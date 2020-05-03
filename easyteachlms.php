@@ -36,19 +36,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 	return;
 }
 
-$baseplugin_file = __FILE__;
+$easyteach_lms_file = __FILE__;
 /* Find our plugin, wherever it may live! */
 if ( isset( $plugin ) ) {
-	$baseplugin_file = $plugin;
+	$easyteach_lms_file = $plugin;
 } elseif ( isset( $mu_plugin ) ) {
-	$baseplugin_file = $mu_plugin;
+	$easyteach_lms_file = $mu_plugin;
 } elseif ( isset( $network_plugin ) ) {
-	$baseplugin_file = $network_plugin;
+	$easyteach_lms_file = $network_plugin;
 }
-define( 'BASEPLUGIN_FILE', $baseplugin_file );
-define( 'BASEPLUGIN_PATH', WP_PLUGIN_DIR . '/' . basename( dirname( $baseplugin_file ) ) );
-define( 'EASYTEACHLMS_VENDOR_PATH', WP_PLUGIN_DIR . '/' . basename( dirname( $baseplugin_file ) ) . '/vendor/' );
-define( 'BASEPLUGIN_URL', plugin_dir_url( __FILE__ ) );
+define( 'EASYTEACHLMS_FILE', $easyteach_lms_file );
+define( 'EASYTEACHLMS_PATH', WP_PLUGIN_DIR . '/' . basename( dirname( $easyteach_lms_file ) ) );
+define( 'EASYTEACHLMS_VENDOR_PATH', WP_PLUGIN_DIR . '/' . basename( dirname( $easyteach_lms_file ) ) . '/vendor/' );
+define( 'EASYTEACHLMS_URL', plugin_dir_url( __FILE__ ) );
 
 require_once EASYTEACHLMS_VENDOR_PATH . '/autoload.php';
 use tgmpa\tgmpa;
@@ -89,8 +89,8 @@ class EasyTeachLMS {
 		add_action( 'init', array( $this, 'rewrite' ) );
 		add_action( 'init', array( $this, 'rewrite_tags' ) );
 
-		register_activation_hook( BASEPLUGIN_FILE, array( $this, 'activate' ) );
-		register_deactivation_hook( BASEPLUGIN_FILE, array( $this, 'deactivate' ) );
+		register_activation_hook( EASYTEACHLMS_FILE, array( $this, 'activate' ) );
+		register_deactivation_hook( EASYTEACHLMS_FILE, array( $this, 'deactivate' ) );
 
 		$this->include_files();
 
@@ -170,17 +170,17 @@ class EasyTeachLMS {
 
 		wp_enqueue_style(
 			'easylms-styles',
-			BASEPLUGIN_URL . 'assets/css/lms.css'
+			EASYTEACHLMS_URL . 'assets/css/lms.css'
 		);
 
 		wp_enqueue_style(
 			'easylms-semantic-ui',
-			BASEPLUGIN_URL . 'vendor/semantic-ui/semantic.css'
+			EASYTEACHLMS_URL . 'vendor/semantic-ui/semantic.css'
 		);
 
 		wp_enqueue_script(
 			'easylms-semanticui',
-			BASEPLUGIN_URL . 'vendor/semantic-ui/semantic.min.js',
+			EASYTEACHLMS_URL . 'vendor/semantic-ui/semantic.min.js',
 			array( 'jquery' ),
 			'3.2.1',
 			true
@@ -188,7 +188,7 @@ class EasyTeachLMS {
 
 		wp_enqueue_script(
 			'easylms-pdfgen',
-			BASEPLUGIN_URL . 'vendor/html2pdf/html2pdf.bundle.min.js',
+			EASYTEACHLMS_URL . 'vendor/html2pdf/html2pdf.bundle.min.js',
 			array( 'jquery' ),
 			$this->plugin_version,
 			true
@@ -196,7 +196,7 @@ class EasyTeachLMS {
 
 		wp_enqueue_script(
 			'easylms-enquirejs',
-			BASEPLUGIN_URL . 'vendor/enquire.min.js',
+			EASYTEACHLMS_URL . 'vendor/enquire.min.js',
 			array( 'jquery' ),
 			$this->plugin_version,
 			true
@@ -204,7 +204,7 @@ class EasyTeachLMS {
 
 		wp_enqueue_script(
 			'easylms-misc',
-			BASEPLUGIN_URL . 'assets/js/misc.js',
+			EASYTEACHLMS_URL . 'assets/js/misc.js',
 			array( 'jquery' ),
 			$this->plugin_version,
 			true
@@ -212,7 +212,7 @@ class EasyTeachLMS {
 
 		wp_enqueue_script(
 			'easylms-quiz',
-			BASEPLUGIN_URL . 'assets/js/quiz.js',
+			EASYTEACHLMS_URL . 'assets/js/quiz.js',
 			array( 'jquery' ),
 			$this->plugin_version,
 			true
@@ -220,7 +220,7 @@ class EasyTeachLMS {
 
 		wp_enqueue_script(
 			'easylms-certificates',
-			BASEPLUGIN_URL . 'assets/js/certificates.js',
+			EASYTEACHLMS_URL . 'assets/js/certificates.js',
 			array( 'jquery', 'easylms-pdfgen' ),
 			$this->plugin_version,
 			true
@@ -228,7 +228,7 @@ class EasyTeachLMS {
 
 		wp_enqueue_script(
 			'easylms-theme-compat',
-			BASEPLUGIN_URL . 'assets/js/themes.js',
+			EASYTEACHLMS_URL . 'assets/js/themes.js',
 			array( 'jquery' ),
 			$this->plugin_version,
 			true
@@ -236,7 +236,7 @@ class EasyTeachLMS {
 
 		wp_register_script(
 			'easylms-userdata',
-			BASEPLUGIN_URL . 'assets/js/user-data.js',
+			EASYTEACHLMS_URL . 'assets/js/user-data.js',
 			array( 'jquery' ),
 			$this->plugin_version,
 			true
@@ -253,7 +253,7 @@ class EasyTeachLMS {
 
 		wp_register_script(
 			'easylms-video-player',
-			BASEPLUGIN_URL . 'assets/js/video-player.js',
+			EASYTEACHLMS_URL . 'assets/js/video-player.js',
 			array( 'jquery' ),
 			$this->plugin_version,
 			true
@@ -270,27 +270,26 @@ class EasyTeachLMS {
 
 	public function include_files() {
 		// Admin Functions
-		require_once BASEPLUGIN_PATH . '/admin-dashboard.php';
+		require_once EASYTEACHLMS_PATH . '/admin-dashboard.php';
 
 		// Template Tags & Directly Callable Functions
-		require_once BASEPLUGIN_PATH . '/includes/template-tags.php';
+		require_once EASYTEACHLMS_PATH . '/includes/template-tags.php';
 
 		// Classes
-		require_once BASEPLUGIN_PATH . '/includes/classes/class-admin.php';
-		require_once BASEPLUGIN_PATH . '/includes/classes/class-bbpress.php';
-		require_once BASEPLUGIN_PATH . '/includes/classes/class-buddypress.php';
-		require_once BASEPLUGIN_PATH . '/includes/classes/class-certificates.php';
-		require_once BASEPLUGIN_PATH . '/includes/classes/class-cohorts.php';
-		require_once BASEPLUGIN_PATH . '/includes/classes/class-courses.php';
-		require_once BASEPLUGIN_PATH . '/includes/classes/class-forms.php';
-		require_once BASEPLUGIN_PATH . '/includes/classes/class-quiz.php';
-		require_once BASEPLUGIN_PATH . '/includes/classes/class-videos.php';
-		require_once BASEPLUGIN_PATH . '/includes/classes/class-user-dashboard.php';
-		require_once BASEPLUGIN_PATH . '/includes/classes/class-rest-api.php';
-		require_once BASEPLUGIN_PATH . '/includes/classes/class-reports.php';
-		require_once BASEPLUGIN_PATH . '/includes/classes/class-woocommerce.php';
-		require_once BASEPLUGIN_PATH . '/includes/classes/class-storefront-compat.php';
-		require_once BASEPLUGIN_PATH . '/includes/classes/class-wp-themes-compat.php';
+		require_once EASYTEACHLMS_PATH . '/includes/classes/class-admin.php';
+		require_once EASYTEACHLMS_PATH . '/includes/classes/class-bbpress.php';
+		require_once EASYTEACHLMS_PATH . '/includes/classes/class-certificates.php';
+		require_once EASYTEACHLMS_PATH . '/includes/classes/class-cohorts.php';
+		require_once EASYTEACHLMS_PATH . '/includes/classes/class-courses.php';
+		require_once EASYTEACHLMS_PATH . '/includes/classes/class-forms.php';
+		require_once EASYTEACHLMS_PATH . '/includes/classes/class-quiz.php';
+		require_once EASYTEACHLMS_PATH . '/includes/classes/class-videos.php';
+		require_once EASYTEACHLMS_PATH . '/includes/classes/class-user-dashboard.php';
+		require_once EASYTEACHLMS_PATH . '/includes/classes/class-rest-api.php';
+		require_once EASYTEACHLMS_PATH . '/includes/classes/class-reports.php';
+		require_once EASYTEACHLMS_PATH . '/includes/classes/class-woocommerce.php';
+		require_once EASYTEACHLMS_PATH . '/includes/classes/class-storefront-compat.php';
+		require_once EASYTEACHLMS_PATH . '/includes/classes/class-wp-themes-compat.php';
 	}
 
 	public function activate() {
@@ -332,7 +331,7 @@ class EasyTeachLMS {
 }
 
 // ACF needs to be loaded before the rest of the plugin
-require BASEPLUGIN_PATH . '/vendor/plugin-installs.php';
+require EASYTEACHLMS_PATH . '/vendor/plugin-installs.php';
 
 $EasyTeachLMS = new EasyTeachLMS();
 $EasyTeachLMS->init();
