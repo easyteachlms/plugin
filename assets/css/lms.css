@@ -1,0 +1,41 @@
+.mejs-container iframe {
+    width: 100%;
+    height: 100%;
+}
+
+.mejs-controls {
+    height: 45px!important;
+    padding-top: 3px;
+}
+
+.ui .icon,
+.ui.icon {
+	height: inherit;
+}
+
+a[data-enrolled-in-course],
+a[data-enroll-in-course],
+.ui .item,
+.ui a,
+.ui {
+	box-shadow: inherit !important;
+}
+
+a[data-enrolled-in-course],
+a[data-enroll-in-course],
+.ui a {
+	border-bottom: inherit !important;
+}
+
+a[data-enrolled-in-course],
+a[data-enroll-in-course] {
+	display: flex;
+}
+
+.ui .item.completed {
+    opacity: 0.6;
+}
+
+#js-module-listing-accordion.inverted #js-module-listing-quiz-link > a {
+	color: white !important;
+}

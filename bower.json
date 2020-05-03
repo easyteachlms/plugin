@@ -1,0 +1,23 @@
+{
+  "name": "easylms",
+  "description": "",
+  "main": "",
+  "authors": [
+    "Seth Rubenstein <seth@sethrubenstein.info>"
+  ],
+  "license": "GPL",
+  "homepage": "https://github.com/sethrubenstein/easylms",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jspdf": "^1.2.61",
+    "chart.js": "^2.7.2",
+    "jquery.fitvids": "FitVids#^1.1.0"
+  }
+}
