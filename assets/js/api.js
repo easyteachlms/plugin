@@ -1,4 +1,4 @@
-var easyLMSAPI = {
+var EasyTeachLMSAPI = {
 	get : {
 		courseObject : function() {
 

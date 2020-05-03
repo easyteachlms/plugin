@@ -1,9 +1,20 @@
 {
-  "name": "lms",
-  "url": "http://cliffmichaels.com",
+  "name": "easyteachlms",
+  "version": "0.1.0",
+  "private": true,
   "devDependencies": {
-    "grunt": "~0.4.1",
-    "grunt-contrib-sass": "^0.7.3",
-    "grunt-contrib-watch": "~0.5.3"
+    "@wpackio/scripts": "^4.4.1",
+    "node-sass": "^4.14.0"
+  },
+  "scripts": {
+    "bootstrap": "wpackio-scripts bootstrap",
+    "build": "wpackio-scripts build",
+    "start": "wpackio-scripts start",
+    "archive": "wpackio-scripts pack"
+  },
+  "dependencies": {
+    "@wpackio/entrypoint": "^4.4.1",
+    "bootstrap": "^4.4.1",
+    "react-bootstrap": "^1.0.1"
   }
 }

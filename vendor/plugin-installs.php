@@ -3,39 +3,39 @@ namespace EasyLMS;
 
 class install_plugins {
 	public function __construct() {
-		add_action( 'init', array($this, 'acf_init'), 10 );
-		if ( !class_exists('acf') ) {
-			include_once( plugin_dir_path(__FILE__) . 'acf/acf.php' );
+		add_action( 'init', array( $this, 'acf_init' ), 10 );
+		if ( ! class_exists( 'acf' ) ) {
+			include_once plugin_dir_path( __FILE__ ) . 'acf/acf.php';
 		}
-		add_action( 'tgmpa_register', array($this, 'required_plugins') );
+		add_action( 'tgmpa_register', array( $this, 'required_plugins' ) );
 	}
 	public function acf_init() {
-		if ( !class_exists('acf') ) {
+		if ( ! class_exists( 'acf' ) ) {
 			$current_user = wp_get_current_user();
 			// 1. customize ACF path
-			add_filter( 'acf/settings/path', array($this, 'acf_settings_path') );
+			add_filter( 'acf/settings/path', array( $this, 'acf_settings_path' ) );
 			// 2. customize ACF dir
-			add_filter( 'acf/settings/dir', array($this, 'acf_settings_dir') );
+			add_filter( 'acf/settings/dir', array( $this, 'acf_settings_dir' ) );
 			if ( $current_user->user_login != 'srubenstein' ) {
 				// 3. Hide ACF field group menu item
 				add_filter( 'acf/settings/show_admin', '__return_false' );
 			}
-			add_filter( 'site_transient_update_plugins', array($this, 'acf_stop_update_notifications'), 11 );
+			add_filter( 'site_transient_update_plugins', array( $this, 'acf_stop_update_notifications' ), 11 );
 		}
 	}
 
 	public function acf_settings_path( $path ) {
-	    // update path
-	    $path = plugin_dir_path(__FILE__) . 'acf/';
-	    // return
-	    return $path;
+		// update path
+		$path = plugin_dir_path( __FILE__ ) . 'acf/';
+		// return
+		return $path;
 	}
 
 	public function acf_settings_dir( $dir ) {
-	    // update path
-	    $dir = plugin_dir_url(__FILE__) . 'acf/';
-	    // return
-	    return $dir;
+		// update path
+		$dir = plugin_dir_url( __FILE__ ) . 'acf/';
+		// return
+		return $dir;
 	}
 
 	public function acf_stop_update_notifications( $value ) {
@@ -51,9 +51,9 @@ class install_plugins {
 		$plugins = array(
 			// TODO: Not yet, we need to rebuild our WooCommerce support.
 			// array(
-			// 	'name'      => 'WooCommerce',
-			// 	'slug'      => 'woocommerce',
-			// 	'required'  => false
+			// 'name'      => 'WooCommerce',
+			// 'slug'      => 'woocommerce',
+			// 'required'  => false
 			// ),
 			array(
 				'name'               => 'GitHub Updater', // The plugin name.
@@ -93,13 +93,13 @@ class install_plugins {
 				'installing'                      => __( 'Installing Plugin: %s', 'theme-slug' ), // %s = plugin name.
 				'oops'                            => __( 'Something went wrong with the plugin API.', 'theme-slug' ),
 				'notice_can_install_required'     => _n_noop(
-					'Easy LMS requires the following plugin: %1$s.',
-					'Easy LMS requires the following plugins: %1$s.',
+					'EasyTeach LMS requires the following plugin: %1$s.',
+					'EasyTeach LMS requires the following plugins: %1$s.',
 					'theme-slug'
 				), // %1$s = plugin name(s).
 				'notice_can_install_recommended'  => _n_noop(
-					'Easy LMS recommends the following plugin: %1$s.',
-					'Easy LMS recommends the following plugins to enable enhanced functionality: %1$s.',
+					'EasyTeach LMS recommends the following plugin: %1$s.',
+					'EasyTeach LMS recommends the following plugins to enable enhanced functionality: %1$s.',
 					'theme-slug'
 				), // %1$s = plugin name(s).
 				'notice_cannot_install'           => _n_noop(
@@ -108,8 +108,8 @@ class install_plugins {
 					'theme-slug'
 				), // %1$s = plugin name(s).
 				'notice_ask_to_update'            => _n_noop(
-					'The following plugin needs to be updated to its latest version to ensure maximum compatibility with Easy LMS: %1$s.',
-					'The following plugins need to be updated to their latest version to ensure maximum compatibility with Easy LMS: %1$s.',
+					'The following plugin needs to be updated to its latest version to ensure maximum compatibility with EasyTeach LMS: %1$s.',
+					'The following plugins need to be updated to their latest version to ensure maximum compatibility with EasyTeach LMS: %1$s.',
 					'theme-slug'
 				), // %1$s = plugin name(s).
 				'notice_ask_to_update_maybe'      => _n_noop(
@@ -142,7 +142,7 @@ class install_plugins {
 					'Install plugins',
 					'theme-slug'
 				),
-				'update_link' 					  => _n_noop(
+				'update_link'                     => _n_noop(
 					'Update plugin',
 					'Update plugins',
 					'theme-slug'
@@ -156,7 +156,7 @@ class install_plugins {
 				'plugin_activated'                => __( 'Plugin activated successfully.', 'theme-slug' ),
 				'activated_successfully'          => __( 'The following plugin was activated successfully:', 'theme-slug' ),
 				'plugin_already_active'           => __( 'No action taken. Plugin %1$s was already active.', 'theme-slug' ),  // %1$s = plugin name(s).
-				'plugin_needs_higher_version'     => __( 'Plugin not activated. A higher version of %s is needed for Easy LMS. Please update the plugin.', 'theme-slug' ),  // %1$s = plugin name(s).
+				'plugin_needs_higher_version'     => __( 'Plugin not activated. A higher version of %s is needed for EasyTeach LMS. Please update the plugin.', 'theme-slug' ),  // %1$s = plugin name(s).
 				'complete'                        => __( 'All plugins installed and activated successfully. %1$s', 'theme-slug' ), // %s = dashboard link.
 				'contact_admin'                   => __( 'Please contact the administrator of this site for help.', 'tgmpa' ),
 
@@ -166,4 +166,5 @@ class install_plugins {
 		tgmpa( $plugins, $config );
 	}
 }
+
 new install_plugins();

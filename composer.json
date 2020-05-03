@@ -1,0 +1,14 @@
+{
+    "name": "cliffmichaels/easyteachlms",
+    "description": "Easy Teach LMS",
+    "type": "project",
+    "require": {
+        "tgmpa/tgm-plugin-activation": "^2.6"
+    },
+    "authors": [
+        {
+            "name": "Seth Rubenstein",
+            "email": "seth@sethrubenstein.info"
+        }
+    ]
+}
