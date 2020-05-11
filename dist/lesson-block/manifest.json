@@ -1,0 +1,26 @@
+{
+  "block.css": "lesson-block/block-2c80c084.css",
+  "block.css.map": "lesson-block/block-2c80c084.css.map",
+  "block.js": "lesson-block/block-fc5085fb.js",
+  "block.js.map": "lesson-block/block-fc5085fb.js.map",
+  "runtime.js": "lesson-block/runtime-67c2300a.js",
+  "runtime.js.map": "lesson-block/runtime-67c2300a.js.map",
+  "wpackioEp": {
+    "block": {
+      "js": [
+        "lesson-block/runtime-67c2300a.js",
+        "lesson-block/block-fc5085fb.js"
+      ],
+      "js.map": [
+        "lesson-block/runtime-67c2300a.js.map",
+        "lesson-block/block-fc5085fb.js.map"
+      ],
+      "css": [
+        "lesson-block/block-2c80c084.css"
+      ],
+      "css.map": [
+        "lesson-block/block-2c80c084.css.map"
+      ]
+    }
+  }
+}

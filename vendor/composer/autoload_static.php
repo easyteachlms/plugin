@@ -10,9 +10,25 @@ class ComposerStaticInit242f414716fd041f0eaef42ccd589041
         'a5f882d89ab791a139cd2d37e50cdd80' => __DIR__ . '/..' . '/tgmpa/tgm-plugin-activation/class-tgm-plugin-activation.php',
     );
 
+    public static $prefixLengthsPsr4 = array (
+        'W' => 
+        array (
+            'WPackio\\' => 8,
+        ),
+    );
+
+    public static $prefixDirsPsr4 = array (
+        'WPackio\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/wpackio/enqueue/inc',
+        ),
+    );
+
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
+            $loader->prefixLengthsPsr4 = ComposerStaticInit242f414716fd041f0eaef42ccd589041::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit242f414716fd041f0eaef42ccd589041::$prefixDirsPsr4;
 
         }, null, ClassLoader::class);
     }

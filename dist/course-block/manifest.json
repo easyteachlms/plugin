@@ -1,0 +1,18 @@
+{
+  "block.js": "course-block/block-d0796495.js",
+  "block.js.map": "course-block/block-d0796495.js.map",
+  "runtime.js": "course-block/runtime-221e05ee.js",
+  "runtime.js.map": "course-block/runtime-221e05ee.js.map",
+  "wpackioEp": {
+    "block": {
+      "js": [
+        "course-block/runtime-221e05ee.js",
+        "course-block/block-d0796495.js"
+      ],
+      "js.map": [
+        "course-block/runtime-221e05ee.js.map",
+        "course-block/block-d0796495.js.map"
+      ]
+    }
+  }
+}

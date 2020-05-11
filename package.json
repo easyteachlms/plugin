@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "@wpackio/entrypoint": "^4.4.1",
+    "antd": "^4.2.0",
     "bootstrap": "^4.4.1",
     "jspdf": "^1.5.3",
     "react-bootstrap": "^1.0.1"
