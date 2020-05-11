@@ -1,17 +1,17 @@
 {
-  "block.js": "topic-block/block-7d6a97bd.js",
-  "block.js.map": "topic-block/block-7d6a97bd.js.map",
+  "block.js": "topic-block/block-a1704bb8.js",
+  "block.js.map": "topic-block/block-a1704bb8.js.map",
   "runtime.js": "topic-block/runtime-099ff9fd.js",
   "runtime.js.map": "topic-block/runtime-099ff9fd.js.map",
   "wpackioEp": {
     "block": {
       "js": [
         "topic-block/runtime-099ff9fd.js",
-        "topic-block/block-7d6a97bd.js"
+        "topic-block/block-a1704bb8.js"
       ],
       "js.map": [
         "topic-block/runtime-099ff9fd.js.map",
-        "topic-block/block-7d6a97bd.js.map"
+        "topic-block/block-a1704bb8.js.map"
       ]
     }
   }

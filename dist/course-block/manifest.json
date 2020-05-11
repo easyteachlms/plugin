@@ -1,17 +1,17 @@
 {
-  "block.js": "course-block/block-d0796495.js",
-  "block.js.map": "course-block/block-d0796495.js.map",
+  "block.js": "course-block/block-6cbd0d8e.js",
+  "block.js.map": "course-block/block-6cbd0d8e.js.map",
   "runtime.js": "course-block/runtime-221e05ee.js",
   "runtime.js.map": "course-block/runtime-221e05ee.js.map",
   "wpackioEp": {
     "block": {
       "js": [
         "course-block/runtime-221e05ee.js",
-        "course-block/block-d0796495.js"
+        "course-block/block-6cbd0d8e.js"
       ],
       "js.map": [
         "course-block/runtime-221e05ee.js.map",
-        "course-block/block-d0796495.js.map"
+        "course-block/block-6cbd0d8e.js.map"
       ]
     }
   }

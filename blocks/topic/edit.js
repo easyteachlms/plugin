@@ -52,6 +52,7 @@ const edit = props => {
     if ( hasInnerBlocks ) {
         return(
             <div className={className}>
+				<div className="section-title"><strong>Topic: </strong>Topic Title Here</div>
                 <InnerBlocks/>
             </div>
         )
@@ -59,6 +60,7 @@ const edit = props => {
     
     return(
         <div className={className}>
+			<div className="section-title"><strong>Topic: </strong>Topic Title Here</div>
             <InnerBlocks/>
         </div>
     );
