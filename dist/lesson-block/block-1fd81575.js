@@ -1,0 +1,24 @@
+/*!
+ * 
+ * easyteachlms
+ * 
+ * @author 
+ * @version 0.1.0
+ * @link UNLICENSED
+ * @license UNLICENSED
+ * 
+ * Copyright (c) 2020 
+ * 
+ * This software is released under the UNLICENSED License
+ * https://opensource.org/licenses/UNLICENSED
+ * 
+ * Compiled with the help of https://wpack.io
+ * A zero setup Webpack Bundler Script for WordPress
+ */
+(window["wpackioeasyteachlmslesson-blockJsonp"]=window["wpackioeasyteachlmslesson-blockJsonp"]||[]).push([[0],[function(e,t){e.exports=wp.i18n},function(e,t){e.exports=wp.blockEditor},function(e,t){e.exports=wp.blocks},function(e,t){e.exports=wp.data},function(e,t){e.exports=wp.components},function(e,t){(function(t){e.exports=t}).call(this,{})},function(e,t){e.exports=wp.element},function(e,t){e.exports=lodash},function(e,t,n){var o,r=n(11);
+/*!
+  Copyright (c) 2017 Jed Watson.
+  Licensed under the MIT License (MIT), see
+  http://jedwatson.github.io/classnames
+*/!function(){"use strict";var c={}.hasOwnProperty;function a(){for(var e=[],t=0;t<arguments.length;t++){var n=arguments[t];if(n){var o=r(n);if("string"===o||"number"===o)e.push(n);else if(Array.isArray(n)&&n.length){var s=a.apply(null,n);s&&e.push(s)}else if("object"===o)for(var l in n)c.call(n,l)&&n[l]&&e.push(l)}}return e.join(" ")}e.exports?(a.default=a,e.exports=a):"object"===r(n(5))&&n(5)?void 0===(o=function(){return a}.apply(t,[]))||(e.exports=o):window.classNames=a}()},function(e,t,n){n(10),e.exports=n(13)},function(e,t,n){"use strict";var o="easyteachlmsdist".replace(/[^a-zA-Z0-9_-]/g,"");n.p=window["__wpackIo".concat(o)]},function(e,t){function n(t){return"function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?e.exports=n=function(e){return typeof e}:e.exports=n=function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e},n(t)}e.exports=n},function(e,t,n){},function(e,t,n){"use strict";function o(e,t){(null==t||t>e.length)&&(t=e.length);for(var n=0,o=new Array(t);n<t;n++)o[n]=e[n];return o}function r(e,t){if(e){if("string"==typeof e)return o(e,t);var n=Object.prototype.toString.call(e).slice(8,-1);return"Object"===n&&e.constructor&&(n=e.constructor.name),"Map"===n||"Set"===n?Array.from(e):"Arguments"===n||/^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)?o(e,t):void 0}}n.r(t);var c=n(2),a=n(0);function s(e,t){return function(e){if(Array.isArray(e))return e}(e)||function(e,t){if("undefined"!=typeof Symbol&&Symbol.iterator in Object(e)){var n=[],o=!0,r=!1,c=void 0;try{for(var a,s=e[Symbol.iterator]();!(o=(a=s.next()).done)&&(n.push(a.value),!t||n.length!==t);o=!0);}catch(e){r=!0,c=e}finally{try{o||null==s.return||s.return()}finally{if(r)throw c}}return n}}(e,t)||r(e,t)||function(){throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.")}()}var l,i=n(1),u=n(3),p=n(6),f=(n(7),n(4)),y=n(8),m=n.n(y),b=["easyteachlms/topic"],d=function(e){var t=e.attributes,n=e.className,o=e.clientId,r=e.name,c=(t.lessonID,t.title),a=s(Object(p.useState)(!0),2),l=a[0],y=a[1];console.log("open"),console.log(l);var d=Object(u.useSelect)((function(e){return{blockType:(0,e("core/blocks").getBlockType)(r),hasInnerBlocks:e("core/block-editor").getBlocks(o).length>0}}),[o,r]),v=(d.blockType,d.hasInnerBlocks),h=(Object(u.useDispatch)("core/block-editor").replaceInnerBlocks,function(e){y(!l)});return v?React.createElement("div",{className:m()(n,{collapsed:!l})},React.createElement("div",{className:"lesson-title"},React.createElement(f.Icon,{icon:"arrow-down-alt2",onClick:h}),React.createElement("span",null,"Lesson:")," ",c),React.createElement("div",{className:"lesson-topics"},React.createElement(i.InnerBlocks,{allowedBlocks:b}))):React.createElement("div",{className:n},React.createElement("div",{className:"lesson-title",onClick:h},React.createElement(f.Icon,{icon:"arrow-down-alt2",onClick:h}),React.createElement("span",null,"Lesson:")," ",c),React.createElement("div",{className:"lesson-topics"},React.createElement(i.InnerBlocks,{allowedBlocks:b})))},v=function(e){e.attributes;var t=e.className;return React.createElement("div",{className:t},React.createElement(i.InnerBlocks.Content,null))},h=["easyteachlms/lesson",{title:Object(a.__)("Lesson"),description:"Block Desc.",category:"layout",keywords:[Object(a.__)("Key 1"),Object(a.__)("Key 2"),Object(a.__)("Key 3")],supports:{html:!1,align:!0},attributes:{lessonID:{type:"integer"},title:{type:"string",default:"Lesson Title Here"}},edit:d,save:v}];n(12);c.registerBlockType.apply(void 0,function(e){if(Array.isArray(e))return o(e)}(l=h)||function(e){if("undefined"!=typeof Symbol&&Symbol.iterator in Object(e))return Array.from(e)}(l)||r(l)||function(){throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.")}())}],[[9,1]]]);
+//# sourceMappingURL=block-1fd81575.js.map

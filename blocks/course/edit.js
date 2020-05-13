@@ -6,9 +6,12 @@ import {
 	__experimentalBlockVariationPicker,
 	__experimentalBlock as Block,
 } from '@wordpress/block-editor';
-import { withDispatch, useDispatch, useSelect } from '@wordpress/data';
+import { useContext } from '@wordpress/element';
+import { useDispatch, useSelect } from '@wordpress/data';
 import { createBlock } from '@wordpress/blocks';
 import { get, map } from 'lodash';
+
+import { Tutorial, tutorialContext } from './components';
 
 const ALLOWED_BLOCKS = ['easyteachlms/lesson'];
 
@@ -47,22 +50,29 @@ const edit = props => {
 		[ clientId, name ]
     );
 
-    const { replaceInnerBlocks } = useDispatch( 'core/block-editor' );
+	const { replaceInnerBlocks } = useDispatch( 'core/block-editor' );
 
+	// @TODOIf has innerblocks and some context provided tutorial finished is it set to true and or if the user has specified to never to be shown.
     if ( hasInnerBlocks ) {
         return(
-            <div className={className}>
-				<div className="section-title"><strong>Course: </strong>Course Title Here</div>
+            <div className={className+'lms-ui'}>
+				<div className="lms-ui course-title">EasyTeach LMS Course Builder</div>
                 <InnerBlocks allowedBlocks={ALLOWED_BLOCKS}/>
             </div>
         )
-    }
+	}
+	
+	const { SpotlightTarget } = useContext(tutorialContext);
     
     return(
+		<Tutorial>
         <div className={className}>
-			<div className="section-title"><strong>Course: </strong>Course Title Here</div>
-            <InnerBlocks allowedBlocks={ALLOWED_BLOCKS}/>
+			<div className="lms-ui course-title">EasyTeach LMS Course Builder</div>
+			<SpotlightTarget name="create-first-lesson">
+				<InnerBlocks allowedBlocks={ALLOWED_BLOCKS}/>
+			</SpotlightTarget>
         </div>
+		</Tutorial>
     );
 }
 

@@ -73,51 +73,9 @@ class Course {
 			array(
 				// We're only enqueing these in the block editor, not the front end.
 				'editor_script' => array_pop( $course_block['js'] )['handle'],
-				// 'editor_style'  => array_pop( $course_block['css'] )['handle'],
+				'editor_style'  => array_pop( $course_block['css'] )['handle'],
 			)
         );
-        
-        $lesson_block = $enqueue->register(
-			'lesson-block',
-			'block',
-			array(
-				'js'        => true,
-				'css'       => true,
-				'js_dep'    => $js_deps,
-				'css_dep'   => array(),
-				'in_footer' => true,
-				'media'     => 'all',
-			)
-		);
-		register_block_type(
-			'easyteachlms/lesson',
-			array(
-				// We're only enqueing these in the block editor, not the front end.
-				'editor_script' => array_pop( $lesson_block['js'] )['handle'],
-				'editor_style'  => array_pop( $lesson_block['css'] )['handle'],
-			)
-        );
-        
-        $topic_block = $enqueue->register(
-			'topic-block',
-			'block',
-			array(
-				'js'        => true,
-				'css'       => true,
-				'js_dep'    => $js_deps,
-				'css_dep'   => array(),
-				'in_footer' => true,
-				'media'     => 'all',
-			)
-		);
-		register_block_type(
-			'easyteachlms/topic',
-			array(
-				// We're only enqueing these in the block editor, not the front end.
-				'editor_script' => array_pop( $topic_block['js'] )['handle'],
-				// 'editor_style'  => array_pop( $topic_block['css'] )['handle'],
-			)
-		);
     }
 }
 

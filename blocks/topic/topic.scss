@@ -1,24 +1,18 @@
-.wp-block-easyteachlms-lesson {
+.wp-block-easyteachlms-topic {
+    padding-left: 1em;
     &.collapsed {
-        .lesson-topics {
+        .topics-content {
             display: none;
-        }
-    }
-
-    .lesson-title {
-        span {
-            font-weight: 700;
         }
     }
 }
 
-div[data-type="easyteachlms/lesson"] {
+div[data-type="easyteachlms/topic"] {
     &.has-child-selected:before {
         z-index: 0;
         content: "";
         position: absolute;
-        border: 1px dashed rgba(66,88,99,.2);
-        border-left: none;
+        border: 1px solid rgba(66,88,99,.4);
         pointer-events: none;
         transition: border-color .1s linear,border-style .1s linear,box-shadow .1s linear;
         outline: 1px solid transparent;

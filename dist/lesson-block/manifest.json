@@ -1,25 +1,25 @@
 {
-  "block.css": "lesson-block/block-2c80c084.css",
-  "block.css.map": "lesson-block/block-2c80c084.css.map",
-  "block.js": "lesson-block/block-fc5085fb.js",
-  "block.js.map": "lesson-block/block-fc5085fb.js.map",
+  "block.css": "lesson-block/block-e5aa5f5a.css",
+  "block.css.map": "lesson-block/block-e5aa5f5a.css.map",
+  "block.js": "lesson-block/block-1fd81575.js",
+  "block.js.map": "lesson-block/block-1fd81575.js.map",
   "runtime.js": "lesson-block/runtime-67c2300a.js",
   "runtime.js.map": "lesson-block/runtime-67c2300a.js.map",
   "wpackioEp": {
     "block": {
       "js": [
         "lesson-block/runtime-67c2300a.js",
-        "lesson-block/block-fc5085fb.js"
+        "lesson-block/block-1fd81575.js"
       ],
       "js.map": [
         "lesson-block/runtime-67c2300a.js.map",
-        "lesson-block/block-fc5085fb.js.map"
+        "lesson-block/block-1fd81575.js.map"
       ],
       "css": [
-        "lesson-block/block-2c80c084.css"
+        "lesson-block/block-e5aa5f5a.css"
       ],
       "css.map": [
-        "lesson-block/block-2c80c084.css.map"
+        "lesson-block/block-e5aa5f5a.css.map"
       ]
     }
   }

@@ -1,17 +1,25 @@
 {
-  "block.js": "topic-block/block-a1704bb8.js",
-  "block.js.map": "topic-block/block-a1704bb8.js.map",
+  "block.css": "topic-block/block-72881b80.css",
+  "block.css.map": "topic-block/block-72881b80.css.map",
+  "block.js": "topic-block/block-6de3faee.js",
+  "block.js.map": "topic-block/block-6de3faee.js.map",
   "runtime.js": "topic-block/runtime-099ff9fd.js",
   "runtime.js.map": "topic-block/runtime-099ff9fd.js.map",
   "wpackioEp": {
     "block": {
       "js": [
         "topic-block/runtime-099ff9fd.js",
-        "topic-block/block-a1704bb8.js"
+        "topic-block/block-6de3faee.js"
       ],
       "js.map": [
         "topic-block/runtime-099ff9fd.js.map",
-        "topic-block/block-a1704bb8.js.map"
+        "topic-block/block-6de3faee.js.map"
+      ],
+      "css": [
+        "topic-block/block-72881b80.css"
+      ],
+      "css.map": [
+        "topic-block/block-72881b80.css.map"
       ]
     }
   }

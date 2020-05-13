@@ -1,0 +1,82 @@
+<?php
+
+namespace EasyTeachLMS;
+use WPackio\Enqueue;
+class Lesson {
+    protected $post_type = 'lesson';
+    protected $js_deps = array( 'react', 'react-dom', 'wp-element', 'wp-components', 'wp-polyfill', 'wp-i18n' );
+
+    public function __construct( $init = false ) {
+        if ( true === $init ) {
+            add_action( 'init', array( $this, 'init' ) );
+        }
+    }
+
+    public function init() {
+        $args = array(
+            'labels'              => array(
+                'name'               => __( 'Lessons', 'post type general name' ),
+                'singular_name'      => __( 'Lesson', 'post type singular name' ),
+                'add_new'            => __( 'Add New' ),
+                'add_new_item'       => __( 'Lesson' ),
+                'edit_item'          => __( 'Edit Lesson' ),
+                'new_item'           => __( 'New Lesson' ),
+                'view_item'          => __( 'View Lesson' ),
+                'search_items'       => __( 'Search Lessons' ),
+                'not_found'          => __( 'No Lesson Found' ),
+                'not_found_in_trash' => __( 'No Lessons in Trash' ),
+                'parent_item_colon'  => __( 'Lesson' ),
+                'menu_name'          => __( 'Lessons' ),
+            ),
+            'singular_label'      => __( 'Lesson' ),
+            'public'              => true,
+            'exclude_from_search' => false,
+            'show_ui'             => true,
+            'publicly_queryable'  => true,
+            'query_var'           => true,
+            'capability_type'     => 'post',
+            'has_archive'         => true,
+            'hierarchical'        => false,
+            'rewrite'             => array(
+                'slug'       => 'lesson',
+                'with_front' => false,
+            ),
+            'show_in_rest'        => true,
+            'supports'            => array( 'title', 'editor', 'revisions', 'thumbnail', 'excerpt', 'author' ),
+            'show_in_menu'        => 'easyteach-lms',
+            'taxonomies'          => array( 'category' ),
+        );
+        register_post_type( $this->post_type, $args );
+        $this->register_block();
+    }
+
+    public function register_block() {
+        $enqueue   = new Enqueue( 'easyteachlms', 'dist', '1.0.0', 'plugin', plugin_dir_path( __FILE__ ) );
+
+		// Lesson
+		$js_deps    = $this->js_deps;
+        
+        $lesson_block = $enqueue->register(
+			'lesson-block',
+			'block',
+			array(
+				'js'        => true,
+				'css'       => true,
+				'js_dep'    => $js_deps,
+				'css_dep'   => array(),
+				'in_footer' => true,
+				'media'     => 'all',
+			)
+		);
+		register_block_type(
+			'easyteachlms/lesson',
+			array(
+				// We're only enqueing these in the block editor, not the front end.
+				'editor_script' => array_pop( $lesson_block['js'] )['handle'],
+				'editor_style'  => array_pop( $lesson_block['css'] )['handle'],
+			)
+        );
+    }
+}
+
+new Lesson(true);
