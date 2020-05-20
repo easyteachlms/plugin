@@ -1,7 +1,7 @@
 .wp-block-easyteachlms-topic {
     padding-left: 1em;
     &.collapsed {
-        .topics-content {
+        .collapsible-content {
             display: none;
         }
     }

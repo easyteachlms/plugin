@@ -7,11 +7,11 @@ import {
 	__experimentalBlock as Block,
 } from '@wordpress/block-editor';
 import { useDispatch, useSelect } from '@wordpress/data';
-import { useState } from '@wordpress/element';
 import { createBlock } from '@wordpress/blocks';
 import { get, map } from 'lodash';
-import { Icon } from '@wordpress/components';
-import classNames from 'classnames';
+
+import InitialState from 'components/block-initial-state';
+import Collapsible from 'components/collapsible';
 
 const ALLOWED_BLOCKS = ['easyteachlms/topic'];
 
@@ -27,12 +27,9 @@ const createBlocksFromInnerBlocksTemplate = ( innerBlocksTemplate ) => {
 	);
 };
 
-const edit = props => {
-    const { attributes, className, clientId, name } = props;
-	const { lessonID, title } = attributes;
-	const [ open, setState ] = useState(true);
-	console.log('open');
-	console.log(open);
+const edit = ({ attributes, className, clientId, name, setAttributes }) => {
+	const { id, title } = attributes;
+
     // We get some information when the block's internal state changes.
     const {
 		blockType,
@@ -54,26 +51,22 @@ const edit = props => {
     );
 
 	const { replaceInnerBlocks } = useDispatch( 'core/block-editor' );
-	
-	const collapseHandler = (e) => {
-		setState(!open);
+
+	if ( 0 !== id ) {
+		return(
+			<div><p>We have an existing lesson! You will not be able to edit the lesson because its stored in the database.</p><p>We will have an edit button that will open in a new window the lesson editor.</p></div>
+		);
 	}
 
-    if ( hasInnerBlocks ) {
-        return(
-            <div className={classNames(className, { collapsed: !open })}>
-				<div className="lesson-title"><Icon icon="arrow-down-alt2" onClick={collapseHandler}/><span>Lesson:</span> {title}</div>
-				<div className="lesson-topics"><InnerBlocks allowedBlocks={ALLOWED_BLOCKS}/></div>
-            </div>
-        )
-    }
+	if ( 0 === id && '' !== title ) {
+		return(
+			<Collapsible className={className} title={title} postType="lesson">
+				<InnerBlocks allowedBlocks={ALLOWED_BLOCKS}/>
+			</Collapsible>
+		)
+	}
     
-    return(
-        <div className={className}>
-			<div className="lesson-title" onClick={collapseHandler}><Icon icon="arrow-down-alt2" onClick={collapseHandler}/><span>Lesson:</span> {title}</div>
-			<div className="lesson-topics"><InnerBlocks allowedBlocks={ALLOWED_BLOCKS}/></div>
-        </div>
-    );
+    return <InitialState title={title} postType="lesson" setAttributes={setAttributes} className={className}/>
 }
 
 export default edit;

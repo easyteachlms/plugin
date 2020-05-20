@@ -8,7 +8,7 @@ const settings = [
     {
         title: __('Topic'), 
         description: 'Block Desc.',
-        category: 'layout',
+        category: 'education',
         // icon: {
         //     background: '#yourcolor',
         //     foreground: '#yourcolor',
@@ -24,9 +24,14 @@ const settings = [
             align: true
         },
         attributes: {
-            yourAttr: {
-                type: 'string' 
-            }
+            id: {
+                type: 'string',
+                default: 0,
+            },
+            title: {
+                type: 'string',
+                default: '',
+            },
         },
         edit,
         save,

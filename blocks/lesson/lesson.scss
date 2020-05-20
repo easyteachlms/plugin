@@ -1,13 +1,7 @@
 .wp-block-easyteachlms-lesson {
     &.collapsed {
-        .lesson-topics {
+        .collapsible-content {
             display: none;
-        }
-    }
-
-    .lesson-title {
-        span {
-            font-weight: 700;
         }
     }
 }

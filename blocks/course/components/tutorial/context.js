@@ -1,9 +1,9 @@
-import { createContext } from '@wordpress/element';
-import {
-    Spotlight,
-    SpotlightManager,
-    SpotlightTarget,
-    SpotlightTransition,
-} from '@atlaskit/onboarding';
+// import { createContext } from '@wordpress/element';
+// import {
+//     Spotlight,
+//     SpotlightManager,
+//     SpotlightTarget,
+//     SpotlightTransition,
+// } from '@atlaskit/onboarding';
 
-export default createContext({Spotlight, SpotlightManager, SpotlightTarget, SpotlightTransition});
+// export default createContext({Spotlight, SpotlightManager, SpotlightTarget, SpotlightTransition});

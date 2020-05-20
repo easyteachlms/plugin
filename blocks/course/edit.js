@@ -27,8 +27,8 @@ const createBlocksFromInnerBlocksTemplate = ( innerBlocksTemplate ) => {
 	);
 };
 
-const edit = props => {
-    const { attributes, className, clientId, name } = props;
+const edit = ({ attributes, className, clientId, name, setAttributes }) => {
+    const {tutorial} = attributes;
 
     // We get some information when the block's internal state changes.
     const {
@@ -53,7 +53,7 @@ const edit = props => {
 	const { replaceInnerBlocks } = useDispatch( 'core/block-editor' );
 
 	// @TODOIf has innerblocks and some context provided tutorial finished is it set to true and or if the user has specified to never to be shown.
-    if ( hasInnerBlocks ) {
+    if ( hasInnerBlocks && false === tutorial ) {
         return(
             <div className={className+'lms-ui'}>
 				<div className="lms-ui course-title">EasyTeach LMS Course Builder</div>
@@ -62,16 +62,13 @@ const edit = props => {
         )
 	}
 	
-	const { SpotlightTarget } = useContext(tutorialContext);
+	// const { SpotlightTarget } = useContext(tutorialContext);
     
     return(
-		<Tutorial>
-        <div className={className}>
-			<div className="lms-ui course-title">EasyTeach LMS Course Builder</div>
-			<SpotlightTarget name="create-first-lesson">
+		<Tutorial setAttributes={setAttributes}>
+			<div className={className}>
 				<InnerBlocks allowedBlocks={ALLOWED_BLOCKS}/>
-			</SpotlightTarget>
-        </div>
+			</div>
 		</Tutorial>
     );
 }

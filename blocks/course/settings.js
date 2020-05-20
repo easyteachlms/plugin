@@ -8,24 +8,42 @@ const settings = [
     {
         title: __('Course'), 
         description: 'Block Desc.',
-        category: 'layout',
+        category: 'education',
         // icon: {
         //     background: '#yourcolor',
         //     foreground: '#yourcolor',
         //     src: 'Dashicon',
         // },
+        styles:  [
+            {
+                name: 'default',
+                label: __('Default'),
+                isDefault: true,
+            },
+            {
+                name: 'mini',
+                label: __('Mini'),
+            },
+            {
+                name: 'full-screen',
+                label: __('Full Screen'),
+            }
+        ],
         keywords: [
-            __( 'Key 1' ),
-            __( 'Key 2' ), 
-            __( 'Key 3' )
+            __( 'Course' ),
+            __( 'Easy Teach LMS' ), 
+            __( 'LMS' ),
+            __( 'Learning' )
         ],
         supports: {
             html: false, 
-            align: true
+            align: false,
+            multiple: false,
         },
         attributes: {
-            yourAttr: {
-                type: 'string' 
+            tutorial: {
+                type: 'boolean',
+                default: true
             }
         },
         edit,

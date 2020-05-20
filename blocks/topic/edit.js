@@ -7,11 +7,14 @@ import {
 	__experimentalBlock as Block,
 } from '@wordpress/block-editor';
 import { withDispatch, useDispatch, useSelect } from '@wordpress/data';
-import { useState } from '@wordpress/element';
+
 import { createBlock } from '@wordpress/blocks';
-import { Icon, Button } from '@wordpress/components';
-import classNames from 'classnames';
 import { get, map } from 'lodash';
+
+import Collapsible from 'components/collapsible';
+import InitialState from 'components/block-initial-state';
+import { Button } from 'semantic-ui-react';
+import { __ } from '@wordpress/i18n';
 
 // const ALLOWED_BLOCKS = ['core/paragraph'];
 
@@ -22,15 +25,15 @@ const createBlocksFromInnerBlocksTemplate = ( innerBlocksTemplate ) => {
 			createBlock(
 				name,
 				attributes,
-				createBlocksFromInnerBlocksTemplate( innerBlocks )
+				createBlocksFromInnerBlocksTemplate( innerBlocks ) 
 			)
 	);
 };
 
-const edit = props => {
-    const { attributes, className, clientId, name } = props;
-	const [ open, setState ] = useState(true);
-    // We get some information when the block's internal state changes.
+const edit = ({ attributes, className, clientId, name, setAttributes }) => {
+	const { title, id } = attributes;
+   
+	// We get some information when the block's internal state changes.
     const {
 		blockType,
 		hasInnerBlocks,
@@ -49,31 +52,29 @@ const edit = props => {
 		},
 		[ clientId, name ]
 	);
-	
-	const collapseHandler = (e) => {
-		setState(!open);
+
+	const { replaceInnerBlocks } = useDispatch( 'core/block-editor' );
+
+	if ( 0 !== id ) {
+		return(
+			<div>
+				<p>We have an existing topic! You will not be able to edit the topic because its stored in the database.</p>
+				<p>We will have an edit button that will open in a new window the topic editor.</p>
+				<p>OR we could conceivably offer the option once a topic is loaded to just copy its contents directly and we would warn the user that they're copying these contents over and we could have a small button that once again lets the user take the contents of the topic and save it </p>
+			</div>
+		);
 	}
 
-    const { replaceInnerBlocks } = useDispatch( 'core/block-editor' );
-
-    if ( hasInnerBlocks ) {
-        return(
-            <div className={classNames(className, { collapsed: !open })}>
-				<div className="section-title"><Icon icon="arrow-down-alt2" onClick={collapseHandler}/><strong>Topic: </strong>Topic Title Here</div>
-                <div className="topics-content">
-					<InnerBlocks/>
-					<Button>Mark Topic Completed</Button>
-				</div>
-            </div>
-        )
-    }
+	if ( 0 === id && '' !== title ) {
+		return(
+			<Collapsible className={className} title={title} postType="topic">
+				<InnerBlocks/>
+				<Button size="small" color="teal" disabled>Mark Topic Completed</Button>
+			</Collapsible>
+		)
+	}
     
-    return(
-        <div className={classNames(className, { collapsed: !open })}>
-			<div className="section-title"><Icon icon="arrow-down-alt2" onClick={collapseHandler}/><strong>Topic: </strong>Topic Title Here</div>
-            <div className="topics-content"><InnerBlocks/></div>
-        </div>
-    );
+	return <InitialState title={title} postType="topic" setAttributes={setAttributes} className={className}/>
 }
 
 export default edit;

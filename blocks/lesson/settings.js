@@ -8,7 +8,7 @@ const settings = [
     {
         title: __('Lesson'), 
         description: 'Block Desc.',
-        category: 'layout',
+        category: 'education',
         // icon: {
         //     background: '#yourcolor',
         //     foreground: '#yourcolor',
@@ -24,12 +24,13 @@ const settings = [
             align: true
         },
         attributes: {
-            lessonID: {
+            id: {
                 type: 'integer', 
+                default: 0,
             },
             title: {
                 type: 'string',
-                default: "Lesson Title Here",
+                default: '',
             }
         },
         edit,

@@ -1,8 +1,9 @@
 const pkg = require('./package.json');
+const path = require('path');
 
 module.exports = {
 	// Project Identity
-	appName: 'easyteachlms', // Unique name of your project
+	appName: 'easyTeachLMS', // Unique name of your project
 	type: 'plugin', // Plugin or theme
 	slug: 'easyteachlms', // Plugin or Theme slug, basically the directory name under `wp-content/<themes|plugins>`
 	// Used to generate banners on top of compiled stuff
@@ -18,6 +19,12 @@ module.exports = {
 	},
 	// Files we need to compile, and where to put
 	files: [
+		{
+            name: 'easyteachlms',
+            entry: {
+                app: './assets/js/app.js',
+            },
+		},,
 		{
             name: 'course-block',
             entry: {
@@ -72,7 +79,10 @@ module.exports = {
 	},
 	// Webpack Aliases
 	// <https://webpack.js.org/configuration/resolve/#resolve-alias>
-	alias: undefined,
+	alias: {
+		components: path.resolve( __dirname, 'blocks/_shared/components' ),
+		styles: path.resolve( __dirname, 'node_modules/semantic-ui-css/components' ),
+	},
 	// Show overlay on development
 	errorOverlay: true,
 	// Auto optimization by webpack

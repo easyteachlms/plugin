@@ -1,0 +1,18 @@
+{
+  "app.js": "easyteachlms/app-2a09f91d.js",
+  "app.js.map": "easyteachlms/app-2a09f91d.js.map",
+  "runtime.js": "easyteachlms/runtime-e7d664c0.js",
+  "runtime.js.map": "easyteachlms/runtime-e7d664c0.js.map",
+  "wpackioEp": {
+    "app": {
+      "js": [
+        "easyteachlms/runtime-e7d664c0.js",
+        "easyteachlms/app-2a09f91d.js"
+      ],
+      "js.map": [
+        "easyteachlms/runtime-e7d664c0.js.map",
+        "easyteachlms/app-2a09f91d.js.map"
+      ]
+    }
+  }
+}

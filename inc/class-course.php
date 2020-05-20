@@ -51,7 +51,7 @@ class Course {
     }
 
     public function register_block() {
-        $enqueue   = new Enqueue( 'easyteachlms', 'dist', '1.0.0', 'plugin', plugin_dir_path( __FILE__ ) );
+        $enqueue   = new Enqueue( 'easyTeachLMS', 'dist', '1.0.0', 'plugin', plugin_dir_path( __FILE__ ) );
 
 		// Course
 		$js_deps    = $this->js_deps;
@@ -63,7 +63,7 @@ class Course {
 				'js'        => true,
 				'css'       => true,
 				'js_dep'    => $js_deps,
-				'css_dep'   => array(),
+				'css_dep'   => array( 'semantic-ui' ),
 				'in_footer' => true,
 				'media'     => 'all',
 			)
