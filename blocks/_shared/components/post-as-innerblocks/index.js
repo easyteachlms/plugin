@@ -71,7 +71,6 @@ const PostAsInnerBlocks = ({id, postType, title, lastUpdated, setAttributes = fa
 
 		post.save().then((post)=> {
 			console.log(post);
-			console.log(post.id);
 			setAttributes( { 
 				id: post.id,
 				lastUpdated: post.modified_gmt
@@ -79,6 +78,7 @@ const PostAsInnerBlocks = ({id, postType, title, lastUpdated, setAttributes = fa
 		});
 	}
 
+	// @TODO we should check if has innerblocks and if not then dont displat the save button
 	const Toolbar = () => {
 		return(
 			<Button isSecondary onClick={()=>{saveAsPost(postType)}}>
