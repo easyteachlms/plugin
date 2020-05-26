@@ -1,6 +1,5 @@
 import {
 	InspectorControls,
-	InnerBlocks,
 	BlockControls,
 	BlockVerticalAlignmentToolbar,
 	__experimentalBlockVariationPicker,
@@ -12,7 +11,7 @@ import { createBlock } from '@wordpress/blocks';
 import { get, map } from 'lodash';
 
 import Collapsible from 'components/collapsible';
-import InitialState from 'components/block-initial-state';
+import PostAsInnerBlocks from 'components/post-as-innerblocks';
 import { Button } from 'semantic-ui-react';
 import { __ } from '@wordpress/i18n';
 
@@ -55,26 +54,26 @@ const edit = ({ attributes, className, clientId, name, setAttributes }) => {
 
 	const { replaceInnerBlocks } = useDispatch( 'core/block-editor' );
 
-	if ( 0 !== id ) {
-		return(
-			<div>
-				<p>We have an existing topic! You will not be able to edit the topic because its stored in the database.</p>
-				<p>We will have an edit button that will open in a new window the topic editor.</p>
-				<p>OR we could conceivably offer the option once a topic is loaded to just copy its contents directly and we would warn the user that they're copying these contents over and we could have a small button that once again lets the user take the contents of the topic and save it </p>
-			</div>
-		);
-	}
+	// if ( 0 !== id ) {
+	// 	return(
+	// 		<div>
+	// 			<p>We have an existing topic! You will not be able to edit the topic because its stored in the database.</p>
+	// 			<p>We will have an edit button that will open in a new window the topic editor.</p>
+	// 			<p>OR we could conceivably offer the option once a topic is loaded to just copy its contents directly and we would warn the user that they're copying these contents over and we could have a small button that once again lets the user take the contents of the topic and save it </p>
+	// 		</div>
+	// 	);
+	// }
 
-	if ( 0 === id && '' !== title ) {
+	if ( 0 !== id && '' !== title ) {
 		return(
 			<Collapsible className={className} title={title} postType="topic">
-				<InnerBlocks/>
+				<PostAsInnerBlocks id={id} postType="topic" setAttributes={setAttributes} title={title}/>
 				<Button size="small" color="teal" disabled>Mark Topic Completed</Button>
 			</Collapsible>
 		)
 	}
-    
-	return <InitialState title={title} postType="topic" setAttributes={setAttributes} className={className}/>
+
+	return <PostAsInnerBlocks id={id} postType="topic" setAttributes={setAttributes} title={title}/>;
 }
 
 export default edit;

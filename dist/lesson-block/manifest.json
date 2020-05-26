@@ -1,8 +1,8 @@
 {
   "block.css": "lesson-block/block-0ac277d6.css",
   "block.css.map": "lesson-block/block-0ac277d6.css.map",
-  "block.js": "lesson-block/block-0a016552.js",
-  "block.js.map": "lesson-block/block-0a016552.js.map",
+  "block.js": "lesson-block/block-1292d203.js",
+  "block.js.map": "lesson-block/block-1292d203.js.map",
   "runtime.js": "lesson-block/runtime-6c8771e2.js",
   "runtime.js.map": "lesson-block/runtime-6c8771e2.js.map",
   "vendors~block.js": "lesson-block/vendors~block-151ad3df.js",
@@ -12,12 +12,12 @@
       "js": [
         "lesson-block/runtime-6c8771e2.js",
         "lesson-block/vendors~block-151ad3df.js",
-        "lesson-block/block-0a016552.js"
+        "lesson-block/block-1292d203.js"
       ],
       "js.map": [
         "lesson-block/runtime-6c8771e2.js.map",
         "lesson-block/vendors~block-151ad3df.js.map",
-        "lesson-block/block-0a016552.js.map"
+        "lesson-block/block-1292d203.js.map"
       ],
       "css": [
         "lesson-block/block-0ac277d6.css"

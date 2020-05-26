@@ -52,13 +52,13 @@ const edit = ({ attributes, className, clientId, name, setAttributes }) => {
 
 	const { replaceInnerBlocks } = useDispatch( 'core/block-editor' );
 
-	if ( 0 !== id ) {
-		return(
-			<div><p>We have an existing lesson! You will not be able to edit the lesson because its stored in the database.</p><p>We will have an edit button that will open in a new window the lesson editor.</p></div>
-		);
-	}
+	// if ( 0 !== id ) {
+	// 	return(
+	// 		<div><p>We have an existing lesson! You will not be able to edit the lesson because its stored in the database.</p><p>We will have an edit button that will open in a new window the lesson editor.</p></div>
+	// 	);
+	// }
 
-	if ( 0 === id && '' !== title ) {
+	if ( 0 !== id && '' !== title ) {
 		return(
 			<Collapsible className={className} title={title} postType="lesson">
 				<InnerBlocks allowedBlocks={ALLOWED_BLOCKS}/>

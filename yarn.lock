@@ -1101,6 +1101,11 @@
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
+"@daniakash/lifecycle-hooks@^0.0.1-alpha-2":
+  version "0.0.1-alpha-2"
+  resolved "https://registry.yarnpkg.com/@daniakash/lifecycle-hooks/-/lifecycle-hooks-0.0.1-alpha-2.tgz#a544fcc54e81c19a8bad5017008dd5b69e934199"
+  integrity sha512-Ql8FSJhgWUFR0iCyh3HmI+YnZY/vkUgiC+6YjK5Sr8xDfUPacGRupUqLMbeEqMAnyyau/wNA6TdwD4DO81c+iw==
+
 "@emotion/cache@^10.0.27":
   version "10.0.29"
   resolved "https://registry.yarnpkg.com/@emotion/cache/-/cache-10.0.29.tgz#87e7e64f412c060102d589fe7c6dc042e6f9d1e0"
@@ -1882,6 +1887,17 @@
   version "2.13.1"
   resolved "https://registry.yarnpkg.com/@wordpress/element/-/element-2.13.1.tgz#b2e3e3ec808d287b9776c52c08f1790741243da9"
   integrity sha512-7bP6ewZ5jogV8wltaNA0Y1yDrPF5zGHprX/zyz8KyQyn5b40YTuoi32HZ1ssYxDa9fFHwbBeFGwVJcyGeKyLpw==
+  dependencies:
+    "@babel/runtime" "^7.9.2"
+    "@wordpress/escape-html" "^1.8.0"
+    lodash "^4.17.15"
+    react "^16.9.0"
+    react-dom "^16.9.0"
+
+"@wordpress/element@^2.14.0":
+  version "2.14.0"
+  resolved "https://registry.yarnpkg.com/@wordpress/element/-/element-2.14.0.tgz#54e9543269c8f898c4e375f09f119cfb414ce18e"
+  integrity sha512-msSkGecq2Z8lBoj95D0vxj64lbGx7c7Q8VxsNLA3G813HVybeY5gYeWFokWKfok+tszCwjJI4ZgR4DxRsYNTig==
   dependencies:
     "@babel/runtime" "^7.9.2"
     "@wordpress/escape-html" "^1.8.0"

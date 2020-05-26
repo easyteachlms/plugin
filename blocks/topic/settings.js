@@ -9,15 +9,8 @@ const settings = [
         title: __('Topic'), 
         description: 'Block Desc.',
         category: 'education',
-        // icon: {
-        //     background: '#yourcolor',
-        //     foreground: '#yourcolor',
-        //     src: 'Dashicon',
-        // },
         keywords: [
-            __( 'Key 1' ),
-            __( 'Key 2' ), 
-            __( 'Key 3' )
+            __( 'Topic' ),
         ],
         supports: {
             html: false, 
@@ -25,7 +18,11 @@ const settings = [
         },
         attributes: {
             id: {
-                type: 'string',
+                type: 'integer',
+                default: 0,
+            },
+            lastUpdated: {
+                type: 'integer',
                 default: 0,
             },
             title: {
