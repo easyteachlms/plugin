@@ -10,8 +10,8 @@ import { useDispatch, useSelect } from '@wordpress/data';
 import { createBlock } from '@wordpress/blocks';
 import { get, map } from 'lodash';
 
-import InitialState from 'components/block-initial-state';
 import Collapsible from 'components/collapsible';
+import PostAsInnerBlocks from 'components/post-as-innerblocks';
 
 const ALLOWED_BLOCKS = ['easyteachlms/topic'];
 
@@ -61,12 +61,13 @@ const edit = ({ attributes, className, clientId, name, setAttributes }) => {
 	if ( 0 !== id && '' !== title ) {
 		return(
 			<Collapsible className={className} title={title} postType="lesson">
-				<InnerBlocks allowedBlocks={ALLOWED_BLOCKS}/>
+				<PostAsInnerBlocks id={id} postType="lesson" setAttributes={setAttributes} title={title} allowedBlocks={ALLOWED_BLOCKS}/>
 			</Collapsible>
 		)
 	}
-    
-    return <InitialState title={title} postType="lesson" setAttributes={setAttributes} className={className}/>
+
+	return <PostAsInnerBlocks id={id} postType="lesson" setAttributes={setAttributes} title={title} allowedBlocks={ALLOWED_BLOCKS}/>;
+
 }
 
 export default edit;

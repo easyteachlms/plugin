@@ -1,6 +1,14 @@
 // HOC that maintains a connection to a external post
 import { Fragment } from '@wordpress/element';
 import { Button } from "@wordpress/components";
+import { withDispatch, useDispatch, useSelect } from '@wordpress/data';
+
+import {
+	useState,
+	useConstructor,
+	useDidMount,
+  } from "@daniakash/lifecycle-hooks";
+
 import InitialState from './initial-state';
 
 import {
@@ -9,19 +17,16 @@ import {
 	BlockControls,
 } from '@wordpress/block-editor';
 
-const capitalize = (s) => {
-    if (typeof s !== 'string') return ''
-    return s.charAt(0).toUpperCase() + s.slice(1)
+const checkPostForUpdates = (id, postType, lastUpdated) => {
+	// Go hit backbone api and get post given id
+	// Get post last updated
+	// Is lastUpdated here the same as last update, then dont worry about it.
 }
 
-	// Creating a topic for the first time:
-	// Give it a title.
-	// Add all your innerblocks.
-	// Offer a save button, click save whenever you want, we're not going to force it at start. Once you click save that block will go save itself AND set a lastUpdaed attribute from the saved post.
+// OPTION 1: Update inner blocks with the contents 
 
-	// Updating Mechanism once a topic is created for the first time:
-	// We can set a param here when the topic was added into the content a unix timestamp. On component mount in the edit function we should ping the topic for the last updated timestamp and if its more recent then we should offer the option to update the topic to latest content or lave as is.
-	// There will be no hard linking. When we do the update we'll need to link into the block editor actual code editing ability and see if we can update the raw html of the block
+const updateInnerBlocks = (newInnerBlocks) => {
+	const { replaceInnerBlocks } = useDispatch( 'core/block-editor' );
 	// When isSelected is true on the topic and isnt a brand new topic
 	// 1. Check attributes.lastUpdated === topicPost.lastUpdated (made up variable we'll need to get that info). If so stop, otherwise proceed.
 	// 2. Prompt user new content is available for this Topic would you like to load it or leave alone.
@@ -30,16 +35,6 @@ const capitalize = (s) => {
 	// 5. Use block editor replaceInnerBLocks https://developer.wordpress.org/block-editor/data/data-core-block-editor/#replaceInnerBlocks to replace the inner blocks of this block with the innerblocks generated from step 4. 
 	// 6. Update attributes.lastUpdated with the topicPost.lastUpdated value so now we signal they are in sync.
 	/// Possibly??? An option to instead of update, create new (fork) the topic/lesson
-
-const checkPostForUpdates = (id, postType, lastUpdated) => {
-	// Go hit backbone api and get post
-	// Get post last updated
-	// Is lastUpdated here the same as last update, then dont worry about it.
-}
-
-// OPTION 1: Update inner blocks with the contents 
-const updateInnerBlocks = (newInnerBlocks) => {
-
 }
 
 // OPTION 3: Do nothing.
@@ -55,18 +50,38 @@ const PostAsInnerBlocks = ({id, postType, title, lastUpdated, setAttributes = fa
     // What the lesson title is and what the lesson post its associated with...
 	// What the topic title is and what the topic post is associated with.
 
+	useDidMount(() => {
+		console.log('Hi');
+		console.log(id);
+	});
+
 	// OPTION 2: Save what you have as a brand new post, break existing links, put new links and more importantly take the current innerblocks parse them back out and send them to a posts content.
-	const saveAsPost = () => {
-		console.log(title);
-		console.log(postType);
-		let post = new wp.api.models[capitalize(postType)]( { title } );
-		post.save();
-		setAttributes( { title, id: post.id } );
+	const saveAsPost = (type) => {
+		const capitalize = (s) => {
+			if (typeof s !== 'string') return ''
+			return s.charAt(0).toUpperCase() + s.slice(1)
+		}
+		
+		let postType = capitalize(type);
+		
+		let content = "Testing. Hello World!";
+		// https://developer.wordpress.org/block-editor/packages/packages-blocks/#getSaveElement use this to pass the blocks innerblocks attributes in and get this out and then add to content.
+
+		let post = new wp.api.models[postType]( { title, content } );
+
+		post.save().then((post)=> {
+			console.log(post);
+			console.log(post.id);
+			setAttributes( { 
+				id: post.id,
+				lastUpdated: post.modified_gmt
+			} );
+		});
 	}
 
 	const Toolbar = () => {
 		return(
-			<Button isSecondary onClick={saveAsPost}>
+			<Button isSecondary onClick={()=>{saveAsPost(postType)}}>
 				Save As {postType}
 			</Button>
 		)

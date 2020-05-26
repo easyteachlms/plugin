@@ -30,6 +30,7 @@ const createBlocksFromInnerBlocksTemplate = ( innerBlocksTemplate ) => {
 };
 
 const edit = ({ attributes, className, clientId, name, setAttributes }) => {
+	console.log(attributes);
 	const { title, id } = attributes;
    
 	// We get some information when the block's internal state changes.
@@ -68,7 +69,6 @@ const edit = ({ attributes, className, clientId, name, setAttributes }) => {
 		return(
 			<Collapsible className={className} title={title} postType="topic">
 				<PostAsInnerBlocks id={id} postType="topic" setAttributes={setAttributes} title={title}/>
-				<Button size="small" color="teal" disabled>Mark Topic Completed</Button>
 			</Collapsible>
 		)
 	}

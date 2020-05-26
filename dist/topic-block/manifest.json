@@ -1,23 +1,23 @@
 {
   "block.css": "topic-block/block-31a14d74.css",
   "block.css.map": "topic-block/block-31a14d74.css.map",
-  "block.js": "topic-block/block-035a2a62.js",
-  "block.js.map": "topic-block/block-035a2a62.js.map",
+  "block.js": "topic-block/block-81f9639f.js",
+  "block.js.map": "topic-block/block-81f9639f.js.map",
   "runtime.js": "topic-block/runtime-62e50556.js",
   "runtime.js.map": "topic-block/runtime-62e50556.js.map",
-  "vendors~block.js": "topic-block/vendors~block-da2fa19b.js",
-  "vendors~block.js.map": "topic-block/vendors~block-da2fa19b.js.map",
+  "vendors~block.js": "topic-block/vendors~block-42c44466.js",
+  "vendors~block.js.map": "topic-block/vendors~block-42c44466.js.map",
   "wpackioEp": {
     "block": {
       "js": [
         "topic-block/runtime-62e50556.js",
-        "topic-block/vendors~block-da2fa19b.js",
-        "topic-block/block-035a2a62.js"
+        "topic-block/vendors~block-42c44466.js",
+        "topic-block/block-81f9639f.js"
       ],
       "js.map": [
         "topic-block/runtime-62e50556.js.map",
-        "topic-block/vendors~block-da2fa19b.js.map",
-        "topic-block/block-035a2a62.js.map"
+        "topic-block/vendors~block-42c44466.js.map",
+        "topic-block/block-81f9639f.js.map"
       ],
       "css": [
         "topic-block/block-31a14d74.css"
