@@ -1,30 +1,30 @@
 {
-  "block.css": "course-block/block-529bb763.css",
-  "block.css.map": "course-block/block-529bb763.css.map",
-  "block.js": "course-block/block-fdaa0373.js",
-  "block.js.map": "course-block/block-fdaa0373.js.map",
+  "block.css": "course-block/block.css",
+  "block.css.map": "course-block/block.css.map",
+  "block.js": "course-block/block.js",
+  "block.js.map": "course-block/block.js.map",
   "course-block/assets/art2.png": "course-block/assets/art2-d92c9b1c.png",
-  "runtime.js": "course-block/runtime-3651f84e.js",
-  "runtime.js.map": "course-block/runtime-3651f84e.js.map",
-  "vendors~block.js": "course-block/vendors~block-3dd856e5.js",
-  "vendors~block.js.map": "course-block/vendors~block-3dd856e5.js.map",
+  "runtime.js": "course-block/runtime.js",
+  "runtime.js.map": "course-block/runtime.js.map",
+  "vendors~block.js": "course-block/vendors~block.js",
+  "vendors~block.js.map": "course-block/vendors~block.js.map",
   "wpackioEp": {
     "block": {
       "js": [
-        "course-block/runtime-3651f84e.js",
-        "course-block/vendors~block-3dd856e5.js",
-        "course-block/block-fdaa0373.js"
+        "course-block/runtime.js",
+        "course-block/vendors~block.js",
+        "course-block/block.js"
       ],
       "js.map": [
-        "course-block/runtime-3651f84e.js.map",
-        "course-block/vendors~block-3dd856e5.js.map",
-        "course-block/block-fdaa0373.js.map"
+        "course-block/runtime.js.map",
+        "course-block/vendors~block.js.map",
+        "course-block/block.js.map"
       ],
       "css": [
-        "course-block/block-529bb763.css"
+        "course-block/block.css"
       ],
       "css.map": [
-        "course-block/block-529bb763.css.map"
+        "course-block/block.css.map"
       ]
     }
   }

@@ -28,6 +28,10 @@ const settings = [
                 type: 'integer', 
                 default: 0,
             },
+            lastUpdated: {
+                type: 'string',
+                default: '',
+            },
             title: {
                 type: 'string',
                 default: '',

@@ -1,29 +1,56 @@
 // HOC that maintains a connection to a external post
+
+import { __ } from '@wordpress/i18n';
 import { Fragment } from '@wordpress/element';
-import { Button } from "@wordpress/components";
-import { withDispatch, useDispatch, useSelect } from '@wordpress/data';
-
-import {
-	useState,
-	useConstructor,
-	useDidMount,
-  } from "@daniakash/lifecycle-hooks";
-
-import InitialState from './initial-state';
-
+import { more } from '@wordpress/icons';
+import { 
+	Button, 
+	Panel, 
+	PanelBody, 
+	PanelRow,
+	TextControl
+} from "@wordpress/components";
+import { 
+	useDispatch, 
+	useSelect
+} from '@wordpress/data';
 import {
 	InspectorControls,
 	InnerBlocks,
 	BlockControls,
 } from '@wordpress/block-editor';
 
-const checkPostForUpdates = (id, postType, lastUpdated) => {
-	// Go hit backbone api and get post given id
-	// Get post last updated
-	// Is lastUpdated here the same as last update, then dont worry about it.
+import { getSaveContent } from '@wordpress/blocks';
+
+import {
+	useState,
+	useConstructor,
+	useDidMount,
+} from "@daniakash/lifecycle-hooks";
+
+import InitialState from './initial-state';
+
+/** Helper Utils */
+const capitalize = (s) => {
+	if (typeof s !== 'string') return ''
+	return s.charAt(0).toUpperCase() + s.slice(1)
 }
 
 // OPTION 1: Update inner blocks with the contents 
+
+const checkPostForUpdates = (id, postType, lastUpdated) => {
+	const pType = capitalize(postType);
+	let post = new wp.api.models[pType]( { id } );
+	
+	post.fetch().then(post => {
+		console.log(post);
+		console.log(lastUpdated);
+		console.log(post.modified_gmt);
+		if ( lastUpdated !== post.modified_gmt ) {
+			console.log("WE ARE DIVERGENT");
+		}
+	});
+}
 
 const updateInnerBlocks = (newInnerBlocks) => {
 	const { replaceInnerBlocks } = useDispatch( 'core/block-editor' );
@@ -37,39 +64,39 @@ const updateInnerBlocks = (newInnerBlocks) => {
 	/// Possibly??? An option to instead of update, create new (fork) the topic/lesson
 }
 
-// OPTION 3: Do nothing.
-
-
+ 
 // if id === 0 then display the block initial state
 // if id === 1 then display normal but offer an option to save as post
 // if id is something else then actually check if the post exists and offer the updates and all that. 
 
-const PostAsInnerBlocks = ({id, postType, title, lastUpdated, setAttributes = false, className = '', allowedBlocks = null}) => {
-    // Select A Post
-    // What the course title is, and what course is associated with it (for courses that should be easy... or not??)
-    // What the lesson title is and what the lesson post its associated with...
-	// What the topic title is and what the topic post is associated with.
+const PostAsInnerBlocks = ({id, postType, title, lastUpdated, clientId, setAttributes = false, className = '', allowedBlocks = null}) => {
+
+	const currentBlock = useSelect( select => {
+		return select( 'core/block-editor' ).getBlock( clientId );
+	}, [] );
+	
+	
+	const useBlockContent = () => {
+		const { name, attributes, innerBlocks } = currentBlock;
+		return getSaveContent('sethrubenstein/ghost-block', attributes, innerBlocks);
+	}
 
 	useDidMount(() => {
 		console.log('Hi');
 		console.log(id);
+		console.log(currentBlock);
+		// Do check for post updates here and if so then set a state flag to has updates available.
 	});
 
 	// OPTION 2: Save what you have as a brand new post, break existing links, put new links and more importantly take the current innerblocks parse them back out and send them to a posts content.
-	const saveAsPost = (type) => {
-		const capitalize = (s) => {
-			if (typeof s !== 'string') return ''
-			return s.charAt(0).toUpperCase() + s.slice(1)
-		}
-		
-		let postType = capitalize(type);
-		
-		let content = "Testing. Hello World!";
-		// https://developer.wordpress.org/block-editor/packages/packages-blocks/#getSaveElement use this to pass the blocks innerblocks attributes in and get this out and then add to content.
+	const saveAsPost = () => {
+		const pType = capitalize(postType);
+		const content = useBlockContent();
 
-		let post = new wp.api.models[postType]( { title, content } );
+		let post = new wp.api.models[pType]( { title, content } );
 
 		post.save().then((post)=> {
+			console.info("POST SAVED");
 			console.log(post);
 			setAttributes( { 
 				id: post.id,
@@ -81,22 +108,61 @@ const PostAsInnerBlocks = ({id, postType, title, lastUpdated, setAttributes = fa
 	// @TODO we should check if has innerblocks and if not then dont displat the save button
 	const Toolbar = () => {
 		return(
-			<Button isSecondary onClick={()=>{saveAsPost(postType)}}>
-				Save As {postType}
-			</Button>
+			<div style={{display: 'flex', flexWrap: 'auto'}}>
+				<div>
+					<Button isSecondary onClick={()=>{saveAsPost(postType)}}>
+						Save As {postType}
+					</Button>
+				</div>
+				<div>
+					<Button isSecondary onClick={()=>{checkPostForUpdates(id, postType, lastUpdated)}}>
+						Check For Updates
+					</Button>
+				</div>
+			</div>
+		)
+	}
+
+	const Controls = () => {
+		const type = capitalize(postType);
+		const panelTitle = type + ' Settings';
+		return(
+			<Fragment>
+				<InspectorControls>
+					<Panel>
+						<PanelBody title={__(panelTitle)} icon={ more } initialOpen={ false }>
+							<PanelRow>
+								<TextControl
+									label='ID'
+									value={ id }
+									disabled
+								/>
+							</PanelRow>
+							<PanelRow>
+								<TextControl
+									label='Post Type'
+									value={ type }
+									disabled
+								/>
+							</PanelRow>
+						</PanelBody>
+					</Panel>
+				</InspectorControls>
+				<Toolbar/>
+			</Fragment>
 		)
 	}
 
 	if ( 0 !== id ) {
 		return(
 			<Fragment>
-				{false !== setAttributes && (
-					<InnerBlocks allowedBlocks={allowedBlocks}/>
+				{ false !== setAttributes && (
+					<Fragment>
+						<InnerBlocks allowedBlocks={allowedBlocks}/>
+						<Controls/>
+					</Fragment>
 				) }
-				{false === setAttributes && (
-					<InnerBlocks.Content/>
-				)}
-				<Toolbar/>
+				{ false === setAttributes && <InnerBlocks.Content/> }
 			</Fragment>
 		 );
 	}

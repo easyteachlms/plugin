@@ -24,7 +24,13 @@ module.exports = {
             entry: {
                 app: './assets/js/app.js',
             },
-		},,
+		},
+		{
+            name: 'ghost-block',
+            entry: {
+                block: './blocks/ghost-block/index.js',
+            },
+		},
 		{
             name: 'course-block',
             entry: {

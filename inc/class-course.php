@@ -45,6 +45,9 @@ class Course {
             'supports'            => array( 'title', 'editor', 'revisions', 'thumbnail', 'excerpt', 'author' ),
             'show_in_menu'        => 'easyteach-lms',
             'taxonomies'          => array( 'category' ),
+            'template' => array(
+                array( 'easyteachlms/course', array() ),
+            ),
         );
         register_post_type( $this->post_type, $args );
         $this->register_block();
@@ -74,6 +77,27 @@ class Course {
 				// We're only enqueing these in the block editor, not the front end.
 				'editor_script' => array_pop( $course_block['js'] )['handle'],
 				'editor_style'  => array_pop( $course_block['css'] )['handle'],
+			)
+        );
+
+        $ghost_block = $enqueue->register(
+			'ghost-block',
+			'block',
+			array(
+				'js'        => true,
+				'css'       => false,
+				'js_dep'    => $js_deps,
+				'css_dep'   => array(),
+				'in_footer' => true,
+				'media'     => 'all',
+			)
+		);
+		register_block_type(
+			'sethrubenstein/ghost-block',
+			array(
+				// We're only enqueing these in the block editor, not the front end.
+				'editor_script' => array_pop( $ghost_block['js'] )['handle'],
+				'editor_style'  => array_pop( $ghost_block['css'] )['handle'],
 			)
         );
     }

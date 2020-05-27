@@ -22,7 +22,7 @@ const settings = [
                 default: 0,
             },
             lastUpdated: {
-                type: 'integer',
+                type: 'string',
                 default: 0,
             },
             title: {

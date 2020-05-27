@@ -2,6 +2,7 @@ import { useState } from '@wordpress/element';
 import classNames from 'classnames';
 import { Header } from 'semantic-ui-react';
 import { __ } from '@wordpress/i18n';
+import './style.scss';
 
 const Collapsible = ({ title, postType, className, children }) => {
 	const [ open, setState ] = useState(true);

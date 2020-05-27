@@ -1,0 +1,23 @@
+{
+  "block.js": "ghost-block/block.js",
+  "block.js.map": "block.b43172267068fd42d7a0.hot-update.js.map",
+  "runtime.js": "ghost-block/runtime.js",
+  "runtime.js.map": "ghost-block/runtime.js.map",
+  "vendors~block.js": "ghost-block/vendors~block.js",
+  "vendors~block.js.map": "ghost-block/vendors~block.js.map",
+  "wpackioEp": {
+    "block": {
+      "js": [
+        "ghost-block/runtime.js",
+        "ghost-block/vendors~block.js",
+        "ghost-block/block.js"
+      ],
+      "js.map": [
+        "ghost-block/runtime.js.map",
+        "ghost-block/vendors~block.js.map",
+        "ghost-block/block.js.map",
+        "block.b43172267068fd42d7a0.hot-update.js.map"
+      ]
+    }
+  }
+}
