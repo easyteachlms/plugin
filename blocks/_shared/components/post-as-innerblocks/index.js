@@ -3,6 +3,7 @@
 import { __ } from '@wordpress/i18n';
 import { Fragment } from '@wordpress/element';
 import { more } from '@wordpress/icons';
+import { parse } from '@wordpress/block-serialization-default-parser';
 import { 
 	Button, 
 	Panel, 
@@ -20,6 +21,7 @@ import {
 	BlockControls,
 } from '@wordpress/block-editor';
 
+
 import { getSaveContent } from '@wordpress/blocks';
 
 import {
@@ -35,42 +37,13 @@ const capitalize = (s) => {
 	if (typeof s !== 'string') return ''
 	return s.charAt(0).toUpperCase() + s.slice(1)
 }
-
-// OPTION 1: Update inner blocks with the contents 
-
-const checkPostForUpdates = (id, postType, lastUpdated) => {
-	const pType = capitalize(postType);
-	let post = new wp.api.models[pType]( { id } );
-	
-	post.fetch().then(post => {
-		console.log(post);
-		console.log(lastUpdated);
-		console.log(post.modified_gmt);
-		if ( lastUpdated !== post.modified_gmt ) {
-			console.log("WE ARE DIVERGENT");
-		}
-	});
-}
-
-const updateInnerBlocks = (newInnerBlocks) => {
-	const { replaceInnerBlocks } = useDispatch( 'core/block-editor' );
-	// When isSelected is true on the topic and isnt a brand new topic
-	// 1. Check attributes.lastUpdated === topicPost.lastUpdated (made up variable we'll need to get that info). If so stop, otherwise proceed.
-	// 2. Prompt user new content is available for this Topic would you like to load it or leave alone.
-	// 3. If they select load it then go get the topicPosts postContent as a raw html string, store it as a temp variable.
-	// 4. Use block editor parser https://developer.wordpress.org/block-editor/packages/packages-block-serialization-default-parser/ to transfor that html string into a list of innerBlock essentially
-	// 5. Use block editor replaceInnerBLocks https://developer.wordpress.org/block-editor/data/data-core-block-editor/#replaceInnerBlocks to replace the inner blocks of this block with the innerblocks generated from step 4. 
-	// 6. Update attributes.lastUpdated with the topicPost.lastUpdated value so now we signal they are in sync.
-	/// Possibly??? An option to instead of update, create new (fork) the topic/lesson
-}
-
  
 // if id === 0 then display the block initial state
 // if id === 1 then display normal but offer an option to save as post
 // if id is something else then actually check if the post exists and offer the updates and all that. 
 
 const PostAsInnerBlocks = ({id, postType, title, lastUpdated, clientId, setAttributes = false, className = '', allowedBlocks = null}) => {
-
+	// We set the current block at init, ideally we would use dispatch or some even watcher here.
 	const currentBlock = useSelect( select => {
 		return select( 'core/block-editor' ).getBlock( clientId );
 	}, [] );
@@ -81,11 +54,38 @@ const PostAsInnerBlocks = ({id, postType, title, lastUpdated, clientId, setAttri
 		return getSaveContent('sethrubenstein/ghost-block', attributes, innerBlocks);
 	}
 
+	const checkPostForUpdates = (id, postType, lastUpdated) => {
+		const pType = capitalize(postType);
+		let post = new wp.api.models[pType]( { id } );
+		
+		post.fetch().then(post => {
+			console.log(post);
+			console.log(lastUpdated);
+			console.log(post.modified_gmt);
+			if ( lastUpdated !== post.modified_gmt ) {
+				console.log("WE ARE DIVERGENT");
+				const test = parse( post.content.rendered );
+				console.log(test);
+			}
+		});
+	}
+
+	const updateInnerBlocks = (newInnerBlocks) => {
+		// When isSelected is true on the topic and isnt a brand new topic
+		// 1. Check attributes.lastUpdated === topicPost.lastUpdated (made up variable we'll need to get that info). If so stop, otherwise proceed.
+		// 2. Prompt user new content is available for this Topic would you like to load it or leave alone.
+		// 3. If they select load it then go get the topicPosts postContent as a raw html string, store it as a temp variable.
+		// 4. Use block editor parser https://developer.wordpress.org/block-editor/packages/packages-block-serialization-default-parser/ to transfor that html string into a list of innerBlock essentially
+		// --- Here is where we need a solution. We need to transform a ghost block into something else
+		// 5. Use block editor replaceInnerBLocks https://developer.wordpress.org/block-editor/data/data-core-block-editor/#replaceInnerBlocks to replace the inner blocks of this block with the innerblocks generated from step 4. 
+		// 6. Update attributes.lastUpdated with the topicPost.lastUpdated value so now we signal they are in sync.
+		/// Possibly??? An option to instead of update, create new (fork) the topic/lesson
+		const newBlock = parse( newInnerBlocks );
+		return newBlock;
+	}
+
 	useDidMount(() => {
-		console.log('Hi');
-		console.log(id);
-		console.log(currentBlock);
-		// Do check for post updates here and if so then set a state flag to has updates available.
+		checkPostForUpdates(id, postType, lastUpdated);
 	});
 
 	// OPTION 2: Save what you have as a brand new post, break existing links, put new links and more importantly take the current innerblocks parse them back out and send them to a posts content.
@@ -115,9 +115,6 @@ const PostAsInnerBlocks = ({id, postType, title, lastUpdated, clientId, setAttri
 					</Button>
 				</div>
 				<div>
-					<Button isSecondary onClick={()=>{checkPostForUpdates(id, postType, lastUpdated)}}>
-						Check For Updates
-					</Button>
 				</div>
 			</div>
 		)

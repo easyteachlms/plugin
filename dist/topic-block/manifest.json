@@ -2,7 +2,7 @@
   "block.css": "topic-block/block.css",
   "block.css.map": "topic-block/block.css.map",
   "block.js": "topic-block/block.js",
-  "block.js.map": "block.56f93cf606209443ac3c.hot-update.js.map",
+  "block.js.map": "block.b4d223d1c19fd84b649a.hot-update.js.map",
   "runtime.js": "topic-block/runtime.js",
   "runtime.js.map": "topic-block/runtime.js.map",
   "vendors~block.js": "topic-block/vendors~block.js",
@@ -18,7 +18,7 @@
         "topic-block/runtime.js.map",
         "topic-block/vendors~block.js.map",
         "topic-block/block.js.map",
-        "block.56f93cf606209443ac3c.hot-update.js.map"
+        "block.b4d223d1c19fd84b649a.hot-update.js.map"
       ],
       "css": [
         "topic-block/block.css"
