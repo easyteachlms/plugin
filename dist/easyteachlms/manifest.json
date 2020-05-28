@@ -1,21 +1,17 @@
 {
-  "app.js": "easyteachlms/app.js",
-  "app.js.map": "easyteachlms/app.js.map",
-  "runtime.js": "easyteachlms/runtime.js",
-  "runtime.js.map": "easyteachlms/runtime.js.map",
-  "vendors~app.js": "easyteachlms/vendors~app.js",
-  "vendors~app.js.map": "easyteachlms/vendors~app.js.map",
+  "app.js": "easyteachlms/app-2a09f91d.js",
+  "app.js.map": "easyteachlms/app-2a09f91d.js.map",
+  "runtime.js": "easyteachlms/runtime-e7d664c0.js",
+  "runtime.js.map": "easyteachlms/runtime-e7d664c0.js.map",
   "wpackioEp": {
     "app": {
       "js": [
-        "easyteachlms/runtime.js",
-        "easyteachlms/vendors~app.js",
-        "easyteachlms/app.js"
+        "easyteachlms/runtime-e7d664c0.js",
+        "easyteachlms/app-2a09f91d.js"
       ],
       "js.map": [
-        "easyteachlms/runtime.js.map",
-        "easyteachlms/vendors~app.js.map",
-        "easyteachlms/app.js.map"
+        "easyteachlms/runtime-e7d664c0.js.map",
+        "easyteachlms/app-2a09f91d.js.map"
       ]
     }
   }
