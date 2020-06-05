@@ -127,6 +127,8 @@ class EasyTeachLMS {
 	public function include_files() {
 		require_once EASYTEACHLMS_PATH . '/inc/class-course.php';
 		require_once EASYTEACHLMS_PATH . '/inc/class-lesson.php';
+		require_once EASYTEACHLMS_PATH . '/inc/class-rest-api.php';
+		require_once EASYTEACHLMS_PATH . '/inc/class-quiz.php';
 		require_once EASYTEACHLMS_PATH . '/inc/class-topic.php';
 	}
 

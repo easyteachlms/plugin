@@ -16,7 +16,7 @@ const Collapsible = ({ title, postType, className, children }) => {
 	return(
         <div className={classNames(className, { collapsed: !open })}>
             <div className="collapsible-title">
-                <Header as='h4' icon={"caret " + caretDirection} content={__( postType.toUpperCase() + ' ' + title)} onClick={collapseHandler} />
+                <Header as='h4' icon={"caret " + caretDirection} content={__( postType.toUpperCase() + ':  ' + title)} onClick={collapseHandler} />
             </div>
             <div className="collapsible-content">
                 {children}

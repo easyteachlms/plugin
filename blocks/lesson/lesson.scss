@@ -4,6 +4,23 @@
             display: none;
         }
     }
+    // For the latest Gutenberg release
+    .block-editor-button-block-appender {
+        display: flex;
+        flex-direction: row;
+        margin-left: 0;
+        width: 100%;
+        opacity: 0.8 !important;
+        &:hover {
+            opacity: 1.0 !important;
+        }
+        .components-visually-hidden {
+            position: relative;
+            width: auto;
+            clip-path: none;
+            margin: 0;
+        }
+    }
 }
 
 div[data-type="easyteachlms/lesson"] {

@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "devDependencies": {
+    "@wordpress/api-fetch": "^3.16.0",
     "@wordpress/block-editor": "^3.10.0",
     "@wordpress/blocks": "^6.15.0",
     "@wordpress/components": "^9.5.0",
@@ -26,8 +27,10 @@
     "@wordpress/block-serialization-default-parser": "^3.6.0",
     "@wordpress/icons": "^2.0.0",
     "@wpackio/entrypoint": "^4.4.1",
+    "animate.css": "^4.1.0",
     "classnames": "^2.2.6",
     "jspdf": "^1.5.3",
+    "reactour": "^1.17.0",
     "semantic-ui-css": "^2.4.1",
     "semantic-ui-react": "^0.88.2",
     "styled-components": "^5.1.0"

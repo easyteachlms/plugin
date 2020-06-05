@@ -16,7 +16,7 @@ const settings = [
         edit: () => {
             return <InnerBlocks/>
         },
-        save: () => {
+        save: ({attributes}) => {
             return <InnerBlocks.Content/>
         },
     }

@@ -44,6 +44,12 @@ module.exports = {
             },
 		},
 		{
+            name: 'quiz-block',
+            entry: {
+                block: './blocks/quiz/index.js',
+            },
+        },
+		{
             name: 'topic-block',
             entry: {
                 block: './blocks/topic/index.js',
@@ -71,7 +77,8 @@ module.exports = {
         react: 'React',
         'react-dom': 'ReactDOM',
         'lodash-es': 'lodash',
-        '@babel/runtime/regenerator': 'regeneratorRuntime',
+		'@babel/runtime/regenerator': 'regeneratorRuntime',
+		'@wordpress/api-fetch': 'wp.apiFetch',
         '@wordpress/blocks': 'wp.blocks',
         '@wordpress/element': 'wp.element',
         '@wordpress/block-editor': 'wp.blockEditor',
@@ -88,6 +95,7 @@ module.exports = {
 	alias: {
 		components: path.resolve( __dirname, 'blocks/_shared/components' ),
 		styles: path.resolve( __dirname, 'node_modules/semantic-ui-css/components' ),
+		utils: path.resolve( __dirname, 'blocks/_shared/utils' ),
 	},
 	// Show overlay on development
 	errorOverlay: true,

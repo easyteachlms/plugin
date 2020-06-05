@@ -1,8 +1,7 @@
 import { __ } from '@wordpress/i18n';
-import { withDispatch, useDispatch, useSelect } from '@wordpress/data';
+import { useSelect } from '@wordpress/data';
 
-import Collapsible from 'components/collapsible';
-import PostAsInnerBlocks from 'components/post-as-innerblocks';
+import { Collapsible, PostAsInnerBlocks } from 'components';
 
 import { Button } from 'semantic-ui-react';
 
@@ -19,10 +18,10 @@ const hasBlocks = (clientId) => {
 const edit = ({ attributes, className, clientId, setAttributes }) => {
 	const { title, lastUpdated, id } = attributes;
 	
-	let test = hasBlocks(clientId);
-	console.log(attributes);
-	console.log("topic has inner blocks??");
-	console.log(test);
+	// let test = hasBlocks(clientId);
+	// console.log(attributes);
+	// console.log("topic has inner blocks??");
+	// console.log(test);
 
 	if ( 0 !== id && '' !== title ) {
 		return(

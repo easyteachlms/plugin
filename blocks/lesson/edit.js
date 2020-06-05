@@ -1,5 +1,4 @@
-import Collapsible from 'components/collapsible';
-import PostAsInnerBlocks from 'components/post-as-innerblocks';
+import { Collapsible, PostAsInnerBlocks } from 'components';
 
 const ALLOWED_BLOCKS = ['easyteachlms/topic'];
 

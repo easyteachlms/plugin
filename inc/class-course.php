@@ -4,7 +4,7 @@ namespace EasyTeachLMS;
 use WPackio\Enqueue;
 class Course {
     protected $post_type = 'course';
-    protected $js_deps = array( 'react', 'react-dom', 'wp-element', 'wp-components', 'wp-polyfill', 'wp-i18n' );
+    protected $js_deps = array( 'react', 'react-dom', 'wp-element', 'wp-components', 'wp-polyfill', 'wp-i18n', 'wp-api' );
 
     public function __construct( $init = false ) {
         if ( true === $init ) {
@@ -70,7 +70,8 @@ class Course {
 				'in_footer' => true,
 				'media'     => 'all',
 			)
-		);
+        );
+        error_log(print_r($course_block, true));
 		register_block_type(
 			'easyteachlms/course',
 			array(
@@ -80,6 +81,7 @@ class Course {
 			)
         );
 
+        // @TODO: This belongs elsewhere:
         $ghost_block = $enqueue->register(
 			'ghost-block',
 			'block',
