@@ -7516,6 +7516,11 @@ react-autosize-textarea@^3.0.2:
     line-height "^0.3.1"
     prop-types "^15.5.6"
 
+react-children-utilities@^2.1.2:
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/react-children-utilities/-/react-children-utilities-2.1.2.tgz#942d94ce529eb264c50ce432349e279c8e449f7b"
+  integrity sha512-lcjFpja5hMLCZKYU1zwtXSZXGv0lHSOMYLI0EWIbitbnGnFnFjg0Py2T9Mrv6NIRA7MGVu3qCdl9UP/USLVE7w==
+
 react-clientside-effect@^1.2.2:
   version "1.2.2"
   resolved "https://registry.yarnpkg.com/react-clientside-effect/-/react-clientside-effect-1.2.2.tgz#6212fb0e07b204e714581dd51992603d1accc837"

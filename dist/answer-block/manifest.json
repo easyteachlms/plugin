@@ -1,0 +1,18 @@
+{
+  "block.js": "answer-block/block-c32bffbe.js",
+  "block.js.map": "answer-block/block-c32bffbe.js.map",
+  "runtime.js": "answer-block/runtime-8411f0b5.js",
+  "runtime.js.map": "answer-block/runtime-8411f0b5.js.map",
+  "wpackioEp": {
+    "block": {
+      "js": [
+        "answer-block/runtime-8411f0b5.js",
+        "answer-block/block-c32bffbe.js"
+      ],
+      "js.map": [
+        "answer-block/runtime-8411f0b5.js.map",
+        "answer-block/block-c32bffbe.js.map"
+      ]
+    }
+  }
+}

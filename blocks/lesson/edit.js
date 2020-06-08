@@ -1,6 +1,6 @@
 import { Collapsible, PostAsInnerBlocks } from 'components';
 
-const ALLOWED_BLOCKS = ['easyteachlms/topic'];
+const ALLOWED_BLOCKS = ['easyteachlms/topic','easyteachlms/quiz'];
 
 const edit = ({ attributes, className, clientId, setAttributes }) => {
 	const { id, lastUpdated, title } = attributes;

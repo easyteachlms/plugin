@@ -1,8 +1,13 @@
+import './edit.scss';
 import { __ } from '@wordpress/i18n';
 import { withDispatch, useDispatch, useSelect } from '@wordpress/data';
 import { InnerBlocks } from '@wordpress/block-editor';
 
 import { Collapsible } from 'components';
+
+import Controls from './controls';
+
+const ALLOWED_BLOCKS = ['easyteachlms/question'];
 
 const hasBlocks = (clientId) => {
 	console.log(clientId);
@@ -19,8 +24,8 @@ const edit = ({ attributes, className, clientId, setAttributes }) => {
 
 	return(
         <Collapsible className={className} title={title} postType="quiz">
-            Quiz Go Here
-            <InnerBlocks/>
+            <InnerBlocks allowedBlocks={ALLOWED_BLOCKS}/>
+			<Controls attributes={attributes} setAttributes={setAttributes}/>
         </Collapsible>
     )
 }

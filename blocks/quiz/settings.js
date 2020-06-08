@@ -14,12 +14,12 @@ const settings = [
         ],
         supports: {
             html: false, 
-            align: true
+            align: false,
         },
         attributes: {
             title: {
                 type: 'string',
-                default: '',
+                default: 'Quiz Title Here',
             },
         },
         edit,

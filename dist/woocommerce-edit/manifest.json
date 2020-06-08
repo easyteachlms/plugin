@@ -1,0 +1,22 @@
+{
+  "field.js": "woocommerce-edit/field-66eac647.js",
+  "field.js.map": "woocommerce-edit/field-66eac647.js.map",
+  "runtime.js": "woocommerce-edit/runtime-e0a40375.js",
+  "runtime.js.map": "woocommerce-edit/runtime-e0a40375.js.map",
+  "vendors~field.js": "woocommerce-edit/vendors~field-453db68d.js",
+  "vendors~field.js.map": "woocommerce-edit/vendors~field-453db68d.js.map",
+  "wpackioEp": {
+    "field": {
+      "js": [
+        "woocommerce-edit/runtime-e0a40375.js",
+        "woocommerce-edit/vendors~field-453db68d.js",
+        "woocommerce-edit/field-66eac647.js"
+      ],
+      "js.map": [
+        "woocommerce-edit/runtime-e0a40375.js.map",
+        "woocommerce-edit/vendors~field-453db68d.js.map",
+        "woocommerce-edit/field-66eac647.js.map"
+      ]
+    }
+  }
+}

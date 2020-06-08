@@ -128,8 +128,10 @@ class EasyTeachLMS {
 		require_once EASYTEACHLMS_PATH . '/inc/class-course.php';
 		require_once EASYTEACHLMS_PATH . '/inc/class-lesson.php';
 		require_once EASYTEACHLMS_PATH . '/inc/class-rest-api.php';
+		require_once EASYTEACHLMS_PATH . '/inc/class-question.php';
 		require_once EASYTEACHLMS_PATH . '/inc/class-quiz.php';
 		require_once EASYTEACHLMS_PATH . '/inc/class-topic.php';
+		require_once EASYTEACHLMS_PATH . '/inc/class-woocommerce.php';
 	}
 
 

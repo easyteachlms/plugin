@@ -14,7 +14,7 @@ const settings = [
         ],
         supports: {
             html: false, 
-            align: true
+            align: false,
         },
         attributes: {
             id: {

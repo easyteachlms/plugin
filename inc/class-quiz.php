@@ -2,6 +2,7 @@
 
 namespace EasyTeachLMS;
 use WPackio\Enqueue;
+
 class Quiz {
     protected $post_type = 'quiz';
     protected $js_deps = array( 'react', 'react-dom', 'wp-element', 'wp-components', 'wp-polyfill', 'wp-i18n' );
@@ -38,7 +39,9 @@ class Quiz {
 				'editor_style'  => array_pop( $quiz_block['css'] )['handle'],
 			)
         );
-    }
+	}
+	
+	// On course save and/or topic save we need to go bundle up all the quiz data into the appropriate data model
 }
 
 new Quiz(true);

@@ -9,19 +9,12 @@ const settings = [
         title: __('Lesson'), 
         description: 'Block Desc.',
         category: 'education',
-        // icon: {
-        //     background: '#yourcolor',
-        //     foreground: '#yourcolor',
-        //     src: 'Dashicon',
-        // },
         keywords: [
-            __( 'Key 1' ),
-            __( 'Key 2' ), 
-            __( 'Key 3' )
+            __( 'Lesson' ),
         ],
         supports: {
             html: false, 
-            align: true
+            align: false,
         },
         attributes: {
             id: {

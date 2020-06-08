@@ -9,6 +9,8 @@ class Course {
     public function __construct( $init = false ) {
         if ( true === $init ) {
             add_action( 'init', array( $this, 'init' ) );
+            add_filter( 'post_class', array( $this, 'is_enrolled_post_class' ), 10, 3 );
+            add_action( 'enroll_user', array( $this, 'enroll' ), 10, 2 );
         }
     }
 
@@ -71,7 +73,7 @@ class Course {
 				'media'     => 'all',
 			)
         );
-        error_log(print_r($course_block, true));
+        
 		register_block_type(
 			'easyteachlms/course',
 			array(
@@ -103,6 +105,47 @@ class Course {
 			)
         );
     }
+
+    public function enroll( $user_id, $course_id ) {
+        if ( ! $user_id || ! $course_id ) {
+            return false;
+        }
+
+        $data = get_user_meta( $user_id, '_enrolled_courses', true );
+
+		if ( ! $data ) {
+			$data = array( $course_id );
+		} else {
+			$data[] = $course_id;
+		}
+
+        return update_user_meta( $user_id, '_enrolled_courses', $data );
+    }
+
+    public function is_enrolled( int $post_id ) {
+		if ( ! $post_id ) {
+			global $post;
+			$post_id = $post->ID;
+        }
+        
+		$user_id = get_current_user_id();
+        $courses = get_user_meta( $user_id, '_enrolled_courses', true );
+        
+		if ( empty( $courses ) ) {
+			return false;
+		} elseif ( in_array( $post_id, $courses ) ) {
+			return true;
+		} else {
+			return false;
+		}
+    }
+    
+	public function is_enrolled_post_class( $classes, $class, $post_id ) {
+		if ( true === $this->is_enrolled( $post_id ) ) {
+			$classes[] = 'user-enrolled';
+		}
+		return $classes;
+	}
 }
 
 new Course(true);

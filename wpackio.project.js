@@ -26,6 +26,12 @@ module.exports = {
             },
 		},
 		{
+            name: 'woocommerce',
+            entry: {
+                productEdit: './assets/js/woocommerce/product-edit.js',
+            },
+		},
+		{
             name: 'ghost-block',
             entry: {
                 block: './blocks/ghost-block/index.js',
@@ -43,6 +49,18 @@ module.exports = {
                 block: './blocks/lesson/index.js',
             },
 		},
+		{
+            name: 'answer-block',
+            entry: {
+                block: './blocks/answer/index.js',
+            },
+        },
+		{
+            name: 'question-block',
+            entry: {
+                block: './blocks/question/index.js',
+            },
+        },
 		{
             name: 'quiz-block',
             entry: {
@@ -88,7 +106,8 @@ module.exports = {
         '@wordpress/data': 'wp.data',
         '@wordpress/i18n': 'wp.i18n',
         '@wordpress/api-fetch': 'wp.apiFetch',
-        '@wordpress/url': 'wp.url',
+		'@wordpress/url': 'wp.url',
+		'@wordpress/dom-ready': 'wp.domReady',
 	},
 	// Webpack Aliases
 	// <https://webpack.js.org/configuration/resolve/#resolve-alias>

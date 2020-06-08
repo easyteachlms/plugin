@@ -100,9 +100,6 @@ const Controls = ({
                 <div>
                     <SaveAsNewButton isSmall={true}/>
                 </div>
-                <div>
-                    <Button isSmall isLink>{__('Edit In New Window')}</Button>
-                </div>
             </div>
             <InspectorControls>
                 <Panel>
@@ -128,11 +125,16 @@ const Controls = ({
                                 disabled
                             />
                         </PanelRow>
-                        <PanelRow>
-                            <UpdateContentButton/>
-                        </PanelRow>
+                        { true === updated && (
+                            <PanelRow>
+                                <UpdateContentButton/>
+                            </PanelRow>
+                        ) }
                         <PanelRow>
                             <SaveAsNewButton/>
+                        </PanelRow>
+                        <PanelRow>
+                            <Button isLink>{__('Edit In New Window')}</Button>
                         </PanelRow>
                     </PanelBody>
                 </Panel>

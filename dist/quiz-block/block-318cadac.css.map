@@ -1,1 +1,0 @@
-{"version":3,"sources":["webpack:///./blocks/_shared/components/collapsible/style.scss"],"names":[],"mappings":";;;;;;;;;;;;;;;;;AAAA,sBACI,eAAgB,CAChB,cAAe","file":"quiz-block/block-318cadac.css","sourcesContent":[".collapsible-title > h4 {\n    max-width: 450px;\n    cursor: pointer;\n}"],"sourceRoot":""}
