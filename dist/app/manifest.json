@@ -1,6 +1,6 @@
 {
-  "course.js": "app/course-adebd391.js",
-  "course.js.map": "app/course-adebd391.js.map",
+  "course.js": "app/course-e362e100.js",
+  "course.js.map": "app/course-e362e100.js.map",
   "runtime.js": "app/runtime-dc430e59.js",
   "runtime.js.map": "app/runtime-dc430e59.js.map",
   "vendors~course.js": "app/vendors~course-b57952b9.js",
@@ -10,12 +10,12 @@
       "js": [
         "app/runtime-dc430e59.js",
         "app/vendors~course-b57952b9.js",
-        "app/course-adebd391.js"
+        "app/course-e362e100.js"
       ],
       "js.map": [
         "app/runtime-dc430e59.js.map",
         "app/vendors~course-b57952b9.js.map",
-        "app/course-adebd391.js.map"
+        "app/course-e362e100.js.map"
       ]
     }
   }

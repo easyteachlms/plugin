@@ -13,6 +13,8 @@ import domReady from '@wordpress/dom-ready';
 import { Parser } from 'html-to-react';
 import { Button } from 'semantic-ui-react';
 
+// We will import raw children and then
+
 const recursiveMap = (children, fn) => {
     return Children.map(children, (child) => {
         if (!isValidElement(child)) {
@@ -26,7 +28,16 @@ const recursiveMap = (children, fn) => {
         }
         console.log('child recursive');
         console.log(child);
-        if ('wp-block-easyteachlms-topic' === child.props.className) {
+
+        // Class Name is so important for us we need to double check it. All of our logic is based on class names.
+        const { className } = child.props;
+        if (undefined === className) {
+            return child;
+        }
+        console.log(className);
+        console.log(className.includes('wp-block-easyteachlms-topic'));
+        // We can do checks here
+        if (className.includes('wp-block-easyteachlms-topic')) {
             return (
                 <div>
                     <Fragment>
@@ -37,7 +48,22 @@ const recursiveMap = (children, fn) => {
                 </div>
             );
         }
-        return child;
+
+        if (className.includes('wp-block-embed-youtube')) {
+            return (
+                <div>
+                    <Fragment>
+                        <p>
+                            <strong>VIDEO HERE</strong>
+                        </p>
+                        {child}
+                        <hr />
+                    </Fragment>
+                </div>
+            );
+        }
+
+        return <Fragment>{child}</Fragment>;
     });
 };
 
