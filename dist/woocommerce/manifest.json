@@ -1,6 +1,6 @@
 {
-  "productEdit.js": "woocommerce/productEdit-30f6a65b.js",
-  "productEdit.js.map": "woocommerce/productEdit-30f6a65b.js.map",
+  "productEdit.js": "woocommerce/productEdit-72e4b352.js",
+  "productEdit.js.map": "woocommerce/productEdit-72e4b352.js.map",
   "runtime.js": "woocommerce/runtime-b2221a3b.js",
   "runtime.js.map": "woocommerce/runtime-b2221a3b.js.map",
   "vendors~productEdit.js": "woocommerce/vendors~productEdit-dbc1e00e.js",
@@ -10,12 +10,12 @@
       "js": [
         "woocommerce/runtime-b2221a3b.js",
         "woocommerce/vendors~productEdit-dbc1e00e.js",
-        "woocommerce/productEdit-30f6a65b.js"
+        "woocommerce/productEdit-72e4b352.js"
       ],
       "js.map": [
         "woocommerce/runtime-b2221a3b.js.map",
         "woocommerce/vendors~productEdit-dbc1e00e.js.map",
-        "woocommerce/productEdit-30f6a65b.js.map"
+        "woocommerce/productEdit-72e4b352.js.map"
       ]
     }
   }

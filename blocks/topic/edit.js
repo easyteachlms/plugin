@@ -1,5 +1,5 @@
 import { __ } from '@wordpress/i18n';
-import { Collapsible, PostAsInnerBlocks } from 'components';
+import { Collapsible, PostAsInnerBlocks } from '@easyteachlms/components';
 
 const edit = ({ attributes, className, clientId, setAttributes }) => {
 	const { title, lastUpdated, id } = attributes;

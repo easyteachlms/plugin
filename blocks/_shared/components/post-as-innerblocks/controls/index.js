@@ -12,7 +12,7 @@ import {
 	TextControl,
 	Dashicon
 } from "@wordpress/components";
-import { replaceContent, capitalize } from 'utils';
+import { replaceContent, capitalize } from '@easyteachlms/utils';
 
 const Controls = ({
     id,

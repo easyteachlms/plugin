@@ -1,5 +1,5 @@
 import { __ } from '@wordpress/i18n';
-import { PostAsInnerBlocks } from 'components';
+import { PostAsInnerBlocks } from '@easyteachlms/components';
 
 const save = ({ attributes, className, clientId }) => {
 	const { title, lastUpdated, id } = attributes;

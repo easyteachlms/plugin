@@ -1,8 +1,8 @@
 {
-  "block.css": "lesson-block/block-1f0226ca.css",
-  "block.css.map": "lesson-block/block-1f0226ca.css.map",
-  "block.js": "lesson-block/block-b8a76190.js",
-  "block.js.map": "lesson-block/block-b8a76190.js.map",
+  "block.css": "lesson-block/block-6d40142f.css",
+  "block.css.map": "lesson-block/block-6d40142f.css.map",
+  "block.js": "lesson-block/block-c3fca180.js",
+  "block.js.map": "lesson-block/block-c3fca180.js.map",
   "runtime.js": "lesson-block/runtime-6c8771e2.js",
   "runtime.js.map": "lesson-block/runtime-6c8771e2.js.map",
   "vendors~block.js": "lesson-block/vendors~block-88e1d823.js",
@@ -12,18 +12,18 @@
       "js": [
         "lesson-block/runtime-6c8771e2.js",
         "lesson-block/vendors~block-88e1d823.js",
-        "lesson-block/block-b8a76190.js"
+        "lesson-block/block-c3fca180.js"
       ],
       "js.map": [
         "lesson-block/runtime-6c8771e2.js.map",
         "lesson-block/vendors~block-88e1d823.js.map",
-        "lesson-block/block-b8a76190.js.map"
+        "lesson-block/block-c3fca180.js.map"
       ],
       "css": [
-        "lesson-block/block-1f0226ca.css"
+        "lesson-block/block-6d40142f.css"
       ],
       "css.map": [
-        "lesson-block/block-1f0226ca.css.map"
+        "lesson-block/block-6d40142f.css.map"
       ]
     }
   }

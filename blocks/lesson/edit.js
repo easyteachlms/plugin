@@ -1,20 +1,37 @@
-import { Collapsible, PostAsInnerBlocks } from 'components';
+import { Collapsible, PostAsInnerBlocks } from '@easyteachlms/components';
 
-const ALLOWED_BLOCKS = ['easyteachlms/topic','easyteachlms/quiz'];
+const ALLOWED_BLOCKS = ['easyteachlms/topic', 'easyteachlms/quiz'];
 
 const edit = ({ attributes, className, clientId, setAttributes }) => {
-	const { id, lastUpdated, title } = attributes;
+    const { id, lastUpdated, title } = attributes;
 
-	if ( 0 !== id && '' !== title ) {
-		return(
-			<Collapsible className={className} title={title} postType="lesson">
-				<PostAsInnerBlocks id={id} postType="lesson" title={title} lastUpdated={lastUpdated} setAttributes={setAttributes} allowedBlocks={ALLOWED_BLOCKS} clientId={clientId}/>
-			</Collapsible>
-		)
-	}
+    if (0 !== id && '' !== title) {
+        return (
+            <Collapsible className={className} title={title} postType="lesson">
+                <PostAsInnerBlocks
+                    id={id}
+                    postType="lesson"
+                    title={title}
+                    lastUpdated={lastUpdated}
+                    setAttributes={setAttributes}
+                    allowedBlocks={ALLOWED_BLOCKS}
+                    clientId={clientId}
+                />
+            </Collapsible>
+        );
+    }
 
-	return <PostAsInnerBlocks id={id} postType="lesson" title={title} lastUpdated={lastUpdated} setAttributes={setAttributes} allowedBlocks={ALLOWED_BLOCKS} clientId={clientId}/>;
-
-}
+    return (
+        <PostAsInnerBlocks
+            id={id}
+            postType="lesson"
+            title={title}
+            lastUpdated={lastUpdated}
+            setAttributes={setAttributes}
+            allowedBlocks={ALLOWED_BLOCKS}
+            clientId={clientId}
+        />
+    );
+};
 
 export default edit;

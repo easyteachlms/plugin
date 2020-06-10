@@ -3,7 +3,7 @@ import { __ } from '@wordpress/i18n';
 import { withDispatch, useDispatch, useSelect } from '@wordpress/data';
 import { InnerBlocks } from '@wordpress/block-editor';
 
-import { Collapsible } from 'components';
+import { Collapsible } from '@easyteachlms/components';
 
 import Controls from './controls';
 

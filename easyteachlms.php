@@ -59,7 +59,7 @@ class EasyTeachLMS {
 	protected $plugin_version   = '5.0.0';
 	public $wp_version_required = '4.7';
 	public $wp_version_tested   = '5.0.0';
-	protected $js_deps = array( 'react', 'react-dom', 'wp-element', 'wp-polyfill', 'wp-i18n' );
+	protected $js_deps          = array( 'react', 'react-dom', 'wp-element', 'wp-polyfill', 'wp-i18n' );
 
 	/**
 	 * @var $name   Variable for Base_Plugin used throughout the plugin
@@ -75,7 +75,7 @@ class EasyTeachLMS {
 	 * @uses Base_Plugin::__construct()
 	 */
 	// public function EasyTeachLMS() {
-	// 	$this->__construct();
+	// $this->__construct();
 	// }
 	/**
 	 * Constructor for the Base_Plugin class
@@ -90,18 +90,17 @@ class EasyTeachLMS {
 	 */
 	public function __construct( $init = false ) {
 		add_action( 'init', array( $this, 'semantic_ui_css_loader' ) );
-		add_action( 'wp_enqueue_scripts', array( $this, 'app_loader' ) );
 		add_action( 'init', array( $this, 'rewrite' ) );
 		add_action( 'init', array( $this, 'rewrite_tags' ) );
 		add_action( 'admin_menu', array( $this, 'register_admin_menu' ) );
 		add_filter( 'block_categories', array( $this, 'register_block_category' ), 10, 2 );
-		
+
 		register_activation_hook( EASYTEACHLMS_FILE, array( $this, 'activate' ) );
 		register_deactivation_hook( EASYTEACHLMS_FILE, array( $this, 'deactivate' ) );
 
 		$this->include_files();
 	}
-	
+
 	/**
 	 * Initializes the Base_Plugin() class
 	 *
@@ -111,11 +110,11 @@ class EasyTeachLMS {
 	 * @uses Base_Plugin()
 	 */
 	// public function &init() {
-	// 	static $instance = false;
-	// 	if ( ! $instance ) {
-	// 		$instance = new EasyTeachLMS();
-	// 	}
-	// 	return $instance;
+	// static $instance = false;
+	// if ( ! $instance ) {
+	// $instance = new EasyTeachLMS();
+	// }
+	// return $instance;
 	// }
 
 	public function rewrite_tags() {
@@ -126,6 +125,7 @@ class EasyTeachLMS {
 
 	public function include_files() {
 		require_once EASYTEACHLMS_PATH . '/inc/class-course.php';
+		require_once EASYTEACHLMS_PATH . '/inc/class-data-model.php';
 		require_once EASYTEACHLMS_PATH . '/inc/class-lesson.php';
 		require_once EASYTEACHLMS_PATH . '/inc/class-rest-api.php';
 		require_once EASYTEACHLMS_PATH . '/inc/class-question.php';
@@ -139,31 +139,15 @@ class EasyTeachLMS {
 		wp_register_style( 'semantic-ui', '//cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css' );
 	}
 
-	public function app_loader() {
-		$enqueue   = new Enqueue( 'easyTeachLMS', 'dist', '1.0.0', 'plugin', plugin_dir_path( __FILE__ ) . '/easyteachlms' );
-        $enqueue->enqueue(
-			'easyteachlms',
-			'app',
-			array(
-				'js'        => true,
-				'css'       => true,
-				'js_dep'    => $this->js_deps,
-				'css_dep'   => array( 'semantic-ui' ),
-				'in_footer' => true,
-				'media'     => 'all',
-			)
-		);
-	}
-
 	function register_block_category( $categories, $post ) {
-		if ( ! in_array( $post->post_type, array('course','lesson','topic') ) ) {
+		if ( ! in_array( $post->post_type, array( 'course', 'lesson', 'topic' ) ) ) {
 			return $categories;
 		}
 		return array_merge(
 			$categories,
 			array(
 				array(
-					'slug' => 'education',
+					'slug'  => 'education',
 					'title' => __( 'Education', 'easyteachlms' ),
 				),
 			)

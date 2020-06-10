@@ -1,8 +1,8 @@
 {
   "block.css": "quiz-block/block-80d08c12.css",
   "block.css.map": "quiz-block/block-80d08c12.css.map",
-  "block.js": "quiz-block/block-2edd04e7.js",
-  "block.js.map": "quiz-block/block-2edd04e7.js.map",
+  "block.js": "quiz-block/block-563fb489.js",
+  "block.js.map": "quiz-block/block-563fb489.js.map",
   "runtime.js": "quiz-block/runtime-53568aeb.js",
   "runtime.js.map": "quiz-block/runtime-53568aeb.js.map",
   "vendors~block.js": "quiz-block/vendors~block-29993b54.js",
@@ -12,12 +12,12 @@
       "js": [
         "quiz-block/runtime-53568aeb.js",
         "quiz-block/vendors~block-29993b54.js",
-        "quiz-block/block-2edd04e7.js"
+        "quiz-block/block-563fb489.js"
       ],
       "js.map": [
         "quiz-block/runtime-53568aeb.js.map",
         "quiz-block/vendors~block-29993b54.js.map",
-        "quiz-block/block-2edd04e7.js.map"
+        "quiz-block/block-563fb489.js.map"
       ],
       "css": [
         "quiz-block/block-80d08c12.css"
