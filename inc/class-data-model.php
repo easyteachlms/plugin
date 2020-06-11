@@ -118,7 +118,7 @@ class Data_Model {
 				foreach ( $question['innerBlocks'] as $index => $answer ) {
 					$answers[] = $answer['attrs']['answer'];
 					if ( true === $answer['attrs']['isCorrect'] ) {
-						$correct_answer = $index;
+						$correct_answer = $index + 1;
 					}
 				}
 				// Construct question.
