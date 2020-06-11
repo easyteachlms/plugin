@@ -5,26 +5,24 @@ import save from './save';
 const settings = [
     'easyteachlms/question',
     {
-        title: __('Question'), 
+        title: __('Question'),
         description: 'Block Desc.',
         category: 'education',
         icon: 'editor-help',
-        keywords: [
-            __( 'Quiz' ),
-        ],
+        keywords: [__('Quiz')],
         supports: {
-            html: false, 
+            html: false,
             align: false,
         },
-        parent: [ 'easyteachlms/quiz' ],
+        parent: ['easyteachlms/quiz'],
         attributes: {
             question: {
                 type: 'string',
-                default: ''
+                default: '',
             },
             type: {
                 type: 'string',
-                default: 'text'
+                default: 'text',
             },
             answersType: {
                 type: 'string',
@@ -49,11 +47,11 @@ const settings = [
             picture: {
                 type: 'string',
                 defualt: '',
-            }
+            },
         },
         edit,
         save,
-    }
+    },
 ];
 
 export default settings;

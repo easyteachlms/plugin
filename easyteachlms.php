@@ -57,8 +57,8 @@ use WPackio\Enqueue;
 
 class EasyTeachLMS {
 	protected $plugin_version   = '5.0.0';
-	public $wp_version_required = '4.7';
-	public $wp_version_tested   = '5.0.0';
+	public $wp_version_required = '5.4.0';
+	public $wp_version_tested   = '5.4.0';
 	protected $js_deps          = array( 'react', 'react-dom', 'wp-element', 'wp-polyfill', 'wp-i18n' );
 
 	/**
@@ -128,7 +128,6 @@ class EasyTeachLMS {
 		require_once EASYTEACHLMS_PATH . '/inc/class-data-model.php';
 		require_once EASYTEACHLMS_PATH . '/inc/class-lesson.php';
 		require_once EASYTEACHLMS_PATH . '/inc/class-rest-api.php';
-		require_once EASYTEACHLMS_PATH . '/inc/class-question.php';
 		require_once EASYTEACHLMS_PATH . '/inc/class-quiz.php';
 		require_once EASYTEACHLMS_PATH . '/inc/class-topic.php';
 		require_once EASYTEACHLMS_PATH . '/inc/class-woocommerce.php';

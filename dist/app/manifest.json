@@ -1,21 +1,29 @@
 {
-  "course.js": "app/course-e362e100.js",
-  "course.js.map": "app/course-e362e100.js.map",
+  "course.js": "app/course-37bc4f58.js",
+  "course.js.map": "app/course-37bc4f58.js.map",
   "runtime.js": "app/runtime-dc430e59.js",
   "runtime.js.map": "app/runtime-dc430e59.js.map",
-  "vendors~course.js": "app/vendors~course-b57952b9.js",
-  "vendors~course.js.map": "app/vendors~course-b57952b9.js.map",
+  "vendors~course.css": "app/vendors~course-dcf35e01.css",
+  "vendors~course.css.map": "app/vendors~course-dcf35e01.css.map",
+  "vendors~course.js": "app/vendors~course-99230206.js",
+  "vendors~course.js.map": "app/vendors~course-99230206.js.map",
   "wpackioEp": {
     "course": {
       "js": [
         "app/runtime-dc430e59.js",
-        "app/vendors~course-b57952b9.js",
-        "app/course-e362e100.js"
+        "app/vendors~course-99230206.js",
+        "app/course-37bc4f58.js"
       ],
       "js.map": [
         "app/runtime-dc430e59.js.map",
-        "app/vendors~course-b57952b9.js.map",
-        "app/course-e362e100.js.map"
+        "app/vendors~course-99230206.js.map",
+        "app/course-37bc4f58.js.map"
+      ],
+      "css": [
+        "app/vendors~course-dcf35e01.css"
+      ],
+      "css.map": [
+        "app/vendors~course-dcf35e01.css.map"
       ]
     }
   }

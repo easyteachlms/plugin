@@ -10,24 +10,24 @@ import Controls from './controls';
 const ALLOWED_BLOCKS = ['easyteachlms/question'];
 
 const hasBlocks = (clientId) => {
-	console.log(clientId);
-	// We get some information when the block's internal state changes.
-	const { hasInnerBlocks } = useSelect(
-		select => select( 'core/block-editor' ).getBlocks( clientId ).length > 0,
-		[ clientId, name ]
-	);
-	return hasInnerBlocks;
-}
+    console.log(clientId);
+    // We get some information when the block's internal state changes.
+    const { hasInnerBlocks } = useSelect(
+        (select) => 0 < select('core/block-editor').getBlocks(clientId).length,
+        [clientId, name],
+    );
+    return hasInnerBlocks;
+};
 
 const edit = ({ attributes, className, clientId, setAttributes }) => {
-	const { title } = attributes;
+    const { title } = attributes;
 
-	return(
+    return (
         <Collapsible className={className} title={title} postType="quiz">
-            <InnerBlocks allowedBlocks={ALLOWED_BLOCKS}/>
-			<Controls attributes={attributes} setAttributes={setAttributes}/>
+            <InnerBlocks allowedBlocks={ALLOWED_BLOCKS} />
+            <Controls attributes={attributes} setAttributes={setAttributes} />
         </Collapsible>
-    )
-}
+    );
+};
 
 export default edit;

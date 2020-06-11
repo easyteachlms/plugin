@@ -5,7 +5,7 @@ namespace EasyTeachLMS;
 use WPackio\Enqueue;
 class Course {
 	protected $post_type        = 'course';
-	protected $frontend_js_deps = array( 'react', 'react-dom', 'wp-element', 'wp-polyfill', 'wp-i18n', 'wp-api', 'wp-dom-ready' );
+	protected $frontend_js_deps = array( 'react', 'react-dom', 'wp-element', 'wp-polyfill', 'wp-i18n', 'wp-api', 'wp-dom-ready', 'wp-api-fetch' );
 	protected $block_js_deps    = array( 'react', 'react-dom', 'wp-element', 'wp-components', 'wp-polyfill', 'wp-i18n', 'wp-api' );
 
 	public function __construct( $init = false ) {
@@ -129,6 +129,22 @@ class Course {
 		);
 	}
 
+	public function log_enrollment_on_course( $user_id, $course_id ) {
+		if ( ! $user_id || ! $course_id ) {
+			return false;
+		}
+
+		$data = get_post_meta( $course_id, '_enrolled_users', true );
+
+		if ( ! $data ) {
+			$data = array( $user_id );
+		} else {
+			$data[] = $user_id;
+		}
+
+		return update_post_meta( $course_id, '_enrolled_users', $data );
+	}
+
 	public function enroll( $user_id, $course_id ) {
 		if ( ! $user_id || ! $course_id ) {
 			return false;
@@ -141,8 +157,12 @@ class Course {
 		} else {
 			$data[] = $course_id;
 		}
-
+		$this->log_enrollment_on_course( $user_id, $course_id );
 		return update_user_meta( $user_id, '_enrolled_courses', $data );
+	}
+
+	public function unenroll( $user_id, $course_id ) {
+
 	}
 
 	public function is_enrolled( int $post_id ) {
@@ -168,6 +188,10 @@ class Course {
 			$classes[] = 'user-enrolled';
 		}
 		return $classes;
+	}
+
+	public function cron_clean_roster() {
+		// twice a month we should look at
 	}
 }
 

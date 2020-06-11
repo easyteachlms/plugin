@@ -1,0 +1,54 @@
+{
+  "answer-block.js": "quiz/answer-block-782ce8b7.js",
+  "answer-block.js.map": "quiz/answer-block-782ce8b7.js.map",
+  "question-block.js": "quiz/question-block-0727ad9b.js",
+  "question-block.js.map": "quiz/question-block-0727ad9b.js.map",
+  "quiz-block.css": "quiz/quiz-block-80d08c12.css",
+  "quiz-block.css.map": "quiz/quiz-block-80d08c12.css.map",
+  "quiz-block.js": "quiz/quiz-block-7a7e0aa5.js",
+  "quiz-block.js.map": "quiz/quiz-block-7a7e0aa5.js.map",
+  "runtime.js": "quiz/runtime-e4730f2b.js",
+  "runtime.js.map": "quiz/runtime-e4730f2b.js.map",
+  "vendors~quiz-block.js": "quiz/vendors~quiz-block-3c2be8b6.js",
+  "vendors~quiz-block.js.map": "quiz/vendors~quiz-block-3c2be8b6.js.map",
+  "wpackioEp": {
+    "quiz-block": {
+      "js": [
+        "quiz/runtime-e4730f2b.js",
+        "quiz/vendors~quiz-block-3c2be8b6.js",
+        "quiz/quiz-block-7a7e0aa5.js"
+      ],
+      "js.map": [
+        "quiz/runtime-e4730f2b.js.map",
+        "quiz/vendors~quiz-block-3c2be8b6.js.map",
+        "quiz/quiz-block-7a7e0aa5.js.map"
+      ],
+      "css": [
+        "quiz/quiz-block-80d08c12.css"
+      ],
+      "css.map": [
+        "quiz/quiz-block-80d08c12.css.map"
+      ]
+    },
+    "question-block": {
+      "js": [
+        "quiz/runtime-e4730f2b.js",
+        "quiz/question-block-0727ad9b.js"
+      ],
+      "js.map": [
+        "quiz/runtime-e4730f2b.js.map",
+        "quiz/question-block-0727ad9b.js.map"
+      ]
+    },
+    "answer-block": {
+      "js": [
+        "quiz/runtime-e4730f2b.js",
+        "quiz/answer-block-782ce8b7.js"
+      ],
+      "js.map": [
+        "quiz/runtime-e4730f2b.js.map",
+        "quiz/answer-block-782ce8b7.js.map"
+      ]
+    }
+  }
+}

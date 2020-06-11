@@ -5,31 +5,29 @@ import save from './save';
 const settings = [
     'easyteachlms/answer',
     {
-        title: __('Answer'), 
+        title: __('Answer'),
         description: 'Block Desc.',
         category: 'education',
         icon: 'yes-alt',
-        keywords: [
-            __( 'Quiz' ),
-        ],
+        keywords: [__('Quiz')],
         supports: {
-            html: false, 
-            align: false
+            html: false,
+            align: false,
         },
-        parent: [ 'easyteachlms/question' ],
+        parent: ['easyteachlms/question'],
         attributes: {
             answer: {
                 type: 'string',
-                default: ''
+                default: '',
             },
             isCorrect: {
                 type: 'boolean',
                 default: false,
-            }
+            },
         },
         edit,
         save,
-    }
+    },
 ];
 
 export default settings;

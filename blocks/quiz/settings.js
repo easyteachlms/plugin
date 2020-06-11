@@ -1,4 +1,3 @@
-
 import { __ } from '@wordpress/i18n';
 import edit from './edit';
 import save from './save';
@@ -6,14 +5,12 @@ import save from './save';
 const settings = [
     'easyteachlms/quiz',
     {
-        title: __('Quiz'), 
+        title: __('Quiz'),
         description: 'Block Desc.',
         category: 'education',
-        keywords: [
-            __( 'Quiz' ),
-        ],
+        keywords: [__('Quiz')],
         supports: {
-            html: false, 
+            html: false,
             align: false,
         },
         attributes: {
@@ -24,7 +21,7 @@ const settings = [
         },
         edit,
         save,
-    }
+    },
 ];
 
 export default settings;

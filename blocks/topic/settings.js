@@ -1,4 +1,3 @@
-
 import { __ } from '@wordpress/i18n';
 import edit from './edit';
 import save from './save';
@@ -6,14 +5,12 @@ import save from './save';
 const settings = [
     'easyteachlms/topic',
     {
-        title: __('Topic'), 
+        title: __('Topic'),
         description: 'Block Desc.',
         category: 'education',
-        keywords: [
-            __( 'Topic' ),
-        ],
+        keywords: [__('Topic')],
         supports: {
-            html: false, 
+            html: false,
             align: false,
         },
         attributes: {
@@ -32,7 +29,7 @@ const settings = [
         },
         edit,
         save,
-    }
+    },
 ];
 
 export default settings;

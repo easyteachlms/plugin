@@ -1,7 +1,7 @@
 import { InnerBlocks } from '@wordpress/block-editor';
 
-const save = ({attributes, className}) => {
-    return <div className={className}><InnerBlocks.Content/></div>
-}
+const save = ({ attributes, className }) => {
+    return <InnerBlocks.Content />;
+};
 
 export default save;

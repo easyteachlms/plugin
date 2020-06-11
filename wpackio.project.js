@@ -53,21 +53,11 @@ module.exports = {
             },
         },
         {
-            name: 'answer-block',
+            name: 'quiz',
             entry: {
-                block: './blocks/answer/index.js',
-            },
-        },
-        {
-            name: 'question-block',
-            entry: {
-                block: './blocks/question/index.js',
-            },
-        },
-        {
-            name: 'quiz-block',
-            entry: {
-                block: './blocks/quiz/index.js',
+                'quiz-block': './blocks/quiz/index.js',
+                'question-block': './blocks/question/index.js',
+                'answer-block': './blocks/answer/index.js',
             },
         },
         {
