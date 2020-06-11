@@ -3,7 +3,7 @@
 import { withState } from '@wordpress/compose';
 import { render } from '@wordpress/element';
 import domReady from '@wordpress/dom-ready';
-import { Parser } from 'html-to-react';
+import ReactHtmlParser from 'react-html-parser';
 import apiFetch from '@wordpress/api-fetch';
 import { useDidMount } from '@daniakash/lifecycle-hooks';
 
@@ -26,8 +26,8 @@ const Course = withState({
         );
     };
 
-    const HTMLParser = new Parser();
-    const courseAsReactElement = HTMLParser.parse(children);
+    // const HTMLParser = new Parser();
+    const courseAsReactElement = ReactHtmlParser(children);
 
     useDidMount(() => {
         init(courseAsReactElement);
