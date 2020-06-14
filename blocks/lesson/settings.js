@@ -1,4 +1,3 @@
-
 import { __ } from '@wordpress/i18n';
 import edit from './edit';
 import save from './save';
@@ -6,19 +5,17 @@ import save from './save';
 const settings = [
     'easyteachlms/lesson',
     {
-        title: __('Lesson'), 
+        title: __('Lesson'),
         description: 'Block Desc.',
         category: 'education',
-        keywords: [
-            __( 'Lesson' ),
-        ],
+        keywords: [__('Lesson')],
         supports: {
-            html: false, 
+            html: false,
             align: false,
         },
         attributes: {
             id: {
-                type: 'integer', 
+                type: 'integer',
                 default: 0,
             },
             lastUpdated: {
@@ -28,11 +25,16 @@ const settings = [
             title: {
                 type: 'string',
                 default: '',
-            }
+            },
+            uuid: {
+                type: 'string',
+                default: 0,
+            },
         },
+        parent: ['easyteachlms/course'],
         edit,
         save,
-    }
+    },
 ];
 
 export default settings;

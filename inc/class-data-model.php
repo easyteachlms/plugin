@@ -26,10 +26,10 @@ class Data_Model {
 						},
 					),
 				),
-				// 'permission_callback' => function () {
-				// @@TODO also a user auth system that will double check that the user has purchased access OR is an admin
-				// return current_user_can( 'read' );
-				// },
+			// 'permission_callback' => function () {
+			// @@TODO also a user auth system that will double check that the user has purchased access OR is an admin
+			// return current_user_can( 'read' );
+			// },
 			)
 		);
 	}
@@ -73,6 +73,7 @@ class Data_Model {
 			return false;
 		}
 
+		$outline = $this->parse_outline( $parsed, $post_id );
 		$quizzes = $this->recursively_search_for_blocks( $parsed, 'blockName', 'easyteachlms/quiz' );
 		$quizzes = $this->parse_quizzes( $quizzes );
 
@@ -80,29 +81,113 @@ class Data_Model {
 			'title'    => $post->post_title,
 			'lessons'  => 'lesson count here as integer',
 			'topics'   => 'topics count here as integer',
-			'enrolled' => 'the total number of students currently enrolled in this course?', // get_post_meta( $post_id, '_enrolled_users', true );
+			'enrolled' => get_post_meta( $post_id, '_enrolled_users', true ),
 			'points'   => 'should we have a numerical points value for the course on "completion" for a student???',
 			'quizzes'  => $quizzes,
-			'outline'  => array(
-				'lesson_01' => array(
-					'topic_01',
-					'topic_02',
-				),
-				'lesson_02' => array(
-					'topic_01',
-					'topic_02',
-				),
-			),
+			'outline'  => $outline,
 		);
 
-		error_log( print_r( $structure, true ) );
+		return apply_filters( 'easyteachlms_course_structure', $structure, $post_id );
+	}
 
-		return $structure;
+	public function has_innerBlocks( $block ) {
+		if ( array_key_exists( 'innerBlocks', $block ) ) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public function get_block_name( $block_name ) {
+		return str_replace( 'easyteachlms/', '', $block_name );
+	}
+
+	/**
+	 * Sanity check, is the block given the block expected?
+	 *
+	 * @param mixed $block_name
+	 * @param mixed $block
+	 * @return bool
+	 */
+	public function is_block( $block_name, $block ) {
+		if ( is_array( $block_name ) ) {
+			if ( in_array( $block['blockName'], $block_name ) ) {
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			if ( $block_name === $block['blockName'] ) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+	}
+
+	/**
+	 * Parses internal block structure and extracts common elements like title and ID
+	 *
+	 * @param mixed $block_name
+	 * @param mixed $block
+	 * @param mixed $key
+	 * @param mixed $outline
+	 * @return void
+	 */
+	protected function parse( $block_name, $block ) {
+		if ( true !== $this->is_block( $block_name, $block ) ) {
+			return;
+		}
+		if ( is_array( $block_name ) ) {
+			$block_name = $block_name[ array_search( $block['blockName'], $block_name ) ];
+		}
+		return array(
+			'title'      => $block['attrs']['title'],
+			'attachedId' => $block['attrs']['id'],
+			'uuid'       => $block['attrs']['uuid'],
+			'type'       => $this->get_block_name( ( $block['blockName'] ) ),
+			'active'     => false,
+		);
+	}
+
+	protected function parse_outline( $blocks ) {
+		$course = $this->recursively_search_for_blocks( $blocks, 'blockName', 'easyteachlms/course' );
+		$course = array_pop( $course );
+
+		error_log( print_r( $course, true ) );
+
+		if ( true !== $this->has_innerBlocks( $course ) ) {
+			return false;
+		}
+
+		$outline = array(
+			'structured' => array(),
+			'flat'       => array(),
+		);
+		foreach ( $course['innerBlocks'] as $key => $lesson ) {
+			$lesson_uuid                           = $lesson['attrs']['uuid'];
+			$lesson_parsed                         = $this->parse( 'easyteachlms/lesson', $lesson );
+			$outline['structured'][ $lesson_uuid ] = $lesson_parsed;
+			$outline['flat'][]                     = $lesson_parsed;
+
+			if ( true === $this->has_innerBlocks( $lesson ) ) {
+				foreach ( $lesson['innerBlocks'] as $key => $block ) {
+					$uuid              = $block['attrs']['uuid'];
+					$block_parsed      = $this->parse( 'easyteachlms/topic', $block );
+					$outline['flat'][] = $block_parsed;
+					$outline['structured'][ $lesson_uuid ]['outline'][ $uuid ] = $block_parsed;
+					// Detect if there is a quiz and maybe add an
+				}
+			}
+		}
+		return $outline;
 	}
 
 	protected function parse_quizzes( $quizzes ) {
 		$return = array();
 		foreach ( $quizzes as $quiz ) {
+			error_log( 'QUiz attr' );
+			error_log( print_r( $quiz['attrs'], true ) );
 			$title         = $quiz['attrs']['title'];
 			$id            = sanitize_title( $title );
 			$return[ $id ] = array(

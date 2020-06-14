@@ -17,38 +17,43 @@ const PostAsInnerBlocks = ({
     title,
     lastUpdated,
     clientId,
+    isSelected = false,
     setAttributes = false,
     className = '',
     allowedBlocks = null,
 }) => {
-    if (0 !== id) {
+    if (false === setAttributes) {
+        return <InnerBlocks.Content />;
+    }
+
+    if (0 === id) {
         return (
-            <Fragment>
-                {false !== setAttributes && (
-                    <Fragment>
-                        <InnerBlocks allowedBlocks={allowedBlocks} />
-                        <Controls
-                            id={id}
-                            postType={postType}
-                            title={title}
-                            lastUpdated={lastUpdated}
-                            clientId={clientId}
-                            setAttributes={setAttributes}
-                        />
-                    </Fragment>
-                )}
-                {false === setAttributes && <InnerBlocks.Content />}
-            </Fragment>
+            <InitialState
+                postType={postType}
+                setAttributes={setAttributes}
+                className={className}
+                clientId={clientId}
+            />
         );
     }
 
     return (
-        <InitialState
-            postType={postType}
-            setAttributes={setAttributes}
-            className={className}
-            clientId={clientId}
-        />
+        <Fragment>
+            {false !== setAttributes && (
+                <Fragment>
+                    <InnerBlocks allowedBlocks={allowedBlocks} />
+                    <Controls
+                        id={id}
+                        postType={postType}
+                        title={title}
+                        lastUpdated={lastUpdated}
+                        clientId={clientId}
+                        setAttributes={setAttributes}
+                        isSelected={isSelected}
+                    />
+                </Fragment>
+            )}
+        </Fragment>
     );
 };
 

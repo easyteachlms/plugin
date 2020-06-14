@@ -18,6 +18,10 @@ const settings = [
                 type: 'string',
                 default: 'Quiz Title Here',
             },
+            uuid: {
+                type: 'string',
+                default: 0,
+            },
         },
         edit,
         save,

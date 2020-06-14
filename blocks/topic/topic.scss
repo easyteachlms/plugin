@@ -1,10 +1,5 @@
 .wp-block-easyteachlms-topic {
     padding-left: 1em;
-    &.collapsed {
-        .collapsible-content {
-            display: none;
-        }
-    }
 }
 
 div[data-type="easyteachlms/topic"] {

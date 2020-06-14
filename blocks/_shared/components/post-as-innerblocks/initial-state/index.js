@@ -2,7 +2,7 @@ import { __ } from '@wordpress/i18n';
 import { withState } from '@wordpress/compose';
 import { Fragment } from '@wordpress/element';
 import { Dropdown, Form, Header } from 'semantic-ui-react';
-import { Card, CardBody, CardDivider, CardHeader } from '@wordpress/components';
+import { Card, CardBody, CardHeader } from '@wordpress/components';
 import { useDispatch } from '@wordpress/data';
 import { useDidMount } from '@daniakash/lifecycle-hooks';
 import { capitalize, replaceContent } from '@easyteachlms/utils';
@@ -24,7 +24,8 @@ const SearchExisting = withState({
                     id: value,
                     lastUpdated: post.modified_gmt,
                 });
-            },);
+            },
+        );
     };
 
     const loadPosts = () => {
@@ -80,7 +81,7 @@ const SearchExisting = withState({
 const CreateNew = withState({
     title: '',
 })(({ title, postType, setState, setAttributes }) => {
-    const handleChange = (e, { name, value }) => {
+    const handleChange = (e, { value }) => {
         setState({ title: value });
     };
     const handleCreation = () => {
@@ -117,11 +118,11 @@ const CreateNew = withState({
 
 // Should only be used when you have no inner block content or some other conditional like that
 
+// Select A Post
+// What the course title is, and what course is associated with it (for courses that should be easy... or not??)
+// What the lesson title is and what the lesson post its associated with...
+// What the topic title is and what the topic post is associated with.
 const InitialState = ({ postType, setAttributes, className, clientId }) => {
-    // Select A Post
-    // What the course title is, and what course is associated with it (for courses that should be easy... or not??)
-    // What the lesson title is and what the lesson post its associated with...
-    // What the topic title is and what the topic post is associated with.
     return (
         <div className={className}>
             <Card size="large">
@@ -132,7 +133,6 @@ const InitialState = ({ postType, setAttributes, className, clientId }) => {
                         setAttributes={setAttributes}
                     />
                 </CardHeader>
-                {/* <CardDivider /> */}
                 <CardBody>
                     <CreateNew
                         postType={postType}

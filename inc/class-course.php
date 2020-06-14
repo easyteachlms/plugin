@@ -5,7 +5,7 @@ namespace EasyTeachLMS;
 use WPackio\Enqueue;
 class Course {
 	protected $post_type        = 'course';
-	protected $frontend_js_deps = array( 'react', 'react-dom', 'wp-element', 'wp-polyfill', 'wp-i18n', 'wp-api', 'wp-dom-ready', 'wp-api-fetch' );
+	protected $frontend_js_deps = array( 'react', 'react-dom', 'wp-element', 'wp-dom-ready', 'wp-polyfill', 'wp-i18n', 'wp-api', 'wp-api-fetch', 'wp-data' );
 	protected $block_js_deps    = array( 'react', 'react-dom', 'wp-element', 'wp-components', 'wp-polyfill', 'wp-i18n', 'wp-api' );
 
 	public function __construct( $init = false ) {

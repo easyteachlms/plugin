@@ -6,20 +6,37 @@ import {
     cloneElement,
 } from '@wordpress/element';
 
-import { Button } from 'semantic-ui-react';
+// Load Our Block Renderers
+// import Lesson from './lesson';
+import Topic from './topic';
 import Quiz from './quiz';
 
-const blockController = (children, data, fn) => {
+const getBlockByUUID = (data, uuid) => {
+    return data.filter(function (obj) {
+        return obj.uuid === uuid;
+    });
+};
+
+// Maps Course post_content to EasyTeach LMS block handlers.
+const blockController = (children, data, active, fn) => {
     return Children.map(children, (child) => {
+        // Failover Condition:
         if (!isValidElement(child)) {
             return <RawHTML>{child}</RawHTML>;
         }
 
         if (child.props.children) {
             child = cloneElement(child, {
-                children: blockController(child.props.children, data, fn),
+                children: blockController(
+                    child.props.children,
+                    data,
+                    active,
+                    fn,
+                ),
             });
         }
+
+        const uuid = child.props['data-uuid'];
 
         // Class Name is so important for us we need to double check it. All of our logic is based on class names.
         const { className } = child.props;
@@ -27,28 +44,22 @@ const blockController = (children, data, fn) => {
             return child;
         }
 
-        // We can do checks here
         if (className.includes('wp-block-easyteachlms-topic')) {
             return (
-                <div>
-                    <Fragment>
-                        <h3>Topic:</h3>
-                        {child}
-                        <Button
-                            onClick={() => {
-                                console.log('COMPLETED');
-                            }}
-                        >
-                            Mark as Completed
-                        </Button>
-                    </Fragment>
-                </div>
+                <Topic
+                    title={child.props['data-title']}
+                    className={child.props.className}
+                    uuid={uuid}
+                >
+                    {child}
+                </Topic>
             );
         }
 
         if (className.includes('wp-block-easyteachlms-quiz')) {
             const qProps = child.props;
             qProps.data = data.quizzes[child.props.id];
+            qProps.uuid = uuid;
             return <Quiz {...qProps} />;
         }
 
@@ -66,6 +77,7 @@ const blockController = (children, data, fn) => {
             );
         }
 
+        // Default to raw output if no conditions met.
         return <Fragment>{child}</Fragment>;
     });
 };

@@ -1,28 +1,40 @@
 import { useState } from '@wordpress/element';
 import classNames from 'classnames';
-import { Header } from 'semantic-ui-react';
+import { Header, Transition } from 'semantic-ui-react';
 import { __ } from '@wordpress/i18n';
-import './style.scss';
 
-const Collapsible = ({ title, postType, className, children }) => {
-	const [ open, setState ] = useState(true);
-	
-	const collapseHandler = (e) => {
-		setState(!open);
-	}
-	
-	let caretDirection = open ? 'down' : 'right';
+const Collapsible = ({
+    title,
+    postType,
+    className,
+    children,
+    defaultOpen = true,
+}) => {
+    const [open, setState] = useState(defaultOpen);
 
-	return(
-        <div className={classNames(className, { collapsed: !open })}>
+    const collapseHandler = () => {
+        setState(!open);
+    };
+
+    const caretDirection = open ? 'down' : 'right';
+    // const animation = open ? 'slide down' : 'slide up';
+    const animation = 'fade down';
+
+    return (
+        <div className={classNames(className, 'lmsui-collapsible')}>
             <div className="collapsible-title">
-                <Header as='h4' icon={"caret " + caretDirection} content={__( postType.toUpperCase() + ':  ' + title)} onClick={collapseHandler} />
+                <Header
+                    as="h4"
+                    icon={`caret ${caretDirection}`}
+                    content={__(`${postType.toUpperCase()}:  ${title}`)}
+                    onClick={collapseHandler}
+                />
             </div>
-            <div className="collapsible-content">
-                {children}
-            </div>
+            <Transition visible={open} animation={animation} duration={500}>
+                <div className="collapsible-content">{children}</div>
+            </Transition>
         </div>
-    )
-}
+    );
+};
 
 export default Collapsible;

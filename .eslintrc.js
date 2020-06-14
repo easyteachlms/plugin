@@ -1,7 +1,8 @@
 module.exports = {
     env: {
-        browser: true,
         es6: true,
+        browser: true,
+        node: true,
     },
     parser: 'babel-eslint',
     extends: ['airbnb', 'prettier', 'prettier/react'],
@@ -21,7 +22,7 @@ module.exports = {
     rules: {
         yoda: ['error', 'always'],
         'function-paren-newline': ['error'],
-        'comma-dangle': ['error', 'only-multiline'],
+        'comma-dangle': ['error'],
         'prettier/prettier': 'error',
         'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx'] }],
         'react/forbid-prop-types': [0, { forbid: ['any'] }],
@@ -29,10 +30,5 @@ module.exports = {
         'react/react-in-jsx-scope': 0,
         'react/jsx-props-no-spreading': 0,
         'import/no-extraneous-dependencies': 0,
-    },
-    env: {
-        es6: true,
-        browser: true,
-        node: true,
     },
 };

@@ -1,5 +1,6 @@
 import './edit.scss';
 import { __ } from '@wordpress/i18n';
+import { v1 as uuidv1 } from 'uuid';
 import { withDispatch, useDispatch, useSelect } from '@wordpress/data';
 import { InnerBlocks } from '@wordpress/block-editor';
 
@@ -20,7 +21,13 @@ const hasBlocks = (clientId) => {
 };
 
 const edit = ({ attributes, className, clientId, setAttributes }) => {
-    const { title } = attributes;
+    const { title, uuid } = attributes;
+
+    if (0 === uuid) {
+        setAttributes({
+            uuid: uuidv1(),
+        });
+    }
 
     return (
         <Collapsible className={className} title={title} postType="quiz">

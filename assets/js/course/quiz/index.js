@@ -1,7 +1,7 @@
 import { useDidMount } from '@daniakash/lifecycle-hooks';
 import Quiz from 'react-quiz-component';
 
-const QuizComponent = ({ id, title, data }) => {
+const QuizComponent = ({ id, title, uuid, data }) => {
     useDidMount(() => {
         console.log('QUIZ');
         console.log(data);
