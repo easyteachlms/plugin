@@ -1,14 +1,17 @@
 import { registerStore } from '@wordpress/data';
-// import apiFetch from '@wordpress/api-fetch';
 
 const DEFAULT_STATE = {
-    active: 'test',
+    active: false,
+    data: false,
 };
 
 const actions = {
     setActive(uuid) {
-        console.log('SETTING ACTIVE');
-        console.log(uuid);
+        const { history } = window;
+        if (history.pushState) {
+            const newurl = `${window.location.protocol}//${window.location.host}${window.location.pathname}?uuid=${uuid}`;
+            window.history.pushState({ path: newurl }, '', newurl);
+        }
         return {
             type: 'SET_ACTIVE',
             uuid,
@@ -18,6 +21,7 @@ const actions = {
 
 const selectors = {
     getActive(state) {
+        // If propert exists in state.
         const { active } = state;
         return active;
     },

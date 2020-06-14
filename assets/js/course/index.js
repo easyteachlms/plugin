@@ -1,52 +1,45 @@
-// Determines style selected and then proceeds to load the course correctly.
-// Dives through finding the lesson block and gathering up its resources.
 import { withState } from '@wordpress/compose';
+import { useDispatch } from '@wordpress/data';
 import { render, Fragment } from '@wordpress/element';
 import domReady from '@wordpress/dom-ready';
 import ReactHtmlParser from 'react-html-parser';
 import apiFetch from '@wordpress/api-fetch';
 import { useDidMount } from '@daniakash/lifecycle-hooks';
-
+import { getQueryArg } from '@wordpress/url';
 import { Grid } from 'semantic-ui-react';
-import Outline from './outline';
 import blockController from './blockController';
+import Outline from './outline';
 
+// Import Course View Data Store
 import './store';
 
 const Course = withState({
     loaded: false,
     data: false,
-    active: false,
-    items: '',
-})(({ loaded, data, active, items, setState, id, children }) => {
+})(({ loaded, data, active, setState, id, children }) => {
     const { outline } = data;
+    const reactElms = ReactHtmlParser(children);
+    const { setActive } = useDispatch('easyteachlms/course');
 
-    const init = () => {
+    useDidMount(() => {
         apiFetch({ path: `/easyteachlms/v3/course/get/?course_id=${id}` }).then(
             (d) => {
                 console.log('Course Data');
                 console.log(d);
+
+                const expectedUUID = getQueryArg(window.location.href, 'uuid');
+                if (expectedUUID) {
+                    setActive(expectedUUID);
+                }
+
                 setState({
                     loaded: true,
                     data: d,
                 });
+                // After loading data determine which is active and use useDispatch to set accordingly
             },
         );
-    };
-
-    const reactElms = ReactHtmlParser(children);
-
-    useDidMount(() => {
-        console.log('Mounted');
-        init();
     });
-
-    const setActive = (uuid) => {
-        setState({ active: uuid });
-        console.log(active);
-    };
-
-    // Outline
 
     return (
         <Fragment>

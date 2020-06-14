@@ -1,21 +1,21 @@
 {
-  "productEdit.js": "woocommerce/productEdit.js",
-  "productEdit.js.map": "woocommerce/productEdit.js.map",
-  "runtime.js": "woocommerce/runtime.js",
-  "runtime.js.map": "woocommerce/runtime.js.map",
-  "vendors~productEdit.js": "woocommerce/vendors~productEdit.js",
-  "vendors~productEdit.js.map": "woocommerce/vendors~productEdit.js.map",
+  "productEdit.js": "woocommerce/productEdit-72e4b352.js",
+  "productEdit.js.map": "woocommerce/productEdit-72e4b352.js.map",
+  "runtime.js": "woocommerce/runtime-b2221a3b.js",
+  "runtime.js.map": "woocommerce/runtime-b2221a3b.js.map",
+  "vendors~productEdit.js": "woocommerce/vendors~productEdit-dbc1e00e.js",
+  "vendors~productEdit.js.map": "woocommerce/vendors~productEdit-dbc1e00e.js.map",
   "wpackioEp": {
     "productEdit": {
       "js": [
-        "woocommerce/runtime.js",
-        "woocommerce/vendors~productEdit.js",
-        "woocommerce/productEdit.js"
+        "woocommerce/runtime-b2221a3b.js",
+        "woocommerce/vendors~productEdit-dbc1e00e.js",
+        "woocommerce/productEdit-72e4b352.js"
       ],
       "js.map": [
-        "woocommerce/runtime.js.map",
-        "woocommerce/vendors~productEdit.js.map",
-        "woocommerce/productEdit.js.map"
+        "woocommerce/runtime-b2221a3b.js.map",
+        "woocommerce/vendors~productEdit-dbc1e00e.js.map",
+        "woocommerce/productEdit-72e4b352.js.map"
       ]
     }
   }
