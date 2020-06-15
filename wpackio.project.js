@@ -123,6 +123,7 @@ module.exports = {
     // Supports glob matching from minimatch
     // @link <https://github.com/isaacs/minimatch#usage>
     packageFiles: [
+        'assets/**',
         'inc/**',
         'vendor/**',
         'dist/**',
