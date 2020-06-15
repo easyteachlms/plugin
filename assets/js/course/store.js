@@ -25,6 +25,10 @@ const selectors = {
         const { active } = state;
         return active;
     },
+    getUserState(state) {
+        const { userData } = state;
+        return userData;
+    },
 };
 
 registerStore('easyteachlms/course', {

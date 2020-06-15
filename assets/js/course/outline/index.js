@@ -15,10 +15,11 @@ const Outline = ({ data }) => {
             const topics = [];
             for (const uuid in outline) {
                 const { title } = outline[uuid];
+                const isActive = active === uuid;
                 topics.push(
                     <Menu.Item
                         onClick={() => setActive(uuid)}
-                        active={active === uuid}
+                        active={isActive}
                     >
                         {title}
                     </Menu.Item>,

@@ -18,7 +18,7 @@ const getBlockByUUID = (data, uuid) => {
 };
 
 // Maps Course post_content to EasyTeach LMS block handlers.
-const blockController = (children, data, active, fn) => {
+const blockController = (children, data, style, fn) => {
     return Children.map(children, (child) => {
         // Failover Condition:
         if (!isValidElement(child)) {
@@ -27,16 +27,21 @@ const blockController = (children, data, active, fn) => {
 
         if (child.props.children) {
             child = cloneElement(child, {
-                children: blockController(
-                    child.props.children,
-                    data,
-                    active,
-                    fn,
-                ),
+                children: blockController(child.props.children, data, fn),
             });
         }
 
         const uuid = child.props['data-uuid'];
+        const blockData = data.outline.flat.filter(
+            (block) => block.uuid === uuid,
+        );
+
+        let parentTitle = false;
+        let hasQuiz = false;
+        if (blockData.length) {
+            parentTitle = blockData[0].parentTitle;
+            hasQuiz = blockData[0].hasQuiz;
+        }
 
         // Class Name is so important for us we need to double check it. All of our logic is based on class names.
         const { className } = child.props;
@@ -44,12 +49,16 @@ const blockController = (children, data, active, fn) => {
             return child;
         }
 
+        // determine if has quiz by going through data.outline.flat ... find by uuid and if obj.hasQuiz
+
         if (className.includes('wp-block-easyteachlms-topic')) {
             return (
                 <Topic
                     title={child.props['data-title']}
                     className={child.props.className}
                     uuid={uuid}
+                    parentTitle={parentTitle}
+                    hasQuiz={hasQuiz}
                 >
                     {child}
                 </Topic>

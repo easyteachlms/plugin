@@ -1,23 +1,49 @@
 import { useDidMount } from '@daniakash/lifecycle-hooks';
 import { withSelect } from '@wordpress/data';
 import { Fragment } from '@wordpress/element';
-import { Button } from 'semantic-ui-react';
+import { Button, Header, Menu } from 'semantic-ui-react';
 
 const Topic = withSelect((select) => {
     return {
         active: select('easyteachlms/course').getActive(),
     };
-})(({ title, active, uuid, className, children }) => {
+})(({ parentTitle, title, active, uuid, hasQuiz, className, children }) => {
     if (uuid !== active) {
         return <Fragment />;
     }
-    return (
-        <div className={className} data-uuid={uuid}>
-            {children}
-            <Button size="medium" color="green">
+    const MarkComplete = () => {
+        return (
+            <Button size="small" color="green">
                 Mark Completed
             </Button>
-        </div>
+        );
+    };
+
+    const Toolbar = () => {
+        return (
+            <Menu style={{ fontSize: '14px' }}>
+                <Menu.Item>
+                    <MarkComplete />
+                </Menu.Item>
+
+                <Menu.Item>Get Help</Menu.Item>
+            </Menu>
+        );
+    };
+    // How can we tell if this has a quiz??
+    return (
+        <Fragment>
+            <Header as="h2" dividing>
+                {title}
+                {false !== parentTitle && (
+                    <Header.Subheader>{parentTitle}</Header.Subheader>
+                )}
+            </Header>
+            <div className={className} data-uuid={uuid}>
+                {children}
+                <Toolbar />
+            </div>
+        </Fragment>
     );
 });
 

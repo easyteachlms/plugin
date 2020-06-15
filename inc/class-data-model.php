@@ -142,11 +142,13 @@ class Data_Model {
 			$block_name = $block_name[ array_search( $block['blockName'], $block_name ) ];
 		}
 		return array(
-			'title'      => $block['attrs']['title'],
-			'attachedId' => $block['attrs']['id'],
-			'uuid'       => $block['attrs']['uuid'],
-			'type'       => $this->get_block_name( ( $block['blockName'] ) ),
-			'active'     => false,
+			'parentTitle' => false,
+			'title'       => $block['attrs']['title'],
+			'attachedId'  => $block['attrs']['id'],
+			'uuid'        => $block['attrs']['uuid'],
+			'type'        => $this->get_block_name( ( $block['blockName'] ) ),
+			'hasQuiz'     => false,
+			'active'      => false,
 		);
 	}
 
@@ -166,17 +168,26 @@ class Data_Model {
 		);
 		foreach ( $course['innerBlocks'] as $key => $lesson ) {
 			$lesson_uuid                           = $lesson['attrs']['uuid'];
+			$lesson_title                          = $lesson['attrs']['title'];
 			$lesson_parsed                         = $this->parse( 'easyteachlms/lesson', $lesson );
 			$outline['structured'][ $lesson_uuid ] = $lesson_parsed;
 			$outline['flat'][]                     = $lesson_parsed;
 
 			if ( true === $this->has_innerBlocks( $lesson ) ) {
 				foreach ( $lesson['innerBlocks'] as $key => $block ) {
-					$uuid              = $block['attrs']['uuid'];
-					$block_parsed      = $this->parse( 'easyteachlms/topic', $block );
+					$uuid                        = $block['attrs']['uuid'];
+					$block_parsed                = $this->parse( 'easyteachlms/topic', $block );
+					$block_parsed['parentTitle'] = $lesson_title;
+					// Detect if there is a quiz and maybe add an
+					if ( true === $this->has_innerBlocks( $block ) ) {
+						foreach ( $block['innerBlocks'] as $key => $block ) {
+							if ( 'easyteachlms/quiz' === $block['blockName'] ) {
+								$block_parsed['hasQuiz'] = true;
+							}
+						}
+					}
 					$outline['flat'][] = $block_parsed;
 					$outline['structured'][ $lesson_uuid ]['outline'][ $uuid ] = $block_parsed;
-					// Detect if there is a quiz and maybe add an
 				}
 			}
 		}

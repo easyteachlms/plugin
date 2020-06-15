@@ -1,3 +1,5 @@
+import './style.scss';
+
 import { withState } from '@wordpress/compose';
 import { useDispatch } from '@wordpress/data';
 import { render, Fragment } from '@wordpress/element';
@@ -16,10 +18,12 @@ import './store';
 const Course = withState({
     loaded: false,
     data: false,
-})(({ loaded, data, active, setState, id, children }) => {
+})(({ loaded, data, setState, id, children }) => {
     const { outline } = data;
     const reactElms = ReactHtmlParser(children);
     const { setActive } = useDispatch('easyteachlms/course');
+
+    const style = 'default';
 
     useDidMount(() => {
         apiFetch({ path: `/easyteachlms/v3/course/get/?course_id=${id}` }).then(
@@ -31,6 +35,7 @@ const Course = withState({
                 if (expectedUUID) {
                     setActive(expectedUUID);
                 }
+                window.sethTestData = d;
 
                 setState({
                     loaded: true,
@@ -50,7 +55,7 @@ const Course = withState({
                             <Outline data={outline} />
                         </Grid.Column>
                         <Grid.Column width={11}>
-                            {blockController(reactElms, data, active)}
+                            {blockController(reactElms, data, style)}
                         </Grid.Column>
                     </Grid.Row>
                 </Grid>

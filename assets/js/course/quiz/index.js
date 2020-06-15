@@ -8,8 +8,6 @@ const QuizComponent = ({ id, title, uuid, data }) => {
     });
     return (
         <div>
-            <h4>Quiz Here</h4>
-            <h3>{title}</h3>
             <Quiz quiz={data} />
         </div>
     );

@@ -93,13 +93,13 @@ const Controls = ({
     };
 
     const checkForUpdates = () => {
-        console.info('Watching for updates...');
         if (1 === id) {
             return;
         }
+        console.info('Watching for updates...');
         const post = new wp.api.models[type]({ id });
-
         post.fetch().then((post) => {
+            console.log(post);
             if (lastUpdated !== post.modified_gmt) {
                 setFlag(true);
             }

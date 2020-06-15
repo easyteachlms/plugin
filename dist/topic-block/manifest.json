@@ -1,8 +1,8 @@
 {
   "block.css": "topic-block/block-fa5f71ea.css",
   "block.css.map": "topic-block/block-fa5f71ea.css.map",
-  "block.js": "topic-block/block-a6f1ff83.js",
-  "block.js.map": "topic-block/block-a6f1ff83.js.map",
+  "block.js": "topic-block/block-fb1e21ec.js",
+  "block.js.map": "topic-block/block-fb1e21ec.js.map",
   "runtime.js": "topic-block/runtime-62e50556.js",
   "runtime.js.map": "topic-block/runtime-62e50556.js.map",
   "vendors~block.js": "topic-block/vendors~block-64b6e65b.js",
@@ -12,12 +12,12 @@
       "js": [
         "topic-block/runtime-62e50556.js",
         "topic-block/vendors~block-64b6e65b.js",
-        "topic-block/block-a6f1ff83.js"
+        "topic-block/block-fb1e21ec.js"
       ],
       "js.map": [
         "topic-block/runtime-62e50556.js.map",
         "topic-block/vendors~block-64b6e65b.js.map",
-        "topic-block/block-a6f1ff83.js.map"
+        "topic-block/block-fb1e21ec.js.map"
       ],
       "css": [
         "topic-block/block-fa5f71ea.css"

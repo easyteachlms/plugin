@@ -5,8 +5,8 @@
   "question-block.js.map": "quiz/question-block-92f13fc5.js.map",
   "quiz-block.css": "quiz/quiz-block-434166d9.css",
   "quiz-block.css.map": "quiz/quiz-block-434166d9.css.map",
-  "quiz-block.js": "quiz/quiz-block-5bf7314d.js",
-  "quiz-block.js.map": "quiz/quiz-block-5bf7314d.js.map",
+  "quiz-block.js": "quiz/quiz-block-64a51eaa.js",
+  "quiz-block.js.map": "quiz/quiz-block-64a51eaa.js.map",
   "runtime.js": "quiz/runtime-e4730f2b.js",
   "runtime.js.map": "quiz/runtime-e4730f2b.js.map",
   "vendors~quiz-block.js": "quiz/vendors~quiz-block-e80b7a35.js",
@@ -16,12 +16,12 @@
       "js": [
         "quiz/runtime-e4730f2b.js",
         "quiz/vendors~quiz-block-e80b7a35.js",
-        "quiz/quiz-block-5bf7314d.js"
+        "quiz/quiz-block-64a51eaa.js"
       ],
       "js.map": [
         "quiz/runtime-e4730f2b.js.map",
         "quiz/vendors~quiz-block-e80b7a35.js.map",
-        "quiz/quiz-block-5bf7314d.js.map"
+        "quiz/quiz-block-64a51eaa.js.map"
       ],
       "css": [
         "quiz/quiz-block-434166d9.css"
