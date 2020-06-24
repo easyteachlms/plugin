@@ -8,8 +8,8 @@ import {
 
 // Load Our Block Renderers
 // import Lesson from './lesson';
-import Topic from './topic';
-import Quiz from './quiz';
+import Topic from '../topic';
+import Quiz from '../quiz';
 
 const getBlockByUUID = (data, uuid) => {
     return data.filter(function (obj) {
@@ -67,8 +67,8 @@ const blockController = (children, data, style, fn) => {
 
         if (className.includes('wp-block-easyteachlms-quiz')) {
             const qProps = child.props;
-            qProps.data = data.quizzes[child.props.id];
             qProps.uuid = uuid;
+            qProps.data = data.quizzes[uuid];
             return <Quiz {...qProps} />;
         }
 
@@ -77,7 +77,7 @@ const blockController = (children, data, style, fn) => {
                 <div>
                     <Fragment>
                         <p>
-                            <strong>VIDEO HERE</strong>
+                            <strong>VIDEO PLAYER STUFF HERE</strong>
                         </p>
                         {child}
                         <hr />

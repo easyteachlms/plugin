@@ -1,3 +1,6 @@
+/* eslint-disable no-shadow */
+/* eslint-disable no-restricted-syntax */
+/* eslint-disable guard-for-in */
 import { useDispatch, useSelect } from '@wordpress/data';
 import { Menu } from 'semantic-ui-react';
 
@@ -7,13 +10,16 @@ const Outline = ({ data }) => {
         (select) => select('easyteachlms/course').getActive(),
         [],
     );
+    const { structured } = data.outline;
 
     const Lessons = () => {
         const lessons = [];
-        for (const uuid in data.structured) {
-            const { title, outline } = data.structured[uuid];
+        for (const uuid in structured) {
+            const { title, outline } = structured[uuid];
             const topics = [];
             for (const uuid in outline) {
+                console.log('Outline');
+                console.log(outline[uuid]);
                 const { title } = outline[uuid];
                 const isActive = active === uuid;
                 topics.push(

@@ -186,6 +186,8 @@ class Course {
 	public function is_enrolled_post_class( $classes, $class, $post_id ) {
 		if ( true === $this->is_enrolled( $post_id ) ) {
 			$classes[] = 'user-enrolled';
+		} else {
+			$classes[] = 'user-not-enrolled';
 		}
 		return $classes;
 	}

@@ -1,50 +1,57 @@
 import './style.scss';
 
-import { withState } from '@wordpress/compose';
-import { useDispatch } from '@wordpress/data';
-import { render, Fragment } from '@wordpress/element';
 import domReady from '@wordpress/dom-ready';
 import ReactHtmlParser from 'react-html-parser';
-import apiFetch from '@wordpress/api-fetch';
-import { useDidMount } from '@daniakash/lifecycle-hooks';
+
+import { useSelect, useDispatch } from '@wordpress/data';
+import { Fragment, render, useState } from '@wordpress/element';
 import { getQueryArg } from '@wordpress/url';
+import { useDidMount } from '@daniakash/lifecycle-hooks';
+
 import { Grid } from 'semantic-ui-react';
-import blockController from './blockController';
+
+import blockController from './_blockController';
 import Outline from './outline';
 
-// Import Course View Data Store
-import './store';
+import dataStore from '../data-store';
 
-const Course = withState({
-    loaded: false,
-    data: false,
-})(({ loaded, data, setState, id, children }) => {
-    const { outline } = data;
+const Course = ({ id, children }) => {
     const reactElms = ReactHtmlParser(children);
+
+    const { data, loaded } = useSelect(
+        (select) => {
+            const data = select('easyteachlms/course').getData(id);
+            console.log(data);
+
+            let loaded = false;
+            if (false !== data) {
+                loaded = true;
+            }
+            return {
+                data,
+                loaded,
+            };
+        },
+        [id],
+    );
+
     const { setActive } = useDispatch('easyteachlms/course');
 
     const style = 'default';
 
+    const windowState = () => {
+        const expectedUUID = getQueryArg(window.location.href, 'uuid');
+        if (expectedUUID) {
+            setActive(expectedUUID);
+        }
+    };
+
     useDidMount(() => {
-        apiFetch({ path: `/easyteachlms/v3/course/get/?course_id=${id}` }).then(
-            (d) => {
-                console.log('Course Data');
-                console.log(d);
-
-                const expectedUUID = getQueryArg(window.location.href, 'uuid');
-                if (expectedUUID) {
-                    setActive(expectedUUID);
-                }
-                window.sethTestData = d;
-
-                setState({
-                    loaded: true,
-                    data: d,
-                });
-                // After loading data determine which is active and use useDispatch to set accordingly
-            },
-        );
+        // Get data
+        windowState();
     });
+    console.log(loaded);
+    console.log(data);
 
     return (
         <Fragment>
@@ -52,7 +59,7 @@ const Course = withState({
                 <Grid divided>
                     <Grid.Row>
                         <Grid.Column width={5}>
-                            <Outline data={outline} />
+                            <Outline data={data} />
                         </Grid.Column>
                         <Grid.Column width={11}>
                             {blockController(reactElms, data, style)}
@@ -62,13 +69,14 @@ const Course = withState({
             )}
         </Fragment>
     );
-});
+};
 
-// Initialize from static markup
+/** Initialize from static markup */
 domReady(() => {
     if (document.querySelector('.wp-block-easyteachlms-course')) {
         const elms = document.querySelectorAll('.wp-block-easyteachlms-course');
         elms.forEach((value) => {
+            // eslint-disable-next-line radix
             const id = parseInt(value.getAttribute('data-course-id'));
             const children = value.innerHTML;
             render(<Course id={id}>{children}</Course>, value);

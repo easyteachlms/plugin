@@ -20,7 +20,7 @@ class Data_Model {
 				'methods'  => 'GET',
 				'callback' => array( $this, 'get_course_structure_restfully' ),
 				'args'     => array(
-					'course_id' => array(
+					'courseId' => array(
 						'validate_callback' => function( $param, $request, $key ) {
 							return is_numeric( $param );
 						},
@@ -51,8 +51,8 @@ class Data_Model {
 		return $results;
 	}
 
-	public function get_course_structure_restfully( WP_REST_Request $request ) {
-		$post_id = $request->get_param( 'course_id' );
+	public function get_course_structure_restfully( \WP_REST_Request $request ) {
+		$post_id = $request->get_param( 'courseId' );
 		return $this->get_course_structure( $post_id );
 	}
 
@@ -78,6 +78,7 @@ class Data_Model {
 		$quizzes = $this->parse_quizzes( $quizzes );
 
 		$structure = array(
+			'id'       => $post->ID,
 			'title'    => $post->post_title,
 			'lessons'  => 'lesson count here as integer',
 			'topics'   => 'topics count here as integer',
@@ -149,14 +150,15 @@ class Data_Model {
 			'type'        => $this->get_block_name( ( $block['blockName'] ) ),
 			'hasQuiz'     => false,
 			'active'      => false,
+			'completed'   => false,
 		);
 	}
 
 	protected function parse_outline( $blocks ) {
 		$course = $this->recursively_search_for_blocks( $blocks, 'blockName', 'easyteachlms/course' );
 		$course = array_pop( $course );
-
-		error_log( print_r( $course, true ) );
+		// error_log( 'parse_outline' );
+		// error_log( print_r( $course, true ) );
 
 		if ( true !== $this->has_innerBlocks( $course ) ) {
 			return false;
@@ -197,38 +199,61 @@ class Data_Model {
 	protected function parse_quizzes( $quizzes ) {
 		$return = array();
 		foreach ( $quizzes as $quiz ) {
-			error_log( 'QUiz attr' );
-			error_log( print_r( $quiz['attrs'], true ) );
-			$title         = $quiz['attrs']['title'];
-			$id            = sanitize_title( $title );
-			$return[ $id ] = array(
-				'quizTitle'    => $title,
+
+			$uuid            = $quiz['attrs']['uuid'];
+			$return[ $uuid ] = array(
+				'quizTitle'    => 'Quiz Title Here...',
 				'quizSynopsis' => 'Quiz Synopsis Here...',
 				'questions'    => array(),
 			);
 
 			$questions = $quiz['innerBlocks'];
 			foreach ( $questions as $question ) {
-				$answers        = array();
-				$correct_answer = false;
+				$args = wp_parse_args(
+					$question['attrs'],
+					array(
+						'question'               => '',
+						'type'                   => 'text',
+						'answersType'            => 'single',
+						'correctAnswerMessage'   => 'Good job! Correct answer.',
+						'incorrectAnswerMessage' => 'Incorrect answer, try again!',
+						'explanation'            => '',
+						'points'                 => 10,
+					)
+				);
+
+				$answers = array();
+				if ( 'multiple' === $args['answersType'] ) {
+					$correct_answer = array();
+				} else {
+					$correct_answer = false;
+				}
 				foreach ( $question['innerBlocks'] as $index => $answer ) {
 					$answers[] = $answer['attrs']['answer'];
 					if ( true === $answer['attrs']['isCorrect'] ) {
-						$correct_answer = $index + 1;
+						if ( 'multiple' === $args['answersType'] ) {
+							$correct_answer[] = $index + 1;
+						} else {
+							$correct_answer = $index + 1;
+						}
 					}
 				}
+
+				$args['answers']       = $answers;
+				$args['correctAnswer'] = $correct_answer;
+
 				// Construct question.
-				$return[ $id ]['questions'][] = array(
-					'question'                  => $question['attrs']['question'],
-					'questionType'              => 'text', // $question['attrs']['type'],
+				$return[ $uuid ]['questions'][] = array(
+					'question'                  => $args['question'],
+					'questionType'              => $args['type'],
 					// 'questionPic' => '', // if you need to display Picture in Question
-					'answerSelectionType'       => 'single', // $question['attrs']['answersType'],
-					'answers'                   => $answers,
-					'correctAnswer'             => $correct_answer,
-					'messageForCorrectAnswer'   => 'Correct answer. Good job.', // $question['attrs']['correctAnswerMessage'],
-					'messageForIncorrectAnswer' => 'Incorrect answer, try again.', // $question['attrs']['incorrectAnswerMessage'],
-					'explanation'               => 'Question Explanation', // $question['attrs']['explanation'],
-					'point'                     => 40, // $question['attrs']['points'],
+					'answerSelectionType'       => $args['answersType'],
+					'answers'                   => $args['answers'],
+					'correctAnswer'             => $args['correctAnswer'],
+					'messageForCorrectAnswer'   => $args['correctAnswerMessage'],
+					'messageForIncorrectAnswer' => $args['incorrectAnswerMessage'],
+					'explanation'               => $args['explanation'],
+					'point'                     => $args['points'],
 				);
 			}
 		}

@@ -89,16 +89,18 @@ class EasyTeachLMS {
 	 * @uses add_action()
 	 */
 	public function __construct( $init = false ) {
-		add_action( 'init', array( $this, 'semantic_ui_css_loader' ) );
-		add_action( 'init', array( $this, 'rewrite' ) );
-		add_action( 'init', array( $this, 'rewrite_tags' ) );
-		add_action( 'admin_menu', array( $this, 'register_admin_menu' ) );
-		add_filter( 'block_categories', array( $this, 'register_block_category' ), 10, 2 );
+		if ( true === $init ) {
+			add_action( 'init', array( $this, 'semantic_ui_css_loader' ) );
+			add_action( 'init', array( $this, 'rewrite' ) );
+			add_action( 'init', array( $this, 'rewrite_tags' ) );
+			add_action( 'admin_menu', array( $this, 'register_admin_menu' ) );
+			add_filter( 'block_categories', array( $this, 'register_block_category' ), 10, 2 );
 
-		register_activation_hook( EASYTEACHLMS_FILE, array( $this, 'activate' ) );
-		register_deactivation_hook( EASYTEACHLMS_FILE, array( $this, 'deactivate' ) );
+			register_activation_hook( EASYTEACHLMS_FILE, array( $this, 'activate' ) );
+			register_deactivation_hook( EASYTEACHLMS_FILE, array( $this, 'deactivate' ) );
 
-		$this->include_files();
+			$this->include_files();
+		}
 	}
 
 	/**
@@ -129,6 +131,7 @@ class EasyTeachLMS {
 		require_once EASYTEACHLMS_PATH . '/inc/class-lesson.php';
 		require_once EASYTEACHLMS_PATH . '/inc/class-rest-api.php';
 		require_once EASYTEACHLMS_PATH . '/inc/class-quiz.php';
+		require_once EASYTEACHLMS_PATH . '/inc/class-student.php';
 		require_once EASYTEACHLMS_PATH . '/inc/class-topic.php';
 		require_once EASYTEACHLMS_PATH . '/inc/class-woocommerce.php';
 	}
@@ -158,13 +161,19 @@ class EasyTeachLMS {
 		$wp_rewrite->flush_rules( false );
 	}
 
+	public function admin_page() {
+		?>
+		<h1>Hello world</h1>
+		<?php
+	}
+
 	public function register_admin_menu() {
 		add_menu_page(
 			'EasyTeach LMS',
 			'EasyTeachLMS',
 			'read',
 			'easyteach-lms',
-			'', // Callback, leave empty
+			array( $this, 'admin_page' ),
 			'dashicons-welcome-learn-more',
 			3
 		);
@@ -176,10 +185,10 @@ class EasyTeachLMS {
 
 }
 
-// ACF needs to be loaded before the rest of the plugin
 require EASYTEACHLMS_PATH . '/vendor/plugin-installs.php';
 
-$EasyTeachLMS = new EasyTeachLMS();
+$easy_teach_lms = new EasyTeachLMS( true );
+
 // $EasyTeachLMS->init();
 
 // add_filter(

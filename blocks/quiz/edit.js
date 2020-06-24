@@ -1,7 +1,6 @@
 import './edit.scss';
 import { __ } from '@wordpress/i18n';
 import { v1 as uuidv1 } from 'uuid';
-import { withDispatch, useDispatch, useSelect } from '@wordpress/data';
 import { InnerBlocks } from '@wordpress/block-editor';
 
 import { Collapsible } from '@easyteachlms/components';
@@ -10,17 +9,7 @@ import Controls from './controls';
 
 const ALLOWED_BLOCKS = ['easyteachlms/question'];
 
-const hasBlocks = (clientId) => {
-    console.log(clientId);
-    // We get some information when the block's internal state changes.
-    const { hasInnerBlocks } = useSelect(
-        (select) => 0 < select('core/block-editor').getBlocks(clientId).length,
-        [clientId, name],
-    );
-    return hasInnerBlocks;
-};
-
-const edit = ({ attributes, className, clientId, setAttributes }) => {
+const edit = ({ attributes, className, setAttributes }) => {
     const { title, uuid } = attributes;
 
     if (0 === uuid) {
