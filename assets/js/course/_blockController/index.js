@@ -6,19 +6,14 @@ import {
     cloneElement,
 } from '@wordpress/element';
 
-// Load Our Block Renderers
-// import Lesson from './lesson';
-import Topic from '../topic';
-import Quiz from '../quiz';
-
-const getBlockByUUID = (data, uuid) => {
-    return data.filter(function (obj) {
-        return obj.uuid === uuid;
-    });
-};
+// Load Our Blocks
+import General from './general';
+import Topic from './topic';
+import Quiz from './quiz';
 
 // Maps Course post_content to EasyTeach LMS block handlers.
 const blockController = (children, data, style, fn) => {
+    // Iterate over static HTML content
     return Children.map(children, (child) => {
         // Failover Condition:
         if (!isValidElement(child)) {
@@ -87,7 +82,7 @@ const blockController = (children, data, style, fn) => {
         }
 
         // Default to raw output if no conditions met.
-        return <Fragment>{child}</Fragment>;
+        return <General>{child}</General>;
     });
 };
 

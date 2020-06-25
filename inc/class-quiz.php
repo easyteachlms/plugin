@@ -86,8 +86,11 @@ class Quiz {
 	}
 
 	public function quiz_callback( $attributes, $content ) {
-		$id = sanitize_title( $attributes['title'] );
-		return "<div class='wp-block-easyteachlms-quiz' id='{$id}' title='{$attributes['title']}' data-uuid='{$attributes['uuid']}'></div>";
+		$title = '';
+		if ( ! empty( $attributes['title'] ) ) {
+			$title = $attributes['title'];
+		}
+		return "<div class='wp-block-easyteachlms-quiz' title='{$title}' data-uuid='{$attributes['uuid']}'></div>";
 	}
 
 	// On course save and/or topic save we need to go bundle up all the quiz data into the appropriate data model

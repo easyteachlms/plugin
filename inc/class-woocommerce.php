@@ -15,7 +15,23 @@ class WooCom {
 			add_action( 'woocommerce_process_product_meta', array( $this, 'save_fields' ), 10, 2 );
 			// Enrollment
 			add_action( 'woocommerce_payment_complete', array( $this, 'process_order' ), 10, 3 );
+
+			// We're going to force some options on WooCommerce
+			add_action( 'init', array( $this, 'force_enable_accounts' ) );
 		}
+	}
+
+	// NEEDS:
+	// @TODO WooCommerce courses tab (should be reusable display callback that we can also create a shortcode of and a function of for use elsewhere)
+	// @TODO when finishing ordering auto login the user if new
+	// @TODO when finished ordering the order receipt page should have some instructions, a tutorial video, and a link to their purchased course.
+
+	public function force_enable_accounts() {
+		update_option( 'woocommerce_enable_guest_checkout', 'no' );
+		update_option( 'woocommerce_enable_checkout_login_reminder', 'yes' );
+		update_option( 'woocommerce_enable_signup_and_login_from_checkout', 'yes' );
+		update_option( 'woocommerce_registration_generate_username', 'yes' );
+		update_option( 'woocommerce_enable_myaccount_registration', 'yes' );
 	}
 
 	protected function authorize_purchase( $product_id, $user_id ) {

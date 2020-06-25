@@ -1,21 +1,17 @@
 {
-  "block.js": "ghost-block/block.js",
-  "block.js.map": "ghost-block/block.js.map",
-  "runtime.js": "ghost-block/runtime.js",
-  "runtime.js.map": "ghost-block/runtime.js.map",
-  "vendors~block.js": "ghost-block/vendors~block.js",
-  "vendors~block.js.map": "ghost-block/vendors~block.js.map",
+  "block.js": "ghost-block/block-037ca866.js",
+  "block.js.map": "ghost-block/block-037ca866.js.map",
+  "runtime.js": "ghost-block/runtime-67f1fa63.js",
+  "runtime.js.map": "ghost-block/runtime-67f1fa63.js.map",
   "wpackioEp": {
     "block": {
       "js": [
-        "ghost-block/runtime.js",
-        "ghost-block/vendors~block.js",
-        "ghost-block/block.js"
+        "ghost-block/runtime-67f1fa63.js",
+        "ghost-block/block-037ca866.js"
       ],
       "js.map": [
-        "ghost-block/runtime.js.map",
-        "ghost-block/vendors~block.js.map",
-        "ghost-block/block.js.map"
+        "ghost-block/runtime-67f1fa63.js.map",
+        "ghost-block/block-037ca866.js.map"
       ]
     }
   }

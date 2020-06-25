@@ -5,7 +5,7 @@ const resolvers = {
     *getData(courseId) {
         console.log('resolvers');
         console.log(`getData(${courseId})`);
-        const data = yield actions.fetchFromAPI(courseId);
+        const data = yield actions.fetchFromAPI(courseId, 1);
         console.log(data);
         return actions.initDataFromAPI(data);
     },

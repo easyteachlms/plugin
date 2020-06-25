@@ -8,6 +8,10 @@ use WP_REST_Request;
  * Whenever a lesson is added to a course the lesson should have post meta that lists the ids of the courses where it can be found.
  */
 class Data_Model {
+	protected $course_id = null;
+	protected $user_id   = null;
+	protected $site_id   = 1;
+
 	public function __construct( $init = false ) {
 		add_action( 'rest_api_init', array( $this, 'register_rest_endpoint' ) );
 	}
@@ -21,6 +25,11 @@ class Data_Model {
 				'callback' => array( $this, 'get_course_structure_restfully' ),
 				'args'     => array(
 					'courseId' => array(
+						'validate_callback' => function( $param, $request, $key ) {
+							return is_numeric( $param );
+						},
+					),
+					'userId'   => array(
 						'validate_callback' => function( $param, $request, $key ) {
 							return is_numeric( $param );
 						},
@@ -52,8 +61,11 @@ class Data_Model {
 	}
 
 	public function get_course_structure_restfully( \WP_REST_Request $request ) {
-		$post_id = $request->get_param( 'courseId' );
-		return $this->get_course_structure( $post_id );
+		$this->site_id   = get_current_blog_id();
+		$this->user_id   = $request->get_param( 'userId' );
+		$this->course_id = $request->get_param( 'courseId' );
+
+		return $this->get_course_structure( $this->course_id );
 	}
 
 	/**
@@ -62,6 +74,11 @@ class Data_Model {
 	 * @return false|array
 	 */
 	protected function get_course_structure( int $post_id ) {
+		error_log( 'get_course_structure' );
+		error_log( $this->user_id );
+		error_log( $this->course_id );
+		error_log( $this->site_id );
+
 		$post = get_post( $post_id );
 		if ( false === $post ) {
 			return false;
@@ -77,15 +94,21 @@ class Data_Model {
 		$quizzes = $this->recursively_search_for_blocks( $parsed, 'blockName', 'easyteachlms/quiz' );
 		$quizzes = $this->parse_quizzes( $quizzes );
 
+		$total_lessons = count( $this->recursively_search_for_blocks( $parsed, 'blockName', 'easyteachlms/lesson' ) );
+		$total_topics  = count( $this->recursively_search_for_blocks( $parsed, 'blockName', 'easyteachlms/topic' ) );
+
+		$files = $this->recursively_search_for_blocks( $parsed, 'blockName', 'core/file' );
+		$files = $this->parse_files( $files );
+
 		$structure = array(
-			'id'       => $post->ID,
-			'title'    => $post->post_title,
-			'lessons'  => 'lesson count here as integer',
-			'topics'   => 'topics count here as integer',
-			'enrolled' => get_post_meta( $post_id, '_enrolled_users', true ),
-			'points'   => 'should we have a numerical points value for the course on "completion" for a student???',
-			'quizzes'  => $quizzes,
-			'outline'  => $outline,
+			'id'      => $post->ID,
+			'title'   => $post->post_title,
+			'lessons' => $total_lessons,
+			'topics'  => $total_topics,
+			'points'  => 'should we have a numerical points value for the course on "completion" for a student???',
+			'quizzes' => $quizzes,
+			'outline' => $outline,
+			'files'   => $files,
 		);
 
 		return apply_filters( 'easyteachlms_course_structure', $structure, $post_id );
@@ -142,16 +165,23 @@ class Data_Model {
 		if ( is_array( $block_name ) ) {
 			$block_name = $block_name[ array_search( $block['blockName'], $block_name ) ];
 		}
-		return array(
+		$user_progress = get_user_meta( $this->user_id, "_course_{$this->course_id}_{$this->site_id}", true );
+		$uuid          = $block['attrs']['uuid'];
+		$data          = array(
 			'parentTitle' => false,
+			'parentUuid'  => false,
 			'title'       => $block['attrs']['title'],
 			'attachedId'  => $block['attrs']['id'],
-			'uuid'        => $block['attrs']['uuid'],
+			'uuid'        => $uuid,
 			'type'        => $this->get_block_name( ( $block['blockName'] ) ),
 			'hasQuiz'     => false,
 			'active'      => false,
 			'completed'   => false,
 		);
+		if ( in_array( $uuid, $user_progress['completed'] ) ) {
+			$data['completed'] = true;
+		}
+		return $data;
 	}
 
 	protected function parse_outline( $blocks ) {
@@ -180,6 +210,7 @@ class Data_Model {
 					$uuid                        = $block['attrs']['uuid'];
 					$block_parsed                = $this->parse( 'easyteachlms/topic', $block );
 					$block_parsed['parentTitle'] = $lesson_title;
+					$block_parsed['parentUuid']  = $lesson_uuid;
 					// Detect if there is a quiz and maybe add an
 					if ( true === $this->has_innerBlocks( $block ) ) {
 						foreach ( $block['innerBlocks'] as $key => $block ) {
@@ -194,6 +225,17 @@ class Data_Model {
 			}
 		}
 		return $outline;
+	}
+
+	protected function parse_files( $blocks ) {
+		$return = array();
+		foreach ( $blocks as $file ) {
+			$return[] = array(
+				'title' => get_the_title( $file['attrs']['id'] ),
+				'href'  => $file['attrs']['href'],
+			);
+		}
+		return $return;
 	}
 
 	protected function parse_quizzes( $quizzes ) {

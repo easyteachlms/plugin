@@ -1,22 +1,26 @@
+/* eslint-disable no-shadow */
 import './style.scss';
 
 import domReady from '@wordpress/dom-ready';
 import ReactHtmlParser from 'react-html-parser';
 
 import { useSelect, useDispatch } from '@wordpress/data';
-import { Fragment, render, useState } from '@wordpress/element';
+import { Fragment, render } from '@wordpress/element';
 import { getQueryArg } from '@wordpress/url';
 import { useDidMount } from '@daniakash/lifecycle-hooks';
 
-import { Grid } from 'semantic-ui-react';
+import { Grid, Segment } from 'semantic-ui-react';
 
 import blockController from './_blockController';
+import Dashboard from './dashboard';
 import Outline from './outline';
 
 import dataStore from '../data-store';
 
 const Course = ({ id, children }) => {
     const reactElms = ReactHtmlParser(children);
+
+    const { setActive } = useDispatch('easyteachlms/course');
 
     const { data, loaded } = useSelect(
         (select) => {
@@ -35,14 +39,14 @@ const Course = ({ id, children }) => {
         [id],
     );
 
-    const { setActive } = useDispatch('easyteachlms/course');
-
     const style = 'default';
 
     const windowState = () => {
         const expectedUUID = getQueryArg(window.location.href, 'uuid');
         if (expectedUUID) {
             setActive(expectedUUID);
+        } else {
+            setActive('dashboard');
         }
     };
 
@@ -50,36 +54,44 @@ const Course = ({ id, children }) => {
         // Get data
         windowState();
     });
-    console.log(loaded);
-    console.log(data);
 
     return (
-        <Fragment>
+        <Segment loading={!loaded} style={{ minHeight: '100px' }}>
             {true === loaded && (
-                <Grid divided>
+                <Grid stackable divided>
                     <Grid.Row>
                         <Grid.Column width={5}>
-                            <Outline data={data} />
+                            <Outline id={id} />
                         </Grid.Column>
                         <Grid.Column width={11}>
-                            {blockController(reactElms, data, style)}
+                            <Fragment>
+                                <Dashboard id={id} />
+                                {blockController(reactElms, data, style)}
+                            </Fragment>
                         </Grid.Column>
                     </Grid.Row>
                 </Grid>
             )}
-        </Fragment>
+        </Segment>
     );
 };
 
 /** Initialize from static markup */
 domReady(() => {
+    // See if we can get other course content
     if (document.querySelector('.wp-block-easyteachlms-course')) {
+        const other = false;
         const elms = document.querySelectorAll('.wp-block-easyteachlms-course');
         elms.forEach((value) => {
             // eslint-disable-next-line radix
             const id = parseInt(value.getAttribute('data-course-id'));
             const children = value.innerHTML;
-            render(<Course id={id}>{children}</Course>, value);
+            render(
+                <Course id={id} other={other}>
+                    {children}
+                </Course>,
+                value,
+            );
         });
     }
 });

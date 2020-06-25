@@ -1,8 +1,9 @@
 const actions = {
-    fetchFromAPI(courseId) {
+    fetchFromAPI(courseId, userId) {
         return {
             type: 'FETCH_FROM_API',
             courseId,
+            userId,
         };
     },
     initDataFromAPI(data) {
@@ -23,23 +24,11 @@ const actions = {
             uuid,
         };
     },
-    updateProgress(uuid) {
+    setComplete(uuid) {
         return {
-            type: 'UPDATE_PROGRESS',
+            type: 'SET_COMPLETE',
             uuid,
-            success: true,
         };
-        // apiFetch({
-        //     path: `/easyteachlms/v3/student/update-progress/?courseId=${courseId}&uuid=${uuid}&userId=${userId}`,
-        //     method: 'POST',
-        //     data: { completed: true },
-        // }).then((res) => {
-        //     console.log(res);
-        //     return {
-        //         type: 'UPDATE_PROGRESS',
-        //         success: true,
-        //     };
-        // });
     },
 };
 

@@ -1,56 +1,92 @@
 /* eslint-disable no-shadow */
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable guard-for-in */
-import { useDispatch, useSelect } from '@wordpress/data';
-import { Menu } from 'semantic-ui-react';
+import { useDispatch, useSelect, select } from '@wordpress/data';
+import { Icon, Menu } from 'semantic-ui-react';
 
-const Outline = ({ data }) => {
+// const getBlockByUUID = (data, uuid) => {
+//     return data.filter((obj) => {
+//         return obj.uuid === uuid;
+//     });
+// };
+
+// const getBlockIndexByUUID = (data, uuid) => {
+//     return data.findIndex((obj) => obj.uuid === uuid);
+// };
+
+const Item = ({ title, uuid }) => {
     const { setActive } = useDispatch('easyteachlms/course');
-    const active = useSelect(
-        (select) => select('easyteachlms/course').getActive(),
-        [],
+    const { isComplete, isActive } = useSelect((select) => {
+        const complete = select('easyteachlms/course').isComplete(uuid);
+        const active = select('easyteachlms/course').getActive();
+        return {
+            isComplete: complete,
+            isActive: active === uuid,
+        };
+    }, []);
+
+    return (
+        <Menu.Item onClick={() => setActive(uuid)} active={isActive}>
+            {true === isComplete && <Icon name="check circle" />}
+            {title}
+        </Menu.Item>
     );
-    const { structured } = data.outline;
+};
 
-    const Lessons = () => {
-        const lessons = [];
-        for (const uuid in structured) {
-            const { title, outline } = structured[uuid];
-            const topics = [];
-            for (const uuid in outline) {
-                console.log('Outline');
-                console.log(outline[uuid]);
-                const { title } = outline[uuid];
-                const isActive = active === uuid;
-                topics.push(
-                    <Menu.Item
-                        onClick={() => setActive(uuid)}
-                        active={isActive}
-                    >
-                        {title}
-                    </Menu.Item>,
-                );
-            }
-            lessons.push(
-                <Menu.Item>
-                    <Menu.Header>{title}</Menu.Header>
-                    <Menu.Menu>{topics}</Menu.Menu>
-                </Menu.Item>,
-            );
+const Lessons = ({ id }) => {
+    const { data, loaded } = useSelect((select) => {
+        const data = select('easyteachlms/course').getData(id);
+        let loaded = false;
+        if (false !== data) {
+            loaded = true;
         }
-        return lessons;
-    };
+        return {
+            data,
+            loaded,
+        };
+    }, []);
 
+    if (true !== loaded) {
+        return;
+    }
+
+    const { outline } = data;
+    const { structured } = outline;
+
+    const lessons = [];
+    for (const uuid in structured) {
+        // Lesson
+        const { title, outline } = structured[uuid];
+        const topics = [];
+        for (const uuid in outline) {
+            // Topic
+            const { title } = outline[uuid];
+
+            topics.push(<Item title={title} uuid={uuid} />);
+        }
+        lessons.push(
+            <Menu.Item>
+                <Menu.Header>{title}</Menu.Header>
+                <Menu.Menu>{topics}</Menu.Menu>
+            </Menu.Item>,
+        );
+    }
+
+    return lessons;
+};
+
+const Outline = ({ id }) => {
+    const { setActive } = useDispatch('easyteachlms/course');
     return (
         <Menu vertical fluid>
             <Menu.Item
                 onClick={() => {
-                    console.log('go to dashboard');
+                    setActive('dashboard');
                 }}
             >
                 Course Dashboard
             </Menu.Item>
-            <Lessons />
+            <Lessons id={id} />
         </Menu>
     );
 };
