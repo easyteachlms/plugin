@@ -12,6 +12,12 @@ const selectors = {
         console.log(`getData(${courseId})`);
         return state.data;
     },
+    getQuizzes(state) {
+        if (!state.data.hasOwnProperty('quizzes')) {
+            return false;
+        }
+        return state.data.quizzes;
+    },
     getFiles(state) {
         if (!state.data.hasOwnProperty('files')) {
             return false;
@@ -19,7 +25,13 @@ const selectors = {
         return state.data.files;
     },
     getCompleted(state) {
-        const { completed } = state;
+        if (
+            !state.data.hasOwnProperty('outline') ||
+            !state.data.outline.hasOwnProperty('completed')
+        ) {
+            return false;
+        }
+        const { completed } = state.data.outline;
         return completed;
     },
     isComplete(state, uuid) {

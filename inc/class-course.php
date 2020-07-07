@@ -66,7 +66,7 @@ class Course {
 		$enqueue = new Enqueue( 'easyTeachLMS', 'dist', '1.0.0', 'plugin', plugin_dir_path( __FILE__ ) );
 		$js_deps = $this->frontend_js_deps;
 
-		$course_frontend = $enqueue->enqueue(
+		$course_frontend = $enqueue->register(
 			'app',
 			'course',
 			array(
@@ -78,6 +78,23 @@ class Course {
 				'media'     => 'all',
 			)
 		);
+
+		$script = array_pop( $course_frontend['js'] )['handle'];
+		$style  = array_pop( $course_frontend['css'] )['handle'];
+
+		if ( 0 !== $user_data = wp_get_current_user() ) {
+			wp_localize_script(
+				$script,
+				'userData',
+				array(
+					'id'   => $user_data->ID,
+					'name' => $user_data->data->user_nicename,
+				)
+			);
+		}
+
+		wp_enqueue_script( $script );
+		wp_enqueue_style( $style );
 	}
 
 	public function register_block() {

@@ -3,6 +3,8 @@ import { Fragment, useState } from '@wordpress/element';
 import apiFetch from '@wordpress/api-fetch';
 import { Button, Header, Menu } from 'semantic-ui-react';
 
+const user = window.userData;
+
 const MarkComplete = ({ uuid, userId, courseId, isComplete }) => {
     const [status, setStatus] = useState(false);
     const { setComplete } = useDispatch('easyteachlms/course');
@@ -52,12 +54,13 @@ const Topic = ({ parentTitle, title, uuid, hasQuiz, className, children }) => {
     }
 
     const Toolbar = () => {
+        const { id } = user;
         return (
             <Menu style={{ fontSize: '14px' }}>
                 <Menu.Item>
                     <MarkComplete
                         uuid={uuid}
-                        userId="1"
+                        userId={id}
                         courseId={courseId}
                         isComplete={isComplete}
                     />

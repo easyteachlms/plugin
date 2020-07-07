@@ -44,8 +44,6 @@ const blockController = (children, data, style, fn) => {
             return child;
         }
 
-        // determine if has quiz by going through data.outline.flat ... find by uuid and if obj.hasQuiz
-
         if (className.includes('wp-block-easyteachlms-topic')) {
             return (
                 <Topic
@@ -71,9 +69,6 @@ const blockController = (children, data, style, fn) => {
             return (
                 <div>
                     <Fragment>
-                        <p>
-                            <strong>VIDEO PLAYER STUFF HERE</strong>
-                        </p>
                         {child}
                         <hr />
                     </Fragment>

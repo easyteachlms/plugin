@@ -26,7 +26,10 @@ const reducer = (state = DEFAULT_STATE, action) => {
             // eslint-disable-next-line no-case-declarations
 
             data.outline.flat[index].completed = true;
-
+            data.outline.completed = data.outline.completed + 1;
+            console.log('set_complete');
+            console.log(state);
+            console.log(data);
             return {
                 ...state,
                 data,

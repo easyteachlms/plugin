@@ -60,6 +60,18 @@ class Data_Model {
 		return $results;
 	}
 
+	public function has_innerBlocks( $block ) {
+		if ( array_key_exists( 'innerBlocks', $block ) ) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public function get_block_name( $block_name ) {
+		return str_replace( 'easyteachlms/', '', $block_name );
+	}
+
 	public function get_course_structure_restfully( \WP_REST_Request $request ) {
 		$this->site_id   = get_current_blog_id();
 		$this->user_id   = $request->get_param( 'userId' );
@@ -101,29 +113,18 @@ class Data_Model {
 		$files = $this->parse_files( $files );
 
 		$structure = array(
-			'id'      => $post->ID,
-			'title'   => $post->post_title,
-			'lessons' => $total_lessons,
-			'topics'  => $total_topics,
-			'points'  => 'should we have a numerical points value for the course on "completion" for a student???',
-			'quizzes' => $quizzes,
-			'outline' => $outline,
-			'files'   => $files,
+			'id'       => $post->ID,
+			'title'    => $post->post_title,
+			'lessons'  => $total_lessons,
+			'topics'   => $total_topics,
+			'points'   => 'should we have a numerical points value for the course on "completion" for a student???',
+			'quizzes'  => $quizzes,
+			'outline'  => $outline,
+			'files'    => $files,
+			'enrolled' => array(),
 		);
 
 		return apply_filters( 'easyteachlms_course_structure', $structure, $post_id );
-	}
-
-	public function has_innerBlocks( $block ) {
-		if ( array_key_exists( 'innerBlocks', $block ) ) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	public function get_block_name( $block_name ) {
-		return str_replace( 'easyteachlms/', '', $block_name );
 	}
 
 	/**
@@ -197,7 +198,11 @@ class Data_Model {
 		$outline = array(
 			'structured' => array(),
 			'flat'       => array(),
+			'completed'  => 0,
 		);
+
+		$user_progress = get_user_meta( $this->user_id, "_course_{$this->course_id}_{$this->site_id}", true );
+
 		foreach ( $course['innerBlocks'] as $key => $lesson ) {
 			$lesson_uuid                           = $lesson['attrs']['uuid'];
 			$lesson_title                          = $lesson['attrs']['title'];
@@ -211,6 +216,13 @@ class Data_Model {
 					$block_parsed                = $this->parse( 'easyteachlms/topic', $block );
 					$block_parsed['parentTitle'] = $lesson_title;
 					$block_parsed['parentUuid']  = $lesson_uuid;
+					// Check for completion status
+					if ( in_array( $uuid, $user_progress['completed'] ) ) {
+						error_log( $uuid );
+						error_log( 'completed' );
+						error_log( $outline['completed'] );
+						$outline['completed'] = $outline['completed'] + 1;
+					}
 					// Detect if there is a quiz and maybe add an
 					if ( true === $this->has_innerBlocks( $block ) ) {
 						foreach ( $block['innerBlocks'] as $key => $block ) {
@@ -244,6 +256,7 @@ class Data_Model {
 
 			$uuid            = $quiz['attrs']['uuid'];
 			$return[ $uuid ] = array(
+				'parentUuid'   => '',
 				'quizTitle'    => 'Quiz Title Here...',
 				'quizSynopsis' => 'Quiz Synopsis Here...',
 				'questions'    => array(),
@@ -300,10 +313,6 @@ class Data_Model {
 			}
 		}
 		return $return;
-	}
-
-	public function update_course_structure( int $post_id ) {
-
 	}
 
 	public function diff_course_structure( int $post_id ) {

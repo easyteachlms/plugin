@@ -1,9 +1,8 @@
 const actions = {
-    fetchFromAPI(courseId, userId) {
+    fetchFromAPI(courseId) {
         return {
             type: 'FETCH_FROM_API',
             courseId,
-            userId,
         };
     },
     initDataFromAPI(data) {
