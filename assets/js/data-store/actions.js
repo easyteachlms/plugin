@@ -23,6 +23,13 @@ const actions = {
             uuid,
         };
     },
+    enroll(status) {
+        console.log('enroleld');
+        return {
+            type: 'ENROLL',
+            status,
+        };
+    },
     setComplete(uuid) {
         return {
             type: 'SET_COMPLETE',

@@ -6,6 +6,7 @@ const DEFAULT_STATE = {
 };
 
 const reducer = (state = DEFAULT_STATE, action) => {
+    const { data } = state;
     switch (action.type) {
         case 'INIT_DATA':
             return {
@@ -17,23 +18,29 @@ const reducer = (state = DEFAULT_STATE, action) => {
                 ...state,
                 active: action.uuid,
             };
+        case 'ENROLL':
+            data.enrolled = action.status;
+            return {
+                ...state,
+                data,
+            };
         case 'SET_COMPLETE':
             // eslint-disable-next-line no-case-declarations
-            const { data } = state;
             const { outline } = data;
+            // eslint-disable-next-line no-case-declarations
             const { flat } = outline;
+            // eslint-disable-next-line no-case-declarations
             const index = flat.findIndex((obj) => obj.uuid === action.uuid);
             // eslint-disable-next-line no-case-declarations
 
             data.outline.flat[index].completed = true;
+
+            // eslint-disable-next-line operator-assignment
             data.outline.completed = data.outline.completed + 1;
-            console.log('set_complete');
-            console.log(state);
-            console.log(data);
+
             return {
                 ...state,
                 data,
-                completed: state.completed + 1,
             };
     }
     return state;

@@ -157,8 +157,7 @@ class EasyTeachLMS {
 	}
 
 	public function activate() {
-		global $wp_rewrite;
-		$wp_rewrite->flush_rules( false );
+		flush_rewrite_rules();
 	}
 
 	public function admin_page() {

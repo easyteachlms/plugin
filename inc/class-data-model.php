@@ -102,12 +102,10 @@ class Data_Model {
 			return false;
 		}
 
-		$outline = $this->parse_outline( $parsed, $post_id );
+		$outline = $this->parse_course( $parsed, $post_id );
+
 		$quizzes = $this->recursively_search_for_blocks( $parsed, 'blockName', 'easyteachlms/quiz' );
 		$quizzes = $this->parse_quizzes( $quizzes );
-
-		$total_lessons = count( $this->recursively_search_for_blocks( $parsed, 'blockName', 'easyteachlms/lesson' ) );
-		$total_topics  = count( $this->recursively_search_for_blocks( $parsed, 'blockName', 'easyteachlms/topic' ) );
 
 		$files = $this->recursively_search_for_blocks( $parsed, 'blockName', 'core/file' );
 		$files = $this->parse_files( $files );
@@ -115,13 +113,11 @@ class Data_Model {
 		$structure = array(
 			'id'       => $post->ID,
 			'title'    => $post->post_title,
-			'lessons'  => $total_lessons,
-			'topics'   => $total_topics,
 			'points'   => 'should we have a numerical points value for the course on "completion" for a student???',
 			'quizzes'  => $quizzes,
 			'outline'  => $outline,
 			'files'    => $files,
-			'enrolled' => array(),
+			'enrolled' => false,
 		);
 
 		return apply_filters( 'easyteachlms_course_structure', $structure, $post_id );
@@ -185,11 +181,9 @@ class Data_Model {
 		return $data;
 	}
 
-	protected function parse_outline( $blocks ) {
+	protected function parse_course( $blocks ) {
 		$course = $this->recursively_search_for_blocks( $blocks, 'blockName', 'easyteachlms/course' );
 		$course = array_pop( $course );
-		// error_log( 'parse_outline' );
-		// error_log( print_r( $course, true ) );
 
 		if ( true !== $this->has_innerBlocks( $course ) ) {
 			return false;
@@ -199,6 +193,7 @@ class Data_Model {
 			'structured' => array(),
 			'flat'       => array(),
 			'completed'  => 0,
+			'total'      => 0,
 		);
 
 		$user_progress = get_user_meta( $this->user_id, "_course_{$this->course_id}_{$this->site_id}", true );
@@ -216,6 +211,7 @@ class Data_Model {
 					$block_parsed                = $this->parse( 'easyteachlms/topic', $block );
 					$block_parsed['parentTitle'] = $lesson_title;
 					$block_parsed['parentUuid']  = $lesson_uuid;
+					$outline['total']            = $outline['total'] + 1;
 					// Check for completion status
 					if ( in_array( $uuid, $user_progress['completed'] ) ) {
 						error_log( $uuid );
@@ -252,18 +248,29 @@ class Data_Model {
 
 	protected function parse_quizzes( $quizzes ) {
 		$return = array();
+		$i      = 0;
 		foreach ( $quizzes as $quiz ) {
 
-			$uuid            = $quiz['attrs']['uuid'];
-			$return[ $uuid ] = array(
-				'parentUuid'   => '',
-				'quizTitle'    => 'Quiz Title Here...',
-				'quizSynopsis' => 'Quiz Synopsis Here...',
+			$uuid  = $quiz['attrs']['uuid'];
+			$title = $quiz['attrs']['title'];
+			if ( empty( $title ) ) {
+				$title = 'Quiz';
+			}
+			$synopsis = $quiz['attrs']['synopsis'];
+			if ( empty( $synopsis ) ) {
+				$synopsis = 'Quiz Synopsis Here...';
+			}
+			$return[ $i ] = array(
+				'uuid'         => $uuid,
+				'parent'       => '',
+				'quizTitle'    => $title,
+				'quizSynopsis' => $synopsis,
 				'questions'    => array(),
 			);
 
 			$questions = $quiz['innerBlocks'];
 			foreach ( $questions as $question ) {
+				// Parse the provided question args against defaults.
 				$args = wp_parse_args(
 					$question['attrs'],
 					array(
@@ -298,7 +305,7 @@ class Data_Model {
 				$args['correctAnswer'] = $correct_answer;
 
 				// Construct question.
-				$return[ $uuid ]['questions'][] = array(
+				$return[ $i ]['questions'][] = array(
 					'question'                  => $args['question'],
 					'questionType'              => $args['type'],
 					// 'questionPic' => '', // if you need to display Picture in Question
@@ -311,6 +318,8 @@ class Data_Model {
 					'point'                     => $args['points'],
 				);
 			}
+
+			$i++;
 		}
 		return $return;
 	}

@@ -1,4 +1,7 @@
 const selectors = {
+    getUserId(state) {
+        return window.userData.id;
+    },
     getCourseId(state) {
         const { id } = state.data;
         return id;
@@ -11,6 +14,13 @@ const selectors = {
         console.log('selector::');
         console.log(`getData(${courseId})`);
         return state.data;
+    },
+    getQuiz(state, uuid) {
+        if (!state.data.hasOwnProperty('quizzes')) {
+            return false;
+        }
+        const quiz = state.data.quizzes.filter((q) => q.uuid === uuid);
+        return quiz[0];
     },
     getQuizzes(state) {
         if (!state.data.hasOwnProperty('quizzes')) {

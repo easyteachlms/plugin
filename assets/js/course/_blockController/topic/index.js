@@ -5,7 +5,7 @@ import { Button, Header, Menu } from 'semantic-ui-react';
 
 const user = window.userData;
 
-const MarkComplete = ({ uuid, userId, courseId, isComplete }) => {
+const MarkComplete = ({ uuid, userId, courseId, hasQuiz, isComplete }) => {
     const [status, setStatus] = useState(false);
     const { setComplete } = useDispatch('easyteachlms/course');
     return (
@@ -33,7 +33,7 @@ const MarkComplete = ({ uuid, userId, courseId, isComplete }) => {
             loading={status}
             disabled={isComplete}
         >
-            Mark Completed
+            Mark Completed {true === hasQuiz && '(Requirement: Complete Quiz)'}
         </Button>
     );
 };
@@ -62,6 +62,7 @@ const Topic = ({ parentTitle, title, uuid, hasQuiz, className, children }) => {
                         uuid={uuid}
                         userId={id}
                         courseId={courseId}
+                        hasQuiz={hasQuiz}
                         isComplete={isComplete}
                     />
                 </Menu.Item>

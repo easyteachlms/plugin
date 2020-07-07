@@ -10,10 +10,11 @@ const Dashboard = ({ id }) => {
             const active = select('easyteachlms/course').getActive();
             const data = select('easyteachlms/course').getData(id);
             const completed = select('easyteachlms/course').getCompleted();
-            const total = data.topics;
+            const { total } = data.outline;
             const ratio = `${completed}/${total}`;
             console.log('<Dashboard>');
             console.log(data);
+            console.log(select('easyteachlms/course').getQuizzes());
             return {
                 data,
                 isActive: 'dashboard' === active,
@@ -75,16 +76,13 @@ const Dashboard = ({ id }) => {
         console.info('<Quizzes/>');
         const q = [];
 
-        // eslint-disable-next-line no-restricted-syntax
-        for (const quiz in quizData) {
-            if (quizData.hasOwnProperty(quiz)) {
-                q.push(
-                    <li>
-                        <a>{quizData[quiz].quizTitle}</a>
-                    </li>,
-                );
-            }
-        }
+        quizData.forEach((quiz) => {
+            q.push(
+                <li>
+                    <a>{quiz.quizTitle}</a>
+                </li>,
+            );
+        });
 
         return (
             <Fragment>

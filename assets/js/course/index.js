@@ -14,6 +14,7 @@ import { Grid, Segment } from 'semantic-ui-react';
 import blockController from './_blockController';
 import Dashboard from './dashboard';
 import Outline from './outline';
+import Enroll from './enroll-gate';
 
 import dataStore from '../data-store';
 
@@ -22,7 +23,7 @@ const Course = ({ id, children }) => {
 
     const { setActive } = useDispatch('easyteachlms/course');
 
-    const { data, loaded } = useSelect(
+    const { data, loaded, isEnrolled } = useSelect(
         (select) => {
             const data = select('easyteachlms/course').getData(id);
             console.log(data);
@@ -31,9 +32,11 @@ const Course = ({ id, children }) => {
             if (false !== data) {
                 loaded = true;
             }
+
             return {
                 data,
                 loaded,
+                isEnrolled: data.enrolled,
             };
         },
         [id],
@@ -57,7 +60,10 @@ const Course = ({ id, children }) => {
 
     return (
         <Segment loading={!loaded} style={{ minHeight: '100px' }}>
-            {true === loaded && (
+            {true === loaded && false === isEnrolled && (
+                <Enroll courseId={id} />
+            )}
+            {true === loaded && true === isEnrolled && (
                 <Grid stackable divided>
                     <Grid.Row>
                         <Grid.Column width={5}>

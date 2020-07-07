@@ -59,10 +59,7 @@ const blockController = (children, data, style, fn) => {
         }
 
         if (className.includes('wp-block-easyteachlms-quiz')) {
-            const qProps = child.props;
-            qProps.uuid = uuid;
-            qProps.data = data.quizzes[uuid];
-            return <Quiz {...qProps} />;
+            return <Quiz uuid={uuid} />;
         }
 
         if (className.includes('wp-block-embed-youtube')) {
