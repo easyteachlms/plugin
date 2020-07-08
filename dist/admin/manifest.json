@@ -1,0 +1,31 @@
+{
+  "runtime.js": "admin/runtime.js",
+  "runtime.js.map": "admin/runtime.js.map",
+  "settings.css": "admin/settings.css",
+  "settings.css.map": "admin/settings.css.map",
+  "settings.js": "admin/settings.js",
+  "settings.js.map": "settings.91e544a76a6010765ace.hot-update.js.map",
+  "vendors~settings.js": "admin/vendors~settings.js",
+  "vendors~settings.js.map": "admin/vendors~settings.js.map",
+  "wpackioEp": {
+    "settings": {
+      "js": [
+        "admin/runtime.js",
+        "admin/vendors~settings.js",
+        "admin/settings.js"
+      ],
+      "js.map": [
+        "admin/runtime.js.map",
+        "admin/vendors~settings.js.map",
+        "admin/settings.js.map",
+        "settings.91e544a76a6010765ace.hot-update.js.map"
+      ],
+      "css": [
+        "admin/settings.css"
+      ],
+      "css.map": [
+        "admin/settings.css.map"
+      ]
+    }
+  }
+}

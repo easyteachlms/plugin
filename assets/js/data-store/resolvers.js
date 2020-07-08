@@ -1,9 +1,8 @@
-import selectors from './selectors';
 import actions from './actions';
 
 const resolvers = {
     *getData(courseId) {
-        console.log('resolvers');
+        console.info('Initializing the first getData fetch into data store');
         console.log(`getData(${courseId})`);
         const data = yield actions.fetchFromAPI(courseId);
         console.log(data);

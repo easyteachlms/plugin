@@ -146,6 +146,15 @@ class Data_Model {
 		}
 	}
 
+	public function is_complete( $uuid ) {
+		$user_progress = get_user_meta( $this->user_id, "_course_{$this->course_id}_{$this->site_id}", true );
+		if ( is_array( $user_progress ) && array_key_exists( 'completed', $user_progress ) && in_array( $uuid, $user_progress['completed'] ) ) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	/**
 	 * Parses internal block structure and extracts common elements like title and ID
 	 *
@@ -162,20 +171,21 @@ class Data_Model {
 		if ( is_array( $block_name ) ) {
 			$block_name = $block_name[ array_search( $block['blockName'], $block_name ) ];
 		}
-		$user_progress = get_user_meta( $this->user_id, "_course_{$this->course_id}_{$this->site_id}", true );
-		$uuid          = $block['attrs']['uuid'];
-		$data          = array(
-			'parentTitle' => false,
-			'parentUuid'  => false,
-			'title'       => $block['attrs']['title'],
-			'attachedId'  => $block['attrs']['id'],
-			'uuid'        => $uuid,
-			'type'        => $this->get_block_name( ( $block['blockName'] ) ),
-			'hasQuiz'     => false,
-			'active'      => false,
-			'completed'   => false,
+
+		$uuid = $block['attrs']['uuid'];
+		$data = array(
+			'parentTitle'   => false,
+			'parentUuid'    => false,
+			'title'         => $block['attrs']['title'],
+			'attachedId'    => $block['attrs']['id'],
+			'uuid'          => $uuid,
+			'type'          => $this->get_block_name( ( $block['blockName'] ) ),
+			'hasQuiz'       => false,
+			'conditionsMet' => true,
+			'active'        => false,
+			'completed'     => false,
 		);
-		if ( in_array( $uuid, $user_progress['completed'] ) ) {
+		if ( true === $this->is_complete( $uuid ) ) {
 			$data['completed'] = true;
 		}
 		return $data;
@@ -196,8 +206,6 @@ class Data_Model {
 			'total'      => 0,
 		);
 
-		$user_progress = get_user_meta( $this->user_id, "_course_{$this->course_id}_{$this->site_id}", true );
-
 		foreach ( $course['innerBlocks'] as $key => $lesson ) {
 			$lesson_uuid                           = $lesson['attrs']['uuid'];
 			$lesson_title                          = $lesson['attrs']['title'];
@@ -206,17 +214,16 @@ class Data_Model {
 			$outline['flat'][]                     = $lesson_parsed;
 
 			if ( true === $this->has_innerBlocks( $lesson ) ) {
+
 				foreach ( $lesson['innerBlocks'] as $key => $block ) {
+
 					$uuid                        = $block['attrs']['uuid'];
 					$block_parsed                = $this->parse( 'easyteachlms/topic', $block );
 					$block_parsed['parentTitle'] = $lesson_title;
 					$block_parsed['parentUuid']  = $lesson_uuid;
 					$outline['total']            = $outline['total'] + 1;
 					// Check for completion status
-					if ( in_array( $uuid, $user_progress['completed'] ) ) {
-						error_log( $uuid );
-						error_log( 'completed' );
-						error_log( $outline['completed'] );
+					if ( true === $this->is_complete( $uuid ) ) {
 						$outline['completed'] = $outline['completed'] + 1;
 					}
 					// Detect if there is a quiz and maybe add an
@@ -224,6 +231,11 @@ class Data_Model {
 						foreach ( $block['innerBlocks'] as $key => $block ) {
 							if ( 'easyteachlms/quiz' === $block['blockName'] ) {
 								$block_parsed['hasQuiz'] = true;
+								$block_parsed['quiz']    = $this->parse_quiz( $block, $uuid );
+								// If this has a quiz then we don't want to allow completion until the quiz is finished.
+								if ( true !== $this->is_complete( $uuid ) ) {
+									$block_parsed['conditionsMet'] = false;
+								}
 							}
 						}
 					}
@@ -246,80 +258,100 @@ class Data_Model {
 		return $return;
 	}
 
-	protected function parse_quizzes( $quizzes ) {
-		$return = array();
-		$i      = 0;
-		foreach ( $quizzes as $quiz ) {
+	public function get_quiz_score( $uuid ) {
+		$user_progress = get_user_meta( $this->user_id, "_course_{$this->course_id}_{$this->site_id}", true );
+		if ( is_array( $user_progress ) && array_key_exists( 'scores', $user_progress ) && array_key_exists( $uuid, $user_progress['scores'] ) ) {
+			return $user_progress['scores'][ $uuid ];
+		} else {
+			return false;
+		}
+	}
 
-			$uuid  = $quiz['attrs']['uuid'];
-			$title = $quiz['attrs']['title'];
-			if ( empty( $title ) ) {
-				$title = 'Quiz';
-			}
-			$synopsis = $quiz['attrs']['synopsis'];
-			if ( empty( $synopsis ) ) {
-				$synopsis = 'Quiz Synopsis Here...';
-			}
-			$return[ $i ] = array(
-				'uuid'         => $uuid,
-				'parent'       => '',
-				'quizTitle'    => $title,
-				'quizSynopsis' => $synopsis,
-				'questions'    => array(),
+	protected function parse_quiz( $quiz, $parent_uuid = 0 ) {
+		$return = array();
+		$uuid   = $quiz['attrs']['uuid'];
+
+		$title = $quiz['attrs']['title'];
+		if ( empty( $title ) ) {
+			$title = 'Quiz';
+		}
+
+		$synopsis = $quiz['attrs']['synopsis'];
+		if ( empty( $synopsis ) ) {
+			$synopsis = 'Quiz Synopsis Here...';
+		}
+
+		$return = array(
+			'uuid'         => $uuid,
+			'parent'       => $parent_uuid,
+			'quizTitle'    => $title,
+			'quizSynopsis' => $synopsis,
+			'questions'    => array(),
+			'userScore'    => false,
+		);
+
+		if ( false !== $user_score = $this->get_quiz_score( $uuid ) ) {
+			$return['userScore'] = $user_score;
+		}
+
+		$questions = $quiz['innerBlocks'];
+		foreach ( $questions as $question ) {
+			// Parse the provided question args against defaults.
+			$args = wp_parse_args(
+				$question['attrs'],
+				array(
+					'question'               => '',
+					'type'                   => 'text',
+					'answersType'            => 'single',
+					'correctAnswerMessage'   => 'Good job! Correct answer.',
+					'incorrectAnswerMessage' => 'Incorrect answer, try again!',
+					'explanation'            => '',
+					'points'                 => 10,
+				)
 			);
 
-			$questions = $quiz['innerBlocks'];
-			foreach ( $questions as $question ) {
-				// Parse the provided question args against defaults.
-				$args = wp_parse_args(
-					$question['attrs'],
-					array(
-						'question'               => '',
-						'type'                   => 'text',
-						'answersType'            => 'single',
-						'correctAnswerMessage'   => 'Good job! Correct answer.',
-						'incorrectAnswerMessage' => 'Incorrect answer, try again!',
-						'explanation'            => '',
-						'points'                 => 10,
-					)
-				);
-
-				$answers = array();
-				if ( 'multiple' === $args['answersType'] ) {
-					$correct_answer = array();
-				} else {
-					$correct_answer = false;
-				}
-				foreach ( $question['innerBlocks'] as $index => $answer ) {
-					$answers[] = $answer['attrs']['answer'];
-					if ( true === $answer['attrs']['isCorrect'] ) {
-						if ( 'multiple' === $args['answersType'] ) {
-							$correct_answer[] = $index + 1;
-						} else {
-							$correct_answer = $index + 1;
-						}
+			$answers = array();
+			if ( 'multiple' === $args['answersType'] ) {
+				$correct_answer = array();
+			} else {
+				$correct_answer = false;
+			}
+			foreach ( $question['innerBlocks'] as $index => $answer ) {
+				$answers[] = $answer['attrs']['answer'];
+				if ( true === $answer['attrs']['isCorrect'] ) {
+					if ( 'multiple' === $args['answersType'] ) {
+						$correct_answer[] = $index + 1;
+					} else {
+						$correct_answer = $index + 1;
 					}
 				}
-
-				$args['answers']       = $answers;
-				$args['correctAnswer'] = $correct_answer;
-
-				// Construct question.
-				$return[ $i ]['questions'][] = array(
-					'question'                  => $args['question'],
-					'questionType'              => $args['type'],
-					// 'questionPic' => '', // if you need to display Picture in Question
-					'answerSelectionType'       => $args['answersType'],
-					'answers'                   => $args['answers'],
-					'correctAnswer'             => $args['correctAnswer'],
-					'messageForCorrectAnswer'   => $args['correctAnswerMessage'],
-					'messageForIncorrectAnswer' => $args['incorrectAnswerMessage'],
-					'explanation'               => $args['explanation'],
-					'point'                     => $args['points'],
-				);
 			}
 
-			$i++;
+			$args['answers']       = $answers;
+			$args['correctAnswer'] = $correct_answer;
+
+			// Construct question.
+			$return['questions'][] = array(
+				'question'                  => $args['question'],
+				'questionType'              => $args['type'],
+				// 'questionPic' => '', // if you need to display Picture in Question
+				'answerSelectionType'       => $args['answersType'],
+				'answers'                   => $args['answers'],
+				'correctAnswer'             => $args['correctAnswer'],
+				'messageForCorrectAnswer'   => $args['correctAnswerMessage'],
+				'messageForIncorrectAnswer' => $args['incorrectAnswerMessage'],
+				'explanation'               => $args['explanation'],
+				'point'                     => $args['points'],
+			);
+		}
+
+		return $return;
+	}
+
+	protected function parse_quizzes( $quizzes ) {
+		$return = array();
+		foreach ( $quizzes as $quiz ) {
+			$return[] = $this->parse_quiz( $quiz );
 		}
 		return $return;
 	}

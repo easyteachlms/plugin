@@ -24,6 +24,13 @@ module.exports = {
             name: 'app',
             entry: {
                 course: './assets/js/course/index.js',
+                enrollButton: './assets/js/enroll-button/index.js',
+            },
+        },
+        {
+            name: 'admin',
+            entry: {
+                settings: './assets/js/admin/settings/index.js',
             },
         },
         // WordPress Plugins

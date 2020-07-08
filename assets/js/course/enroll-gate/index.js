@@ -8,6 +8,7 @@ const Enroll = ({ courseId }) => {
     const { id } = userData;
     const [enrolling, setEnrolling] = useState(false);
     const { enroll } = useDispatch('easyteachlms/course');
+    const allowEnrollment = easyTeachSettings.openEnrollment;
 
     const clickHandler = () => {
         setEnrolling(true);
@@ -33,9 +34,11 @@ const Enroll = ({ courseId }) => {
         >
             <h1>Not authorized</h1>
             <p>You are currently not enrolled in this course</p>
-            <Button primary onClick={clickHandler} loading={enrolling}>
-                Enroll
-            </Button>
+            {allowEnrollment && (
+                <Button primary onClick={clickHandler} loading={enrolling}>
+                    Enroll
+                </Button>
+            )}
         </div>
     );
 };

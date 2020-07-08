@@ -1,4 +1,4 @@
-import { useSelect } from '@wordpress/data';
+import { useSelect, useDispatch } from '@wordpress/data';
 import { Fragment } from '@wordpress/element';
 import { Progress, Icon } from 'semantic-ui-react';
 
@@ -26,6 +26,9 @@ const Dashboard = ({ id }) => {
         },
         [],
     );
+
+    const { setActive } = useDispatch('easyteachlms/course');
+
     if (true !== isActive) {
         return <Fragment />;
     }
@@ -79,7 +82,13 @@ const Dashboard = ({ id }) => {
         quizData.forEach((quiz) => {
             q.push(
                 <li>
-                    <a>{quiz.quizTitle}</a>
+                    <a
+                        onClick={() => {
+                            setActive(quiz.parent);
+                        }}
+                    >
+                        {quiz.quizTitle}
+                    </a>
                 </li>,
             );
         });

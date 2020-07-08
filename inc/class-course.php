@@ -14,7 +14,8 @@ class Course {
 			add_filter( 'post_class', array( $this, 'is_enrolled_post_class' ), 10, 3 );
 			add_action( 'enroll_user', array( $this, 'enroll' ), 10, 2 );
 			add_action( 'wp_enqueue_scripts', array( $this, 'register_frontend' ) );
-			add_filter( 'the_content', array( $this, 'enroll_button' ) );
+			add_action( 'wp_enqueue_scripts', array( $this, 'enroll_button_enqueue' ) );
+			add_filter( 'the_excerpt', array( $this, 'enroll_button' ) );
 			add_action( 'rest_api_init', array( $this, 'rest_routes' ) );
 			add_filter( 'easyteachlms_course_structure', array( $this, 'check_enrollment' ), 10, 2 );
 		}
@@ -59,6 +60,24 @@ class Course {
 		);
 		register_post_type( $this->post_type, $args );
 		$this->register_block();
+	}
+
+	public function enroll_button_enqueue() {
+		if ( is_post_type_archive( $this->post_type ) ) {
+			$enqueue    = new Enqueue( 'easyTeachLMS', 'dist', '1.0.0', 'plugin', plugin_dir_path( __FILE__ ) );
+			$registered = $enqueue->enqueue(
+				'app',
+				'enrollButton',
+				array(
+					'js'        => true,
+					'css'       => false,
+					'js_dep'    => $this->frontend_js_deps,
+					'css_dep'   => array( 'semantic-ui' ),
+					'in_footer' => true,
+					'media'     => 'all',
+				)
+			);
+		}
 	}
 
 	public function register_frontend() {
@@ -175,15 +194,20 @@ class Course {
 		);
 	}
 
-	public function enroll_button( $content ) {
+	public function enroll_button( $excerpt ) {
 		if ( is_post_type_archive( $this->post_type ) && in_the_loop() && is_main_query() ) {
+			$user_data = wp_get_current_user();
+			if ( 0 === $user_data ) {
+				return $excerpt;
+			}
+			// Check if already enrolled and display that here.
 			ob_start();
 			?>
-			<a href="#" class="ui primary button">Enroll</a>
+			<div class="easyteachlms-enroll-button" data-userId=<?php echo $user_data->ID; ?> data-courseId=<?php echo get_the_ID(); ?>>Enroll Now</div>
 			<?php
-			$content = $content . ob_get_clean();
+			$excerpt = $excerpt . ob_get_clean();
 		}
-		return $content;
+		return $excerpt;
 	}
 
 	public function rest_enroll_user_in_course( \WP_REST_Request $request ) {

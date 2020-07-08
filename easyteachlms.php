@@ -59,7 +59,7 @@ class EasyTeachLMS {
 	protected $plugin_version   = '5.0.0';
 	public $wp_version_required = '5.4.0';
 	public $wp_version_tested   = '5.4.0';
-	protected $js_deps          = array( 'react', 'react-dom', 'wp-element', 'wp-polyfill', 'wp-i18n' );
+	protected $js_deps          = array( 'react', 'react-dom', 'wp-element', 'wp-polyfill', 'wp-i18n', 'wp-components' );
 
 	/**
 	 * @var $name   Variable for Base_Plugin used throughout the plugin
@@ -93,7 +93,6 @@ class EasyTeachLMS {
 			add_action( 'init', array( $this, 'semantic_ui_css_loader' ) );
 			add_action( 'init', array( $this, 'rewrite' ) );
 			add_action( 'init', array( $this, 'rewrite_tags' ) );
-			add_action( 'admin_menu', array( $this, 'register_admin_menu' ) );
 			add_filter( 'block_categories', array( $this, 'register_block_category' ), 10, 2 );
 
 			register_activation_hook( EASYTEACHLMS_FILE, array( $this, 'activate' ) );
@@ -126,6 +125,7 @@ class EasyTeachLMS {
 	}
 
 	public function include_files() {
+		require_once EASYTEACHLMS_PATH . '/inc/class-admin.php';
 		require_once EASYTEACHLMS_PATH . '/inc/class-course.php';
 		require_once EASYTEACHLMS_PATH . '/inc/class-data-model.php';
 		require_once EASYTEACHLMS_PATH . '/inc/class-lesson.php';
@@ -158,24 +158,6 @@ class EasyTeachLMS {
 
 	public function activate() {
 		flush_rewrite_rules();
-	}
-
-	public function admin_page() {
-		?>
-		<h1>Hello world</h1>
-		<?php
-	}
-
-	public function register_admin_menu() {
-		add_menu_page(
-			'EasyTeach LMS',
-			'EasyTeachLMS',
-			'read',
-			'easyteach-lms',
-			array( $this, 'admin_page' ),
-			'dashicons-welcome-learn-more',
-			3
-		);
 	}
 
 	public function deactivate() {

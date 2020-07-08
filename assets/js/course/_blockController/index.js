@@ -33,6 +33,7 @@ const blockController = (children, data, style, fn) => {
 
         let parentTitle = false;
         let hasQuiz = false;
+        const parentUuid = false;
         if (blockData.length) {
             parentTitle = blockData[0].parentTitle;
             hasQuiz = blockData[0].hasQuiz;

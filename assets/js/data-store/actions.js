@@ -1,3 +1,4 @@
+// Actions, ask the store in the form of a declarative command...
 const actions = {
     fetchFromAPI(courseId) {
         return {
@@ -9,6 +10,12 @@ const actions = {
         return {
             type: 'INIT_DATA',
             data,
+        };
+    },
+    enroll(status) {
+        return {
+            type: 'ENROLL',
+            status,
         };
     },
     setActive(uuid) {
@@ -23,16 +30,22 @@ const actions = {
             uuid,
         };
     },
-    enroll(status) {
-        console.log('enroleld');
-        return {
-            type: 'ENROLL',
-            status,
-        };
-    },
     setComplete(uuid) {
         return {
             type: 'SET_COMPLETE',
+            uuid,
+        };
+    },
+    setQuizScore(uuid, score) {
+        return {
+            type: 'SET_QUIZ_SCORE',
+            uuid,
+            score,
+        };
+    },
+    setConditionsMet(uuid) {
+        return {
+            type: 'SET_CONDITIONS_MET',
             uuid,
         };
     },

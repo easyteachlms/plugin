@@ -19,14 +19,14 @@ const settings = [
                 label: __('Default'),
                 isDefault: true,
             },
-            {
-                name: 'mini',
-                label: __('Mini'),
-            },
-            {
-                name: 'full-screen',
-                label: __('Full Screen'),
-            },
+            // {
+            //     name: 'mini',
+            //     label: __('Mini'),
+            // },
+            // {
+            //     name: 'full-screen',
+            //     label: __('Full Screen'),
+            // },
         ],
         keywords: [
             __('Course'),
