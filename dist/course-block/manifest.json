@@ -1,32 +1,32 @@
 {
-  "block.css": "course-block/block.css",
-  "block.css.map": "course-block/block.css.map",
-  "block.js": "course-block/block.js",
-  "block.js.map": "course-block/block.js.map",
+  "block.css": "course-block/block-e9cece5d.css",
+  "block.css.map": "course-block/block-e9cece5d.css.map",
+  "block.js": "course-block/block-0a94f654.js",
+  "block.js.map": "course-block/block-0a94f654.js.map",
   "course-block/assets/basic.png": "course-block/assets/basic-3e2ee038.png",
   "course-block/assets/step-1-animated.gif": "course-block/assets/step-1-animated-ba95b9c0.gif",
   "course-block/assets/step-2-animated.gif": "course-block/assets/step-2-animated-1e083445.gif",
-  "runtime.js": "course-block/runtime.js",
-  "runtime.js.map": "course-block/runtime.js.map",
-  "vendors~block.js": "course-block/vendors~block.js",
-  "vendors~block.js.map": "course-block/vendors~block.js.map",
+  "runtime.js": "course-block/runtime-3651f84e.js",
+  "runtime.js.map": "course-block/runtime-3651f84e.js.map",
+  "vendors~block.js": "course-block/vendors~block-82d9b13e.js",
+  "vendors~block.js.map": "course-block/vendors~block-82d9b13e.js.map",
   "wpackioEp": {
     "block": {
       "js": [
-        "course-block/runtime.js",
-        "course-block/vendors~block.js",
-        "course-block/block.js"
+        "course-block/runtime-3651f84e.js",
+        "course-block/vendors~block-82d9b13e.js",
+        "course-block/block-0a94f654.js"
       ],
       "js.map": [
-        "course-block/runtime.js.map",
-        "course-block/vendors~block.js.map",
-        "course-block/block.js.map"
+        "course-block/runtime-3651f84e.js.map",
+        "course-block/vendors~block-82d9b13e.js.map",
+        "course-block/block-0a94f654.js.map"
       ],
       "css": [
-        "course-block/block.css"
+        "course-block/block-e9cece5d.css"
       ],
       "css.map": [
-        "course-block/block.css.map"
+        "course-block/block-e9cece5d.css.map"
       ]
     }
   }

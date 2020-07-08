@@ -1,52 +1,45 @@
 {
-  "course.css": "app/course.css",
-  "course.css.map": "app/course.css.map",
-  "course.js": "app/course.js",
-  "course.js.map": "course.0d4d04364b35902c5332.hot-update.js.map",
-  "enrollButton.js": "app/enrollButton.js",
-  "enrollButton.js.map": "app/enrollButton.js.map",
-  "runtime.js": "app/runtime.js",
-  "runtime.js.map": "app/runtime.js.map",
-  "vendors~course.css": "app/vendors~course.css",
-  "vendors~course.css.map": "app/vendors~course.css.map",
-  "vendors~course.js": "app/vendors~course.js",
-  "vendors~course.js.map": "app/vendors~course.js.map",
-  "vendors~course~enrollButton.js": "app/vendors~course~enrollButton.js",
-  "vendors~course~enrollButton.js.map": "app/vendors~course~enrollButton.js.map",
+  "course.css": "app/course-04c874ae.css",
+  "course.css.map": "app/course-04c874ae.css.map",
+  "course.js": "app/course-0b1542ab.js",
+  "course.js.map": "app/course-0b1542ab.js.map",
+  "enrollButton.js": "app/enrollButton-d72c3e31.js",
+  "enrollButton.js.map": "app/enrollButton-d72c3e31.js.map",
+  "runtime.js": "app/runtime-12452016.js",
+  "runtime.js.map": "app/runtime-12452016.js.map",
+  "vendors~course.css": "app/vendors~course-dcf35e01.css",
+  "vendors~course.css.map": "app/vendors~course-dcf35e01.css.map",
+  "vendors~course.js": "app/vendors~course-f3f26826.js",
+  "vendors~course.js.map": "app/vendors~course-f3f26826.js.map",
   "wpackioEp": {
     "course": {
       "js": [
-        "app/runtime.js",
-        "app/vendors~course~enrollButton.js",
-        "app/vendors~course.js",
-        "app/course.js"
+        "app/runtime-12452016.js",
+        "app/vendors~course-f3f26826.js",
+        "app/course-0b1542ab.js"
       ],
       "js.map": [
-        "app/runtime.js.map",
-        "app/vendors~course~enrollButton.js.map",
-        "app/vendors~course.js.map",
-        "app/course.js.map",
-        "course.0d4d04364b35902c5332.hot-update.js.map"
+        "app/runtime-12452016.js.map",
+        "app/vendors~course-f3f26826.js.map",
+        "app/course-0b1542ab.js.map"
       ],
       "css": [
-        "app/vendors~course.css",
-        "app/course.css"
+        "app/vendors~course-dcf35e01.css",
+        "app/course-04c874ae.css"
       ],
       "css.map": [
-        "app/vendors~course.css.map",
-        "app/course.css.map"
+        "app/vendors~course-dcf35e01.css.map",
+        "app/course-04c874ae.css.map"
       ]
     },
     "enrollButton": {
       "js": [
-        "app/runtime.js",
-        "app/vendors~course~enrollButton.js",
-        "app/enrollButton.js"
+        "app/runtime-12452016.js",
+        "app/enrollButton-d72c3e31.js"
       ],
       "js.map": [
-        "app/runtime.js.map",
-        "app/vendors~course~enrollButton.js.map",
-        "app/enrollButton.js.map"
+        "app/runtime-12452016.js.map",
+        "app/enrollButton-d72c3e31.js.map"
       ]
     }
   }

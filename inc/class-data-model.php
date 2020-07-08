@@ -104,9 +104,6 @@ class Data_Model {
 
 		$outline = $this->parse_course( $parsed, $post_id );
 
-		$quizzes = $this->recursively_search_for_blocks( $parsed, 'blockName', 'easyteachlms/quiz' );
-		$quizzes = $this->parse_quizzes( $quizzes );
-
 		$files = $this->recursively_search_for_blocks( $parsed, 'blockName', 'core/file' );
 		$files = $this->parse_files( $files );
 

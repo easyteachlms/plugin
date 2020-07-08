@@ -94,6 +94,7 @@ class EasyTeachLMS {
 			add_action( 'init', array( $this, 'rewrite' ) );
 			add_action( 'init', array( $this, 'rewrite_tags' ) );
 			add_filter( 'block_categories', array( $this, 'register_block_category' ), 10, 2 );
+			add_action( 'admin_notices', array( $this, 'welcome_admin_notice' ) );
 
 			register_activation_hook( EASYTEACHLMS_FILE, array( $this, 'activate' ) );
 			register_deactivation_hook( EASYTEACHLMS_FILE, array( $this, 'deactivate' ) );
@@ -162,6 +163,19 @@ class EasyTeachLMS {
 
 	public function deactivate() {
 
+	}
+
+	public function welcome_admin_notice() {
+
+		/* Check transient, if available display notice */
+		if ( ! get_option( 'easyteachlms-welcome' ) ) {
+			$link = get_bloginfo( 'wpurl' ) . '/wp-admin/admin.php?page=easyteach-lms-settings';
+			?>
+			<div class="updated notice is-dismissible">
+				<p>Thank you for installing EasyTeach LMS! <strong><a href="<?php echo $link; ?>">Get Started</a></strong>.</p>
+			</div>
+			<?php
+		}
 	}
 
 }

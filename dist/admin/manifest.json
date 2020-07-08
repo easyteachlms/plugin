@@ -1,30 +1,25 @@
 {
-  "runtime.js": "admin/runtime.js",
-  "runtime.js.map": "admin/runtime.js.map",
-  "settings.css": "admin/settings.css",
-  "settings.css.map": "admin/settings.css.map",
-  "settings.js": "admin/settings.js",
-  "settings.js.map": "settings.91e544a76a6010765ace.hot-update.js.map",
-  "vendors~settings.js": "admin/vendors~settings.js",
-  "vendors~settings.js.map": "admin/vendors~settings.js.map",
+  "runtime.js": "admin/runtime-067fda1e.js",
+  "runtime.js.map": "admin/runtime-067fda1e.js.map",
+  "settings.css": "admin/settings-ee8f0a1a.css",
+  "settings.css.map": "admin/settings-ee8f0a1a.css.map",
+  "settings.js": "admin/settings-176a9cd8.js",
+  "settings.js.map": "admin/settings-176a9cd8.js.map",
   "wpackioEp": {
     "settings": {
       "js": [
-        "admin/runtime.js",
-        "admin/vendors~settings.js",
-        "admin/settings.js"
+        "admin/runtime-067fda1e.js",
+        "admin/settings-176a9cd8.js"
       ],
       "js.map": [
-        "admin/runtime.js.map",
-        "admin/vendors~settings.js.map",
-        "admin/settings.js.map",
-        "settings.91e544a76a6010765ace.hot-update.js.map"
+        "admin/runtime-067fda1e.js.map",
+        "admin/settings-176a9cd8.js.map"
       ],
       "css": [
-        "admin/settings.css"
+        "admin/settings-ee8f0a1a.css"
       ],
       "css.map": [
-        "admin/settings.css.map"
+        "admin/settings-ee8f0a1a.css.map"
       ]
     }
   }
