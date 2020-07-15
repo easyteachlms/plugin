@@ -59,12 +59,11 @@ class EasyTeachLMS {
 	protected $plugin_version   = '5.0.0';
 	public $wp_version_required = '5.4.0';
 	public $wp_version_tested   = '5.4.0';
-	protected $js_deps          = array( 'react', 'react-dom', 'wp-element', 'wp-polyfill', 'wp-i18n', 'wp-components' );
 
 	/**
 	 * @var $name   Variable for Base_Plugin used throughout the plugin
 	 */
-	protected $name = 'EasyLMS';
+	protected $name = 'EasyTeachLMS';
 	/**
 	 * @var $nonce_key  A security key used internally by the plugin
 	 */
@@ -74,9 +73,9 @@ class EasyTeachLMS {
 	 *
 	 * @uses Base_Plugin::__construct()
 	 */
-	// public function EasyTeachLMS() {
-	// $this->__construct();
-	// }
+	public function EasyTeachLMS() {
+		$this->__construct( true );
+	}
 	/**
 	 * Constructor for the Base_Plugin class
 	 *
