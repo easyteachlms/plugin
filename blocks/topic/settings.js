@@ -31,7 +31,7 @@ const settings = [
                 default: 0, // At block init a UUID will be generated based on timestamp
             },
         },
-        parent: ['easyteachlms/lesson'],
+        // parent: ['easyteachlms/lesson'],
         edit,
         save,
     },

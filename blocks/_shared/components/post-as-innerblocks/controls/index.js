@@ -10,6 +10,7 @@ import {
     PanelBody,
     PanelRow,
     TextControl,
+    Snackbar,
     Dashicon,
 } from '@wordpress/components';
 import { replaceContent, capitalize } from '@easyteachlms/utils';
@@ -28,6 +29,7 @@ const Controls = ({
     }, []);
 
     const [updated, setFlag] = useState(false);
+    const [saved, setSaved] = useState(false);
 
     const type = capitalize(postType);
 
@@ -83,12 +85,20 @@ const Controls = ({
                     id: post.id,
                     lastUpdated: post.modified_gmt,
                 });
+                setSaved(true);
             });
         };
         return (
-            <Button isSmall={isSmall} isSecondary onClick={() => saveAsPost()}>
-                {__(`Save As New ${type}`)}
-            </Button>
+            <Fragment>
+                <Button isSmall={isSmall} isSecondary onClick={() => saveAsPost()}>
+                    {__(`Save As New ${type}`)}
+                </Button>
+                {/* { true === saved && (
+                    <Snackbar>
+                        Post published successfully.
+                    </Snackbar>
+                ) } */}
+            </Fragment>
         );
     };
 
@@ -130,15 +140,18 @@ const Controls = ({
                     This {type} has updated content.
                 </div>
             )}
-            <div style={{ display: 'flex' }}>
+            <div style={{ display: 'flex', flexWrap: 'wrap', }}>
                 {true === updated && (
-                    <div>
+                    <div style={{marginRight: '0.8em'}}>
                         <UpdateContentButton isSmall />
                     </div>
                 )}
-                <div>
+                <div style={{flexGrow: '1'}}>
                     <SaveAsNewButton isSmall />
                 </div>
+                { '$0' !== lastUpdated &&  (
+                    <div style={{flexBasis: '100%'}}><span style={{fontFamily: 'sans-serif', fontSize: '11px'}}><strong>Last Updated:</strong> ${lastUpdated}</span></div>
+                ) }
             </div>
             <InspectorControls>
                 <Panel>
