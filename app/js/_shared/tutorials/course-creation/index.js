@@ -4,11 +4,12 @@ import { Guide, Button } from '@wordpress/components';
 
 import './style.scss';
 import illustration from './art/basic.png';
-// import animatedStep1 from './art/steps/intro.gif';
-// import animatedStep2 from './art/steps/adding-content-video.gif'; //
-// import animatedStep3 from './art/steps/adding-other-content.gif';
-// import animatedStep4 from './art/steps/adding-quiz.gif';
-// import animatedStep5 from './art/steps/saving-content.gif';
+
+const animatedStep1 = 'https://beta.easyteachlms.com/wp-content/uploads/2020/07/intro.gif';
+const animatedStep2 = 'https://beta.easyteachlms.com/wp-content/uploads/2020/07/adding-content-video.gif';
+const animatedStep3 = 'https://beta.easyteachlms.com/wp-content/uploads/2020/07/adding-other-content.gif';
+const animatedStep4 = 'https://beta.easyteachlms.com/wp-content/uploads/2020/07/adding-quiz.gif';
+const animatedStep5 = 'https://beta.easyteachlms.com/wp-content/uploads/2020/07/saving-content.gif';
 
 const Tutorial = ({ disable = false }) => {
     const [open, openTutorial] = useState(false);
@@ -31,7 +32,7 @@ const Tutorial = ({ disable = false }) => {
                 <Guide
                     onFinish={() => {
                         console.log('Tutorial Finished');
-                        openTutorial(true);
+                        openTutorial(false);
                         if ('function' === typeof disable) {
                             disable(true);
                         }
@@ -60,7 +61,7 @@ const Tutorial = ({ disable = false }) => {
                         {
                             image: (
                                 <img
-                                    src={illustration}
+                                    src={animatedStep1}
                                     style={{ width: '100%', height: 'auto' }}
                                 />
                             ),
@@ -88,7 +89,7 @@ const Tutorial = ({ disable = false }) => {
                         {
                             image: (
                                 <img
-                                    src={illustration}
+                                    src={animatedStep2}
                                     style={{ width: '100%', height: 'auto' }}
                                 />
                             ),
@@ -126,7 +127,7 @@ const Tutorial = ({ disable = false }) => {
                         {
                             image: (
                                 <img
-                                    src={illustration}
+                                    src={animatedStep3}
                                     style={{ width: '100%', height: 'auto' }}
                                 />
                             ),
@@ -154,7 +155,7 @@ const Tutorial = ({ disable = false }) => {
                         {
                             image: (
                                 <img
-                                    src={illustration}
+                                    src={animatedStep4}
                                     style={{ width: '100%', height: 'auto' }}
                                 />
                             ),
@@ -174,7 +175,7 @@ const Tutorial = ({ disable = false }) => {
                         {
                             image: (
                                 <img
-                                    src={illustration}
+                                    src={animatedStep5}
                                     style={{ width: '100%', height: 'auto' }}
                                 />
                             ),

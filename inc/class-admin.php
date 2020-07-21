@@ -45,6 +45,11 @@ class Admin {
 	public function admin_page() {
 		?>
 		<div id="easyteachlms-settings"></div>
+		<style>
+		.components-guide__footer {
+			padding: 0 !important;
+		}
+		</style>
 		<?php
 	}
 

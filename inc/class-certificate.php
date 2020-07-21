@@ -8,7 +8,7 @@ class Certificates {
 
 	public function __construct( $init = false ) {
 		if ( true === $init ) {
-			add_action( 'init', array( $this, 'init' ) );
+			// add_action( 'init', array( $this, 'init' ) );
 		}
 	}
 
