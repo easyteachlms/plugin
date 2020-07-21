@@ -4,11 +4,11 @@ import { Guide, Button } from '@wordpress/components';
 
 import './style.scss';
 import illustration from './art/basic.png';
-import animatedStep1 from './art/steps/intro.gif';
-import animatedStep2 from './art/steps/adding-content-video.gif'; //
-import animatedStep3 from './art/steps/adding-other-content.gif';
-import animatedStep4 from './art/steps/adding-quiz.gif';
-import animatedStep5 from './art/steps/saving-content.gif';
+// import animatedStep1 from './art/steps/intro.gif';
+// import animatedStep2 from './art/steps/adding-content-video.gif'; //
+// import animatedStep3 from './art/steps/adding-other-content.gif';
+// import animatedStep4 from './art/steps/adding-quiz.gif';
+// import animatedStep5 from './art/steps/saving-content.gif';
 
 const Tutorial = ({ disable = false }) => {
     const [open, openTutorial] = useState(false);
@@ -18,11 +18,11 @@ const Tutorial = ({ disable = false }) => {
                 isPrimary
                 onClick={() => {
                     openTutorial(true);
-                    const modal = document.querySelector(
-                        '.components-modal__frame.components-guide',
-                    );
-                    modal.style.maxHeight = '600px';
-                    modal.style.minWidth = '700px';
+                    // const modal = document.querySelector(
+                    //     '.components-modal__frame.components-guide',
+                    // );
+                    // modal.style.maxHeight = '600px';
+                    // modal.style.minWidth = '700px';
                 }}
             >
                 Begin Tutorial
@@ -30,6 +30,7 @@ const Tutorial = ({ disable = false }) => {
             {true === open && (
                 <Guide
                     onFinish={() => {
+                        console.log('Tutorial Finished');
                         openTutorial(true);
                         if ('function' === typeof disable) {
                             disable(true);
@@ -59,7 +60,7 @@ const Tutorial = ({ disable = false }) => {
                         {
                             image: (
                                 <img
-                                    src={animatedStep1}
+                                    src={illustration}
                                     style={{ width: '100%', height: 'auto' }}
                                 />
                             ),
@@ -87,7 +88,7 @@ const Tutorial = ({ disable = false }) => {
                         {
                             image: (
                                 <img
-                                    src={animatedStep2}
+                                    src={illustration}
                                     style={{ width: '100%', height: 'auto' }}
                                 />
                             ),
@@ -125,7 +126,7 @@ const Tutorial = ({ disable = false }) => {
                         {
                             image: (
                                 <img
-                                    src={animatedStep3}
+                                    src={illustration}
                                     style={{ width: '100%', height: 'auto' }}
                                 />
                             ),
@@ -153,7 +154,7 @@ const Tutorial = ({ disable = false }) => {
                         {
                             image: (
                                 <img
-                                    src={animatedStep4}
+                                    src={illustration}
                                     style={{ width: '100%', height: 'auto' }}
                                 />
                             ),
@@ -173,7 +174,7 @@ const Tutorial = ({ disable = false }) => {
                         {
                             image: (
                                 <img
-                                    src={animatedStep5}
+                                    src={illustration}
                                     style={{ width: '100%', height: 'auto' }}
                                 />
                             ),

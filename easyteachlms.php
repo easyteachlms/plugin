@@ -130,6 +130,10 @@ class EasyTeachLMS {
 	 */
 	public function __construct( $init = false ) {
 		if ( true === $init ) {
+			if ( is_object( $wcam_lib ) && $wcam_lib->get_api_key_status( false ) ) {
+				// Code to load your plugin or theme here.
+				// This code will not run until the API Key is activated.
+			}
 			add_action( 'init', array( $this, 'semantic_ui_css_loader' ) );
 			add_action( 'init', array( $this, 'rewrite' ) );
 			add_action( 'init', array( $this, 'rewrite_tags' ) );
@@ -174,6 +178,7 @@ class EasyTeachLMS {
 		require_once EASYTEACHLMS_PATH . '/inc/class-quiz.php';
 		require_once EASYTEACHLMS_PATH . '/inc/class-student.php';
 		require_once EASYTEACHLMS_PATH . '/inc/class-topic.php';
+		require_once EASYTEACHLMS_PATH . '/inc/class-certificate.php';
 		require_once EASYTEACHLMS_PATH . '/inc/class-woocommerce.php';
 	}
 

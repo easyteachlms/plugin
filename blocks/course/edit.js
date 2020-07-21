@@ -44,8 +44,6 @@ const edit = ({ attributes, className, clientId, name, setAttributes }) => {
         );
     }
 
-    // const { SpotlightTarget } = useContext(tutorialContext);
-
     return (
         <Welcome setAttributes={setAttributes}>
             <div className={className}>

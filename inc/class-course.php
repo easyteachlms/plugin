@@ -163,7 +163,6 @@ class Course {
 			array(
 				// We're only enqueing these in the block editor, not the front end.
 				'editor_script' => array_pop( $ghost_block['js'] )['handle'],
-				'editor_style'  => array_pop( $ghost_block['css'] )['handle'],
 			)
 		);
 	}
