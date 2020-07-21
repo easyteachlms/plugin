@@ -52,7 +52,7 @@ class Admin {
 		add_menu_page(
 			'EasyTeach LMS',
 			'EasyTeachLMS',
-			'edit',
+			'edit_others_posts',
 			'easyteach-lms',
 			null,
 			'dashicons-welcome-learn-more',
@@ -62,7 +62,7 @@ class Admin {
 			'easyteach-lms',
 			'EasyTeach LMS Settings',
 			'Settings',
-			'edit',
+			'edit_others_posts',
 			'easyteach-lms-settings',
 			array( $this, 'admin_page' )
 		);
