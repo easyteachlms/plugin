@@ -18,6 +18,12 @@ class WooCom {
 
 			// We're going to force some options on WooCommerce
 			add_action( 'init', array( $this, 'force_enable_accounts' ) );
+
+			// Add My Courses to WooCommerce Account Page:
+			add_action( 'init', array( $this, 'add_courses_endpoint' ) );
+			add_filter( 'query_vars', array( $this, 'courses_query_vars' ), 0 );
+			add_filter( 'woocommerce_account_menu_items', array( $this, 'add_courses_link' ) );
+			add_action( 'woocommerce_account_courses_endpoint', array( $this, 'courses_content' ) );
 		}
 	}
 
@@ -107,7 +113,7 @@ class WooCom {
 		echo ob_get_clean();
 	}
 
-	function save_fields( $id, $post ) {
+	public function save_fields( $id, $post ) {
 		if ( ! empty( $_POST['elms_attached_product'] ) ) {
 			update_post_meta( $id, $this->attachment_meta_key, $_POST['elms_attached_product'] );
 		} else {
@@ -115,6 +121,50 @@ class WooCom {
 		}
 		error_log( print_r( get_post_meta( $id, $this->attachment_meta_key ), true ) );
 	}
+
+	public function array_insert( &$array, $position, $insert ) {
+		if ( is_int( $position ) ) {
+			array_splice( $array, $position, 0, $insert );
+		} else {
+			$pos   = array_search( $position, array_keys( $array ) );
+			$array = array_merge(
+				array_slice( $array, 0, $pos ),
+				$insert,
+				array_slice( $array, $pos )
+			);
+		}
+	}
+
+	public function add_courses_endpoint() {
+		add_rewrite_endpoint( 'courses', EP_ROOT | EP_PAGES );
+	}
+
+	public function courses_query_vars( $vars ) {
+		$vars[] = 'courses';
+		return $vars;
+	}
+
+	public function add_courses_link( $items ) {
+		$this->array_insert(
+			$items,
+			'orders',
+			array(
+				'courses' => 'Courses',
+			)
+		);
+		return $items;
+	}
+
+	public function courses_content() {
+		$user_id = get_current_user_id();
+		ob_start();
+		?>
+		<h3>Purchased Courses</h3>
+		<?php do_action( 'easyteachlms_woocom_courses', $user_id ); ?>
+		<?php
+		echo ob_get_clean();
+	}
+
 }
 
 $woocommerce = new WooCom( true );

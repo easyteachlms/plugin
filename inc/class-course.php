@@ -5,19 +5,24 @@ namespace EasyTeachLMS;
 use WPackio\Enqueue;
 class Course {
 	protected $post_type        = 'course';
-	protected $frontend_js_deps = array( 'react', 'react-dom', 'wp-element', 'wp-dom-ready', 'wp-polyfill', 'wp-i18n', 'wp-api', 'wp-api-fetch', 'wp-data', 'wp-url' );
+	public $assets              = array();
+	protected $frontend_js_deps = array( 'react', 'react-dom', 'wp-element', 'wp-dom-ready', 'wp-components', 'wp-polyfill', 'wp-i18n', 'wp-api', 'wp-api-fetch', 'wp-data', 'wp-url', 'wp-autop' );
 	protected $block_js_deps    = array( 'react', 'react-dom', 'wp-element', 'wp-components', 'wp-polyfill', 'wp-i18n', 'wp-api' );
 
 	public function __construct( $init = false ) {
 		if ( true === $init ) {
+			add_action( 'init', array( $this, 'register_assets' ) );
 			add_action( 'init', array( $this, 'init' ) );
 			add_filter( 'post_class', array( $this, 'is_enrolled_post_class' ), 10, 3 );
 			add_action( 'enroll_user', array( $this, 'enroll' ), 10, 2 );
-			add_action( 'wp_enqueue_scripts', array( $this, 'register_frontend' ) );
+			add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_course_frontend' ) );
 			add_action( 'wp_enqueue_scripts', array( $this, 'enroll_button_enqueue' ) );
 			add_filter( 'the_excerpt', array( $this, 'enroll_button' ) );
 			add_action( 'rest_api_init', array( $this, 'rest_routes' ) );
 			add_filter( 'easyteachlms_course_structure', array( $this, 'check_enrollment' ), 10, 2 );
+
+			// My Courses:
+			add_action( 'easyteachlms_woocom_courses', array( $this, 'woocom_purchased_courses_grid' ), 10, 1 );
 		}
 	}
 
@@ -80,33 +85,84 @@ class Course {
 		}
 	}
 
-	public function register_frontend() {
-		if ( ! is_singular( 'course' ) ) {
-			return;
-		}
-
+	public function register_assets() {
 		$enqueue = new Enqueue( 'easyTeachLMS', 'dist', '1.0.0', 'plugin', plugin_dir_path( __FILE__ ) );
-		$js_deps = $this->frontend_js_deps;
 
-		$course_frontend = $enqueue->register(
-			'app',
-			'course',
+		$course_block                    = $enqueue->register(
+			'course-block',
+			'block',
 			array(
 				'js'        => true,
 				'css'       => true,
-				'js_dep'    => $js_deps,
+				'js_dep'    => $this->block_js_deps,
 				'css_dep'   => array( 'semantic-ui' ),
 				'in_footer' => true,
 				'media'     => 'all',
 			)
 		);
+		$this->assets['block']['course'] = array(
+			'script' => array_pop( $course_block['js'] )['handle'],
+			'style'  => array_pop( $course_block['css'] )['handle'],
+		);
 
-		$script = array_pop( $course_frontend['js'] )['handle'];
-		$style  = array_pop( $course_frontend['css'] )['handle'];
+		$ghost_block                    = $enqueue->register(
+			'ghost-block',
+			'block',
+			array(
+				'js'        => true,
+				'css'       => false,
+				'js_dep'    => $this->block_js_deps,
+				'css_dep'   => array(),
+				'in_footer' => true,
+				'media'     => 'all',
+			)
+		);
+		$this->assets['block']['ghost'] = array(
+			'script' => array_pop( $ghost_block['js'] )['handle'],
+		);
 
+		$course_app                         = $enqueue->register(
+			'app',
+			'course',
+			array(
+				'js'        => true,
+				'css'       => true,
+				'js_dep'    => $this->frontend_js_deps,
+				'css_dep'   => array( 'semantic-ui' ),
+				'in_footer' => true,
+				'media'     => 'all',
+			)
+		);
+		$this->assets['frontend']['course'] = array(
+			'script' => array_pop( $course_app['js'] )['handle'],
+			'style'  => array_pop( $course_app['css'] )['handle'],
+		);
+
+		$my_courses                             = $enqueue->register(
+			'app',
+			'myCourses',
+			array(
+				'js'        => true,
+				'css'       => true,
+				'js_dep'    => $this->frontend_js_deps,
+				'css_dep'   => array(),
+				'in_footer' => true,
+				'media'     => 'all',
+			)
+		);
+		$this->assets['frontend']['my-courses'] = array(
+			'script' => array_pop( $my_courses['js'] )['handle'],
+			'style'  => array_pop( $my_courses['css'] )['handle'],
+		);
+	}
+
+	public function enqueue_course_frontend() {
+		if ( ! is_singular( 'course' ) ) {
+			return;
+		}
 		if ( 0 !== $user_data = wp_get_current_user() ) {
 			wp_localize_script(
-				$script,
+				$this->assets['frontend']['course']['script'],
 				'userData',
 				array(
 					'id'   => $user_data->ID,
@@ -114,55 +170,25 @@ class Course {
 				)
 			);
 		}
-
-		wp_enqueue_script( $script );
-		wp_enqueue_style( $style );
+		wp_enqueue_script( $this->assets['frontend']['course']['script'] );
+		wp_enqueue_style( $this->assets['frontend']['course']['style'] );
 	}
 
 	public function register_block() {
-		$enqueue = new Enqueue( 'easyTeachLMS', 'dist', '1.0.0', 'plugin', plugin_dir_path( __FILE__ ) );
-		$js_deps = $this->block_js_deps;
-
-		$course_block = $enqueue->register(
-			'course-block',
-			'block',
-			array(
-				'js'        => true,
-				'css'       => true,
-				'js_dep'    => $js_deps,
-				'css_dep'   => array( 'semantic-ui' ),
-				'in_footer' => true,
-				'media'     => 'all',
-			)
-		);
-
 		register_block_type(
 			'easyteachlms/course',
 			array(
 				// We're only enqueing these in the block editor, not the front end.
-				'editor_script' => array_pop( $course_block['js'] )['handle'],
-				'editor_style'  => array_pop( $course_block['css'] )['handle'],
+				'editor_script' => $this->assets['block']['course']['script'],
+				'editor_style'  => $this->assets['block']['course']['style'],
 			)
 		);
 
-		// @TODO: This belongs elsewhere:
-		$ghost_block = $enqueue->register(
-			'ghost-block',
-			'block',
-			array(
-				'js'        => true,
-				'css'       => false,
-				'js_dep'    => $js_deps,
-				'css_dep'   => array(),
-				'in_footer' => true,
-				'media'     => 'all',
-			)
-		);
 		register_block_type(
 			'sethrubenstein/ghost-block',
 			array(
 				// We're only enqueing these in the block editor, not the front end.
-				'editor_script' => array_pop( $ghost_block['js'] )['handle'],
+				'editor_script' => $this->assets['block']['ghost']['script'],
 			)
 		);
 	}
@@ -309,6 +335,63 @@ class Course {
 
 	public function cron_clean_roster() {
 		// twice a month we should look at
+	}
+
+	public function get_enrolled_courses( $user_id = false ) {
+		if ( false === $user_id ) {
+			return;
+		}
+		$site_id = get_current_blog_id();
+		$courses = get_user_meta( (int) $user_id, '_enrolled_courses', true );
+		$data    = array();
+
+		$data_model = new Data_Model( false );
+
+		foreach ( $courses as $course_id ) {
+			error_log( 'get_enrolled_courses' );
+			error_log( $site_id );
+			$course = $data_model->get_course_structure( $course_id, $user_id, $site_id );
+			error_log( print_r( $course, true ) );
+
+			$progress          = get_user_meta( (int) $user_id, "_course_{$course_id}_{$site_id}", true );
+			$progress['total'] = 100 * ( $course['outline']['completed'] / $course['outline']['total'] );
+
+			$data[] = array(
+				'title'    => $course['title'],
+				'excerpt'  => $course['excerpt'],
+				'progress' => $progress,
+				'url'      => get_permalink( $course_id ),
+			);
+		}
+		return $data;
+	}
+
+	public function my_courses_grid( $user_id = false ) {
+		if ( false === $user_id ) {
+			return;
+		}
+		$user_data = get_userdata( (int) $user_id );
+		wp_localize_script(
+			$this->assets['frontend']['my-courses']['script'],
+			'myCoursesData',
+			array(
+				'id'      => $user_data->ID,
+				'name'    => $user_data->data->user_nicename,
+				'courses' => $this->get_enrolled_courses( $user_data->ID ),
+
+			)
+		);
+		wp_enqueue_script( $this->assets['frontend']['my-courses']['script'] );
+		wp_enqueue_style( $this->assets['frontend']['my-courses']['style'] );
+
+		return "<div id='easyteachlms-enrolled-courses' data-user-id={$user_id}></div>";
+	}
+
+	public function woocom_purchased_courses_grid( $user_id = false ) {
+		if ( false === $user_id ) {
+			return;
+		}
+		echo $this->my_courses_grid( $user_id );
 	}
 }
 

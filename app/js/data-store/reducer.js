@@ -1,6 +1,7 @@
 /* eslint-disable default-case */
 const DEFAULT_STATE = {
     active: false,
+    certificate: false,
     data: false,
 };
 
@@ -66,6 +67,13 @@ const reducer = (state = DEFAULT_STATE, action) => {
                 ...state,
                 data,
             };
+        case 'STORE_CERTIFICATE':
+            let certificate = action.markup;
+            return {
+                ...state,
+                certificate,
+            };
+            
     }
     return state;
 };

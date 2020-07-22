@@ -41,7 +41,14 @@ const PostAsInnerBlocks = ({
         <Fragment>
             {false !== setAttributes && (
                 <Fragment>
-                    <InnerBlocks allowedBlocks={allowedBlocks} />
+                    {'topic' === postType && (
+                        <InnerBlocks allowedBlocks={allowedBlocks} />
+                    )}
+                    {'topic' !== postType && (
+                        <InnerBlocks allowedBlocks={allowedBlocks} renderAppender={
+                            ()=><InnerBlocks.ButtonBlockAppender />
+                        } />
+                    )}
                     <Controls
                         id={id}
                         postType={postType}

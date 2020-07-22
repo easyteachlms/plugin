@@ -22,6 +22,7 @@ module.exports = {
             entry: {
                 course: './app/js/course/index.js',
                 enrollButton: './app/js/enroll-button/index.js',
+                myCourses: './app/js/my-courses/index.js',
             },
         },
         {
@@ -48,6 +49,12 @@ module.exports = {
             name: 'course-block',
             entry: {
                 block: './blocks/course/index.js',
+            },
+        },
+        {
+            name: 'certificate-block',
+            entry: {
+                block: './blocks/certificate/index.js',
             },
         },
         {
@@ -86,6 +93,7 @@ module.exports = {
         'react-dom': 'ReactDOM',
         'lodash-es': 'lodash',
         '@babel/runtime/regenerator': 'regeneratorRuntime',
+        '@wordpress/autop': 'wp.autop',
         '@wordpress/api-fetch': 'wp.apiFetch',
         '@wordpress/blocks': 'wp.blocks',
         '@wordpress/block-editor': 'wp.blockEditor',

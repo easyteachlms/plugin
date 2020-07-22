@@ -7,6 +7,7 @@ import {
 } from '@wordpress/element';
 
 // Load Our Blocks
+import Certificate from './certificate'
 import General from './general';
 import Topic from './topic';
 import Quiz from './quiz';
@@ -61,6 +62,10 @@ const blockController = (children, data, style, fn) => {
 
         if (className.includes('wp-block-easyteachlms-quiz')) {
             return <Quiz uuid={uuid} />;
+        }
+
+        if (className.includes('wp-block-easyteachlms-certificate')) {
+            return <Certificate>{child}</Certificate>;
         }
 
         if (className.includes('wp-block-embed-youtube')) {

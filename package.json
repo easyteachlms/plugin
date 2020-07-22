@@ -4,6 +4,7 @@
   "private": true,
   "devDependencies": {
     "@wordpress/api-fetch": "^3.16.0",
+    "@wordpress/autop": "^2.9.0",
     "@wordpress/block-editor": "^3.10.0",
     "@wordpress/blocks": "^6.15.0",
     "@wordpress/components": "^9.5.0",
@@ -41,6 +42,7 @@
     "animate.css": "^4.1.0",
     "beautiful-react-hooks": "^0.25.2",
     "classnames": "^2.2.6",
+    "html2pdf.js": "^0.9.2",
     "jspdf": "^1.5.3",
     "react-html-parser": "^2.0.2",
     "react-quiz-component": "^0.3.4",

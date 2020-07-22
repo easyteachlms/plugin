@@ -3,28 +3,29 @@ import edit from './edit';
 import save from './save';
 
 const settings = [
-    'easyteachlms/topic',
+    'easyteachlms/certificate',
     {
-        title: __('Topic'),
-        description: 'Block Desc.',
+        title: __('Certificate'),
+        description: 'Completion Certificate',
         category: 'education',
-        keywords: [__('Topic')],
+        keywords: [__('Certificate')],
         supports: {
             html: false,
             align: false,
+            multiple: false,
         },
         attributes: {
-            id: {
-                type: 'integer',
-                default: 0,
-            },
-            lastUpdated: {
-                type: 'string',
-                default: 0,
-            },
-            title: {
+            backgroundColor: {
                 type: 'string',
                 default: '',
+            },
+            borderColor: {
+                type: 'string',
+                default: '',
+            },
+            requiredScore: {
+                type: 'integer',
+                default: 80,
             },
             uuid: {
                 type: 'string',

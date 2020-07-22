@@ -8,7 +8,7 @@ import './edit.scss';
 
 import Welcome from './welcome';
 
-const ALLOWED_BLOCKS = ['easyteachlms/lesson'];
+const ALLOWED_BLOCKS = ['easyteachlms/lesson', 'easyteachlms/certificate'];
 
 const edit = ({ attributes, className, clientId, name, setAttributes }) => {
     const { welcomeDisabled, id } = attributes;
@@ -39,7 +39,9 @@ const edit = ({ attributes, className, clientId, name, setAttributes }) => {
     if (hasInnerBlocks || true === welcomeDisabled) {
         return (
             <div className={className}>
-                <InnerBlocks allowedBlocks={ALLOWED_BLOCKS} />
+                <InnerBlocks allowedBlocks={ALLOWED_BLOCKS} renderAppender={
+                    ()=><InnerBlocks.ButtonBlockAppender />
+                } />
             </div>
         );
     }
@@ -47,7 +49,9 @@ const edit = ({ attributes, className, clientId, name, setAttributes }) => {
     return (
         <Welcome setAttributes={setAttributes}>
             <div className={className}>
-                <InnerBlocks allowedBlocks={ALLOWED_BLOCKS} />
+                <InnerBlocks allowedBlocks={ALLOWED_BLOCKS} renderAppender={
+                    ()=><InnerBlocks.ButtonBlockAppender />
+                } />
             </div>
         </Welcome>
     );

@@ -2,6 +2,8 @@ import { useSelect, useDispatch } from '@wordpress/data';
 import { Fragment } from '@wordpress/element';
 import { Progress, Icon } from 'semantic-ui-react';
 
+import { DownloadCertificate } from '../_blockController/certificate';
+
 const user = window.userData;
 
 const Dashboard = ({ id }) => {
@@ -37,17 +39,22 @@ const Dashboard = ({ id }) => {
 
     const CourseProgress = () => {
         return (
-            <Progress
-                percent={progress}
-                color="teal"
-                size="small"
-                active
-                autoSuccess
-            >
-                {100 === progress
-                    ? 'Course Completed!'
-                    : `Course Progress ${progressRatio}`}
-            </Progress>
+            <Fragment>
+                <Progress
+                    percent={progress}
+                    color="teal"
+                    size="small"
+                    active
+                    autoSuccess
+                >
+                    {100 === progress
+                        ? 'Course Completed!'
+                        : `Course Progress ${progressRatio}`}
+                </Progress>
+                { 100 === progress && (
+                    <DownloadCertificate/>
+                )}
+            </Fragment>
         );
     };
 

@@ -101,6 +101,8 @@ class EasyTeachLMS {
 			add_filter( 'block_categories', array( $this, 'register_block_category' ), 10, 2 );
 			add_action( 'admin_notices', array( $this, 'welcome_admin_notice' ) );
 
+			add_filter( 'classic_editor_enabled_editors_for_post_type', array( $this, 'force_gutenberg' ), 10, 2 );
+
 			register_activation_hook( EASYTEACHLMS_FILE, array( $this, 'activate' ) );
 			register_deactivation_hook( EASYTEACHLMS_FILE, array( $this, 'deactivate' ) );
 
@@ -124,6 +126,15 @@ class EasyTeachLMS {
 	// return $instance;
 	// }
 
+	public function force_gutenberg( $editors, $post_type ) {
+		error_log( 'force_gutenberg' );
+		if ( 'course' === $post_type ) {
+			$editors['classic_editor'] = false;
+		}
+		error_log( print_r( $editors, true ) );
+		error_log( print_r( $post_type, true ) );
+	}
+
 	public function rewrite_tags() {
 	}
 
@@ -131,7 +142,9 @@ class EasyTeachLMS {
 	}
 
 	public function include_files() {
+		require_once EASYTEACHLMS_PATH . '/inc/template-tags.php';
 		require_once EASYTEACHLMS_PATH . '/inc/class-admin.php';
+		require_once EASYTEACHLMS_PATH . '/inc/class-certificate.php';
 		require_once EASYTEACHLMS_PATH . '/inc/class-course.php';
 		require_once EASYTEACHLMS_PATH . '/inc/class-data-model.php';
 		require_once EASYTEACHLMS_PATH . '/inc/class-lesson.php';

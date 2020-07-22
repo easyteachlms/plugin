@@ -49,6 +49,12 @@ const actions = {
             uuid,
         };
     },
+    storeCertificate(markup) {
+        return {
+            type: 'STORE_CERTIFICATE',
+            markup,
+        };
+    }
 };
 
 export default actions;

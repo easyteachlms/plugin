@@ -15,6 +15,9 @@ const selectors = {
         console.log(`getData(${courseId})`);
         return state.data;
     },
+    getCertificate(state) {
+        return state.certificate;
+    },
     getQuiz(state, uuid) {
         if (!state.data.hasOwnProperty('quizzes')) {
             return false;
