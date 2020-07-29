@@ -193,7 +193,7 @@ class EasyTeachLMS {
 	public function welcome_admin_notice() {
 
 		/* Check transient, if available display notice */
-		if ( ! get_option( 'easyteachlms-welcome' ) ) {
+		if ( ! get_option( 'easyteachlms-welcome-1' ) ) {
 			$link = get_bloginfo( 'wpurl' ) . '/wp-admin/admin.php?page=easyteach-lms-settings';
 			?>
 			<div class="updated notice is-dismissible">

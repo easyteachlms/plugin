@@ -144,7 +144,7 @@ class Course {
 			'myCourses',
 			array(
 				'js'        => true,
-				'css'       => true,
+				'css'       => false,
 				'js_dep'    => $this->frontend_js_deps,
 				'css_dep'   => array(),
 				'in_footer' => true,
@@ -153,7 +153,6 @@ class Course {
 		);
 		$this->assets['frontend']['my-courses'] = array(
 			'script' => array_pop( $my_courses['js'] )['handle'],
-			'style'  => array_pop( $my_courses['css'] )['handle'],
 		);
 	}
 

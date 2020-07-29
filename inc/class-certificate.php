@@ -24,9 +24,9 @@ class Certificates {
 			'certificate-block',
 			array(
 				'js'        => true,
-				'css'       => true,
+				'css'       => false,
 				'js_dep'    => $js_deps,
-				'css_dep'   => array( 'semantic-ui' ),
+				'css_dep'   => array(),
 				'in_footer' => true,
 				'media'     => 'all',
 			)
@@ -36,7 +36,6 @@ class Certificates {
 			'easyteachlms/certificate',
 			array(
 				'editor_script' => array_pop( $certificate_block['js'] )['handle'],
-				'editor_style'  => array_pop( $certificate_block['css'] )['handle'],
 			)
 		);
 
