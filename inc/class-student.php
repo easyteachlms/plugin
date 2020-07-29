@@ -92,6 +92,37 @@ class Student {
 		error_log( $user_id );
 		error_log( $meta_key );
 		error_log( print_r( $data, true ) );
+		// Log completion in group activity log
+		if ( class_exists( 'BP_Group_Extension' ) ) {
+			$attached_groups = get_post_meta( $course_id, '_attached_groups', true );
+			$users_groups    = groups_get_user_groups( $user_id );
+			error_log( 'users groups' );
+			error_log( print_r( $attached_groups, true ) );
+			error_log( print_r( $users_groups, true ) );
+			if ( array_key_exists( 'groups', $users_groups ) && is_array( $users_groups['groups'] ) ) {
+				foreach ( $attached_groups as $group_id ) {
+					error_log( 'group: ' . $group_id );
+					if ( in_array( $group_id, $users_groups ) ) {
+						error_log( 'groups_record_activity' );
+						$action           = sprintf( __( '%1$s completed %2$s', 'buddypress' ), bp_core_get_userlink( $user_id ), '<a href="#">' . esc_attr( get_the_title( $course_id ) ) . '</a>' );
+						$content_filtered = apply_filters( 'groups_activity_new_update_content', 'Completed Title of Topic UUID' );
+						groups_record_activity(
+							array(
+								// 'id'           => false,
+								'item_id'      => $group_id,
+								'user_id'      => $user_id,
+								'type'         => 'activity_update',
+								'action'       => $action,
+								'content'      => $content_filtered,
+								'primary_link' => 'http://www.google.com',
+							)
+						);
+					} else {
+						error_log( 'NO GROUPS RECORD ACTIVITY' );
+					}
+				}
+			}
+		}
 		$data = update_user_meta( (int) $user_id, $meta_key, $data );
 		return $data;
 	}
