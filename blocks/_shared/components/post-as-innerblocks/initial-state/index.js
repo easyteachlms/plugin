@@ -4,7 +4,7 @@ import { Fragment } from '@wordpress/element';
 import { Dropdown, Form, Header } from 'semantic-ui-react';
 import { Card, CardBody, CardHeader } from '@wordpress/components';
 import { useDispatch } from '@wordpress/data';
-import { useDidMount } from '@daniakash/lifecycle-hooks';
+import { useDidMount } from 'beautiful-react-hooks';
 import { capitalize, replaceContent } from '@easyteachlms/utils';
 
 const SearchExisting = withState({

@@ -37,6 +37,10 @@ const settings = [
                 type: 'boolean',
                 default: false,
             },
+            description: {
+                type: 'string',
+                default: '',
+            }
         },
         edit,
         save,

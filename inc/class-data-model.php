@@ -129,6 +129,8 @@ class Data_Model {
 
 		$parsed = parse_blocks( $post->post_content );
 
+		error_log( print_r( $parsed, true ) );
+
 		if ( empty( $parsed ) ) {
 			return false;
 		}
@@ -139,13 +141,14 @@ class Data_Model {
 		$files = $this->parse_files( $files );
 
 		$structure = array(
-			'id'       => $post->ID,
-			'title'    => $post->post_title,
-			'excerpt'  => $post->post_excerpt,
-			'points'   => 'should we have a numerical points value for the course on "completion" for a student???',
-			'outline'  => $outline,
-			'files'    => $files,
-			'enrolled' => false,
+			'id'          => $post->ID,
+			'title'       => $post->post_title,
+			'excerpt'     => $post->post_excerpt,
+			'description' => $parsed[0]['attrs']['description'],
+			'points'      => 'NULL', // Gather up all the quiz points as total points here??
+			'outline'     => $outline,
+			'files'       => $files,
+			'enrolled'    => false,
 		);
 		error_log( print_r( $structure, true ) );
 		return apply_filters( 'easyteachlms_course_structure', $structure, $course_id );

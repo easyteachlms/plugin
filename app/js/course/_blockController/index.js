@@ -5,6 +5,8 @@ import {
     isValidElement,
     cloneElement,
 } from '@wordpress/element';
+import { select } from '@wordpress/data';
+import * as moment from 'moment';
 
 // Load Our Blocks
 import Certificate from './certificate'
@@ -62,6 +64,13 @@ const blockController = (children, data, style, fn) => {
 
         if (className.includes('wp-block-easyteachlms-quiz')) {
             return <Quiz uuid={uuid} />;
+        }
+
+        if (className.includes('wp-block-easyteachlms-certificate-date')) {
+            return <p>{moment().format('MMM D, YYYY')}</p>;
+        }
+        if (className.includes('wp-block-easyteachlms-certificate-student')) {
+            return <h4>{select('easyteachlms/course').getUserName()}</h4>;
         }
 
         if (className.includes('wp-block-easyteachlms-certificate')) {

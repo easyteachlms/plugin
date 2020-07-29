@@ -2,6 +2,9 @@ const selectors = {
     getUserId() {
         return window.userData.id;
     },
+    getUserName() {
+        return window.userData.name;
+    },
     getCourseId(state) {
         const { id } = state.data;
         return id;
@@ -19,9 +22,6 @@ const selectors = {
         return state.certificate;
     },
     getQuiz(state, uuid) {
-        if (!state.data.hasOwnProperty('quizzes')) {
-            return false;
-        }
         const { outline } = state.data;
         const index = outline.flat.findIndex(
             (obj) =>

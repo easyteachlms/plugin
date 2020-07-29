@@ -7,9 +7,7 @@ const Certificate = ({ children }) => {
     const { storeCertificate } = useDispatch('easyteachlms/course');
     console.log('store cert');
     storeCertificate(renderToString(children));
-    return (
-        <Fragment></Fragment>
-    );
+    return <Fragment></Fragment>;
 };
 
 const DownloadCertificate = () => {
@@ -23,7 +21,9 @@ const DownloadCertificate = () => {
             margin:       0,
             filename:     'certificate.pdf',
             image:        { type: 'jpeg', quality: 0.98 },
-            html2canvas:  { scale: 1 },
+            html2canvas:  { 
+                scale: 1,
+            },
             jsPDF:        { unit: 'in', format: 'letter', orientation: 'landscape' }
         };
         html2pdf().from(certificate, 'string').set(opts).outputPdf().then((e)=>{

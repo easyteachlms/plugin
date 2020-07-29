@@ -12,23 +12,21 @@ class install_plugins {
 		 * If the source is NOT from the .org repo, then source is also required.
 		 */
 		$plugins = array(
-			// TODO: Not yet, we need to rebuild our WooCommerce support.
-			// array(
-			// 'name'      => 'WooCommerce',
-			// 'slug'      => 'woocommerce',
-			// 'required'  => false
-			// ),
-			// array(
-			// 'name'               => 'GitHub Updater', // The plugin name.
-			// 'slug'               => 'github-updater', // The plugin slug (typically the folder name).
-			// 'source'             => 'https://github.com/afragen/github-updater/archive/master.zip', // The plugin source.
-			// 'required'           => true, // If false, the plugin is only 'recommended' instead of required.
-			// 'version'            => '7.6.2', // E.g. 1.0.0. If set, the active plugin must be this version or higher. If the plugin version is higher than the plugin version installed, the user will be notified to update the plugin.
-			// 'force_activation'   => false, // If true, plugin is activated upon theme activation and cannot be deactivated until theme switch.
-			// 'force_deactivation' => false, // If true, plugin is deactivated upon theme switch, useful for theme-specific plugins.
-			// 'external_url'       => '', // If set, overrides default API URL and points to an external URL.
-			// 'is_callable'        => '', // If set, this callable will be be checked for availability to determine if a plugin is active.
-			// ),
+			array(
+				'name'     => 'WooCommerce',
+				'slug'     => 'woocommerce',
+				'required' => false,
+			),
+			array(
+				'name'     => 'BuddyPress',
+				'slug'     => 'buddypress',
+				'required' => false,
+			),
+			array(
+				'name'     => 'Gutenberg',
+				'slug'     => 'gutenberg',
+				'required' => true,
+			),
 		);
 		/*
 		 * Array of configuration settings. Amend each line as needed.

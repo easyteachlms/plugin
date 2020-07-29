@@ -36,7 +36,6 @@
     "package": "wpackio-scripts pack"
   },
   "dependencies": {
-    "@daniakash/lifecycle-hooks": "^0.0.1-alpha-2",
     "@wordpress/icons": "^2.0.0",
     "@wpackio/entrypoint": "^4.4.1",
     "animate.css": "^4.1.0",
@@ -46,7 +45,6 @@
     "jspdf": "^1.5.3",
     "react-html-parser": "^2.0.2",
     "react-quiz-component": "^0.3.4",
-    "reactour": "^1.17.0",
     "semantic-ui-css": "^2.4.1",
     "semantic-ui-react": "^0.88.2",
     "styled-components": "^5.1.0"

@@ -7,7 +7,7 @@ import ReactHtmlParser from 'react-html-parser';
 import { useSelect, useDispatch } from '@wordpress/data';
 import { Fragment, render } from '@wordpress/element';
 import { getQueryArg } from '@wordpress/url';
-import { useDidMount } from '@daniakash/lifecycle-hooks';
+import { useDidMount } from 'beautiful-react-hooks';
 
 import { Grid, Segment } from 'semantic-ui-react';
 

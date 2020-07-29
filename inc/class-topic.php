@@ -5,7 +5,7 @@ namespace EasyTeachLMS;
 use WPackio\Enqueue;
 class Topic {
 	protected $post_type = 'topic';
-	protected $js_deps   = array( 'react', 'react-dom', 'wp-element', 'wp-components', 'wp-polyfill', 'wp-i18n', 'wp-api' );
+	protected $js_deps   = array( 'react', 'react-dom', 'wp-element', 'wp-components', 'wp-polyfill', 'wp-i18n', 'wp-api', 'moment' );
 
 	public function __construct( $init = false ) {
 		if ( true === $init ) {

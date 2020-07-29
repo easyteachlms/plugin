@@ -95,6 +95,8 @@ class EasyTeachLMS {
 	 */
 	public function __construct( $init = false ) {
 		if ( true === $init ) {
+			$this->include_files();
+
 			add_action( 'init', array( $this, 'semantic_ui_css_loader' ) );
 			add_action( 'init', array( $this, 'rewrite' ) );
 			add_action( 'init', array( $this, 'rewrite_tags' ) );
@@ -103,10 +105,10 @@ class EasyTeachLMS {
 
 			add_filter( 'classic_editor_enabled_editors_for_post_type', array( $this, 'force_gutenberg' ), 10, 2 );
 
+			add_action( 'bp_include', array( $this, 'include_buddypress_support' ), 32 );
+
 			register_activation_hook( EASYTEACHLMS_FILE, array( $this, 'activate' ) );
 			register_deactivation_hook( EASYTEACHLMS_FILE, array( $this, 'deactivate' ) );
-
-			$this->include_files();
 		}
 	}
 
@@ -157,6 +159,10 @@ class EasyTeachLMS {
 	}
 
 
+	function include_buddypress_support() {
+		require_once EASYTEACHLMS_PATH . '/inc/class-buddypress.php';
+	}
+
 	public function semantic_ui_css_loader() {
 		wp_register_style( 'semantic-ui', '//cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css' );
 	}
@@ -202,3 +208,7 @@ class EasyTeachLMS {
 require EASYTEACHLMS_PATH . '/vendor/plugin-installs.php';
 
 $easy_teach_lms = new EasyTeachLMS( true );
+
+function lms_throw_error( $msg ) {
+	error_log( print_r( $msg, true ) );
+}

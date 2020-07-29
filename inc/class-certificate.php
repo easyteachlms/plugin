@@ -20,8 +20,8 @@ class Certificates {
 		$js_deps = $this->js_deps;
 
 		$certificate_block = $enqueue->register(
+			'certificate',
 			'certificate-block',
-			'block',
 			array(
 				'js'        => true,
 				'css'       => true,
@@ -37,6 +37,46 @@ class Certificates {
 			array(
 				'editor_script' => array_pop( $certificate_block['js'] )['handle'],
 				'editor_style'  => array_pop( $certificate_block['css'] )['handle'],
+			)
+		);
+
+		$date = $enqueue->register(
+			'certificate',
+			'date-block',
+			array(
+				'js'        => true,
+				'css'       => false,
+				'js_dep'    => $js_deps,
+				'css_dep'   => array(),
+				'in_footer' => true,
+				'media'     => 'all',
+			)
+		);
+
+		register_block_type(
+			'easyteachlms/certificate-date',
+			array(
+				'editor_script' => array_pop( $date['js'] )['handle'],
+			)
+		);
+
+		$student_name = $enqueue->register(
+			'certificate',
+			'student-block',
+			array(
+				'js'        => true,
+				'css'       => false,
+				'js_dep'    => $js_deps,
+				'css_dep'   => array(),
+				'in_footer' => true,
+				'media'     => 'all',
+			)
+		);
+
+		register_block_type(
+			'easyteachlms/certificate-student',
+			array(
+				'editor_script' => array_pop( $student_name['js'] )['handle'],
 			)
 		);
 	}

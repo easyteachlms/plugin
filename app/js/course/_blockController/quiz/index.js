@@ -1,4 +1,4 @@
-import { useDidMount } from '@daniakash/lifecycle-hooks';
+import { useDidMount } from 'beautiful-react-hooks';
 import { useSelect, useDispatch } from '@wordpress/data';
 import Quiz from 'react-quiz-component';
 import apiFetch from '@wordpress/api-fetch';
@@ -29,7 +29,7 @@ const QuizComponent = ({ uuid }) => {
 
     useDidMount(() => {
         console.log('QUIZ');
-        // console.log(data);
+        console.log(data);
     });
 
     const onCompleteAction = (obj) => {

@@ -20,7 +20,7 @@ const settings = [
             },
             lastUpdated: {
                 type: 'string',
-                default: 0,
+                default: '',
             },
             title: {
                 type: 'string',

@@ -1,17 +1,17 @@
 import { InnerBlocks } from '@wordpress/block-editor';
-import { useContext, Fragment } from '@wordpress/element';
+import { Fragment } from '@wordpress/element';
 import { useSelect } from '@wordpress/data';
-import { useDidMount } from '@daniakash/lifecycle-hooks';
-import { get, map } from 'lodash';
+import { useDidMount } from 'beautiful-react-hooks';
 
 import './edit.scss';
 
 import Welcome from './welcome';
+import Controls from './controls';
 
 const ALLOWED_BLOCKS = ['easyteachlms/lesson', 'easyteachlms/certificate'];
 
 const edit = ({ attributes, className, clientId, name, setAttributes }) => {
-    const { welcomeDisabled, id } = attributes;
+    const { welcomeDisabled, id, description } = attributes;
 
     // We get some information when the block's internal state changes.
     const { hasInnerBlocks, courseId } = useSelect(
@@ -38,11 +38,14 @@ const edit = ({ attributes, className, clientId, name, setAttributes }) => {
     // @TODOIf has innerblocks and some context provided tutorial finished is it set to true and or if the user has specified to never to be shown.
     if (hasInnerBlocks || true === welcomeDisabled) {
         return (
-            <div className={className}>
-                <InnerBlocks allowedBlocks={ALLOWED_BLOCKS} renderAppender={
-                    ()=><InnerBlocks.ButtonBlockAppender />
-                } />
-            </div>
+            <Fragment>
+                <Controls description={description} setAttributes={setAttributes}/>
+                <div className={className}>
+                    <InnerBlocks allowedBlocks={ALLOWED_BLOCKS} renderAppender={
+                        ()=><InnerBlocks.ButtonBlockAppender />
+                    } />
+                </div>
+            </Fragment>
         );
     }
 

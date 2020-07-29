@@ -15,6 +15,7 @@ class Course {
 			add_action( 'init', array( $this, 'init' ) );
 			add_filter( 'post_class', array( $this, 'is_enrolled_post_class' ), 10, 3 );
 			add_action( 'enroll_user', array( $this, 'enroll' ), 10, 2 );
+			add_action( 'unenroll_user', array( $this, 'unenroll' ), 10, 2 );
 			add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_course_frontend' ) );
 			add_action( 'wp_enqueue_scripts', array( $this, 'enroll_button_enqueue' ) );
 			add_filter( 'the_excerpt', array( $this, 'enroll_button' ) );
@@ -273,8 +274,11 @@ class Course {
 
 		if ( ! $data ) {
 			$data = array( $course_id );
-		} else {
+		} elseif ( ! in_array( $course_id, $data ) ) {
 			$data[] = $course_id;
+		} else {
+			// User already enrolled don't enroll again.
+			return;
 		}
 		$this->log_enrollment_on_course( $user_id, $course_id );
 		return update_user_meta( $user_id, '_enrolled_courses', $data );
@@ -312,25 +316,27 @@ class Course {
 	}
 
 	public function unenroll( $user_id, $course_id ) {
-		// $user_id   = $request->get_param( 'userId' );
-		// $course_id = $request->get_param( 'courseId' );
-		// $data      = get_user_meta( $user_id, '_enrolled_courses', true );
+		if ( ! $user_id || ! $course_id ) {
+			return false;
+		}
 
-		// if ( ! $data ) {
-		// return false;
-		// } else {
-		// $data = array_diff( $data, $course_id );
-		// }
+		$data = get_user_meta( $user_id, '_enrolled_courses', true );
 
-		// update_user_meta( $user_id, '_enrolled_courses', $data );
+		if ( ! $data ) {
+			return false;
+		} else {
+			$data = array_diff( $data, array( $course_id ) );
+		}
 
-		// $index = get_post_meta( $course_id, '_students_enrolled', true );
-		// if ( $index ) {
-		// $index = array_diff( $index, $user_id );
-		// }
-		// update_post_meta( $course_id, '_students_enrolled', $index );
+		update_user_meta( $user_id, '_enrolled_courses', $data );
 
-		// return $data;
+		$index = get_post_meta( $course_id, '_enrolled_users', true );
+		if ( $index ) {
+			$index = array_diff( $index, array( $user_id ) );
+		}
+		update_post_meta( $course_id, '_enrolled_users', $index );
+
+		return $data;
 	}
 
 	public function cron_clean_roster() {

@@ -29,6 +29,7 @@ module.exports = {
             name: 'admin',
             entry: {
                 settings: './app/js/admin/settings/index.js',
+                buddyPress: './app/js/admin/buddypress/index.js',
             },
         },
         // WordPress Plugins
@@ -52,9 +53,11 @@ module.exports = {
             },
         },
         {
-            name: 'certificate-block',
+            name: 'certificate',
             entry: {
-                block: './blocks/certificate/index.js',
+                'certificate-block': './blocks/certificate/index.js',
+                'date-block': './blocks/certificate-date/index.js',
+                'student-block': './blocks/certificate-student/index.js',
             },
         },
         {

@@ -1,5 +1,5 @@
 import { __ } from '@wordpress/i18n';
-import { useDidMount } from '@daniakash/lifecycle-hooks';
+import { useDidMount } from 'beautiful-react-hooks';
 import { Fragment, useState } from '@wordpress/element';
 import { useSelect, useDispatch } from '@wordpress/data';
 import { getSaveContent } from '@wordpress/blocks';
@@ -24,6 +24,8 @@ const Controls = ({
     setAttributes = false,
     isSelected,
 }) => {
+    console.log("Last Updated");
+    console.log(lastUpdated);
     const currentBlock = useSelect((select) => {
         return select('core/block-editor').getBlock(clientId);
     }, []);
@@ -44,6 +46,10 @@ const Controls = ({
     );
 
     const { replaceInnerBlocks } = useDispatch('core/block-editor');
+
+    const formatDate = (date) => {
+        return moment(date).format('MMM D, YYYY');
+    };
 
     const UpdateContentButton = ({ isSmall = false }) => {
         const onClick = () => {
@@ -110,6 +116,8 @@ const Controls = ({
         const post = new wp.api.models[type]({ id });
         post.fetch().then((post) => {
             console.log(post);
+            console.log(lastUpdated);
+            console.log(post.modified_gmt);
             if (lastUpdated !== post.modified_gmt) {
                 setFlag(true);
             }
@@ -149,8 +157,8 @@ const Controls = ({
                 <div style={{flexGrow: '1'}}>
                     <SaveAsNewButton isSmall />
                 </div>
-                { '$0' !== lastUpdated &&  (
-                    <div style={{flexBasis: '100%'}}><span style={{fontFamily: 'sans-serif', fontSize: '11px'}}><strong>Last Updated:</strong> ${lastUpdated}</span></div>
+                { '' !== lastUpdated &&  (
+                    <div style={{flexBasis: '100%'}}><span style={{fontFamily: 'sans-serif', fontSize: '11px'}}><strong>Last Updated:</strong> {formatDate(lastUpdated)}</span></div>
                 ) }
             </div>
             <InspectorControls>

@@ -1,13 +1,14 @@
 import { useSelect, useDispatch } from '@wordpress/data';
-import { Fragment } from '@wordpress/element';
+import { Fragment, RawHTML } from '@wordpress/element';
 import { Progress, Icon } from 'semantic-ui-react';
+import { autop } from '@wordpress/autop';
 
 import { DownloadCertificate } from '../_blockController/certificate';
 
 const user = window.userData;
 
 const Dashboard = ({ id }) => {
-    const { isActive, progress, progressRatio, files, quizData } = useSelect(
+    const { isActive, progress, progressRatio, files, quizData, description } = useSelect(
         (select) => {
             const active = select('easyteachlms/course').getActive();
             const data = select('easyteachlms/course').getData(id);
@@ -22,6 +23,7 @@ const Dashboard = ({ id }) => {
                 isActive: 'dashboard' === active,
                 progress: 100 * (completed / total),
                 progressRatio: ratio,
+                description: data.description,
                 files: select('easyteachlms/course').getFiles(),
                 quizData: select('easyteachlms/course').getQuizzes(),
             };
@@ -58,8 +60,22 @@ const Dashboard = ({ id }) => {
         );
     };
 
+    const CourseDescription = () => {
+        if ( ! description ) {
+            return <Fragment></Fragment>;
+        }
+        return(
+            <div>
+                <RawHTML>{autop(description)}</RawHTML>
+            </div>
+        );
+    }
+
     const Files = () => {
         console.info('<Files/>');
+        if ( 0 == files.length ) {
+            return <Fragment></Fragment>;
+        }
         const f = [];
         files.forEach((file) => {
             f.push(
@@ -84,6 +100,9 @@ const Dashboard = ({ id }) => {
 
     const Quizzes = () => {
         console.info('<Quizzes/>');
+        if ( 0 == quizData.length ) {
+            return <Fragment></Fragment>;
+        }
         const q = [];
 
         quizData.forEach((quiz) => {
@@ -112,7 +131,7 @@ const Dashboard = ({ id }) => {
         <div>
             <h2>Hi, {name}</h2>
             <CourseProgress />
-            <p>Course Description Here...</p>
+            <CourseDescription />
             <Quizzes />
             <Files />
         </div>
