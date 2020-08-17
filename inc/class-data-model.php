@@ -279,9 +279,10 @@ class Data_Model {
 			$title = 'Quiz';
 		}
 
-		$synopsis = $quiz['attrs']['synopsis'];
-		if ( empty( $synopsis ) ) {
-			$synopsis = 'Quiz Synopsis Here...';
+		if ( array_key_exists( 'synopsis', $quiz['attrs'] ) && ! empty( $quiz['attrs']['synopsis'] ) ) {
+			$synopsis = $quiz['attrs']['synopsis'];
+		} else {
+			$synopsis = '';
 		}
 
 		$return = array(
@@ -321,7 +322,7 @@ class Data_Model {
 			}
 			foreach ( $question['innerBlocks'] as $index => $answer ) {
 				$answers[] = $answer['attrs']['answer'];
-				if ( true === $answer['attrs']['isCorrect'] ) {
+				if ( array_key_exists( 'isCorrect', $answer['attrs'] ) && true === $answer['attrs']['isCorrect'] ) {
 					if ( 'multiple' === $args['answersType'] ) {
 						$correct_answer[] = $index + 1;
 					} else {
