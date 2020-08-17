@@ -33,14 +33,6 @@ const settings = [
                 type: 'integer',
                 default: 0,
             },
-            welcomeDisabled: {
-                type: 'boolean',
-                default: false,
-            },
-            description: {
-                type: 'string',
-                default: '',
-            }
         },
         edit,
         save,

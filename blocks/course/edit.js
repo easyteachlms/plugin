@@ -11,7 +11,7 @@ import Controls from './controls';
 const ALLOWED_BLOCKS = ['easyteachlms/lesson', 'easyteachlms/certificate'];
 
 const edit = ({ attributes, className, clientId, name, setAttributes }) => {
-    const { welcomeDisabled, id, description } = attributes;
+    const { id } = attributes;
 
     // We get some information when the block's internal state changes.
     const { hasInnerBlocks, courseId } = useSelect(
@@ -35,7 +35,7 @@ const edit = ({ attributes, className, clientId, name, setAttributes }) => {
         setCourseID();
     });
 
-    if (hasInnerBlocks || true === welcomeDisabled) {
+    if (hasInnerBlocks) {
         return (
             <Fragment>
                 <Controls setAttributes={setAttributes}/>

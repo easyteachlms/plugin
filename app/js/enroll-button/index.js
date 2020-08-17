@@ -4,6 +4,11 @@ import apiFetch from '@wordpress/api-fetch';
 
 const EnrollButton = ({ enrolled, userId, courseId, link }) => {
     const [ success, enroll ] = useState(enrolled);
+    console.log("<EnrollButton>");
+    console.log(enrolled);
+    console.log(userId);
+    console.log(courseId);
+    console.log(link);
     return (
         <a
             onClick={() => {
@@ -35,8 +40,8 @@ domReady(() => {
     targets.forEach(target => {
         const props = {
             userId: target.getAttribute('data-userId'),
-            courseId:target.getAttribute('data-courseId'),
-            link:target.getAttribute('data-courseLink'),
+            courseId: target.getAttribute('data-courseId'),
+            link: target.getAttribute('data-courseLink'),
             enrolled: target.getAttribute('data-enrolled')
         };
         render(<EnrollButton {...props}/>, target);

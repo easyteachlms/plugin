@@ -9,14 +9,6 @@ import {
 } from '@easyteachlms/shared';
 
 const Welcome = ({ welcomeDisabled, children, setAttributes }) => {
-    const disable = (condition) => {
-        if (true === condition) {
-            setAttributes({ welcomeDisabled: true });
-        } else {
-            setAttributes({ welcomeDisabled: false });
-        }
-    };
-
     const Prompt = () => {
         const Art = () => {
             return (
@@ -47,16 +39,7 @@ const Welcome = ({ welcomeDisabled, children, setAttributes }) => {
                                 settings in the dashboard.
                             </p>
 
-                            <CourseCreationButton disable={disable} />
-
-                            <Button
-                                isSecondary
-                                onClick={() => {
-                                    setAttributes({ welcomeDisabled: true });
-                                }}
-                            >
-                                {__("Don't show tutorial again")}
-                            </Button>
+                            <CourseCreationButton/>
                         </div>
                     </div>
                 </Segment>
@@ -72,7 +55,6 @@ const Welcome = ({ welcomeDisabled, children, setAttributes }) => {
                     {children}
                 </Fragment>
             )}
-            {true === welcomeDisabled && children}
         </Fragment>
     );
 };
