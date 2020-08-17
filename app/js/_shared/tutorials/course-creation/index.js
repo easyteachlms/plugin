@@ -17,7 +17,9 @@ const Tutorial = ({open = false, toggleOpen}) => {
             {true === open && (
                 <Guide
                     onFinish={() => {
-                        toggleOpen(false);
+                        if ( 'function' === typeof toggleOpen ) {
+                            toggleOpen(false);
+                        }
                     }}
                     pages={[
                         {
