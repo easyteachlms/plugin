@@ -10,7 +10,7 @@ import {
     Button,
 } from '@wordpress/components';
 
-import { CourseCreationTutorial, WelcomeGraphic } from '@easyteachlms/shared';
+import { CourseCreationButton, WelcomeGraphic } from '@easyteachlms/shared';
 import WooCommerceGraphic from './woocommerce-selling.gif';
 
 const Tutorial = () => {
@@ -33,7 +33,7 @@ const Tutorial = () => {
                                 open the EasyTeach LMS course creation self
                                 guided tutorial.
                             </p>
-                            <CourseCreationTutorial />
+                            <CourseCreationButton />
                         </div>
                     </div>
                     <CardDivider />

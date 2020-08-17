@@ -16,9 +16,9 @@ class Student {
 			'easyteachlms/v3',
 			'/student/update-progress',
 			array(
-				'methods'  => 'POST',
-				'callback' => array( $this, 'update_progress_restfully' ),
-				'args'     => array(
+				'methods'             => 'POST',
+				'callback'            => array( $this, 'update_progress_restfully' ),
+				'args'                => array(
 					'userId'   => array(
 						'validate_callback' => function( $param, $request, $key ) {
 							return is_string( $param );
@@ -35,6 +35,9 @@ class Student {
 						},
 					),
 				),
+				'permission_callback' => function () {
+					return current_user_can( 'read' );
+				},
 			)
 		);
 
@@ -42,9 +45,9 @@ class Student {
 			'easyteachlms/v3',
 			'/student/update-quiz-progress',
 			array(
-				'methods'  => 'POST',
-				'callback' => array( $this, 'update_quiz_progress_restfully' ),
-				'args'     => array(
+				'methods'             => 'POST',
+				'callback'            => array( $this, 'update_quiz_progress_restfully' ),
+				'args'                => array(
 					'userId'   => array(
 						'validate_callback' => function( $param, $request, $key ) {
 							return is_string( $param );
@@ -61,6 +64,9 @@ class Student {
 						},
 					),
 				),
+				'permission_callback' => function () {
+					return current_user_can( 'read' );
+				},
 			)
 		);
 	}
@@ -88,10 +94,12 @@ class Student {
 			);
 		}
 		$data['completed'][] = $uuid;
+
 		error_log( 'User ID' );
 		error_log( $user_id );
 		error_log( $meta_key );
 		error_log( print_r( $data, true ) );
+
 		// Log completion in group activity log
 		if ( class_exists( 'BP_Group_Extension' ) ) {
 			$attached_groups = get_post_meta( $course_id, '_attached_groups', true );

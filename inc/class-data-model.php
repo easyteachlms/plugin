@@ -23,9 +23,9 @@ class Data_Model {
 			'easyteachlms/v3',
 			'/course/get',
 			array(
-				'methods'  => 'GET',
-				'callback' => array( $this, 'get_course_structure_restfully' ),
-				'args'     => array(
+				'methods'             => 'GET',
+				'callback'            => array( $this, 'get_course_structure_restfully' ),
+				'args'                => array(
 					'courseId' => array(
 						'validate_callback' => function( $param, $request, $key ) {
 							return is_numeric( $param );
@@ -37,10 +37,9 @@ class Data_Model {
 						},
 					),
 				),
-			// 'permission_callback' => function () {
-			// @@TODO also a user auth system that will double check that the user has purchased access OR is an admin
-			// return current_user_can( 'read' );
-			// },
+				'permission_callback' => function () {
+					return current_user_can( 'read' );
+				},
 			)
 		);
 	}
@@ -144,13 +143,15 @@ class Data_Model {
 			'id'          => $post->ID,
 			'title'       => $post->post_title,
 			'excerpt'     => $post->post_excerpt,
-			'description' => $parsed[0]['attrs']['description'],
+			'description' => get_the_excerpt( $course_id ),
 			'points'      => 'NULL', // Gather up all the quiz points as total points here??
 			'outline'     => $outline,
 			'files'       => $files,
 			'enrolled'    => false,
 		);
+
 		error_log( print_r( $structure, true ) );
+
 		return apply_filters( 'easyteachlms_course_structure', $structure, $course_id );
 	}
 

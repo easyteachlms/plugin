@@ -11,31 +11,13 @@ const animatedStep3 = 'https://beta.easyteachlms.com/wp-content/uploads/2020/07/
 const animatedStep4 = 'https://beta.easyteachlms.com/wp-content/uploads/2020/07/adding-quiz.gif';
 const animatedStep5 = 'https://beta.easyteachlms.com/wp-content/uploads/2020/07/saving-content.gif';
 
-const Tutorial = ({ disable = false }) => {
-    const [open, openTutorial] = useState(false);
-    return (
+const Tutorial = ({open = false, toggleOpen}) => {
+    return(
         <Fragment>
-            <Button
-                isPrimary
-                onClick={() => {
-                    openTutorial(true);
-                    // const modal = document.querySelector(
-                    //     '.components-modal__frame.components-guide',
-                    // );
-                    // modal.style.maxHeight = '600px';
-                    // modal.style.minWidth = '700px';
-                }}
-            >
-                Begin Tutorial
-            </Button>
             {true === open && (
                 <Guide
                     onFinish={() => {
-                        console.log('Tutorial Finished');
-                        openTutorial(false);
-                        if ('function' === typeof disable) {
-                            disable(true);
-                        }
+                        toggleOpen(false);
                     }}
                     pages={[
                         {
@@ -235,6 +217,29 @@ const Tutorial = ({ disable = false }) => {
             )}
         </Fragment>
     );
+}
+
+const TutorialButton = ({ disable = false }) => {
+    const [open, toggleOpen] = useState(false);
+    return (
+        <Fragment>
+            <Button
+                isPrimary
+                onClick={() => {
+                    openTutorial(true);
+                    // const modal = document.querySelector(
+                    //     '.components-modal__frame.components-guide',
+                    // );
+                    // modal.style.maxHeight = '600px';
+                    // modal.style.minWidth = '700px';
+                }}
+            >
+                Begin Tutorial
+            </Button>
+            <Tutorial open={open} toggleOpen={toggleOpen}/>
+        </Fragment>
+    );
 };
 
-export default Tutorial;
+export{ Tutorial, TutorialButton };
+export default TutorialButton;

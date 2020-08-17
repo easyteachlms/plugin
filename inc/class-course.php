@@ -225,10 +225,12 @@ class Course {
 			if ( 0 === $user_data ) {
 				return $excerpt;
 			}
+			$course_id = get_the_ID();
+			$enrolled  = $this->is_enrolled( $course_id );
 			// Check if already enrolled and display that here.
 			ob_start();
 			?>
-			<div class="easyteachlms-enroll-button" data-userId=<?php echo $user_data->ID; ?> data-courseId=<?php echo get_the_ID(); ?>>Enroll Now</div>
+			<div class="easyteachlms-enroll-button" data-enrolled=<?php echo esc_attr( $enrolled ); ?> data-userId=<?php echo $user_data->ID; ?> data-courseId=<?php echo $course_id; ?> data-courseLink=<?php echo get_permalink( $course_id ); ?>>Enroll Now</div>
 			<?php
 			$excerpt = $excerpt . ob_get_clean();
 		}

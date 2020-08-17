@@ -4,7 +4,7 @@ import { Button } from '@wordpress/components';
 import { Segment } from 'semantic-ui-react';
 
 import {
-    CourseCreationTutorial,
+    CourseCreationButton,
     WelcomeGraphic as illustration,
 } from '@easyteachlms/shared';
 
@@ -47,7 +47,7 @@ const Welcome = ({ welcomeDisabled, children, setAttributes }) => {
                                 settings in the dashboard.
                             </p>
 
-                            <CourseCreationTutorial disable={disable} />
+                            <CourseCreationButton disable={disable} />
 
                             <Button
                                 isSecondary

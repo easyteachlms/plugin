@@ -37,9 +37,6 @@ class Admin {
 				'media'     => 'all',
 			)
 		);
-		if ( ! get_option( 'easyteachlms-welcome-1' ) ) {
-			update_option( 'easyteachlms-welcome-1', true );
-		}
 	}
 
 	public function admin_page() {

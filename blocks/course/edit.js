@@ -35,11 +35,10 @@ const edit = ({ attributes, className, clientId, name, setAttributes }) => {
         setCourseID();
     });
 
-    // @TODOIf has innerblocks and some context provided tutorial finished is it set to true and or if the user has specified to never to be shown.
     if (hasInnerBlocks || true === welcomeDisabled) {
         return (
             <Fragment>
-                <Controls description={description} setAttributes={setAttributes}/>
+                <Controls setAttributes={setAttributes}/>
                 <div className={className}>
                     <InnerBlocks allowedBlocks={ALLOWED_BLOCKS} renderAppender={
                         ()=><InnerBlocks.ButtonBlockAppender />

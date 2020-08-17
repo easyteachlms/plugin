@@ -1,4 +1,4 @@
-import CourseCreationTutorial from './tutorials/course-creation';
+import {TutorialButton as CourseCreationButton, Tutorial as CourseCreationTutorial} from './tutorials/course-creation';
 import WelcomeGraphic from './tutorials/course-creation/art/basic.png';
 
-export { CourseCreationTutorial, WelcomeGraphic };
+export { CourseCreationButton, CourseCreationTutorial, WelcomeGraphic };
