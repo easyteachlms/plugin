@@ -4,7 +4,6 @@ namespace EasyTeachLMS;
 use WP_REST_Request;
 /**
  * Course structure should be added as post meta to the course.
- * Whenever a topic is added to a lesson the topic should have post meta that should list the post id's of the lessons where it can be found.
  * Whenever a lesson is added to a course the lesson should have post meta that lists the ids of the courses where it can be found.
  */
 class Data_Model {
@@ -220,7 +219,7 @@ class Data_Model {
 					foreach ( $block['innerBlocks'] as $key => $block ) {
 
 						$uuid                        = $block['attrs']['uuid'];
-						$block_parsed                = $this->parse( 'easyteachlms/topic', $block, $course_id, $user_id, $site_id );
+						$block_parsed                = $this->parse( 'easyteachlms/lesson-content', $block, $course_id, $user_id, $site_id );
 						$block_parsed['parentTitle'] = $lesson_title;
 						$block_parsed['parentUuid']  = $lesson_uuid;
 						$outline['total']            = $outline['total'] + 1;

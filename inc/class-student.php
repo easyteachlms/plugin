@@ -113,7 +113,7 @@ class Student {
 					if ( in_array( $group_id, $users_groups ) ) {
 						error_log( 'groups_record_activity' );
 						$action           = sprintf( __( '%1$s completed %2$s', 'buddypress' ), bp_core_get_userlink( $user_id ), '<a href="#">' . esc_attr( get_the_title( $course_id ) ) . '</a>' );
-						$content_filtered = apply_filters( 'groups_activity_new_update_content', 'Completed Title of Topic UUID' );
+						$content_filtered = apply_filters( 'groups_activity_new_update_content', 'Completed Title of Lesson Content UUID' );
 						groups_record_activity(
 							array(
 								// 'id'           => false,

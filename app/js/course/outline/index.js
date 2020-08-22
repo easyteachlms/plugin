@@ -57,17 +57,17 @@ const Lessons = ({ id }) => {
     for (const uuid in structured) {
         // Lesson
         const { title, outline } = structured[uuid];
-        const topics = [];
+        const contents = [];
         for (const uuid in outline) {
-            // Topic
+            // Lesson Content
             const { title } = outline[uuid];
 
-            topics.push(<Item title={title} uuid={uuid} />);
+            contents.push(<Item title={title} uuid={uuid} />);
         }
         lessons.push(
             <Menu.Item>
                 <Menu.Header>{title}</Menu.Header>
-                <Menu.Menu>{topics}</Menu.Menu>
+                <Menu.Menu>{contents}</Menu.Menu>
             </Menu.Item>,
         );
     }

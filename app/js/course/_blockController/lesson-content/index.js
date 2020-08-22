@@ -3,7 +3,7 @@ import { Fragment } from '@wordpress/element';
 import { Header, Menu } from 'semantic-ui-react';
 import MarkComplete from './completion';
 
-const Topic = ({ parentTitle, title, uuid, hasQuiz, className, children }) => {
+const LessonContent = ({ parentTitle, title, uuid, hasQuiz, className, children }) => {
     const { isComplete, isActive, conditionsMet, courseId } = useSelect(
         (select) => {
             return {
@@ -56,4 +56,4 @@ const Topic = ({ parentTitle, title, uuid, hasQuiz, className, children }) => {
     );
 };
 
-export default Topic;
+export default LessonContent;

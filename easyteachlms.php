@@ -3,14 +3,14 @@
 Plugin Name: EasyTeach LMS
 Plugin URI: https://easyteachlms.com
 Description: An easy to use LMS for WordPress. Supports additional features from WooCommerce, and BBPress.
-Version: 5.0
+Version: 1.0.0
 Author: Cliff Michaels & Associates, LLC.
 Author URI: http://cliffmichaels.com
 GitHub Plugin URI: https://github.com/easyteachlms/plugin
 */
 
 /**
- * Copyright (c) `date "+%Y"` . All rights reserved.
+ * Copyright (c) 2020 . All rights reserved.
  *
  * Released under the GPL license
  * http://www.opensource.org/licenses/gpl-license.php
@@ -61,6 +61,20 @@ require_once EASYTEACHLMS_VENDOR_PATH . '/autoload.php';
 use tgmpa\tgmpa;
 use WPackio\Enqueue;
 
+// Load WC_AM_Client class if it exists.
+$wcam_lib = false;
+if ( ! class_exists( 'WC_AM_Client_2_7' ) ) {
+	require_once EASYTEACHLMS_PATH . 'wc-am-client.php';
+} else {
+	// Preferred positive integer product_id.
+	$wcam_lib = new WC_AM_Client_2_7( EASYTEACHLMS_FILE, 132967, '1.0.0', 'plugin', 'http://wc/', 'EasyTeach LMS' );
+}
+
+/**
+ * EasyTeach LMS
+ *
+ * @package
+ */
 class EasyTeachLMS {
 	protected $plugin_version   = '5.0.0';
 	public $wp_version_required = '5.4.0';
@@ -95,6 +109,11 @@ class EasyTeachLMS {
 	 */
 	public function __construct( $init = false ) {
 		if ( true === $init ) {
+			if ( is_object( $wcam_lib ) && $wcam_lib->get_api_key_status( false ) ) {
+				// Code to load your plugin or theme here.
+				// This code will not run until the API Key is activated.
+			}
+
 			$this->include_files();
 
 			add_action( 'init', array( $this, 'semantic_ui_css_loader' ) );
@@ -150,10 +169,8 @@ class EasyTeachLMS {
 		require_once EASYTEACHLMS_PATH . '/inc/class-course.php';
 		require_once EASYTEACHLMS_PATH . '/inc/class-data-model.php';
 		require_once EASYTEACHLMS_PATH . '/inc/class-lesson.php';
-		require_once EASYTEACHLMS_PATH . '/inc/class-rest-api.php';
 		require_once EASYTEACHLMS_PATH . '/inc/class-quiz.php';
 		require_once EASYTEACHLMS_PATH . '/inc/class-student.php';
-		require_once EASYTEACHLMS_PATH . '/inc/class-topic.php';
 		require_once EASYTEACHLMS_PATH . '/inc/class-certificate.php';
 		require_once EASYTEACHLMS_PATH . '/inc/class-woocommerce.php';
 	}

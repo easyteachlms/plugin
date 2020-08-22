@@ -3,25 +3,17 @@ import edit from './edit';
 import save from './save';
 
 const settings = [
-    'easyteachlms/topic',
+    'easyteachlms/lesson-content',
     {
-        title: __('Topic'),
+        title: __('Lesson Content'),
         description: 'Block Desc.',
         category: 'education',
-        keywords: [__('Topic')],
+        keywords: [__('Lesson')],
         supports: {
             html: false,
             align: false,
         },
         attributes: {
-            id: {
-                type: 'integer',
-                default: 0,
-            },
-            lastUpdated: {
-                type: 'string',
-                default: '',
-            },
             title: {
                 type: 'string',
                 default: '',

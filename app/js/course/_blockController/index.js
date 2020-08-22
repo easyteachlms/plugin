@@ -11,7 +11,7 @@ import * as moment from 'moment';
 // Load Our Blocks
 import Certificate from './certificate'
 import General from './general';
-import Topic from './topic';
+import LessonContent from './lesson-content';
 import Quiz from './quiz';
 
 // Maps Course post_content to EasyTeach LMS block handlers.
@@ -48,9 +48,9 @@ const blockController = (children, data, style, fn) => {
             return child;
         }
 
-        if (className.includes('wp-block-easyteachlms-topic')) {
+        if (className.includes('wp-block-easyteachlms-lesson-content')) {
             return (
-                <Topic
+                <LessonContent
                     title={child.props['data-title']}
                     className={child.props.className}
                     uuid={uuid}
@@ -58,7 +58,7 @@ const blockController = (children, data, style, fn) => {
                     hasQuiz={hasQuiz}
                 >
                     {child}
-                </Topic>
+                </LessonContent>
             );
         }
 

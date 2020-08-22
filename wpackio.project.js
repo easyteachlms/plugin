@@ -67,17 +67,17 @@ module.exports = {
             },
         },
         {
+            name: 'lesson-content-block',
+            entry: {
+                block: './blocks/lesson-content/index.js',
+            },
+        },
+        {
             name: 'quiz',
             entry: {
                 'quiz-block': './blocks/quiz/index.js',
                 'question-block': './blocks/question/index.js',
                 'answer-block': './blocks/answer/index.js',
-            },
-        },
-        {
-            name: 'topic-block',
-            entry: {
-                block: './blocks/topic/index.js',
             },
         },
     ],

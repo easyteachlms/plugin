@@ -36,6 +36,7 @@
     "package": "wpackio-scripts pack"
   },
   "dependencies": {
+    "@opuscapita/react-autocompletes": "^3.0.1",
     "@wordpress/icons": "^2.0.0",
     "@wpackio/entrypoint": "^4.4.1",
     "animate.css": "^4.1.0",

@@ -1,39 +1,21 @@
 import { __ } from '@wordpress/i18n';
-import { useDidMount } from 'beautiful-react-hooks';
-import { Fragment, useState } from '@wordpress/element';
+import { Fragment, useState, useEffect } from '@wordpress/element';
 import { useSelect, useDispatch } from '@wordpress/data';
 import { getSaveContent } from '@wordpress/blocks';
-import { InspectorControls } from '@wordpress/block-editor';
-import {
-    Button,
-    Panel,
-    PanelBody,
-    PanelRow,
-    TextControl,
-    Snackbar,
-    Dashicon,
-} from '@wordpress/components';
+import { Button, Dashicon } from '@wordpress/components';
 import { replaceContent, capitalize } from '@easyteachlms/utils';
 
-const Controls = ({
-    id,
-    postType,
-    title,
-    lastUpdated,
-    clientId,
-    setAttributes = false,
-    isSelected,
-}) => {
-    console.log("Last Updated");
-    console.log(lastUpdated);
+const PostFetchToolbar = ({clientId, id,  postType, title, lastUpdated}) => {
+    if ( false === postType ) {
+        return <Fragment></Fragment>;
+    }
+
     const currentBlock = useSelect((select) => {
         return select('core/block-editor').getBlock(clientId);
     }, []);
-
+    const type = capitalize(postType);
     const [updated, setFlag] = useState(false);
     const [saved, setSaved] = useState(false);
-
-    const type = capitalize(postType);
 
     const { hasInnerBlocks } = useSelect(
         (select) => {
@@ -44,7 +26,6 @@ const Controls = ({
         },
         [clientId],
     );
-
     const { replaceInnerBlocks } = useDispatch('core/block-editor');
 
     const formatDate = (date) => {
@@ -99,40 +80,31 @@ const Controls = ({
                 <Button isSmall={isSmall} isSecondary onClick={() => saveAsPost()}>
                     {__(`Save As New ${type}`)}
                 </Button>
-                {/* { true === saved && (
-                    <Snackbar>
-                        Post published successfully.
-                    </Snackbar>
-                ) } */}
             </Fragment>
         );
     };
 
     const checkForUpdates = () => {
-        if (1 === id) {
-            return;
+        if ( undefined !== id && null !== id ) {
+            console.info('Watching for updates...');
+            const post = new wp.api.models[type]({ id });
+            post.fetch().then((post) => {
+                console.log(post);
+                console.log(lastUpdated);
+                console.log(post.modified_gmt);
+                if (lastUpdated !== post.modified_gmt) {
+                    setFlag(true);
+                }
+            });
         }
-        console.info('Watching for updates...');
-        const post = new wp.api.models[type]({ id });
-        post.fetch().then((post) => {
-            console.log(post);
-            console.log(lastUpdated);
-            console.log(post.modified_gmt);
-            if (lastUpdated !== post.modified_gmt) {
-                setFlag(true);
-            }
-        });
     };
 
-    /** Check for post updates */
-    useDidMount(() => {
+    useEffect(()=>{
         checkForUpdates();
         setInterval(checkForUpdates, 30000);
     });
 
-    const panelTitle = `${type} Settings`;
-
-    return (
+    return(
         <Fragment>
             {true === updated && (
                 <div
@@ -161,42 +133,8 @@ const Controls = ({
                     <div style={{flexBasis: '100%'}}><span style={{fontFamily: 'sans-serif', fontSize: '11px'}}><strong>Last Updated:</strong> {formatDate(lastUpdated)}</span></div>
                 ) }
             </div>
-            <InspectorControls>
-                <Panel>
-                    <PanelBody title={__(panelTitle)} initialOpen>
-                        <PanelRow>
-                            <TextControl
-                                label="Title"
-                                value={title}
-                                onChange={(title) => setAttributes({ title })}
-                            />
-                        </PanelRow>
-                        <PanelRow>
-                            <TextControl label="ID" value={id} disabled />
-                        </PanelRow>
-                        <PanelRow>
-                            <TextControl
-                                label="Post Type"
-                                value={type}
-                                disabled
-                            />
-                        </PanelRow>
-                        {true === updated && (
-                            <PanelRow>
-                                <UpdateContentButton />
-                            </PanelRow>
-                        )}
-                        <PanelRow>
-                            <SaveAsNewButton />
-                        </PanelRow>
-                        <PanelRow>
-                            <Button isLink>{__('Edit In New Window')}</Button>
-                        </PanelRow>
-                    </PanelBody>
-                </Panel>
-            </InspectorControls>
         </Fragment>
     );
-};
+}
 
-export default Controls;
+export default PostFetchToolbar;

@@ -1,6 +1,5 @@
+import { __ } from '@wordpress/i18n';
 import { Collapsible, PostAsInnerBlocks } from '@easyteachlms/components';
-
-const ALLOWED_BLOCKS = ['easyteachlms/lesson-content'];
 
 const edit = ({
     attributes,
@@ -9,27 +8,23 @@ const edit = ({
     setAttributes,
     isSelected,
 }) => {
-    const { id, lastUpdated, title, uuid } = attributes;
+    const { title, uuid } = attributes;
 
     const labels = {
-        headerLabel: 'Start a new lesson',
-        buttonLabel: 'Create lesson'
+        headerLabel: 'Add content to this lesson',
+        buttonLabel: 'Add content'
     };
 
     if (0 !== uuid) {
         return (
-            <Collapsible className={className} title={title} postType="lesson">
+            <Collapsible className={className} title={title} postType="content">
                 <PostAsInnerBlocks
-                    id={id}
-                    postType="lesson"
-                    labels={labels}
                     title={title}
-                    lastUpdated={lastUpdated}
+                    labels={labels}
                     setAttributes={setAttributes}
                     clientId={clientId}
                     uuid={uuid}
                     isSelected={isSelected}
-                    allowedBlocks={ALLOWED_BLOCKS}
                 />
             </Collapsible>
         );
@@ -37,16 +32,12 @@ const edit = ({
 
     return (
         <PostAsInnerBlocks
-            id={id}
-            postType="lesson"
-            labels={labels}
             title={title}
-            lastUpdated={lastUpdated}
+            labels={labels}
             setAttributes={setAttributes}
             clientId={clientId}
             uuid={uuid}
             isSelected={isSelected}
-            allowedBlocks={ALLOWED_BLOCKS}
         />
     );
 };

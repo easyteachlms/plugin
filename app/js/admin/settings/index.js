@@ -8,25 +8,51 @@ import {
     CardFooter,
     CardHeader,
     CardMedia,
+    TabPanel
 } from '@wordpress/components';
 
 import './style.scss';
 
 import WooCommerceSettings from './woocommerce';
-import Tutorial from './tutorial';
+import Welcome from './welcome';
+
 
 const Settings = () => {
     return (
-        <div>
+        <div id="easyteach-settings-wrapper">
             <h1>EasyTeach LMS Settings</h1>
-            <div id="settings-grid">
-                <div>
-                    <WooCommerceSettings />
-                </div>
-                <div>
-                    <Tutorial />
-                </div>
-            </div>
+            <Card>
+                <TabPanel
+                    activeClass="active-tab"
+                    tabs={ [
+                        {
+                            name: 'welcome',
+                            title: 'Welcome',
+                            className: 'tab-one',
+                        },
+                        {
+                            name: 'settings',
+                            title: 'Settings',
+                            className: 'tab-two',
+                        },
+                        {
+                            name: 'license',
+                            title: 'License Management',
+                            className: 'tab-three',
+                        },
+                    ] }>
+                    {
+                        ( tab ) => {
+                            if ( 'welcome' === tab.name ) {
+                                return(<CardBody><Welcome/></CardBody>);
+                            }
+                            if ( 'settings' === tab.name ) {
+                                return(<CardBody><WooCommerceSettings/></CardBody>);
+                            }
+                        }
+                    }
+                </TabPanel>
+            </Card>
         </div>
     );
 };
