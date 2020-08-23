@@ -38,11 +38,14 @@ const edit = ({ attributes, className, clientId, name, setAttributes }) => {
     if (hasInnerBlocks) {
         return (
             <Fragment>
-                <Controls setAttributes={setAttributes}/>
+                <Controls />
                 <div className={className}>
-                    <InnerBlocks allowedBlocks={ALLOWED_BLOCKS} renderAppender={
-                        ()=><InnerBlocks.ButtonBlockAppender />
-                    } />
+                    <InnerBlocks
+                        allowedBlocks={ALLOWED_BLOCKS}
+                        renderAppender={() => (
+                            <InnerBlocks.ButtonBlockAppender />
+                        )}
+                    />
                 </div>
             </Fragment>
         );
@@ -51,9 +54,10 @@ const edit = ({ attributes, className, clientId, name, setAttributes }) => {
     return (
         <Welcome setAttributes={setAttributes}>
             <div className={className}>
-                <InnerBlocks allowedBlocks={ALLOWED_BLOCKS} renderAppender={
-                    ()=><InnerBlocks.ButtonBlockAppender />
-                } />
+                <InnerBlocks
+                    allowedBlocks={ALLOWED_BLOCKS}
+                    renderAppender={() => <InnerBlocks.ButtonBlockAppender />}
+                />
             </div>
         </Welcome>
     );

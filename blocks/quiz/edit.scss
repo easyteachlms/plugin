@@ -1,10 +1,10 @@
 .wp-block-easyteachlms-quiz {
     background: #f0f0f0;
     padding: 1em;
-    &.collapsed {
-        .collapsible-content {
-            display: none;
-        }
+    .components-toolbar {
+        background: #f0f0f0;
+        border: none;
+        margin-top: -1em;
     }
     // For the latest Gutenberg release
     .block-editor-button-block-appender {

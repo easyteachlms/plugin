@@ -12,12 +12,12 @@ const edit = ({
 
     const labels = {
         headerLabel: 'Add content to this lesson',
-        buttonLabel: 'Add content'
+        buttonLabel: 'Add content',
     };
 
     if (0 !== uuid) {
         return (
-            <Collapsible className={className} title={title} postType="content">
+            <Collapsible className={className} title={title}>
                 <PostAsInnerBlocks
                     title={title}
                     labels={labels}

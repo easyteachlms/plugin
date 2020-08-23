@@ -156,10 +156,25 @@ class Course {
 		);
 	}
 
+	public function get_settings() {
+		return get_option(
+			'_easyteachlms_settings',
+			array(
+				'openEnrollment' => true,
+			)
+		);
+	}
+
 	public function enqueue_course_frontend() {
 		if ( ! is_singular( 'course' ) ) {
 			return;
 		}
+		$settings = wp_json_encode( $this->get_settings() );
+		wp_localize_script(
+			$this->assets['frontend']['course']['script'],
+			'easyTeachSettings',
+			$settings,
+		);
 		if ( 0 !== $user_data = wp_get_current_user() ) {
 			wp_localize_script(
 				$this->assets['frontend']['course']['script'],

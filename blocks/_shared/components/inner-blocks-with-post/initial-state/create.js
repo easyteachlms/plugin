@@ -23,17 +23,15 @@ const Create = ({ headerLabel, buttonLabel, setAttributes }) => {
             >
                 {__(`${headerLabel}`)}
             </div>
-            <form>
-                <TextControl
-                    value={title}
-                    placeholder="Title"
-                    name="title"
-                    onChange={handleChange}
-                />
-                <Button isPrimary onClick={handleCreation}>
-                    {__(`${buttonLabel}`)}
-                </Button>
-            </form>
+            <TextControl
+                value={title}
+                placeholder="Title"
+                name="title"
+                onChange={handleChange}
+            />
+            <Button isPrimary onClick={handleCreation}>
+                {__(`${buttonLabel}`)}
+            </Button>
         </Fragment>
     );
 };

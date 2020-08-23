@@ -1,21 +1,10 @@
 import domReady from '@wordpress/dom-ready';
-import { render, useState } from '@wordpress/element';
-import apiFetch from '@wordpress/api-fetch';
-import {
-    Card,
-    CardBody,
-    CardDivider,
-    CardFooter,
-    CardHeader,
-    CardMedia,
-    TabPanel
-} from '@wordpress/components';
+import { render } from '@wordpress/element';
+import { Card, CardBody, TabPanel } from '@wordpress/components';
 
 import './style.scss';
 
-import WooCommerceSettings from './woocommerce';
 import Welcome from './welcome';
-
 
 const Settings = () => {
     return (
@@ -23,34 +12,32 @@ const Settings = () => {
             <h1>EasyTeach LMS Settings</h1>
             <Card>
                 <TabPanel
-                    activeClass="active-tab"
-                    tabs={ [
+                    initialTabName="welcome"
+                    tabs={[
                         {
                             name: 'welcome',
                             title: 'Welcome',
-                            className: 'tab-one',
-                        },
-                        {
-                            name: 'settings',
-                            title: 'Settings',
-                            className: 'tab-two',
                         },
                         {
                             name: 'license',
                             title: 'License Management',
-                            className: 'tab-three',
                         },
-                    ] }>
-                    {
-                        ( tab ) => {
-                            if ( 'welcome' === tab.name ) {
-                                return(<CardBody><Welcome/></CardBody>);
-                            }
-                            if ( 'settings' === tab.name ) {
-                                return(<CardBody><WooCommerceSettings/></CardBody>);
-                            }
+                    ]}
+                >
+                    {(tab) => {
+                        if ('license' === tab.name) {
+                            return (
+                                <CardBody>
+                                    <p>License Settings Here</p>
+                                </CardBody>
+                            );
                         }
-                    }
+                        return (
+                            <CardBody>
+                                <Welcome />
+                            </CardBody>
+                        );
+                    }}
                 </TabPanel>
             </Card>
         </div>

@@ -3,6 +3,8 @@ import { useSelect, useDispatch } from '@wordpress/data';
 import { Button } from 'semantic-ui-react';
 import apiFetch from '@wordpress/api-fetch';
 
+const { easyTeachSettings } = window;
+
 const Enroll = ({ courseId }) => {
     const { userData } = window;
     const { id } = userData;

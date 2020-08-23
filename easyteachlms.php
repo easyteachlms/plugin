@@ -61,15 +61,6 @@ require_once EASYTEACHLMS_VENDOR_PATH . '/autoload.php';
 use tgmpa\tgmpa;
 use WPackio\Enqueue;
 
-// Load WC_AM_Client class if it exists.
-$wcam_lib = false;
-if ( ! class_exists( 'WC_AM_Client_2_7' ) ) {
-	require_once EASYTEACHLMS_PATH . 'wc-am-client.php';
-} else {
-	// Preferred positive integer product_id.
-	$wcam_lib = new WC_AM_Client_2_7( EASYTEACHLMS_FILE, 132967, '1.0.0', 'plugin', 'http://wc/', 'EasyTeach LMS' );
-}
-
 /**
  * EasyTeach LMS
  *
@@ -109,6 +100,15 @@ class EasyTeachLMS {
 	 */
 	public function __construct( $init = false ) {
 		if ( true === $init ) {
+			// Load WC_AM_Client class if it exists.
+			$wcam_lib = false;
+			if ( ! class_exists( 'WC_AM_Client_2_7' ) ) {
+				require_once EASYTEACHLMS_PATH . 'wc-am-client.php';
+			} else {
+				// Preferred positive integer product_id.
+				$wcam_lib = new WC_AM_Client_2_7( EASYTEACHLMS_FILE, 132967, '1.0.0', 'plugin', 'http://wc/', 'EasyTeach LMS' );
+			}
+
 			if ( is_object( $wcam_lib ) && $wcam_lib->get_api_key_status( false ) ) {
 				// Code to load your plugin or theme here.
 				// This code will not run until the API Key is activated.

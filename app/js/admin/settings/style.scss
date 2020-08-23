@@ -1,24 +1,11 @@
-#settings-grid {
-    display: flex;
-    flex-grow: 1;
-    flex-wrap: auto;
-    max-width: 1200px;
-    & > div:first-of-type {
-        width: 70%;
-        padding-right: 1em;
-    }
-    & > div:last-of-type {
-        flex-grow: 1;
-        padding-right: 1em;
-    }
-}
-
 #wpbody-content {
+    padding-top: 1em;
     .notice {
         margin-left: 0;
     }
 }
 
 #easyteach-settings-wrapper {
-    max-width: 1200px;
+    max-width: 100%;
+    margin-right: 15px;
 }

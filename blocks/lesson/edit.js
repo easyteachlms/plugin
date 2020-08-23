@@ -9,18 +9,18 @@ const edit = ({
     setAttributes,
     isSelected,
 }) => {
-    const { id, lastUpdated, title, uuid } = attributes;
+    const { postId, lastUpdated, title, uuid } = attributes;
 
     const labels = {
         headerLabel: 'Start a new lesson',
-        buttonLabel: 'Create lesson'
+        buttonLabel: 'Create lesson',
     };
 
     if (0 !== uuid) {
         return (
             <Collapsible className={className} title={title} postType="lesson">
                 <PostAsInnerBlocks
-                    id={id}
+                    postId={postId}
                     postType="lesson"
                     labels={labels}
                     title={title}
@@ -37,7 +37,7 @@ const edit = ({
 
     return (
         <PostAsInnerBlocks
-            id={id}
+            postId={postId}
             postType="lesson"
             labels={labels}
             title={title}

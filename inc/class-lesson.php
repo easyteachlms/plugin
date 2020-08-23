@@ -45,6 +45,9 @@ class Lesson {
 			'supports'            => array( 'title', 'editor', 'revisions', 'excerpt', 'author' ),
 			'show_in_menu'        => 'easyteach-lms',
 			'taxonomies'          => array(),
+			'template'            => array(
+				array( 'easyteachlms/lesson-content', array() ),
+			),
 		);
 		register_post_type( $this->post_type, $args );
 
@@ -78,7 +81,6 @@ class Lesson {
 	public function register_block() {
 		$enqueue = new Enqueue( 'easyTeachLMS', 'dist', '1.0.0', 'plugin', plugin_dir_path( __FILE__ ) );
 
-		// Lesson
 		$js_deps = $this->js_deps;
 
 		$lesson_block = $enqueue->register(
@@ -88,7 +90,7 @@ class Lesson {
 				'js'        => true,
 				'css'       => true,
 				'js_dep'    => $js_deps,
-				'css_dep'   => array( 'semantic-ui' ),
+				'css_dep'   => array(),
 				'in_footer' => true,
 				'media'     => 'all',
 			)
@@ -97,7 +99,6 @@ class Lesson {
 		register_block_type(
 			'easyteachlms/lesson',
 			array(
-				// We're only enqueing these in the block editor, not the front end.
 				'editor_script' => array_pop( $lesson_block['js'] )['handle'],
 				'editor_style'  => array_pop( $lesson_block['css'] )['handle'],
 			)
@@ -110,15 +111,14 @@ class Lesson {
 				'js'        => true,
 				'css'       => true,
 				'js_dep'    => $js_deps,
-				'css_dep'   => array( 'semantic-ui' ),
+				'css_dep'   => array(),
 				'in_footer' => true,
 				'media'     => 'all',
-			)
+			),
 		);
 		register_block_type(
 			'easyteachlms/lesson-content',
 			array(
-				// We're only enqueing these in the block editor, not the front end.
 				'editor_script' => array_pop( $lesson_content_block['js'] )['handle'],
 				'editor_style'  => array_pop( $lesson_content_block['css'] )['handle'],
 			)

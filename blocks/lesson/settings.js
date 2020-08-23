@@ -14,7 +14,7 @@ const settings = [
             align: false,
         },
         attributes: {
-            id: {
+            postId: {
                 type: 'integer',
                 default: 0,
             },

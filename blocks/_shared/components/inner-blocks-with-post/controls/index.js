@@ -1,23 +1,17 @@
 import { __ } from '@wordpress/i18n';
 import { Fragment } from '@wordpress/element';
 import { InspectorControls } from '@wordpress/block-editor';
-import {
-    Panel,
-    PanelBody,
-    PanelRow,
-    TextControl,
-} from '@wordpress/components';
+import { Panel, PanelBody, PanelRow, TextControl } from '@wordpress/components';
 import PostFetchToolbar from './post-fetch-toolbar';
 
 const Controls = ({
-    id,
+    postId,
     postType,
     title,
     lastUpdated,
     clientId,
     setAttributes = false,
 }) => {
-
     return (
         <Fragment>
             <InspectorControls>
@@ -27,13 +21,17 @@ const Controls = ({
                             <TextControl
                                 label="Title"
                                 value={title}
-                                onChange={(title) => setAttributes({ title })}
+                                onChange={(t) => setAttributes({ title: t })}
                             />
                         </PanelRow>
                         {false !== postType && (
                             <Fragment>
                                 <PanelRow>
-                                    <TextControl label="ID" value={id} disabled />
+                                    <TextControl
+                                        label="ID"
+                                        value={postId}
+                                        disabled
+                                    />
                                 </PanelRow>
                                 <PanelRow>
                                     <TextControl
@@ -51,10 +49,10 @@ const Controls = ({
             <PostFetchToolbar
                 clientId={clientId}
                 postType={postType}
-                id={id}
+                postId={postId}
                 title={title}
-                setAttributes={setAttributes}
                 lastUpdated={lastUpdated}
+                setAttributes={setAttributes}
             />
         </Fragment>
     );

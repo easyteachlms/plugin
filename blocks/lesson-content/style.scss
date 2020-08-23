@@ -2,7 +2,7 @@
     padding-left: 1em;
 }
 
-div[data-type="easyteachlms/topic"] {
+div[data-type="easyteachlms/lesson-content"] {
     &.has-child-selected:before {
         z-index: 0;
         content: "";

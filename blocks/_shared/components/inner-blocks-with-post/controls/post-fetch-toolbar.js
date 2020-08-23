@@ -3,11 +3,21 @@ import { Fragment, useState, useEffect } from '@wordpress/element';
 import { useSelect, useDispatch } from '@wordpress/data';
 import { getSaveContent } from '@wordpress/blocks';
 import { Button, Dashicon } from '@wordpress/components';
-import { replaceContent, capitalize } from '@easyteachlms/utils';
+import * as moment from 'moment';
+import { capitalize, replaceContent } from '../utils';
 
-const PostFetchToolbar = ({clientId, id,  postType, title, lastUpdated}) => {
-    if ( false === postType ) {
-        return <Fragment></Fragment>;
+const { api } = window.wp;
+
+const PostFetchToolbar = ({
+    clientId,
+    postId,
+    postType,
+    title,
+    lastUpdated,
+    setAttributes,
+}) => {
+    if (false === postType) {
+        return <Fragment />;
     }
 
     const currentBlock = useSelect((select) => {
@@ -34,7 +44,7 @@ const PostFetchToolbar = ({clientId, id,  postType, title, lastUpdated}) => {
 
     const UpdateContentButton = ({ isSmall = false }) => {
         const onClick = () => {
-            replaceContent(clientId, id, postType, replaceInnerBlocks).then(
+            replaceContent(clientId, postId, postType, replaceInnerBlocks).then(
                 (post) => {
                     setAttributes({ lastUpdated: post.modified_gmt });
                     setFlag(false);
@@ -49,7 +59,7 @@ const PostFetchToolbar = ({clientId, id,  postType, title, lastUpdated}) => {
     };
 
     const SaveAsNewButton = ({ isSmall = false }) => {
-        if (false === hasInnerBlocks) {
+        if (false === hasInnerBlocks || true === saved) {
             return <Fragment />;
         }
 
@@ -65,19 +75,23 @@ const PostFetchToolbar = ({clientId, id,  postType, title, lastUpdated}) => {
         const saveAsPost = () => {
             const content = getBlockContent();
 
-            const post = new wp.api.models[type]({ title, content });
+            const post = new api.models[type]({ title, content });
 
-            post.save().then((post) => {
+            post.save().then((p) => {
                 setAttributes({
-                    id: post.id,
-                    lastUpdated: post.modified_gmt,
+                    postId: p.id,
+                    lastUpdated: p.modified_gmt,
                 });
                 setSaved(true);
             });
         };
         return (
             <Fragment>
-                <Button isSmall={isSmall} isSecondary onClick={() => saveAsPost()}>
+                <Button
+                    isSmall={isSmall}
+                    isSecondary
+                    onClick={() => saveAsPost()}
+                >
                     {__(`Save As New ${type}`)}
                 </Button>
             </Fragment>
@@ -85,9 +99,9 @@ const PostFetchToolbar = ({clientId, id,  postType, title, lastUpdated}) => {
     };
 
     const checkForUpdates = () => {
-        if ( undefined !== id && null !== id ) {
+        if (undefined !== postId && null !== postId) {
             console.info('Watching for updates...');
-            const post = new wp.api.models[type]({ id });
+            const post = new wp.api.models[type]({ id: postId });
             post.fetch().then((post) => {
                 console.log(post);
                 console.log(lastUpdated);
@@ -99,12 +113,12 @@ const PostFetchToolbar = ({clientId, id,  postType, title, lastUpdated}) => {
         }
     };
 
-    useEffect(()=>{
+    useEffect(() => {
         checkForUpdates();
         setInterval(checkForUpdates, 30000);
-    });
+    }, []);
 
-    return(
+    return (
         <Fragment>
             {true === updated && (
                 <div
@@ -120,21 +134,33 @@ const PostFetchToolbar = ({clientId, id,  postType, title, lastUpdated}) => {
                     This {type} has updated content.
                 </div>
             )}
-            <div style={{ display: 'flex', flexWrap: 'wrap', }}>
+            <div style={{ display: 'flex', flexWrap: 'wrap' }}>
                 {true === updated && (
-                    <div style={{marginRight: '0.8em'}}>
-                        <UpdateContentButton isSmall />
+                    <Fragment>
+                        <div style={{ marginRight: '0.8em' }}>
+                            <UpdateContentButton isSmall />
+                        </div>
+                        <div style={{ flexGrow: '1' }}>
+                            <SaveAsNewButton isSmall />
+                        </div>
+                    </Fragment>
+                )}
+                {'' !== lastUpdated && (
+                    <div style={{ flexBasis: '100%' }}>
+                        <span
+                            style={{
+                                fontFamily: 'sans-serif',
+                                fontSize: '11px',
+                            }}
+                        >
+                            <strong>Last Updated:</strong>{' '}
+                            {formatDate(lastUpdated)}
+                        </span>
                     </div>
                 )}
-                <div style={{flexGrow: '1'}}>
-                    <SaveAsNewButton isSmall />
-                </div>
-                { '' !== lastUpdated &&  (
-                    <div style={{flexBasis: '100%'}}><span style={{fontFamily: 'sans-serif', fontSize: '11px'}}><strong>Last Updated:</strong> {formatDate(lastUpdated)}</span></div>
-                ) }
             </div>
         </Fragment>
     );
-}
+};
 
 export default PostFetchToolbar;
