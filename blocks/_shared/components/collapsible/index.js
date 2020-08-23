@@ -47,7 +47,7 @@ const Collapsible = ({
                     label={__(`${label}: ${title}`)}
                     onClick={collapseHandler}
                 >
-                    <strong>{__(`${label}: `)}</strong> {__(` ${title}`)}
+                    <strong>{__(`${label}: `)}</strong>&nbsp;{__(` ${title}`)}
                 </ToolbarButton>
             </Toolbar>
             {true === open && (
