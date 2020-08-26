@@ -91,7 +91,7 @@ const Dashboard = ({ id }) => {
 
         return (
             <Fragment>
-                <h3>Files</h3>
+                <h3>Downloadable Files</h3>
                 <p>
                     <i>Click to download files</i>
                 </p>

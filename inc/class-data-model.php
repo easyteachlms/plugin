@@ -2,6 +2,7 @@
 namespace EasyTeachLMS;
 
 use WP_REST_Request;
+use WP_Error;
 /**
  * Course structure should be added as post meta to the course.
  * Whenever a lesson is added to a course the lesson should have post meta that lists the ids of the courses where it can be found.
@@ -37,7 +38,8 @@ class Data_Model {
 					),
 				),
 				'permission_callback' => function () {
-					return current_user_can( 'read' );
+					// return current_user_can( 'read' );
+					return true;
 				},
 			)
 		);
@@ -81,7 +83,7 @@ class Data_Model {
 	 */
 	public function is_block( $block_name, $block ) {
 		if ( is_array( $block_name ) ) {
-			if ( in_array( $block['blockName'], $block_name ) ) {
+			if ( in_array( $block['blockName'], $block_name, true ) ) {
 				return true;
 			} else {
 				return false;
@@ -105,7 +107,6 @@ class Data_Model {
 	}
 
 	public function get_course_structure_restfully( \WP_REST_Request $request ) {
-		error_log( 'get_course_structure_restfully' );
 		return $this->get_course_structure(
 			$request->get_param( 'courseId' ),
 			$request->get_param( 'userId' ),
@@ -119,7 +120,6 @@ class Data_Model {
 	 * @return false|array
 	 */
 	public function get_course_structure( int $course_id = 0, $user_id = false, $site_id = false ) {
-		error_log( "get_course_structure({$course_id}, {$user_id}, {$site_id})" );
 		$post = get_post( $course_id );
 		if ( false === $post ) {
 			return false;
@@ -127,10 +127,8 @@ class Data_Model {
 
 		$parsed = parse_blocks( $post->post_content );
 
-		error_log( print_r( $parsed, true ) );
-
 		if ( empty( $parsed ) ) {
-			return false;
+			return new WP_Error( 'parse-error', __( 'API could not parse course', 'easyteachlms' ) );
 		}
 
 		$outline = $this->parse_course( $parsed, $course_id, $user_id, $site_id );
@@ -149,19 +147,16 @@ class Data_Model {
 			'enrolled'    => false,
 		);
 
-		error_log( print_r( $structure, true ) );
-
 		return apply_filters( 'easyteachlms_course_structure', $structure, $course_id );
 	}
 
 	protected function parse_course( $blocks, $course_id, $user_id, $site_id ) {
 		$course = $this->recursively_search_for_blocks( $blocks, 'blockName', 'easyteachlms/course' );
-		error_log( 'parse_course' );
-		error_log( print_r( $course, true ) );
+
 		$course = array_pop( $course );
 
 		if ( true !== $this->has_innerBlocks( $course ) ) {
-			return false;
+			return new WP_Error( 'parse-error', __( 'API could not find any innerblocks', 'easyteachlms' ) );
 		}
 
 		$outline = array(
@@ -207,6 +202,7 @@ class Data_Model {
 				}
 			}
 		}
+
 		return $outline;
 	}
 
@@ -219,7 +215,7 @@ class Data_Model {
 	 * @param mixed $outline
 	 * @return void
 	 */
-	protected function parse( $block_name, $block, $course_id, $user_id, $site_id ) {
+	public function parse( $block_name, $block, $course_id, $user_id, $site_id ) {
 		if ( true !== $this->is_block( $block_name, $block ) ) {
 			return;
 		}
@@ -232,7 +228,6 @@ class Data_Model {
 			'parentTitle'   => false,
 			'parentUuid'    => false,
 			'title'         => $block['attrs']['title'],
-			'attachedId'    => $block['attrs']['id'],
 			'uuid'          => $uuid,
 			'type'          => $this->get_block_name( ( $block['blockName'] ) ),
 			'conditionsMet' => true,
@@ -245,7 +240,7 @@ class Data_Model {
 		return $data;
 	}
 
-	protected function parse_files( $blocks ) {
+	public function parse_files( $blocks ) {
 		$return = array();
 		foreach ( $blocks as $file ) {
 			$return[] = array(
@@ -265,7 +260,7 @@ class Data_Model {
 		}
 	}
 
-	protected function parse_quiz( $quiz, $course_id, $user_id, $site_id ) {
+	public function parse_quiz( $quiz, $course_id, $user_id, $site_id ) {
 		$return = array();
 		$uuid   = $quiz['attrs']['uuid'];
 
@@ -284,7 +279,6 @@ class Data_Model {
 			'parentTitle'   => false,
 			'parentUuid'    => false,
 			'title'         => $title,
-			'attachedId'    => $quiz['attrs']['id'],
 			'uuid'          => $uuid,
 			'type'          => $this->get_block_name( ( $quiz['blockName'] ) ),
 			'conditionsMet' => false, // By default do not allow completion until quiz is completed

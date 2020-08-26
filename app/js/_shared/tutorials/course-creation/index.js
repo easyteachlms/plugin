@@ -1,37 +1,25 @@
 import { __ } from '@wordpress/i18n';
 import { Fragment, useState } from '@wordpress/element';
 import { Modal, Button } from '@wordpress/components';
-import QierPlayer from 'qier-player';
 
 import './style.scss';
 
 import illustration from './art/basic.png';
 
-// const intro =
-//     'https://beta.easyteachlms.com/wp-content/uploads/2020/07/intro.gif';
-// const addingContent1 =
-//     'https://beta.easyteachlms.com/wp-content/uploads/2020/07/adding-content-video.gif';
-// const addingContent2 =
-//     'https://beta.easyteachlms.com/wp-content/uploads/2020/07/adding-other-content.gif';
-// const creatingQuiz =
-//     'https://beta.easyteachlms.com/wp-content/uploads/2020/07/adding-quiz.gif';
-// const savingContent =
-//     'https://beta.easyteachlms.com/wp-content/uploads/2020/07/saving-content.gif';
-
-const intro =
-    'http://beta.easyteachlms.com/wp-content/uploads/2020/08/CleanShot-2020-08-26-at-12.22.19.mp4';
+const intro = '//beta.easyteachlms.com/wp-content/uploads/2020/08/intro.mp4';
 const addingContent1 =
-    'http://beta.easyteachlms.com/wp-content/uploads/2020/08/CleanShot-2020-08-26-at-12.22.19.mp4';
+    '//beta.easyteachlms.com/wp-content/uploads/2020/08/intro.mp4';
 const addingContent2 =
-    'http://beta.easyteachlms.com/wp-content/uploads/2020/08/CleanShot-2020-08-26-at-12.22.19.mp4';
+    '//beta.easyteachlms.com/wp-content/uploads/2020/08/intro.mp4';
 const creatingQuiz =
-    'http://beta.easyteachlms.com/wp-content/uploads/2020/08/CleanShot-2020-08-26-at-12.22.19.mp4';
+    '//beta.easyteachlms.com/wp-content/uploads/2020/08/intro.mp4';
 const savingContent =
-    'http://beta.easyteachlms.com/wp-content/uploads/2020/08/CleanShot-2020-08-26-at-12.22.19.mp4';
+    '//beta.easyteachlms.com/wp-content/uploads/2020/08/intro.mp4';
 
 const Page = ({
     title,
-    videoSrc,
+    imgSrc = false,
+    videoSrc = false,
     children,
     activePage,
     pageNumber,
@@ -62,7 +50,14 @@ const Page = ({
                         borderRight: '1px solid #eaeaea',
                     }}
                 >
-                    <QierPlayer srcOrigin={videoSrc} width="100%" />
+                    {false !== videoSrc && false === imgSrc && (
+                        <video controls autoPlay>
+                            <source src={videoSrc} type="video/mp4" />
+                        </video>
+                    )}
+                    {false === videoSrc && false !== imgSrc && (
+                        <img src={imgSrc} style={{ width: '100%' }} />
+                    )}
                 </div>
                 <div style={{ width: '40%', paddingLeft: '1em' }}>
                     {children}
@@ -119,7 +114,7 @@ const Page = ({
                                 }
                             }}
                         >
-                            Finish
+                            Close Tutorial
                         </Button>
                     )}
                 </div>
@@ -145,16 +140,17 @@ const Tutorial = ({ open = false, toggleOpen }) => {
                 >
                     <Page
                         title="Welcome to EasyTeach LMS"
-                        videoSrc={intro}
+                        imgSrc={illustration}
                         activePage={currentPage}
                         pageNumber={1}
                         goToPage={setCurrentPage}
                         setTitle={setTitle}
                     >
                         <p>
-                            In less than 5 minutes we'll have you creating your
-                            first course in the EasyTeach LMS system. It's easy,
-                            fun, and designed to let your creativity run wild.
+                            In less than 5 minutes we&apos;ll have you creating
+                            your first course in the EasyTeach LMS system. It's
+                            easy, fun, and designed to let your creativity run
+                            wild.
                         </p>
                     </Page>
 
@@ -168,7 +164,23 @@ const Tutorial = ({ open = false, toggleOpen }) => {
                     >
                         <p>
                             The first step in creating a course is creating a
-                            lesson. Lessons contain sections of content.
+                            lesson.
+                        </p>
+                        <p>
+                            All courses require at least one{' '}
+                            <strong>Lesson</strong> block and at least one{' '}
+                            <strong>Lesson Content</strong> block inside. Thats
+                            it, thats the only requirement. You can experiment
+                            in a variety of ways of structuring your course.
+                        </p>
+                        <p>
+                            For example: you could create a lesson for every
+                            week scheduled in a course:{' '}
+                            <i>Week 1, Week 2, etc...</i>. Inside each Lesson
+                            you could have one <strong>Lesson Content</strong>{' '}
+                            block with all the content for that week or you
+                            could break it out into one content block for each
+                            video/element of content.
                         </p>
                         <p>
                             To get started, click the Add Lesson button and
@@ -177,7 +189,7 @@ const Tutorial = ({ open = false, toggleOpen }) => {
                         </p>
                         <p>
                             Once you've created a new Lesson you then can move
-                            on to creating topics and adding content.
+                            on to inserting content and quizzes.
                         </p>
                     </Page>
 
@@ -192,22 +204,29 @@ const Tutorial = ({ open = false, toggleOpen }) => {
                         <p>
                             EasyTeach LMS uses the power of the new WordPress
                             Block Editor, sometimes refered to as{' '}
-                            <i>"Gutenberg"</i> to allow you to easily and
-                            visually build rich media content courses.
+                            <i>&quot;Gutenberg&quot;</i> to allow you to easily
+                            and visually build rich content courses. Every piece
+                            of content in a Gutenberg powered post is a{' '}
+                            <i>Block</i>.
+                        </p>
+                        <p>
+                            As described in the prior page course content lives
+                            inside <strong>Lesson Content</strong> blocks.
                         </p>
                         <p>
                             To get started, lets add a video. You can use video
                             service that WordPress supports natively - or
                             download support for additional video services via
                             3rd party plugins. You can even host your own videos
-                            if you're using a serivce like Jetpack or any other
-                            service that offers native WordPress video hosting.
+                            if you&apos;re using a serivce like Jetpack or any
+                            other service that offers native WordPress video
+                            hosting.
                         </p>
                         <p>
-                            For this demo let's use a YouTube video. You can
-                            click the plus icon in the editor and click YouTube{' '}
-                            <i>OR</i> you can paste a YouTube video link into
-                            the editor and it will insert the video
+                            For this demo let&apos;s use a Vimeo hosted video.
+                            You can click the plus icon in the editor and click
+                            Vimeo <i>OR</i> you can paste a Vimeo video link
+                            into the editor and it will insert the video
                             automatically for you.
                         </p>
                     </Page>
@@ -221,18 +240,19 @@ const Tutorial = ({ open = false, toggleOpen }) => {
                         setTitle={setTitle}
                     >
                         <p>
-                            Of course video's are not the only content you can
-                            add. We support all native WordPress functionality,
-                            so that means you can embed Slideshare
-                            presentations, audio podcasts, Google maps, even
-                            music from Spotify. Just search for the service in
-                            the block editor or paste in links to popular 3rd
-                            party sites and they will be embedded automatically.
+                            Of course video&apos;s are not the only content you
+                            can add. We support all native WordPress
+                            functionality, so that means you can embed
+                            Slideshare presentations, audio podcasts, Google
+                            maps, even music from Spotify. Just search for the
+                            service in the block editor or paste in links to
+                            popular 3rd party sites and they will be embedded
+                            automatically.
                         </p>
                         <p>
                             Thats how easy it is to build rich media filled
-                            courses. In our next step we'll go over how easy it
-                            is to build quizzes.
+                            courses. In our next step we&apos;ll go over how
+                            easy it is to build quizzes.
                         </p>
                     </Page>
 
@@ -245,15 +265,16 @@ const Tutorial = ({ open = false, toggleOpen }) => {
                         setTitle={setTitle}
                     >
                         <p>
-                            If you're new to the WordPress Block Editor
-                            "Gutenberg" here are some helpful hints to remember
-                            when building your course.
+                            If you&apos;re new to the WordPress Block Editor
+                            &quot;Gutenberg&quot; here are some helpful hints to
+                            remember when building your course.
                         </p>
                         <p>
                             The + icon will always open a dropdown with your
-                            recently used blocks. Click "Browse All" to access
-                            all available blocks, including "File" or
-                            "Download".
+                            recently used blocks. Click{' '}
+                            <strong>&quot;Browse All&quot;</strong> to access
+                            all available blocks, including &quot;File&quot; or
+                            &quot;Download`quot;.
                         </p>
                         <p>
                             To save even more time you use the keyboard shortcut{' '}
@@ -272,10 +293,10 @@ const Tutorial = ({ open = false, toggleOpen }) => {
                         setTitle={setTitle}
                     >
                         <p>
-                            Quizzes can be added to any <i>lesson</i>. You'll
-                            have an option of multiple choice or singular choice
-                            based answers as well as assigning point values to
-                            questions and answers.
+                            Quizzes can be added to any <strong>Lesson</strong>{' '}
+                            block. You&apos;ll have an option of multiple choice
+                            or singular choice based answers as well as
+                            assigning point values to questions and answers.
                         </p>
                     </Page>
 
@@ -293,20 +314,22 @@ const Tutorial = ({ open = false, toggleOpen }) => {
                             content.
                         </p>
                         <p>
-                            In the Lesson block clicking the button "Save As
-                            New" will allow you to save a version of your
-                            content for use elsewhere.
+                            In the <strong>Lesson</strong> block clicking the
+                            button &quot;Save As New&quot; will allow you to
+                            save a version of your content for use in other
+                            courses.
                         </p>
                         <p>
-                            If there is ever any changes to the Lesson you've
-                            saved you'll get a notification and an option to
+                            If there is ever any changes to the{' '}
+                            <strong>Lesson</strong> you&apos;ve saved
+                            you&apos;ll get a notification and an option to
                             update your content.
                         </p>
                     </Page>
 
                     <Page
                         title="On Your Own"
-                        videoSrc={illustration}
+                        imgSrc={illustration}
                         activePage={currentPage}
                         pageNumber={8}
                         goToPage={setCurrentPage}
@@ -314,12 +337,13 @@ const Tutorial = ({ open = false, toggleOpen }) => {
                         closeModal={toggleOpen}
                     >
                         <p>
-                            You're now ready to start creating your own courses
-                            in EasyTeach LMS!
+                            You&apos;re now ready to start creating your own
+                            courses in EasyTeach LMS!
                         </p>
                         <p>
-                            Click finish to end the tutorial and start creating
-                            or click Load Example to load an example course.
+                            Click close tutorial to end the tutorial and start
+                            creating or click Load Example to load an example
+                            course.
                         </p>
                         <p style={{ textAlign: 'center' }}>
                             <Button isSecondary>Load Example Content</Button>
