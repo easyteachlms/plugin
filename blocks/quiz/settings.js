@@ -25,6 +25,7 @@ const settings = [
         },
         edit,
         save,
+        parent: ['easyteachlms/lesson'],
     },
 ];
 

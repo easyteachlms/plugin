@@ -24,15 +24,12 @@ const selectors = {
     getQuiz(state, uuid) {
         const { outline } = state.data;
         const index = outline.flat.findIndex(
-            (obj) =>
-                obj.hasQuiz &&
-                obj.hasOwnProperty('quiz') &&
-                obj.quiz.uuid === uuid,
+            (obj) => 'quiz' === obj.type && obj.uuid === uuid,
         );
         console.log('getQuiz');
         console.log(index);
-        if (outline.flat[index].hasOwnProperty('quiz')) {
-            return outline.flat[index].quiz;
+        if (outline.flat[index]) {
+            return outline.flat[index];
         }
         return false;
     },
@@ -48,8 +45,8 @@ const selectors = {
         console.log('getQuizzes');
         outline.flat.forEach((obj) => {
             console.log(obj);
-            if (true === obj.hasQuiz) {
-                r.push(obj.quiz);
+            if ('quiz' === obj.type) {
+                r.push(obj);
             }
         });
         return r;

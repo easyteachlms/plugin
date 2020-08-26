@@ -10,14 +10,13 @@ const MarkComplete = ({
     uuid,
     userId = id, // We're defaulting to the global scoped current user, however this can be assigned a user id manually - useful for teacher interfaces.
     courseId,
-    hasQuiz,
     conditionsMet, // Are the conditions for allowing this to be marked complete met?
     isComplete,
 }) => {
     const [status, setStatus] = useState(false);
     const { setComplete } = useDispatch('easyteachlms/course');
     let disabled = false;
-    if (true === hasQuiz && true !== conditionsMet) {
+    if (true !== conditionsMet) {
         disabled = true;
     } else if (true === isComplete) {
         disabled = true;
@@ -44,9 +43,7 @@ const MarkComplete = ({
             disabled={disabled}
         >
             Mark Completed
-            {true === hasQuiz &&
-                false === conditionsMet &&
-                ' (Requirement: Complete Quiz)'}
+            {false === conditionsMet && ' (Requirement: Complete Quiz)'}
         </Button>
     );
 };

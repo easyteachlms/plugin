@@ -4,7 +4,7 @@ namespace EasyTeachLMS;
 require_once EASYTEACHLMS_VENDOR_PATH . '/autoload.php';
 use WPackio\Enqueue;
 class Admin {
-	protected $js_deps       = array( 'react', 'react-dom', 'wp-element', 'wp-polyfill', 'wp-i18n', 'wp-components', 'wp-api-fetch' );
+	protected $js_deps       = array( 'react', 'react-dom', 'wp-element', 'wp-polyfill', 'wp-i18n', 'wp-components', 'wp-api-fetch', 'wp-mediaelement' );
 	public $default_settings = array(
 		'openEnrollment' => true,
 	);

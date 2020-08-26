@@ -24,11 +24,6 @@ const Collapsible = ({
         setState(!open);
     };
 
-    const style = {};
-    if (false === postType) {
-        style.paddingLeft = '15px';
-    }
-
     const toolbarStyle = {
         width: '100%',
     };
@@ -37,10 +32,7 @@ const Collapsible = ({
     }
 
     return (
-        <div
-            className={classNames(className, 'lmsui-collapsible')}
-            style={style}
-        >
+        <div className={classNames(className, 'lmsui-collapsible')}>
             <Toolbar label="Options" style={toolbarStyle}>
                 <ToolbarButton
                     icon={open ? chevronDown : chevronRight}

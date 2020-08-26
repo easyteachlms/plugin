@@ -6,7 +6,7 @@ const settings = [
     'easyteachlms/lesson-content',
     {
         title: __('Lesson Content'),
-        description: 'Block Desc.',
+        description: `Place your rich text and audio visual content for a lesson here and structure your content however you would like.`,
         category: 'education',
         keywords: [__('Lesson')],
         supports: {
@@ -25,6 +25,7 @@ const settings = [
         },
         edit,
         save,
+        parent: ['easyteachlms/lesson'],
     },
 ];
 

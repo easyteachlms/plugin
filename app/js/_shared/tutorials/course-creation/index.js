@@ -1,25 +1,37 @@
 import { __ } from '@wordpress/i18n';
 import { Fragment, useState } from '@wordpress/element';
 import { Modal, Button } from '@wordpress/components';
+import QierPlayer from 'qier-player';
 
 import './style.scss';
 
 import illustration from './art/basic.png';
 
+// const intro =
+//     'https://beta.easyteachlms.com/wp-content/uploads/2020/07/intro.gif';
+// const addingContent1 =
+//     'https://beta.easyteachlms.com/wp-content/uploads/2020/07/adding-content-video.gif';
+// const addingContent2 =
+//     'https://beta.easyteachlms.com/wp-content/uploads/2020/07/adding-other-content.gif';
+// const creatingQuiz =
+//     'https://beta.easyteachlms.com/wp-content/uploads/2020/07/adding-quiz.gif';
+// const savingContent =
+//     'https://beta.easyteachlms.com/wp-content/uploads/2020/07/saving-content.gif';
+
 const intro =
-    'https://beta.easyteachlms.com/wp-content/uploads/2020/07/intro.gif';
+    'http://beta.easyteachlms.com/wp-content/uploads/2020/08/CleanShot-2020-08-26-at-12.22.19.mp4';
 const addingContent1 =
-    'https://beta.easyteachlms.com/wp-content/uploads/2020/07/adding-content-video.gif';
+    'http://beta.easyteachlms.com/wp-content/uploads/2020/08/CleanShot-2020-08-26-at-12.22.19.mp4';
 const addingContent2 =
-    'https://beta.easyteachlms.com/wp-content/uploads/2020/07/adding-other-content.gif';
+    'http://beta.easyteachlms.com/wp-content/uploads/2020/08/CleanShot-2020-08-26-at-12.22.19.mp4';
 const creatingQuiz =
-    'https://beta.easyteachlms.com/wp-content/uploads/2020/07/adding-quiz.gif';
+    'http://beta.easyteachlms.com/wp-content/uploads/2020/08/CleanShot-2020-08-26-at-12.22.19.mp4';
 const savingContent =
-    'https://beta.easyteachlms.com/wp-content/uploads/2020/07/saving-content.gif';
+    'http://beta.easyteachlms.com/wp-content/uploads/2020/08/CleanShot-2020-08-26-at-12.22.19.mp4';
 
 const Page = ({
     title,
-    imgSrc,
+    videoSrc,
     children,
     activePage,
     pageNumber,
@@ -50,10 +62,7 @@ const Page = ({
                         borderRight: '1px solid #eaeaea',
                     }}
                 >
-                    <img
-                        src={imgSrc}
-                        style={{ width: '100%', height: 'auto' }}
-                    />
+                    <QierPlayer srcOrigin={videoSrc} width="100%" />
                 </div>
                 <div style={{ width: '40%', paddingLeft: '1em' }}>
                     {children}
@@ -136,7 +145,7 @@ const Tutorial = ({ open = false, toggleOpen }) => {
                 >
                     <Page
                         title="Welcome to EasyTeach LMS"
-                        imgSrc={illustration}
+                        videoSrc={intro}
                         activePage={currentPage}
                         pageNumber={1}
                         goToPage={setCurrentPage}
@@ -151,7 +160,7 @@ const Tutorial = ({ open = false, toggleOpen }) => {
 
                     <Page
                         title="Lessons"
-                        imgSrc={intro}
+                        videoSrc={intro}
                         activePage={currentPage}
                         pageNumber={2}
                         goToPage={setCurrentPage}
@@ -174,7 +183,7 @@ const Tutorial = ({ open = false, toggleOpen }) => {
 
                     <Page
                         title="Adding Content (Part 1)"
-                        imgSrc={addingContent1}
+                        videoSrc={addingContent1}
                         activePage={currentPage}
                         pageNumber={3}
                         goToPage={setCurrentPage}
@@ -205,7 +214,7 @@ const Tutorial = ({ open = false, toggleOpen }) => {
 
                     <Page
                         title="Adding Content (Part 2)"
-                        imgSrc={addingContent2}
+                        videoSrc={addingContent2}
                         activePage={currentPage}
                         pageNumber={4}
                         goToPage={setCurrentPage}
@@ -229,7 +238,7 @@ const Tutorial = ({ open = false, toggleOpen }) => {
 
                     <Page
                         title="Gutenberg Basics"
-                        imgSrc={addingContent2}
+                        videoSrc={addingContent2}
                         activePage={currentPage}
                         pageNumber={5}
                         goToPage={setCurrentPage}
@@ -256,7 +265,7 @@ const Tutorial = ({ open = false, toggleOpen }) => {
 
                     <Page
                         title="Creating Quizzes"
-                        imgSrc={creatingQuiz}
+                        videoSrc={creatingQuiz}
                         activePage={currentPage}
                         pageNumber={6}
                         goToPage={setCurrentPage}
@@ -272,7 +281,7 @@ const Tutorial = ({ open = false, toggleOpen }) => {
 
                     <Page
                         title="Saving Content"
-                        imgSrc={savingContent}
+                        videoSrc={savingContent}
                         activePage={currentPage}
                         pageNumber={7}
                         goToPage={setCurrentPage}
@@ -297,7 +306,7 @@ const Tutorial = ({ open = false, toggleOpen }) => {
 
                     <Page
                         title="On Your Own"
-                        imgSrc={illustration}
+                        videoSrc={illustration}
                         activePage={currentPage}
                         pageNumber={8}
                         goToPage={setCurrentPage}

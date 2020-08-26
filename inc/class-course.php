@@ -7,7 +7,7 @@ class Course {
 	protected $post_type        = 'course';
 	public $assets              = array();
 	protected $frontend_js_deps = array( 'react', 'react-dom', 'wp-element', 'wp-dom-ready', 'wp-components', 'wp-polyfill', 'wp-i18n', 'wp-api', 'wp-api-fetch', 'wp-data', 'wp-url', 'wp-autop' );
-	protected $block_js_deps    = array( 'react', 'react-dom', 'wp-element', 'wp-components', 'wp-polyfill', 'wp-i18n', 'wp-api' );
+	protected $block_js_deps    = array( 'react', 'react-dom', 'wp-element', 'wp-components', 'wp-polyfill', 'wp-i18n', 'wp-api', 'wp-mediaelement' );
 
 	public function __construct( $init = false ) {
 		if ( true === $init ) {

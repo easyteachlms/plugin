@@ -1,6 +1,6 @@
-import { Collapsible, PostAsInnerBlocks } from '@easyteachlms/components';
+import { Collapsible, InnerBlocksWithPost } from '@easyteachlms/components';
 
-const ALLOWED_BLOCKS = ['easyteachlms/lesson-content'];
+const ALLOWED_BLOCKS = ['easyteachlms/lesson-content', 'easyteachlms/quiz'];
 
 const edit = ({
     attributes,
@@ -19,7 +19,7 @@ const edit = ({
     if (0 !== uuid) {
         return (
             <Collapsible className={className} title={title} postType="lesson">
-                <PostAsInnerBlocks
+                <InnerBlocksWithPost
                     postId={postId}
                     postType="lesson"
                     labels={labels}
@@ -36,7 +36,7 @@ const edit = ({
     }
 
     return (
-        <PostAsInnerBlocks
+        <InnerBlocksWithPost
             postId={postId}
             postType="lesson"
             labels={labels}

@@ -7,6 +7,10 @@ import { InnerBlocks as WPInnerBlocks } from '@wordpress/block-editor';
 import InitialState from './initial-state';
 import Controls from './controls';
 
+const ButtonBlockAppender = (props) => {
+    return <WPInnerBlocks.ButtonBlockAppender {...props} />;
+};
+
 const InnerBlocksWithPost = ({
     title,
     labels,
@@ -49,7 +53,7 @@ const InnerBlocksWithPost = ({
                         renderAppender={
                             false === postType
                                 ? renderAppender
-                                : () => <WPInnerBlocks.ButtonBlockAppender />
+                                : () => <ButtonBlockAppender />
                         }
                         orientation={orientation}
                         __experimentalCaptureToolbars={
@@ -71,5 +75,5 @@ const InnerBlocksWithPost = ({
     );
 };
 
-export { InnerBlocksWithPost };
+export { InnerBlocksWithPost, ButtonBlockAppender };
 export default InnerBlocksWithPost;

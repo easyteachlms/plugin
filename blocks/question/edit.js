@@ -1,18 +1,20 @@
 import { __ } from '@wordpress/i18n';
 import { InnerBlocks, RichText } from '@wordpress/block-editor';
-import { TextControl } from '@wordpress/components';
 import { Fragment } from '@wordpress/element';
 import Controls from './controls';
 
 const ALLOWED_BLOCKS = ['easyteachlms/answer'];
 
-const edit = ({ attributes, className, clientId, setAttributes }) => {
+const edit = ({ attributes, className, setAttributes }) => {
     const { question, picture } = attributes;
 
     return (
         <Fragment>
             <Controls attributes={attributes} setAttributes={setAttributes} />
-            <div className={className}>
+            <div
+                className={className}
+                style={{ paddingLeft: '2em', paddingRight: '1em' }}
+            >
                 <RichText
                     tagName="div"
                     value={question}

@@ -1,13 +1,14 @@
-import { useDidMount } from 'beautiful-react-hooks';
 import { useSelect, useDispatch } from '@wordpress/data';
+import { Fragment } from '@wordpress/element';
+import { Header } from 'semantic-ui-react';
 import Quiz from 'react-quiz-component';
 import apiFetch from '@wordpress/api-fetch';
 
 const user = window.userData;
 const { id } = user;
 
-const QuizComponent = ({ uuid }) => {
-    const { data, loaded, courseId } = useSelect(
+const QuizComponent = ({ uuid, parentTitle, title }) => {
+    const { data, loaded, courseId, isActive } = useSelect(
         (select) => {
             const d = select('easyteachlms/course').getQuiz(uuid);
             let l = false;
@@ -17,20 +18,19 @@ const QuizComponent = ({ uuid }) => {
             return {
                 data: d,
                 loaded: l,
+                isActive: select('easyteachlms/course').getActive() === uuid,
                 courseId: select('easyteachlms/course').getCourseId(),
             };
         },
         [uuid],
     );
-
-    const { setConditionsMet, setQuizScore } = useDispatch(
+    const { setConditionsMet, setComplete, setQuizScore } = useDispatch(
         'easyteachlms/course',
     );
 
-    useDidMount(() => {
-        console.log('QUIZ');
-        console.log(data);
-    });
+    if (true !== isActive) {
+        return <Fragment />;
+    }
 
     const onCompleteAction = (obj) => {
         console.log('onCompleteAction');
@@ -43,14 +43,23 @@ const QuizComponent = ({ uuid }) => {
             method: 'POST',
             data: userScore,
         }).then(() => {
-            // If score is high enough score??
-            setConditionsMet(data.parent);
             setQuizScore(uuid, userScore);
+            // If score is high enough score??
+            if (0 !== userScore.score) {
+                setConditionsMet(uuid);
+                setComplete(uuid);
+            }
         });
     };
 
     return (
         <div>
+            <Header as="h2" dividing>
+                {title}
+                {false !== parentTitle && (
+                    <Header.Subheader>{parentTitle}</Header.Subheader>
+                )}
+            </Header>
             {false !== loaded && (
                 // If you alread have taken this quiz then we should say something here, like you scored X
                 <Quiz quiz={data} onComplete={onCompleteAction} />

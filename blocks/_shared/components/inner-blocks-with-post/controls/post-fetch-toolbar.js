@@ -103,9 +103,7 @@ const PostFetchToolbar = ({
             console.info('Watching for updates...');
             const post = new wp.api.models[type]({ id: postId });
             post.fetch().then((post) => {
-                console.log(post);
-                console.log(lastUpdated);
-                console.log(post.modified_gmt);
+                console.log(lastUpdated, post);
                 if (lastUpdated !== post.modified_gmt) {
                     setFlag(true);
                 }
@@ -115,7 +113,7 @@ const PostFetchToolbar = ({
 
     useEffect(() => {
         checkForUpdates();
-        setInterval(checkForUpdates, 30000);
+        setInterval(checkForUpdates, 60000);
     }, []);
 
     return (

@@ -1,11 +1,11 @@
 import { __ } from '@wordpress/i18n';
-import { PostAsInnerBlocks } from '@easyteachlms/components';
+import { InnerBlocksWithPost } from '@easyteachlms/components';
 
 const save = ({ attributes, className, clientId }) => {
     const { title, lastUpdated, postId, uuid } = attributes;
     return (
         <div className={className} data-title={title} data-uuid={uuid}>
-            <PostAsInnerBlocks
+            <InnerBlocksWithPost
                 postId={postId}
                 postType="topic"
                 title={title}

@@ -1,5 +1,5 @@
 import { __ } from '@wordpress/i18n';
-import { Collapsible, PostAsInnerBlocks } from '@easyteachlms/components';
+import { Collapsible, InnerBlocksWithPost } from '@easyteachlms/components';
 
 const edit = ({
     attributes,
@@ -18,7 +18,7 @@ const edit = ({
     if (0 !== uuid) {
         return (
             <Collapsible className={className} title={title}>
-                <PostAsInnerBlocks
+                <InnerBlocksWithPost
                     title={title}
                     labels={labels}
                     setAttributes={setAttributes}
@@ -31,7 +31,7 @@ const edit = ({
     }
 
     return (
-        <PostAsInnerBlocks
+        <InnerBlocksWithPost
             title={title}
             labels={labels}
             setAttributes={setAttributes}
