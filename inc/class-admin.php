@@ -66,7 +66,7 @@ class Admin {
 		add_submenu_page(
 			'easyteach-lms',
 			'EasyTeach LMS Settings',
-			'Settings',
+			'Settings & Help',
 			'edit_others_posts',
 			'easyteach-lms-settings',
 			array( $this, 'admin_page' )

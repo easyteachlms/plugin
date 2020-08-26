@@ -39,7 +39,7 @@ const Welcome = ({ welcomeDisabled, children, setAttributes }) => {
                                 settings in the dashboard.
                             </p>
 
-                            <CourseCreationButton/>
+                            <CourseCreationButton />
                         </div>
                     </div>
                 </Segment>

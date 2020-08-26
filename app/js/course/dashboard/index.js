@@ -1,6 +1,6 @@
 import { useSelect, useDispatch } from '@wordpress/data';
 import { Fragment, RawHTML } from '@wordpress/element';
-import { Progress, Icon } from 'semantic-ui-react';
+import { Progress, Divider } from 'semantic-ui-react';
 import { autop } from '@wordpress/autop';
 
 import { DownloadCertificate } from '../_blockController/certificate';
@@ -131,9 +131,10 @@ const Dashboard = ({ id }) => {
 
     return (
         <div>
-            <h2>Hi, {name}</h2>
-            <CourseProgress />
             <CourseDescription />
+            <Divider />
+            <h3>Welcome back, {name}</h3>
+            <CourseProgress />
             <Quizzes />
             <Files />
         </div>

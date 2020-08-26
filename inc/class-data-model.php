@@ -131,7 +131,9 @@ class Data_Model {
 			return new WP_Error( 'parse-error', __( 'API could not parse course', 'easyteachlms' ) );
 		}
 
-		$outline = $this->parse_course( $parsed, $course_id, $user_id, $site_id );
+		$course  = $this->recursively_search_for_blocks( $parsed, 'blockName', 'easyteachlms/course' );
+		$course  = array_pop( $course );
+		$outline = $this->parse_course( $course, $course_id, $user_id, $site_id );
 
 		$files = $this->recursively_search_for_blocks( $parsed, 'blockName', 'core/file' );
 		$files = $this->parse_files( $files );
@@ -140,20 +142,25 @@ class Data_Model {
 			'id'          => $post->ID,
 			'title'       => $post->post_title,
 			'excerpt'     => $post->post_excerpt,
-			'description' => get_the_excerpt( $course_id ),
+			'description' => null,
 			'points'      => 'NULL', // Gather up all the quiz points as total points here??
 			'outline'     => $outline,
 			'files'       => $files,
 			'enrolled'    => false,
 		);
 
+		if ( array_key_exists( 'description', $course['attrs'] ) ) {
+			$structure['description'] = $course['attrs']['description'];
+		}
+
+		if ( empty( $structure['excerpt'] ) && ! empty( $structure['description'] ) ) {
+			$structure['excerpt'] = $course['attrs']['description'];
+		}
+
 		return apply_filters( 'easyteachlms_course_structure', $structure, $course_id );
 	}
 
-	protected function parse_course( $blocks, $course_id, $user_id, $site_id ) {
-		$course = $this->recursively_search_for_blocks( $blocks, 'blockName', 'easyteachlms/course' );
-
-		$course = array_pop( $course );
+	protected function parse_course( $course, $course_id, $user_id, $site_id ) {
 
 		if ( true !== $this->has_innerBlocks( $course ) ) {
 			return new WP_Error( 'parse-error', __( 'API could not find any innerblocks', 'easyteachlms' ) );

@@ -22,7 +22,7 @@ const edit = ({
 
     if (0 !== uuid) {
         return (
-            <Collapsible className={className} title={title}>
+            <Collapsible className={className} title={title} label="Quiz">
                 <InnerBlocksWithPost
                     title={title}
                     labels={labels}

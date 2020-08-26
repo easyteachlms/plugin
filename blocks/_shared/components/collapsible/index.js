@@ -12,12 +12,16 @@ const Collapsible = ({
     className,
     children,
     defaultOpen = true,
+    label = false,
 }) => {
     const [open, setState] = useState(defaultOpen);
 
-    let label = 'Content';
+    let labelPrefix = 'Content';
     if (false !== postType) {
-        label = postType.toUpperCase();
+        labelPrefix = postType.toUpperCase();
+    }
+    if (false !== label) {
+        labelPrefix = label;
     }
 
     const collapseHandler = () => {
@@ -36,10 +40,11 @@ const Collapsible = ({
             <Toolbar label="Options" style={toolbarStyle}>
                 <ToolbarButton
                     icon={open ? chevronDown : chevronRight}
-                    label={__(`${label}: ${title}`)}
+                    label={__(`${labelPrefix}: ${title}`)}
                     onClick={collapseHandler}
                 >
-                    <strong>{__(`${label}: `)}</strong>&nbsp;{__(` ${title}`)}
+                    <strong>{__(`${labelPrefix}: `)}</strong>&nbsp;
+                    {__(` ${title}`)}
                 </ToolbarButton>
             </Toolbar>
             {true === open && (

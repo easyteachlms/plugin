@@ -123,7 +123,7 @@ const Page = ({
     );
 };
 
-const Tutorial = ({ open = false, toggleOpen }) => {
+const Tutorial = ({ open = false, toggleOpen, enableExample = false }) => {
     const [currentPage, setCurrentPage] = useState(1);
     const [title, setTitle] = useState('Welcome to EasyTeach LMS');
     return (
@@ -340,14 +340,20 @@ const Tutorial = ({ open = false, toggleOpen }) => {
                             You&apos;re now ready to start creating your own
                             courses in EasyTeach LMS!
                         </p>
-                        <p>
-                            Click close tutorial to end the tutorial and start
-                            creating or click Load Example to load an example
-                            course.
-                        </p>
-                        <p style={{ textAlign: 'center' }}>
-                            <Button isSecondary>Load Example Content</Button>
-                        </p>
+                        {true === enableExample && (
+                            <Fragment>
+                                <p>
+                                    Click close tutorial to end the tutorial and
+                                    start creating or click Load Example to load
+                                    an example course.
+                                </p>
+                                <p style={{ textAlign: 'center' }}>
+                                    <Button isSecondary>
+                                        Load Example Content
+                                    </Button>
+                                </p>
+                            </Fragment>
+                        )}
                     </Page>
                 </Modal>
             )}
@@ -355,7 +361,7 @@ const Tutorial = ({ open = false, toggleOpen }) => {
     );
 };
 
-const TutorialButton = ({ disable = false }) => {
+const TutorialButton = ({ disable = false, enableExample = false }) => {
     const [open, toggleOpen] = useState(false);
     return (
         <Fragment>
@@ -367,7 +373,11 @@ const TutorialButton = ({ disable = false }) => {
             >
                 Begin Tutorial
             </Button>
-            <Tutorial open={open} toggleOpen={toggleOpen} />
+            <Tutorial
+                open={open}
+                toggleOpen={toggleOpen}
+                enableExample={enableExample}
+            />
         </Fragment>
     );
 };

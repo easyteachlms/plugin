@@ -21,7 +21,6 @@ const settings = [
             __('Easy Teach LMS'),
             __('LMS'),
             __('Learning'),
-            ,
         ],
         supports: {
             html: false,
@@ -32,6 +31,10 @@ const settings = [
             id: {
                 type: 'integer',
                 default: 0,
+            },
+            description: {
+                type: 'string',
+                default: '',
             },
         },
         edit,

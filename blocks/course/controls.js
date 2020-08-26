@@ -1,11 +1,17 @@
 import { __ } from '@wordpress/i18n';
 import { useState, Fragment } from '@wordpress/element';
-import { Toolbar, ToolbarButton, Icon } from '@wordpress/components';
+import {
+    TextareaControl,
+    Toolbar,
+    ToolbarButton,
+    Icon,
+} from '@wordpress/components';
 import { help } from '@wordpress/icons';
 
 import { CourseCreationTutorial } from '@easyteachlms/shared';
 
-const Controls = () => {
+const Controls = ({ attributes, setAttributes }) => {
+    const { description } = attributes;
     const [open, toggleOpen] = useState(false);
     return (
         <Fragment>
@@ -30,7 +36,23 @@ const Controls = () => {
                     Need Help?
                 </ToolbarButton>
             </Toolbar>
-            <CourseCreationTutorial open={open} toggleOpen={toggleOpen} />
+            <CourseCreationTutorial
+                open={open}
+                toggleOpen={toggleOpen}
+                enableExample
+            />
+            <div
+                style={{
+                    marginTop: '1em',
+                }}
+            >
+                <TextareaControl
+                    label="Course Description"
+                    placeholder="Enter a short description for this course here..."
+                    value={description}
+                    onChange={(value) => setAttributes({ description: value })}
+                />
+            </div>
         </Fragment>
     );
 };

@@ -38,7 +38,10 @@ const edit = ({ attributes, className, clientId, name, setAttributes }) => {
     if (hasInnerBlocks) {
         return (
             <Fragment>
-                <Controls />
+                <Controls
+                    attributes={attributes}
+                    setAttributes={setAttributes}
+                />
                 <div className={className}>
                     <InnerBlocks
                         allowedBlocks={ALLOWED_BLOCKS}
