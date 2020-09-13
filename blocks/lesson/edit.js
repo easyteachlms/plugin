@@ -1,4 +1,5 @@
 import { Collapsible, InnerBlocksWithPost } from '@easyteachlms/components';
+import './style.scss';
 
 const ALLOWED_BLOCKS = ['easyteachlms/lesson-content', 'easyteachlms/quiz'];
 

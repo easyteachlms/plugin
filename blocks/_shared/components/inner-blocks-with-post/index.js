@@ -50,11 +50,12 @@ const InnerBlocksWithPost = ({
                 <Fragment>
                     <WPInnerBlocks
                         allowedBlocks={allowedBlocks}
-                        renderAppender={
-                            false === postType
-                                ? renderAppender
-                                : () => <ButtonBlockAppender />
-                        }
+                        // renderAppender={
+                        //     false === postType
+                        //         ? renderAppender
+                        //         : () => <ButtonBlockAppender />
+                        // }
+                        renderAppender={() => <ButtonBlockAppender />}
                         orientation={orientation}
                         __experimentalCaptureToolbars={
                             __experimentalCaptureToolbars

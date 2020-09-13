@@ -46,7 +46,7 @@ class Quiz {
 			'question-block',
 			array(
 				'js'        => true,
-				'css'       => false,
+				'css'       => true,
 				'js_dep'    => $js_deps,
 				'css_dep'   => array( 'semantic-ui' ),
 				'in_footer' => true,
@@ -58,6 +58,7 @@ class Quiz {
 			array(
 				// We're only enqueing these in the block editor, not the front end.
 				'editor_script' => array_pop( $question_block['js'] )['handle'],
+				'editor_style'  => array_pop( $question_block['css'] )['handle'],
 			)
 		);
 

@@ -25,4 +25,8 @@ div[data-type="easyteachlms/lesson-content"] {
             margin-top: 0;
         }
     }
+    .block-list-appender:before {
+       display: none;
+    }
 }
+

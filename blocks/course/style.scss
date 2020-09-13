@@ -1,0 +1,11 @@
+div[data-type="easyteachlms/course"] {
+    .block-list-appender:before {
+        content: "Add Lesson or Certificate";
+        display: inline-block;
+        position: absolute;
+        // width: 100%;
+        text-align: center;
+        font-family: 'sans-serif';
+        font-size: 1em;
+    }
+}

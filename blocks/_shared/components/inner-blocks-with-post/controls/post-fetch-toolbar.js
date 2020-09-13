@@ -1,12 +1,9 @@
 import { __ } from '@wordpress/i18n';
 import { Fragment, useState, useEffect } from '@wordpress/element';
 import { useSelect, useDispatch } from '@wordpress/data';
-import { getSaveContent } from '@wordpress/blocks';
 import { Button, Dashicon } from '@wordpress/components';
 import * as moment from 'moment';
-import { capitalize, replaceContent } from '../utils';
-
-const { api } = window.wp;
+import { capitalize, replaceContent, SaveAsPostButton } from '../utils';
 
 const PostFetchToolbar = ({
     clientId,
@@ -20,10 +17,6 @@ const PostFetchToolbar = ({
         return <Fragment />;
     }
 
-    const currentBlock = useSelect((select) => {
-        return select('core/block-editor').getBlock(clientId);
-    }, []);
-    const type = capitalize(postType);
     const [updated, setFlag] = useState(false);
     const [saved, setSaved] = useState(false);
 
@@ -58,42 +51,20 @@ const PostFetchToolbar = ({
         );
     };
 
-    const SaveAsNewButton = ({ isSmall = false }) => {
+    const SaveAsNewButton = () => {
         if (false === hasInnerBlocks || true === saved) {
             return <Fragment />;
         }
 
-        const getBlockContent = () => {
-            const { attributes, innerBlocks } = currentBlock;
-            return getSaveContent(
-                'sethrubenstein/ghost-block',
-                attributes,
-                innerBlocks,
-            );
-        };
-
-        const saveAsPost = () => {
-            const content = getBlockContent();
-
-            const post = new api.models[type]({ title, content });
-
-            post.save().then((p) => {
-                setAttributes({
-                    postId: p.id,
-                    lastUpdated: p.modified_gmt,
-                });
-                setSaved(true);
-            });
-        };
         return (
             <Fragment>
-                <Button
-                    isSmall={isSmall}
-                    isSecondary
-                    onClick={() => saveAsPost()}
-                >
-                    {__(`Save As New ${type}`)}
-                </Button>
+                <SaveAsPostButton
+                    title={title}
+                    postType={postType}
+                    clientId={clientId}
+                    setAttributes={setAttributes}
+                    setSaved={setSaved}
+                />
             </Fragment>
         );
     };
@@ -101,6 +72,7 @@ const PostFetchToolbar = ({
     const checkForUpdates = () => {
         if (undefined !== postId && null !== postId) {
             console.info('Watching for updates...');
+            const type = capitalize(postType);
             const post = new wp.api.models[type]({ id: postId });
             post.fetch().then((post) => {
                 console.log(lastUpdated, post);

@@ -181,7 +181,7 @@ class Course {
 				'userData',
 				array(
 					'id'   => $user_data->ID,
-					'name' => $user_data->data->user_nicename,
+					'name' => $user_data->display_name,
 				)
 			);
 		}

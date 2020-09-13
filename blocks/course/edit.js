@@ -3,8 +3,7 @@ import { Fragment } from '@wordpress/element';
 import { useSelect } from '@wordpress/data';
 import { useDidMount } from 'beautiful-react-hooks';
 
-import './edit.scss';
-
+import './style.scss';
 import Welcome from './welcome';
 import Controls from './controls';
 
@@ -46,7 +45,9 @@ const edit = ({ attributes, className, clientId, name, setAttributes }) => {
                     <InnerBlocks
                         allowedBlocks={ALLOWED_BLOCKS}
                         renderAppender={() => (
-                            <InnerBlocks.ButtonBlockAppender />
+                            <InnerBlocks.ButtonBlockAppender
+                                clientId={clientId}
+                            />
                         )}
                     />
                 </div>

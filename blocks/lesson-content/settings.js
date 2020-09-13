@@ -5,7 +5,7 @@ import save from './save';
 const settings = [
     'easyteachlms/lesson-content',
     {
-        title: __('Lesson Content'),
+        title: __('Content'),
         description: `Place your rich text and audio visual content for a lesson here and structure your content however you would like.`,
         category: 'education',
         keywords: [__('Lesson')],

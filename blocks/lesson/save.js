@@ -7,7 +7,7 @@ const save = ({ attributes, className, clientId }) => {
         <div className={className} data-title={title} data-uuid={uuid}>
             <InnerBlocksWithPost
                 postId={postId}
-                postType="topic"
+                postType="lesson"
                 title={title}
                 lastUpdated={lastUpdated}
                 setAttributes={false}

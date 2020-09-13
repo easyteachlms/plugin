@@ -185,7 +185,7 @@ class EasyTeachLMS {
 	}
 
 	function register_block_category( $categories, $post ) {
-		if ( ! in_array( $post->post_type, array( 'course', 'lesson', 'topic' ) ) ) {
+		if ( ! in_array( $post->post_type, array( 'course', 'lesson' ) ) ) {
 			return $categories;
 		}
 		return array_merge(

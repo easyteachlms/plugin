@@ -1,8 +1,47 @@
 import { __ } from '@wordpress/i18n';
-import { Fragment } from '@wordpress/element';
+import { Fragment, useState } from '@wordpress/element';
+import { __experimentalGetSettings } from '@wordpress/date';
 import { InspectorControls } from '@wordpress/block-editor';
-import { Panel, PanelBody, PanelRow, TextControl } from '@wordpress/components';
+import {
+    DateTimePicker,
+    Panel,
+    PanelBody,
+    PanelRow,
+    TextControl,
+} from '@wordpress/components';
+
 import PostFetchToolbar from './post-fetch-toolbar';
+import { SaveAsPostButton } from '../utils';
+
+const ScheduleInFuture = () => {
+    const settings = __experimentalGetSettings();
+    const [date, setDate] = useState(new Date());
+
+    // To know if the current timezone is a 12 hour time with look for an "a" in the time format.
+    // We also make sure this a is not escaped by a "/".
+    const is12HourTime = /a(?!\\)/i.test(
+        settings.formats.time
+            .toLowerCase() // Test only the lower case a
+            .replace(/\\\\/g, '') // Replace "//" with empty strings
+            .split('')
+            .reverse()
+            .join(''), // Reverse the string and test for "a" not followed by a slash
+    );
+
+    return (
+        <Panel>
+            <PanelBody title={__('Schedule For Future Release')} initialOpen>
+                <PanelRow>
+                    <DateTimePicker
+                        currentDate={date}
+                        onChange={(d) => setDate(d)}
+                        is12Hour={is12HourTime}
+                    />
+                </PanelRow>
+            </PanelBody>
+        </Panel>
+    );
+};
 
 const Controls = ({
     postId,
@@ -34,16 +73,18 @@ const Controls = ({
                                     />
                                 </PanelRow>
                                 <PanelRow>
-                                    <TextControl
-                                        label="Post Type"
-                                        value={postType}
-                                        disabled
+                                    <SaveAsPostButton
+                                        title={title}
+                                        postType={postType}
+                                        clientId={clientId}
+                                        setAttributes={setAttributes}
                                     />
                                 </PanelRow>
                             </Fragment>
                         )}
                     </PanelBody>
                 </Panel>
+                {false !== postType && <ScheduleInFuture />}
             </InspectorControls>
 
             <PostFetchToolbar

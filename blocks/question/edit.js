@@ -3,6 +3,8 @@ import { InnerBlocks, RichText } from '@wordpress/block-editor';
 import { Fragment } from '@wordpress/element';
 import Controls from './controls';
 
+import './style.scss';
+
 const ALLOWED_BLOCKS = ['easyteachlms/answer'];
 
 const edit = ({ attributes, className, setAttributes }) => {
@@ -24,7 +26,14 @@ const edit = ({ attributes, className, setAttributes }) => {
                     keepPlaceholderOnFocus
                     allowedFormats={['core/bold', 'core/italic']}
                 />
-                <InnerBlocks allowedBlocks={ALLOWED_BLOCKS} />
+                <InnerBlocks
+                    allowedBlocks={ALLOWED_BLOCKS}
+                    renderAppender={() => (
+                        <InnerBlocks.ButtonBlockAppender>
+                            Add an Answer
+                        </InnerBlocks.ButtonBlockAppender>
+                    )}
+                />
             </div>
         </Fragment>
     );
