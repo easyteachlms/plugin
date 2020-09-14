@@ -5,10 +5,10 @@ import Controls from './controls';
 
 import './style.scss';
 
-const ALLOWED_BLOCKS = ['easyteachlms/answer'];
-
 const edit = ({ attributes, className, setAttributes }) => {
     const { question, picture } = attributes;
+
+    const ALLOWED_BLOCKS = ['easyteachlms/answer'];
 
     return (
         <Fragment>

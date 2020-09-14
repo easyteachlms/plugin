@@ -147,188 +147,275 @@ const Tutorial = ({ open = false, toggleOpen, enableExample = false }) => {
                         setTitle={setTitle}
                     >
                         <p>
-                            In less than 5 minutes we&apos;ll have you creating
-                            your first course in the EasyTeach LMS system. It's
-                            easy, fun, and designed to let your creativity run
-                            wild.
+                            In as little as 5 minutes, our EasyTeach LMS
+                            tutorial will help you set up your first course,
+                            upload content, and create the learning environment
+                            best suited to your learners (clients, students,
+                            employees). Remember, EasyTeach is designed to let
+                            you customize just about anything for an E-Learning
+                            environment -- SO LET’S GET STARTED!
                         </p>
                     </Page>
 
                     <Page
-                        title="Lessons"
+                        title="Introducing the Block Editor (Gutenberg)"
                         videoSrc={intro}
                         activePage={currentPage}
                         pageNumber={2}
                         goToPage={setCurrentPage}
                         setTitle={setTitle}
                     >
-                        <p>
-                            The first step in creating a course is creating a
-                            lesson.
-                        </p>
-                        <p>
-                            All courses require at least one{' '}
-                            <strong>Lesson</strong> block and at least one{' '}
-                            <strong>Lesson Content</strong> block inside. Thats
-                            it, thats the only requirement. You can experiment
-                            in a variety of ways of structuring your course.
-                        </p>
-                        <p>
-                            For example: you could create a lesson for every
-                            week scheduled in a course:{' '}
-                            <i>Week 1, Week 2, etc...</i>. Inside each Lesson
-                            you could have one <strong>Lesson Content</strong>{' '}
-                            block with all the content for that week or you
-                            could break it out into one content block for each
-                            video/element of content.
-                        </p>
-                        <p>
-                            To get started, click the Add Lesson button and
-                            create a new Lesson <i>OR</i> search for an existing
-                            one.
-                        </p>
-                        <p>
-                            Once you've created a new Lesson you then can move
-                            on to inserting content and quizzes.
-                        </p>
+                        <ul>
+                            <li>
+                                The EasyTeach platform takes advantage of the
+                                popular WordPress Block Editor, “Gutenberg,”
+                                rapidly becoming the editor of choice for
+                                amateurs and World-Class Developers alike. With
+                                Gutenberg’s simple interface, dynamic “drag &
+                                drop” features, and duplicate-post
+                                functionality, your dream experience is just a
+                                few clicks away, no matter what you teach.
+                            </li>
+                            <li>
+                                Gutenberg is built on BLOCKS. Blocks allow you
+                                to add any kind of multi-media content – the sky
+                                is the limit. The key to mastering Gutenberg
+                                Blocks & EasyTeach LMS is in the magic + button
+                                (Show image). Whether you want to add a new
+                                lesson, video, quiz, or file, the + (Show image)
+                                button is all you need.
+                            </li>
+                            <li>
+                                If you are currently using another website or
+                                page-builder like WP Bakery or Elementor, not to
+                                worry! CLICK HERE to set up EasyTeach to
+                                seamlessly integrate with your existing website!
+                            </li>
+                        </ul>
                     </Page>
 
                     <Page
-                        title="Adding Content (Part 1)"
-                        videoSrc={addingContent1}
+                        title="Create an E-Course"
+                        videoSrc={intro}
                         activePage={currentPage}
                         pageNumber={3}
                         goToPage={setCurrentPage}
                         setTitle={setTitle}
                     >
                         <p>
-                            EasyTeach LMS uses the power of the new WordPress
-                            Block Editor, sometimes refered to as{' '}
-                            <i>&quot;Gutenberg&quot;</i> to allow you to easily
-                            and visually build rich content courses. Every piece
-                            of content in a Gutenberg powered post is a{' '}
-                            <i>Block</i>.
+                            All EasyTeach COURSES are comprised of at least one
+                            LESSON BLOCK which contains at least one CONTENT
+                            BLOCK – But you can structure a course in a variety
+                            of ways, with as many LESSON and CONTENT Blocks as
+                            you wish.
                         </p>
-                        <p>
-                            As described in the prior page course content lives
-                            inside <strong>Lesson Content</strong> blocks.
-                        </p>
-                        <p>
-                            To get started, lets add a video. You can use video
-                            service that WordPress supports natively - or
-                            download support for additional video services via
-                            3rd party plugins. You can even host your own videos
-                            if you&apos;re using a serivce like Jetpack or any
-                            other service that offers native WordPress video
-                            hosting.
-                        </p>
-                        <p>
-                            For this demo let&apos;s use a Vimeo hosted video.
-                            You can click the plus icon in the editor and click
-                            Vimeo <i>OR</i> you can paste a Vimeo video link
-                            into the editor and it will insert the video
-                            automatically for you.
-                        </p>
+                        <ul>
+                            <li>
+                                Step 1: NAME YOUR COURSE or PRODUCT (eg:
+                                Psychology 101 or Yoga for Beginners)
+                            </li>
+                            <li>
+                                Step 2 : Create a LESSON within the COURSE. All
+                                courses require at least one LESSON block and at
+                                least one CONTENT block inside the LESSON block.
+                                You can structure any course with this simple
+                                building-block foundation. From there, you can
+                                add multiple LESSONS and CONTENT blocks within
+                                each LESSON, featuring videos, PDFs, links, and
+                                so on. PRETTY EASY, HUH?
+                                <ul>
+                                    <li>
+                                        For Example: You could create a daily,
+                                        weekly, or time-structured LESSON or
+                                        create a series of self-paced lessons
+                                        within each course.
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                Step 3: Click the plus button (show image) and
+                                then select LESSON to create a new Lesson, OR
+                                search for an existing LESSON that you
+                                previously created (Learn more about
+                                DUPLICATE-CONTENT & DUPLICATE-COURSE FEATURES
+                                HERE) – SETH – link to tutorial page on Saving
+                                as New Lesson. For Duplicate Content – just
+                                install Duplicate Post and then instructions for
+                                how to duplicate?).
+                            </li>
+                        </ul>
                     </Page>
 
                     <Page
-                        title="Adding Content (Part 2)"
-                        videoSrc={addingContent2}
+                        title="Course Content (videos, text, PDFs, PPTs, Links) lives inside CONTENT blocks, which live inside LESSON blocks"
+                        videoSrc={intro}
                         activePage={currentPage}
                         pageNumber={4}
                         goToPage={setCurrentPage}
                         setTitle={setTitle}
                     >
-                        <p>
-                            Of course video&apos;s are not the only content you
-                            can add. We support all native WordPress
-                            functionality, so that means you can embed
-                            Slideshare presentations, audio podcasts, Google
-                            maps, even music from Spotify. Just search for the
-                            service in the block editor or paste in links to
-                            popular 3rd party sites and they will be embedded
-                            automatically.
-                        </p>
-                        <p>
-                            Thats how easy it is to build rich media filled
-                            courses. In our next step we&apos;ll go over how
-                            easy it is to build quizzes.
-                        </p>
+                        <ul>
+                            <li>
+                                Let’s start with adding a video to your course.
+                                First, click your trusty + button and select
+                                CONTENT from the pop-up box to add a CONTENT
+                                block. You can use any video service that
+                                WordPress supports (i.e Vimeo or YouTube), or
+                                download support for additional video services
+                                via 3rd-party tools and plug-ins. You can ALSO
+                                host your own videos if you're using a service
+                                like Jetpack that offers WordPress video
+                                hosting.
+                            </li>
+                            <li>
+                                For this demo let's assume you use a
+                                Vimeo-hosted video.
+                            </li>
+                            <li>
+                                Click the + button (show image) and select your
+                                item from the pop-up box OR click “Browse All”
+                                to see all of your options. You can select
+                                Vimeo, OR you can paste a Vimeo-video link into
+                                the editor and it will automatically insert the
+                                video for you.
+                            </li>
+                        </ul>
                     </Page>
 
                     <Page
-                        title="Gutenberg Basics"
-                        videoSrc={addingContent2}
+                        title="Don’t stop at videos!  You can add course content of all kinds!"
+                        videoSrc={intro}
                         activePage={currentPage}
                         pageNumber={5}
                         goToPage={setCurrentPage}
                         setTitle={setTitle}
                     >
-                        <p>
-                            If you&apos;re new to the WordPress Block Editor
-                            &quot;Gutenberg&quot; here are some helpful hints to
-                            remember when building your course.
-                        </p>
-                        <p>
-                            The + icon will always open a dropdown with your
-                            recently used blocks. Click{' '}
-                            <strong>&quot;Browse All&quot;</strong> to access
-                            all available blocks, including &quot;File&quot; or
-                            &quot;Download`quot;.
-                        </p>
-                        <p>
-                            To save even more time you use the keyboard shortcut{' '}
-                            <pre>/</pre> to bring up a list of blocks what will
-                            filter as you type and search (see example to the
-                            left).
-                        </p>
+                        <ul>
+                            <li>
+                                We support all native (that is, built-in)
+                                WordPress functionality, so that means you can
+                                embed Slideshare presentations, audio podcasts,
+                                Google maps, even “licensed” music from your
+                                favorite multi-media source such as Spotify or
+                                YouTube. Again, just click your trusty + plus
+                                button (show image), select your item from the
+                                pop-up box OR click “Browse All” to see all of
+                                your options. Want to make life even simpler?
+                                Just paste links to popular 3rd party sites and
+                                they will be embedded automatically.
+                            </li>
+                            <li>
+                                That’s how easy it is to build media-filled,
+                                content-rich courses. In our next step, we'll go
+                                over how easy it is to build quizzes.
+                            </li>
+                        </ul>
                     </Page>
 
                     <Page
-                        title="Creating Quizzes"
-                        videoSrc={creatingQuiz}
+                        title="Quizzes can be added to any Lesson block."
+                        videoSrc={intro}
                         activePage={currentPage}
                         pageNumber={6}
                         goToPage={setCurrentPage}
                         setTitle={setTitle}
                     >
-                        <p>
-                            Quizzes can be added to any <strong>Lesson</strong>{' '}
-                            block. You&apos;ll have an option of multiple choice
-                            or singular choice based answers as well as
-                            assigning point values to questions and answers.
-                        </p>
+                        <ul>
+                            <li>
+                                You can add a quiz to every lesson or a final
+                                quiz at the end of the course. Quizzes can be
+                                configured any way you like including:
+                                <ul>
+                                    <li>
+                                        Create multiple-choice questions such
+                                        as: A-B-C-D
+                                    </li>
+                                    <li>
+                                        Provide word-based answers (blue, green,
+                                        purple, yellow)
+                                    </li>
+                                    <li>
+                                        Provide a Text Box for written responses
+                                    </li>
+                                    <li>
+                                        Assign point values to each response
+                                        (Question 1 = 5 pts, Question 2 = 10
+                                        pts, Question 3 = 20 pts), etc.
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                To build a quiz, navigate to the Lesson where
+                                you want to insert a quiz, click the + button
+                                (show image) and select QUIZ from the pop-up
+                                box. Next, add a title for your quiz and click
+                                “Add quiz.” Click the + again to add your first
+                                question where indicated. Type your question and
+                                then navigate to the panel on the right to
+                                define the kind of questions in the QUESTIONS
+                                SETTINGS section. You can add a questions
+                                explanation, define text for correct and
+                                incorrect answers, switch from text to photo
+                                questions, and define whether your question has
+                                a single answer, multiple answers, or even
+                                written text or essay answers. Lastly, you can
+                                define point value for each question.{' '}
+                            </li>
+                            <li>
+                                Now it’s time to define the answer. Adding
+                                answers is as easy as clicking the + button.
+                                Click the button and add your answer text (i.e.
+                                True/False). You will need to add an answer
+                                field for every choice. For example, for a
+                                True/False quiz the first answer box would be
+                                “True,” the second, “False.” Click on the Smiley
+                                Face (show image) to indicate the correct
+                                answer. When the family face is White on a Black
+                                Background, your answer is marked as the correct
+                                answer
+                            </li>
+                        </ul>
                     </Page>
 
                     <Page
-                        title="Saving Content"
-                        videoSrc={savingContent}
+                        title="Duplicate Lessons and Content"
+                        videoSrc={intro}
                         activePage={currentPage}
                         pageNumber={7}
                         goToPage={setCurrentPage}
                         setTitle={setTitle}
                     >
                         <p>
-                            Lessons can be saved outside the scope of a course.
-                            This allows for easy centralization and re-use of
-                            content.
+                            Another exciting feature to your EasyTeach LMS is
+                            the option to save and duplicate CONTENT BLOCKS &
+                            LESSONS for re-use within a COURSE, or from one
+                            COURSE to another COURSE. Your Easy Teach CONTENT
+                            LIBRARY is actually a powerful, customizable CMS
+                            (Content Management System) enabling you to re-use
+                            content with a few simple clicks.
                         </p>
-                        <p>
-                            In the <strong>Lesson</strong> block clicking the
-                            button &quot;Save As New&quot; will allow you to
-                            save a version of your content for use in other
-                            courses.
-                        </p>
-                        <p>
-                            If there is ever any changes to the{' '}
-                            <strong>Lesson</strong> you&apos;ve saved
-                            you&apos;ll get a notification and an option to
-                            update your content.
-                        </p>
+                        <ul>
+                            <li>
+                                In the LESSON block, click the button "SAVE AS
+                                NEW" to save a version of your content for use
+                                in other courses.
+                            </li>
+                            <li>
+                                If you ever need to add or make changes to the
+                                LESSON you've saved, open the COURSE and you'll
+                                be prompted with the option to update LESSONS
+                                that have updated content.
+                            </li>
+                            <li>
+                                Want to use a previous lesson as a template?
+                                THAT’S EASY, TOO! Click Here to Learn More about
+                                Duplicating Content.
+                            </li>
+                        </ul>
                     </Page>
 
                     <Page
-                        title="On Your Own"
+                        title="More Helpful Tips"
                         imgSrc={illustration}
                         activePage={currentPage}
                         pageNumber={8}
@@ -336,22 +423,42 @@ const Tutorial = ({ open = false, toggleOpen, enableExample = false }) => {
                         setTitle={setTitle}
                         closeModal={toggleOpen}
                     >
-                        <p>
-                            You&apos;re now ready to start creating your own
-                            courses in EasyTeach LMS!
-                        </p>
+                        <p>Mak the Most of Gutenberg Editing Tools</p>
+                        <ul>
+                            <li>
+                                The + icon (show image) will always open a
+                                pop-up with your recently-used blocks. Click
+                                "Browse All" to access all available blocks,
+                                including "File" or "Download”;.
+                            </li>
+                            <li>
+                                To save even more time, use the keyboard
+                                shortcut “ / ” to bring up a list of blocks that
+                                will filter as you type and search (see example
+                                to the left).
+                            </li>
+                        </ul>
                         {true === enableExample && (
                             <Fragment>
+                                <p>Want to see EasyTeach in Action?</p>
                                 <p>
-                                    Click close tutorial to end the tutorial and
-                                    start creating or click Load Example to load
-                                    an example course.
+                                    We created 2 simple courses that you can
+                                    import with the touch of a button.
                                 </p>
-                                <p style={{ textAlign: 'center' }}>
-                                    <Button isSecondary>
-                                        Load Example Content
-                                    </Button>
-                                </p>
+                                <ul>
+                                    <li>
+                                        Option 1: Beginner Course with 1 Lesson
+                                        Block (Video) + 1 Content Block
+                                        (Downloadable PDF Exercise).
+                                        <Button isSecondary>Import Now</Button>
+                                    </li>
+                                    <li>
+                                        Option 2: Advanced Course with Multiple
+                                        Lesson Blocks + Multiple Content Blocks
+                                        + Multiple Quizzes.
+                                        <Button isSecondary>Import Now</Button>
+                                    </li>
+                                </ul>
                             </Fragment>
                         )}
                     </Page>

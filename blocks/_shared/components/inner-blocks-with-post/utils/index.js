@@ -1,4 +1,5 @@
 import { __ } from '@wordpress/i18n';
+import { useState } from '@wordpress/element';
 import { select } from '@wordpress/data';
 import { Button } from '@wordpress/components';
 import { rawHandler, getSaveContent } from '@wordpress/blocks';
@@ -36,7 +37,9 @@ const replaceContent = (clientId, postId, postType, replaceInnerBlocks) => {
     });
 };
 
-const saveAsPost = (title, type, clientId, setAttributes, setSaved) => {
+const saveAsPost = (title, type, clientId, setAttributes, toggleLoading) => {
+    toggleLoading(true);
+
     console.log('Saving Post');
     console.log(title);
     console.log(type);
@@ -57,35 +60,37 @@ const saveAsPost = (title, type, clientId, setAttributes, setSaved) => {
     const post = new api.models[type]({ title, content });
 
     post.save().then((p) => {
+        toggleLoading(false);
         setAttributes({
             postId: p.id,
             lastUpdated: p.modified_gmt,
         });
-        if (false !== setSaved) {
-            setSaved(true);
-        }
     });
 };
 
 const SaveAsPostButton = ({
     title,
     postType,
+    postId,
     clientId,
     setAttributes,
-    setSaved = false,
     isSmall = false,
 }) => {
     const type = capitalize(postType);
+    const [loading, toggleLoading] = useState(false);
 
     return (
         <Button
             isSmall={isSmall}
             isSecondary
+            isBusy={loading}
+            disabled={0 !== postId}
             onClick={() =>
-                saveAsPost(title, type, clientId, setAttributes, setSaved)
+                saveAsPost(title, type, clientId, setAttributes, toggleLoading)
             }
         >
-            {__(`Save As New ${type}`)}
+            {0 === postId && __(`Save As New ${type}`)}
+            {0 !== postId && __(`${type} Saved`)}
         </Button>
     );
 };

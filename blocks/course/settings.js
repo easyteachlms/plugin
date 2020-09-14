@@ -6,7 +6,7 @@ const settings = [
     'easyteachlms/course',
     {
         title: __('Course'),
-        description: 'Block Desc.',
+        description: 'Main EasyTeach LMS course block.',
         category: 'education',
         // styles: [
         //     {

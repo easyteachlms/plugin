@@ -18,7 +18,6 @@ const PostFetchToolbar = ({
     }
 
     const [updated, setFlag] = useState(false);
-    const [saved, setSaved] = useState(false);
 
     const { hasInnerBlocks } = useSelect(
         (select) => {
@@ -52,7 +51,7 @@ const PostFetchToolbar = ({
     };
 
     const SaveAsNewButton = () => {
-        if (false === hasInnerBlocks || true === saved) {
+        if (false === hasInnerBlocks) {
             return <Fragment />;
         }
 
@@ -61,16 +60,16 @@ const PostFetchToolbar = ({
                 <SaveAsPostButton
                     title={title}
                     postType={postType}
+                    postId={postId}
                     clientId={clientId}
                     setAttributes={setAttributes}
-                    setSaved={setSaved}
                 />
             </Fragment>
         );
     };
 
     const checkForUpdates = () => {
-        if (undefined !== postId && null !== postId) {
+        if (undefined !== postId && null !== postId && 0 !== postId) {
             console.info('Watching for updates...');
             const type = capitalize(postType);
             const post = new wp.api.models[type]({ id: postId });
@@ -101,7 +100,7 @@ const PostFetchToolbar = ({
                     }}
                 >
                     <Dashicon icon="update" style={{ marginRight: '11px' }} />
-                    This {type} has updated content.
+                    This {postType} has updated content.
                 </div>
             )}
             <div style={{ display: 'flex', flexWrap: 'wrap' }}>
@@ -109,9 +108,6 @@ const PostFetchToolbar = ({
                     <Fragment>
                         <div style={{ marginRight: '0.8em' }}>
                             <UpdateContentButton isSmall />
-                        </div>
-                        <div style={{ flexGrow: '1' }}>
-                            <SaveAsNewButton isSmall />
                         </div>
                     </Fragment>
                 )}

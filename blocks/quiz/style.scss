@@ -19,30 +19,25 @@ div[data-type="easyteachlms/quiz"] {
         background: #f0f0f0;
         border: none;
     }
-    .block-list-appender:before {
-        content: "Add A Question";
-        display: inline-block;
-        position: absolute;
-        // width: 100%;
-        text-align: center;
-        font-family: 'sans-serif';
-        font-size: 1em;
+    .block-list-appender {
+        &:before {
+            content: "Add A Question";
+            font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;
+            font-size: 14px;
+            padding-top: 5px;
+            display: inline-block;
+            position: absolute;
+            width: 100%;
+            text-align: center;
+            width: 100%;
+            z-index: 1;
+        }
+        button {
+            position: relative;
+            z-index: 2;
+            svg {
+                opacity: 0;
+            }
+        }
     }
-    // For the latest Gutenberg release
-    // .block-editor-button-block-appender {
-    //     display: flex;
-    //     flex-direction: row;
-    //     margin-left: 0;
-    //     width: 100%;
-    //     opacity: 0.8 !important;
-    //     &:hover {
-    //         opacity: 1.0 !important;
-    //     }
-    //     .components-visually-hidden {
-    //         position: relative;
-    //         width: auto;
-    //         clip-path: none;
-    //         margin: 0;
-    //     }
-    // }
 }

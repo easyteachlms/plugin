@@ -76,6 +76,7 @@ const Controls = ({
                                     <SaveAsPostButton
                                         title={title}
                                         postType={postType}
+                                        postId={postId}
                                         clientId={clientId}
                                         setAttributes={setAttributes}
                                     />
