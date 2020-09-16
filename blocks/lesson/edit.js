@@ -10,7 +10,7 @@ const edit = ({
     setAttributes,
     isSelected,
 }) => {
-    const { postId, lastUpdated, title, uuid } = attributes;
+    const { postId, lastUpdated, schedule, title, uuid } = attributes;
 
     const labels = {
         headerLabel: 'Start a new lesson',
@@ -31,6 +31,7 @@ const edit = ({
                     labels={labels}
                     title={title}
                     lastUpdated={lastUpdated}
+                    schedule={schedule}
                     setAttributes={setAttributes}
                     clientId={clientId}
                     uuid={uuid}
@@ -48,6 +49,7 @@ const edit = ({
             labels={labels}
             title={title}
             lastUpdated={lastUpdated}
+            schedule={schedule}
             setAttributes={setAttributes}
             clientId={clientId}
             uuid={uuid}

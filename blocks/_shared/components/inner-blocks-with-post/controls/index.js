@@ -13,9 +13,15 @@ import {
 import PostFetchToolbar from './post-fetch-toolbar';
 import { SaveAsPostButton } from '../utils';
 
-const ScheduleInFuture = () => {
+const ScheduleInFuture = ({ date, setAttributes }) => {
+    const startingDate = () => {
+        if (false === date) {
+            return new Date();
+        }
+        return date;
+    };
     const settings = __experimentalGetSettings();
-    const [date, setDate] = useState(new Date());
+    const [currentDate, setDate] = useState(startingDate());
 
     // To know if the current timezone is a 12 hour time with look for an "a" in the time format.
     // We also make sure this a is not escaped by a "/".
@@ -33,8 +39,11 @@ const ScheduleInFuture = () => {
             <PanelBody title={__('Schedule For Future Release')} initialOpen>
                 <PanelRow>
                     <DateTimePicker
-                        currentDate={date}
-                        onChange={(d) => setDate(d)}
+                        currentDate={currentDate}
+                        onChange={(d) => {
+                            setAttributes({ schedule: d });
+                            setDate(d);
+                        }}
                         is12Hour={is12HourTime}
                     />
                 </PanelRow>
@@ -48,6 +57,7 @@ const Controls = ({
     postType,
     title,
     lastUpdated,
+    schedule = false,
     clientId,
     setAttributes = false,
 }) => {
@@ -85,7 +95,12 @@ const Controls = ({
                         )}
                     </PanelBody>
                 </Panel>
-                {false !== postType && <ScheduleInFuture />}
+                {false !== postType && false !== schedule && (
+                    <ScheduleInFuture
+                        date={schedule}
+                        setAttributes={setAttributes}
+                    />
+                )}
             </InspectorControls>
 
             <PostFetchToolbar

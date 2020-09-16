@@ -18,6 +18,7 @@ const InnerBlocksWithPost = ({
     postId,
     postType = false,
     lastUpdated,
+    schedule,
     className = '',
     clientId,
     isSelected = false,
@@ -66,6 +67,7 @@ const InnerBlocksWithPost = ({
                         postId={postId}
                         postType={postType}
                         lastUpdated={lastUpdated}
+                        schedule={schedule}
                         clientId={clientId}
                         setAttributes={setAttributes}
                         isSelected={isSelected}

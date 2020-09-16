@@ -26,6 +26,10 @@ const settings = [
                 type: 'string',
                 default: '',
             },
+            schedule: {
+                type: 'string',
+                default: '',
+            },
             uuid: {
                 type: 'string',
                 default: 0,

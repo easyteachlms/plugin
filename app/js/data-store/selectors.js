@@ -67,6 +67,17 @@ const selectors = {
         const { completed } = state.data.outline;
         return completed;
     },
+    isLocked(state, uuid) {
+        if (
+            !state.data.hasOwnProperty('outline') ||
+            !state.data.outline.hasOwnProperty('flat')
+        ) {
+            return false;
+        }
+        const { flat } = state.data.outline;
+        const index = flat.findIndex((obj) => obj.uuid === uuid);
+        return flat[index].locked;
+    },
     // Check the state of a course element or user, ask in form of a grammatically correct simple question.
     isComplete(state, uuid) {
         if (

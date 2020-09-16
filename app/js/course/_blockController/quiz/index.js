@@ -1,14 +1,19 @@
 import { useSelect, useDispatch } from '@wordpress/data';
 import { Fragment } from '@wordpress/element';
 import { Header } from 'semantic-ui-react';
-import Quiz from 'react-quiz-component';
 import apiFetch from '@wordpress/api-fetch';
 
 const user = window.userData;
 const { id } = user;
 
-const QuizComponent = ({ uuid, parentTitle, title }) => {
-    const { data, loaded, courseId, isActive } = useSelect(
+const Page = ({}) => {};
+
+const Question = ({}) => {};
+
+const Answer = ({}) => {};
+
+const Quiz = ({ uuid, parentTitle, title }) => {
+    const { data, loaded, isLocked, courseId, isActive } = useSelect(
         (select) => {
             const d = select('easyteachlms/course').getQuiz(uuid);
             let l = false;
@@ -18,6 +23,7 @@ const QuizComponent = ({ uuid, parentTitle, title }) => {
             return {
                 data: d,
                 loaded: l,
+                isLocked: select('easyteachlms/course').isLocked(uuid),
                 isActive: select('easyteachlms/course').getActive() === uuid,
                 courseId: select('easyteachlms/course').getCourseId(),
             };
@@ -31,6 +37,12 @@ const QuizComponent = ({ uuid, parentTitle, title }) => {
     if (true !== isActive) {
         return <Fragment />;
     }
+
+    if (false !== isLocked) {
+        return <Fragment>Quiz Locked Until {isLocked}</Fragment>;
+    }
+
+    const gradeQuiz = () => {};
 
     const onCompleteAction = (obj) => {
         console.log('onCompleteAction');
@@ -60,12 +72,12 @@ const QuizComponent = ({ uuid, parentTitle, title }) => {
                     <Header.Subheader>{parentTitle}</Header.Subheader>
                 )}
             </Header>
-            {false !== loaded && (
+            {/* {false !== loaded && (
                 // If you alread have taken this quiz then we should say something here, like you scored X
                 <Quiz quiz={data} onComplete={onCompleteAction} />
-            )}
+            )} */}
         </div>
     );
 };
 
-export default QuizComponent;
+export default Quiz;

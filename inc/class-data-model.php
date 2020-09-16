@@ -181,6 +181,8 @@ class Data_Model {
 				$outline['structured'][ $lesson_uuid ] = $lesson_parsed;
 				$outline['flat'][]                     = $lesson_parsed;
 
+				$lesson_locked = $lesson_parsed['locked'];
+
 				if ( true === $this->has_innerBlocks( $block ) ) {
 					foreach ( $block['innerBlocks'] as $key => $block ) {
 
@@ -198,6 +200,7 @@ class Data_Model {
 
 						$block_parsed['parentTitle'] = $lesson_title;
 						$block_parsed['parentUuid']  = $lesson_uuid;
+						$block_parsed['locked']      = $lesson_locked;
 						$outline['total']            = $outline['total'] + 1;
 						// Check for completion status.
 						if ( true === $this->is_complete( $uuid, $course_id, $user_id, $site_id ) ) {
@@ -240,7 +243,17 @@ class Data_Model {
 			'conditionsMet' => true,
 			'active'        => false,
 			'completed'     => false,
+			'locked'        => false,
 		);
+		if ( ! empty( $block['attrs']['schedule'] ) ) {
+			$now = strtotime( date( 'Y-m-dH:i:s', strtotime( 'now' ) ) );
+			error_log( 'now?' );
+			error_log( $now );
+			error_log( strtotime( $block['attrs']['schedule'] ) );
+			if ( strtotime( $block['attrs']['schedule'] ) > $now ) {
+				$data['locked'] = date( 'Y-m-d H:i:s', strtotime( $block['attrs']['schedule'] ) );
+			}
+		}
 		if ( true === $this->is_complete( $uuid, $course_id, $user_id, $site_id ) ) {
 			$data['completed'] = true;
 		}

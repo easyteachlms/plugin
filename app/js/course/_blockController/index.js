@@ -34,6 +34,9 @@ const blockController = (children, data, style, fn) => {
             (block) => block.uuid === uuid,
         );
 
+        console.log('SCHEDULE?');
+        console.log(blockData);
+
         let parentTitle = false;
         if (blockData.length) {
             parentTitle = blockData[0].parentTitle;
