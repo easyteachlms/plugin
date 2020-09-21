@@ -5177,6 +5177,13 @@ flat-cache@^2.0.1:
     rimraf "2.6.3"
     write "1.0.3"
 
+flat-carousel@^0.0.1:
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/flat-carousel/-/flat-carousel-0.0.1.tgz#973405c3ca16438e3ee8be02d375f6eef3af24ad"
+  integrity sha512-oOHCNCjnw4Tx7KFNSH1rUaqJtvrCf5Ku7dBRfA3jIFySMgEervNlh941SqVI67nf7tNqNRMmJNU6WzibCx/K+w==
+  dependencies:
+    react "^16.11.0"
+
 flatted@^2.0.0:
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/flatted/-/flatted-2.0.2.tgz#4575b21e2bcee7434aa9be662f4b7b5f9c2b5138"
@@ -8477,6 +8484,11 @@ react-native-url-polyfill@^1.1.2:
     buffer "^5.4.3"
     whatwg-url-without-unicode "8.0.0-1"
 
+react-navigable@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/react-navigable/-/react-navigable-1.0.1.tgz#30c26ed9f107553b8bc0d64321cb09fd3ca52dcc"
+  integrity sha512-2O30AexRfJu3dG1KmEZAB4O5oUMfFJwE3M8fnx2UBbC+Y9165PcmXJEe5WeEvvLHKF/VsglgljgkC9+iLRZExg==
+
 react-outside-click-handler@^1.2.0:
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/react-outside-click-handler/-/react-outside-click-handler-1.3.0.tgz#3831d541ac059deecd38ec5423f81e80ad60e115"
@@ -8572,7 +8584,7 @@ react@^15.6.1:
     object-assign "^4.1.0"
     prop-types "^15.5.10"
 
-react@^16.10.2, react@^16.13.1, react@^16.9.0:
+react@^16.10.2, react@^16.11.0, react@^16.13.1, react@^16.9.0:
   version "16.13.1"
   resolved "https://registry.yarnpkg.com/react/-/react-16.13.1.tgz#2e818822f1a9743122c063d6410d85c1e3afe48e"
   integrity sha512-YMZQQq32xHLX0bz5Mnibv1/LHb3Sqzngu7xstSM+vrkE5Kzr9xE0yMByK5kMoTK30YVJE61WfbxIFFvfeDKT1w==

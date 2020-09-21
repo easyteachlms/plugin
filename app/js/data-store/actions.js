@@ -54,7 +54,7 @@ const actions = {
             type: 'STORE_CERTIFICATE',
             markup,
         };
-    }
+    },
 };
 
 export default actions;

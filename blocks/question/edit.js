@@ -1,12 +1,13 @@
 import { __ } from '@wordpress/i18n';
 import { InnerBlocks, RichText } from '@wordpress/block-editor';
 import { Fragment } from '@wordpress/element';
+import { TextareaControl } from '@wordpress/components';
 import Controls from './controls';
 
 import './style.scss';
 
 const edit = ({ attributes, className, setAttributes }) => {
-    const { question, picture } = attributes;
+    const { question, answersType } = attributes;
 
     const ALLOWED_BLOCKS = ['easyteachlms/answer'];
 
@@ -26,14 +27,22 @@ const edit = ({ attributes, className, setAttributes }) => {
                     keepPlaceholderOnFocus
                     allowedFormats={['core/bold', 'core/italic']}
                 />
-                <InnerBlocks
-                    allowedBlocks={ALLOWED_BLOCKS}
-                    renderAppender={() => (
-                        <InnerBlocks.ButtonBlockAppender>
-                            Add an Answer
-                        </InnerBlocks.ButtonBlockAppender>
-                    )}
-                />
+                {'text' !== answersType && (
+                    <InnerBlocks
+                        allowedBlocks={ALLOWED_BLOCKS}
+                        renderAppender={() => (
+                            <InnerBlocks.ButtonBlockAppender>
+                                Add an Answer
+                            </InnerBlocks.ButtonBlockAppender>
+                        )}
+                    />
+                )}
+                {'text' === answersType && (
+                    <TextareaControl
+                        label="Text answers will not be automatically graded and admins will be required to manually score this quiz."
+                        disabled
+                    />
+                )}
             </div>
         </Fragment>
     );

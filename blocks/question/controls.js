@@ -54,7 +54,7 @@ const Controls = ({ attributes, setAttributes }) => {
                     },
                     { label: 'Single', value: 'single' },
                     { label: 'Multiple', value: 'multiple' },
-                    // { label: 'Text', value: 'text' },
+                    { label: 'Text', value: 'text' },
                 ]}
                 onChange={(aT) => {
                     setAttributes({ answersType: aT });
