@@ -3,6 +3,7 @@ const DEFAULT_STATE = {
     active: false,
     certificate: false,
     data: false,
+    quizAnswers: false,
 };
 
 const reducer = (state = DEFAULT_STATE, action) => {

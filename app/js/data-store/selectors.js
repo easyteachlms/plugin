@@ -21,6 +21,16 @@ const selectors = {
     getCertificate(state) {
         return state.certificate;
     },
+    getQuestions(state, uuid) {
+        const { outline } = state.data;
+        const index = outline.flat.findIndex(
+            (obj) => 'quiz' === obj.type && obj.uuid === uuid,
+        );
+        if (outline.flat[index] && outline.flat[index].questions) {
+            return outline.flat[index].questions;
+        }
+        return false;
+    },
     getQuiz(state, uuid) {
         const { outline } = state.data;
         const index = outline.flat.findIndex(

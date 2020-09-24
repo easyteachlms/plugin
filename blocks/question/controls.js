@@ -32,7 +32,7 @@ const Controls = ({ attributes, setAttributes }) => {
                         disabled: true,
                     },
                     { label: 'Text', value: 'text' },
-                    { label: 'Photo', value: 'photo' },
+                    // { label: 'Photo', value: 'photo' },
                 ]}
                 onChange={(t) => {
                     setAttributes({ type: t });
@@ -83,24 +83,6 @@ const Controls = ({ attributes, setAttributes }) => {
                             value={explanation}
                             onChange={(e) => setAttributes({ explanation: e })}
                             placeholder="Expand on this question, provide more background or additional information."
-                        />
-                    </PanelRow>
-                    <PanelRow>
-                        <TextControl
-                            label="Correct Answer Message"
-                            value={correctAnswerMessage}
-                            onChange={(cAW) =>
-                                setAttributes({ correctAnswerMessage: cAW })
-                            }
-                        />
-                    </PanelRow>
-                    <PanelRow>
-                        <TextControl
-                            label="Incorrect Answer Message"
-                            value={incorrectAnswerMessage}
-                            onChange={(iCAW) =>
-                                setAttributes({ incorrectAnswerMessage: iCAW })
-                            }
                         />
                     </PanelRow>
                     <PanelRow>

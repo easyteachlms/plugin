@@ -319,13 +319,11 @@ class Data_Model {
 			$args = wp_parse_args(
 				$question['attrs'],
 				array(
-					'question'               => '',
-					'type'                   => 'text',
-					'answersType'            => 'single',
-					'correctAnswerMessage'   => 'Good job! Correct answer.',
-					'incorrectAnswerMessage' => 'Incorrect answer, try again!',
-					'explanation'            => '',
-					'points'                 => 10,
+					'question'    => '',
+					'type'        => 'text',
+					'answersType' => 'single',
+					'explanation' => '',
+					'points'      => 10,
 				)
 			);
 
@@ -339,9 +337,9 @@ class Data_Model {
 				$answers[] = $answer['attrs']['answer'];
 				if ( array_key_exists( 'isCorrect', $answer['attrs'] ) && true === $answer['attrs']['isCorrect'] ) {
 					if ( 'multiple' === $args['answersType'] ) {
-						$correct_answer[] = $index + 1;
+						$correct_answer[] = $index++;
 					} else {
-						$correct_answer = $index + 1;
+						$correct_answer = array( $index );
 					}
 				}
 			}
@@ -351,16 +349,13 @@ class Data_Model {
 
 			// Construct question.
 			$return['questions'][] = array(
-				'question'                  => $args['question'],
-				'questionType'              => $args['type'],
-				// 'questionPic' => '', // if you need to display Picture in Question
-				'answerSelectionType'       => $args['answersType'],
-				'answers'                   => $args['answers'],
-				'correctAnswer'             => $args['correctAnswer'],
-				'messageForCorrectAnswer'   => $args['correctAnswerMessage'],
-				'messageForIncorrectAnswer' => $args['incorrectAnswerMessage'],
-				'explanation'               => $args['explanation'],
-				'point'                     => $args['points'],
+				'question'            => $args['question'],
+				'questionType'        => $args['type'],
+				'answerSelectionType' => $args['answersType'],
+				'answers'             => $args['answers'],
+				'correctAnswer'       => $args['correctAnswer'],
+				'explanation'         => $args['explanation'],
+				'point'               => $args['points'],
 			);
 		}
 
