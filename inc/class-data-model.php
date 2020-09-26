@@ -355,7 +355,7 @@ class Data_Model {
 				'answers'             => $args['answers'],
 				'correctAnswer'       => $args['correctAnswer'],
 				'explanation'         => $args['explanation'],
-				'point'               => $args['points'],
+				'points'              => $args['points'],
 			);
 		}
 

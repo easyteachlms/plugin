@@ -1,7 +1,7 @@
 /* eslint-disable no-shadow */
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable guard-for-in */
-import { useDispatch, useSelect, select } from '@wordpress/data';
+import { useDispatch, useSelect } from '@wordpress/data';
 import { Icon, Menu } from 'semantic-ui-react';
 
 // const getBlockByUUID = (data, uuid) => {
@@ -15,7 +15,6 @@ import { Icon, Menu } from 'semantic-ui-react';
 // };
 
 const Item = ({ title, uuid }) => {
-    const { setActive } = useDispatch('easyteachlms/course');
     const { isComplete, isActive } = useSelect((select) => {
         const complete = select('easyteachlms/course').isComplete(uuid);
         const active = select('easyteachlms/course').getActive();
@@ -24,6 +23,8 @@ const Item = ({ title, uuid }) => {
             isActive: active === uuid,
         };
     }, []);
+
+    const { setActive } = useDispatch('easyteachlms/course');
 
     return (
         <Menu.Item onClick={() => setActive(uuid)} active={isActive}>
@@ -86,6 +87,7 @@ const Outline = ({ id }) => {
             >
                 Course Dashboard
             </Menu.Item>
+
             <Lessons id={id} />
         </Menu>
     );

@@ -1,67 +1,35 @@
 import { List, Radio, TextArea } from 'semantic-ui-react';
-import { useEffect, useState, Fragment } from '@wordpress/element';
+import { useQuiz } from './context';
 
-const Answers = ({ question, data, type, quizState }) => {
-    const [answers, setAnswers] = useState(false);
-    const [selected, setSelected] = useState([]);
-
-    const globalHandler = (answer) => {
-        console.log('globalHandler!', quizState);
-        const tmp = quizState.allSelected;
-        tmp[question] = answer;
-        quizState.setSelected(tmp);
-    };
+const Answers = ({ question, answers, type }) => {
+    const { entryData, answerHandler } = useQuiz();
 
     const handler = (answer, index) => {
-        let s = selected;
-        if ('single' === type) {
-            // Add answer
-            s = [index];
-        } else if ('multiple' === type) {
-            if (s.includes(index)) {
-                // Remove an already added answer
-                s = s.filter((el) => el !== index);
-            } else {
-                // Add an answer
-                s.push(index);
-            }
-        } else if ('text' === type) {
-            s = answer;
-        }
-        setSelected(s);
-        globalHandler(s);
+        answerHandler(answer, index, type, question);
     };
 
-    useEffect(() => {
-        const tmp = [];
-        if ('text' === type) {
-            tmp.push(
-                <TextArea
-                    placeholder="Your answer here"
-                    onChange={(e, { value }) => handler(value, null)}
-                />,
-            );
-        } else {
-            data.forEach((answer, index) => {
-                let key = index;
-                if ('text' === type) {
-                    key = answer;
-                }
-                tmp.push(
-                    <List.Item>
-                        <Radio
-                            label={answer}
-                            onClick={() => handler(answer, index)}
-                            checked={selected.includes(key)}
-                        />
-                    </List.Item>,
-                );
-            });
-        }
-        setAnswers(tmp);
-    }, [answers]);
+    if ('text' === type) {
+        return (
+            <TextArea
+                placeholder="Your answer here"
+                onChange={(e, { value }) => handler(value, null)}
+            />
+        );
+    }
 
-    return <List>{answers}</List>;
+    return (
+        <List>
+            {answers.map((answer, index) => (
+                <List.Item>
+                    <Radio
+                        label={answer}
+                        onClick={() => handler(answer, index)}
+                        checked={entryData[question].includes(index)}
+                    />
+                </List.Item>
+            ))}
+        </List>
+    );
 };
 
 export default Answers;

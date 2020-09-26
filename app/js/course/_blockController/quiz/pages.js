@@ -1,94 +1,59 @@
 /* eslint-disable array-callback-return */
 /* eslint-disable consistent-return */
-import { Fragment, useState, useEffect } from '@wordpress/element';
-import { useSelect, useDispatch } from '@wordpress/data';
+import { Fragment, useEffect } from '@wordpress/element';
 import { Accordion, Icon, Button } from 'semantic-ui-react';
-
+import { useQuiz } from './context';
 import Answers from './answers';
 
-const Pages = ({ uuid, onComplete }) => {
-    const [activeItem, setActiveItem] = useState(0);
-    const [disabled, toggleDisabled] = useState(true);
-
-    const { questions } = useSelect(
-        (select) => {
-            return {
-                questions: select('easyteachlms/course').getQuestions(uuid),
-            };
-        },
-        [uuid],
-    );
-
-    const [pages, setPages] = useState(false);
-    const [allSelected, setSelected] = useState({});
-
-    const checkForData = () => {
-        const test = Object.keys(allSelected);
-        let numberOfNo = 0;
-        test.forEach((e) => {
-            if (0 === allSelected[e].length) {
-                numberOfNo++;
-            }
-        });
-        if (0 === numberOfNo) {
-            toggleDisabled(false);
-        } else {
-            toggleDisabled(true);
-        }
-    };
+const Pages = () => {
+    const {
+        quizData,
+        activeItem,
+        setActiveItem,
+        entryData,
+        disabled,
+    } = useQuiz();
 
     useEffect(() => {
-        const tmp = {};
-        questions.map((page, index) => {
-            console.log('questionsMap', page);
-            const { question } = page;
-            tmp[question] = [];
-        });
-        setSelected(tmp);
-    }, [questions]);
+        console.log('ENTRYDAYA :: useEffect', entryData);
+    }, [entryData]);
 
     useEffect(() => {
-        checkForData();
-        const tmp = [];
-        questions.map((page, index) => {
-            const { answers, answerSelectionType, question } = page;
-            tmp.push(
-                <Fragment>
-                    <Accordion.Title
-                        active={index === activeItem}
-                        index={index}
-                        onClick={() => {
-                            setActiveItem(index);
-                        }}
-                    >
-                        <Icon name="dropdown" />
-                        {question}
-                    </Accordion.Title>
-                    <Accordion.Content active={index === activeItem}>
-                        <Answers
-                            uuid={uuid}
-                            question={question}
-                            data={answers}
-                            type={answerSelectionType}
-                            quizState={{ allSelected, setSelected }}
-                        />
-                    </Accordion.Content>
-                </Fragment>,
-            );
-        });
-        setPages(tmp);
-    }, [allSelected, activeItem]);
+        console.log('PAGES :: useEffect', quizData, entryData);
+    }, [quizData, activeItem, entryData]);
 
     return (
         <Accordion>
-            {pages}
+            {quizData.map((page, index) => {
+                const { answers, answerSelectionType, question } = page;
+                return (
+                    <Fragment>
+                        <Accordion.Title
+                            active={index === activeItem}
+                            index={index}
+                            onClick={() => {
+                                setActiveItem(index);
+                            }}
+                        >
+                            <Icon name="dropdown" />
+                            {question}
+                        </Accordion.Title>
+                        <Accordion.Content active={index === activeItem}>
+                            <Answers
+                                question={question}
+                                answers={answers}
+                                type={answerSelectionType}
+                            />
+                        </Accordion.Content>
+                    </Fragment>
+                );
+            })}
             <Button
                 primary
-                disabled={disabled}
                 loading={false}
+                disabled={disabled}
                 onClick={() => {
-                    console.log(allSelected);
-                    onComplete(allSelected);
+                    console.log('Done');
                 }}
             >
                 Submit Quiz
