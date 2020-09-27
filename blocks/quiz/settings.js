@@ -22,6 +22,14 @@ const settings = [
                 type: 'string',
                 default: 0,
             },
+            pointsRequiredToPass: {
+                type: 'integer',
+                default: 80,
+            },
+            requirePassing: {
+                type: 'boolean',
+                default: false,
+            },
         },
         edit,
         save,

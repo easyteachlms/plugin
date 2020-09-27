@@ -210,11 +210,18 @@ class EasyTeachLMS {
 	public function welcome_admin_notice() {
 
 		/* Check transient, if available display notice */
-		if ( ! get_option( 'easyteachlms-welcome-1' ) ) {
-			$link = get_bloginfo( 'wpurl' ) . '/wp-admin/admin.php?page=easyteach-lms-settings';
+		if ( ! get_option( 'easyteachlms-welcome-2' ) ) {
+			$new_course_link = admin_url( 'post-new.php?post_type=course' );
+			$settings_link   = get_bloginfo( 'wpurl' ) . '/wp-admin/admin.php?page=easyteach-lms-settings';
 			?>
 			<div class="updated notice is-dismissible">
-				<p>Thank you for installing EasyTeach LMS! <strong><a href="<?php echo $link; ?>">Get Started</a></strong>.</p>
+				<h3>Welcome to EasyTeach LMS – The World’s EASIEST and most CUSTOMIZABLE Learning Management System designed for WordPress.</h3>
+				<p>EasyTeach is also a DYNAMIC Content Management System, featuring Gutenberg’s Drag & Drop Editor to save you time and effort at every turn, no matter what kind of look and feel you need to create for your user experience.</p>
+				<ul style="padding-left: 15px;list-style: disc;">
+					<li>Ready to create your first course? <a href="<?php echo $new_course_link; ?>">Start Here</a></li>
+					<li style="opacity: 0.6">Need to set up an EasyTeach WordPress Web Template with Built In Demo Content? <a href="#">START HERE (COMING SOON)</a></li>
+					<li>Need instructions or resources for Easy Teach? <a href="<?php echo $settings_link; ?>">Start Here</a></li>
+				</ul>
 			</div>
 			<?php
 		}

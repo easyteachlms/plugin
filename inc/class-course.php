@@ -241,7 +241,7 @@ class Course {
 				return $excerpt;
 			}
 			$course_id = get_the_ID();
-			$enrolled  = $this->is_enrolled( $course_id );
+			$enrolled  = $this->is_enrolled( $course_id ) ? 'true' : 'false';
 			// Check if already enrolled and display that here.
 			ob_start();
 			?>
@@ -309,7 +309,7 @@ class Course {
 		$user_id = get_current_user_id();
 		// All editors get access to all courses.
 		if ( user_can( $user_id, 'edit_others_posts' ) ) {
-			return true;
+			// return true;
 		}
 		$courses = get_user_meta( $user_id, '_enrolled_courses', true );
 

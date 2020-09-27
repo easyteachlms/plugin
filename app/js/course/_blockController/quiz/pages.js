@@ -1,26 +1,25 @@
 /* eslint-disable array-callback-return */
 /* eslint-disable consistent-return */
-import { Fragment, useEffect } from '@wordpress/element';
+import { Fragment, useState } from '@wordpress/element';
 import { Accordion, Icon, Button } from 'semantic-ui-react';
 import { useQuiz } from './context';
 import Answers from './answers';
+import Results from './results';
 
 const Pages = () => {
     const {
         quizData,
         activeItem,
         setActiveItem,
-        entryData,
         disabled,
+        onCompleteAction,
+        submitted,
     } = useQuiz();
+    const [loading, toggleLoading] = useState(false);
 
-    useEffect(() => {
-        console.log('ENTRYDAYA :: useEffect', entryData);
-    }, [entryData]);
-
-    useEffect(() => {
-        console.log('PAGES :: useEffect', quizData, entryData);
-    }, [quizData, activeItem, entryData]);
+    if (false !== submitted) {
+        return <Results />;
+    }
 
     return (
         <Accordion>
@@ -50,10 +49,11 @@ const Pages = () => {
             })}
             <Button
                 primary
-                loading={false}
+                loading={loading}
                 disabled={disabled}
                 onClick={() => {
-                    console.log('Done');
+                    toggleLoading(true);
+                    onCompleteAction(toggleLoading);
                 }}
             >
                 Submit Quiz

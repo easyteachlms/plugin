@@ -20,7 +20,7 @@ const Settings = () => {
                         },
                         {
                             name: 'license',
-                            title: 'License Management',
+                            title: 'License Management and Updates',
                         },
                     ]}
                 >
@@ -28,7 +28,10 @@ const Settings = () => {
                         if ('license' === tab.name) {
                             return (
                                 <CardBody>
-                                    <p>License Settings Here</p>
+                                    <p>
+                                        Automatic upgrades through license
+                                        activation coming at end of beta.
+                                    </p>
                                 </CardBody>
                             );
                         }

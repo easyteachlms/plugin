@@ -31,6 +31,26 @@ const selectors = {
         }
         return false;
     },
+    getPointsRequiredToPass(state, uuid) {
+        const { outline } = state.data;
+        const index = outline.flat.findIndex(
+            (obj) => 'quiz' === obj.type && obj.uuid === uuid,
+        );
+        if (outline.flat[index] && outline.flat[index].pointsRequiredToPass) {
+            return outline.flat[index].pointsRequiredToPass;
+        }
+        return false;
+    },
+    hasUserTakenQuiz(state, uuid) {
+        const { outline } = state.data;
+        const index = outline.flat.findIndex(
+            (obj) => 'quiz' === obj.type && obj.uuid === uuid,
+        );
+        if (outline.flat[index] && outline.flat[index].userScore) {
+            return outline.flat[index].userScore;
+        }
+        return false;
+    },
     getQuiz(state, uuid) {
         const { outline } = state.data;
         const index = outline.flat.findIndex(

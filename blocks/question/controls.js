@@ -11,35 +11,7 @@ import {
 
 const Controls = ({ attributes, setAttributes }) => {
     const panelTitle = 'Question Settings';
-    const {
-        explanation,
-        type,
-        answersType,
-        correctAnswerMessage,
-        incorrectAnswerMessage,
-        points,
-    } = attributes;
-
-    const QuestionType = () => {
-        return (
-            <SelectControl
-                label="Question Type"
-                value={type}
-                options={[
-                    {
-                        value: null,
-                        label: 'Select a question type',
-                        disabled: true,
-                    },
-                    { label: 'Text', value: 'text' },
-                    // { label: 'Photo', value: 'photo' },
-                ]}
-                onChange={(t) => {
-                    setAttributes({ type: t });
-                }}
-            />
-        );
-    };
+    const { explanation, answersType, points } = attributes;
 
     const AnswersType = () => {
         return (
@@ -84,9 +56,6 @@ const Controls = ({ attributes, setAttributes }) => {
                             onChange={(e) => setAttributes({ explanation: e })}
                             placeholder="Expand on this question, provide more background or additional information."
                         />
-                    </PanelRow>
-                    <PanelRow>
-                        <QuestionType />
                     </PanelRow>
                     <PanelRow>
                         <AnswersType />

@@ -1,16 +1,16 @@
 import { useState } from '@wordpress/element';
-import { useSelect, useDispatch } from '@wordpress/data';
+import { useDispatch } from '@wordpress/data';
 import { Button } from 'semantic-ui-react';
 import apiFetch from '@wordpress/api-fetch';
 
 const { easyTeachSettings } = window;
+const { openEnrollment } = easyTeachSettings;
 
 const Enroll = ({ courseId }) => {
     const { userData } = window;
     const { id } = userData;
     const [enrolling, setEnrolling] = useState(false);
     const { enroll } = useDispatch('easyteachlms/course');
-    const allowEnrollment = easyTeachSettings.openEnrollment;
 
     const clickHandler = () => {
         setEnrolling(true);
@@ -18,11 +18,10 @@ const Enroll = ({ courseId }) => {
             path: `/easyteachlms/v3/course/enroll/?userId=${id}&courseId=${courseId}`,
             method: 'POST',
             data: { enrolled: true },
-        }).then((res) => {
-            console.log(res);
+        }).then(() => {
             setTimeout(() => {
-                setEnrolling(false);
                 enroll(true);
+                setEnrolling(false);
             }, 1000);
         });
     };
@@ -36,7 +35,7 @@ const Enroll = ({ courseId }) => {
         >
             <h1>Not authorized</h1>
             <p>You are currently not enrolled in this course</p>
-            {allowEnrollment && (
+            {openEnrollment && (
                 <Button primary onClick={clickHandler} loading={enrolling}>
                     Enroll
                 </Button>

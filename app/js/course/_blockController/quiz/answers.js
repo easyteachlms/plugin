@@ -19,6 +19,16 @@ const Answers = ({ question, answers, type }) => {
 
     return (
         <List>
+            {'single' === type && (
+                <p>
+                    <i>Select one answer.</i>
+                </p>
+            )}
+            {'multiple' === type && (
+                <p>
+                    <i>Select one, or more answer(s).</i>
+                </p>
+            )}
             {answers.map((answer, index) => (
                 <List.Item>
                     <Radio

@@ -29,15 +29,18 @@ const reducer = (state = DEFAULT_STATE, action) => {
             };
         case 'SET_QUIZ_SCORE':
             console.log('SET_QUIZ_SCORE');
+            console.log(action);
+            console.log(action.score);
+            console.log(outline.flat);
             // eslint-disable-next-line no-case-declarations
             const quizIndex = outline.flat.findIndex(
                 (obj) => 'quiz' === obj.type && obj.uuid === action.uuid,
             );
             console.log(quizIndex);
             console.log(data.outline.flat[quizIndex].userScore);
-            console.log(action);
-            console.log(action.scores);
-            data.outline.flat[quizIndex].userScore = action.scores;
+
+            data.outline.flat[quizIndex].userScore = action.score;
+
             console.log(data.outline.flat[quizIndex].userScore);
             return {
                 ...state,

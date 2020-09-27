@@ -91,6 +91,7 @@ class Student {
 		if ( ! is_array( $data ) ) {
 			$data = array(
 				'completed' => array(),
+				'scores'    => array(),
 			);
 		}
 		$data['completed'][] = $uuid;
@@ -145,7 +146,7 @@ class Student {
 		error_log( 'update_quiz_progress_restfully!!' );
 		error_log( print_r( $user_data, true ) );
 
-		if ( ! array_key_exists( 'score', $user_data ) && ! array_key_exists( 'total', $user_data ) ) {
+		if ( ! array_key_exists( 'score', $user_data ) && ! array_key_exists( 'total', $user_data ) && ! array_key_exists( 'pointsRequiredToPass', $user_data ) ) {
 			return false;
 		}
 
@@ -154,8 +155,17 @@ class Student {
 		$data = get_user_meta( $user_id, $meta_key, true );
 		if ( ! is_array( $data ) ) {
 			$data = array(
-				'scores' => array(),
+				'completed' => array(),
+				'scores'    => array(),
 			);
+		}
+		$passed = $user_data['score'] >= $user_data['pointsRequiredToPass'];
+
+		if ( true === $passed ) {
+			$data['completed'][] = $uuid;
+		} elseif ( array_key_exists( 'completed', $data ) && in_array( $uuid, $data['completed'] ) ) {
+			// If the user has already completed/passed this quiz but then submits another entry that fails then the completion should be removed, so find the diff between an array with all the completed and one with this completed item and return that.
+			$data['completed'] = array_diff( $data['completed'], array( $uuid ) );
 		}
 		$data['scores'][ $uuid ] = $user_data;
 		error_log( 'User ID' );

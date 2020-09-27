@@ -283,30 +283,33 @@ class Data_Model {
 	public function parse_quiz( $quiz, $course_id, $user_id, $site_id ) {
 		$return = array();
 		$uuid   = $quiz['attrs']['uuid'];
+		error_log( 'parse_quiz' );
+		error_log(
+			print_r( $quiz['attrs'], true )
+		);
 
 		$title = $quiz['attrs']['title'];
 		if ( empty( $title ) ) {
 			$title = 'Quiz';
 		}
 
-		if ( array_key_exists( 'synopsis', $quiz['attrs'] ) && ! empty( $quiz['attrs']['synopsis'] ) ) {
-			$synopsis = $quiz['attrs']['synopsis'];
-		} else {
-			$synopsis = '';
+		$points_required_to_pass = $quiz['attrs']['pointsRequiredToPass'];
+		if ( empty( $points_required_to_pass ) ) {
+			$points_required_to_pass = 100;
 		}
 
 		$return = array(
-			'parentTitle'   => false,
-			'parentUuid'    => false,
-			'title'         => $title,
-			'uuid'          => $uuid,
-			'type'          => $this->get_block_name( ( $quiz['blockName'] ) ),
-			'conditionsMet' => false, // By default do not allow completion until quiz is completed
-			'active'        => false,
-			'completed'     => false,
-			'quizSynopsis'  => $synopsis,
-			'questions'     => array(),
-			'userScore'     => false,
+			'parentTitle'          => false,
+			'parentUuid'           => false,
+			'type'                 => 'quiz',
+			'title'                => $title,
+			'uuid'                 => $uuid,
+			'conditionsMet'        => false, // By default do not allow completion until quiz is completed
+			'active'               => false,
+			'completed'            => false,
+			'pointsRequiredToPass' => $points_required_to_pass,
+			'questions'            => array(),
+			'userScore'            => false,
 		);
 
 		if ( false !== $user_score = $this->get_quiz_score( $uuid, $course_id, $user_id, $site_id ) ) {
@@ -350,13 +353,16 @@ class Data_Model {
 			// Construct question.
 			$return['questions'][] = array(
 				'question'            => $args['question'],
-				'questionType'        => $args['type'],
 				'answerSelectionType' => $args['answersType'],
 				'answers'             => $args['answers'],
 				'correctAnswer'       => $args['correctAnswer'],
 				'explanation'         => $args['explanation'],
 				'points'              => $args['points'],
 			);
+		}
+
+		if ( true === $this->is_complete( $uuid, $course_id, $user_id, $site_id ) ) {
+			$return['completed'] = true;
 		}
 
 		return $return;

@@ -147,13 +147,13 @@ const Tutorial = ({ open = false, toggleOpen, enableExample = false }) => {
                         setTitle={setTitle}
                     >
                         <p>
-                            In as little as 5 minutes, our EasyTeach LMS
-                            tutorial will help you set up your first course,
-                            upload content, and create the learning environment
-                            best suited to your learners (clients, students,
-                            employees). Remember, EasyTeach is designed to let
-                            you customize just about anything for an E-Learning
-                            environment -- SO LET’S GET STARTED!
+                            In just 10 minutes, our EasyTeach LMS tutorial will
+                            help you to set up your first course, upload
+                            content, and create the teaching and learning
+                            environment best suited to for you and your users.
+                            Remember, EasyTeach enables you to customize any
+                            part of your E-Learning environment -- SO LET’S GET
+                            STARTED!
                         </p>
                     </Page>
 
@@ -167,123 +167,152 @@ const Tutorial = ({ open = false, toggleOpen, enableExample = false }) => {
                     >
                         <ul>
                             <li>
-                                The EasyTeach platform takes advantage of the
-                                popular WordPress Block Editor, “Gutenberg,”
-                                rapidly becoming the editor of choice for
-                                amateurs and World-Class Developers alike. With
-                                Gutenberg’s simple interface, dynamic “drag &
-                                drop” features, and duplicate-post
-                                functionality, your dream experience is just a
-                                few clicks away, no matter what you teach.
+                                Your EasyTeach LMS features the WordPress Block
+                                Editor, “Gutenberg,” popular with amateurs and
+                                World-Class Developers alike. This simple but
+                                dynamic tool puts “drag & drop” features,
+                                customization options, and duplicate-post
+                                functionality just a few clicks away.
                             </li>
                             <li>
-                                Gutenberg is built on BLOCKS. Blocks allow you
-                                to add any kind of multi-media content – the sky
-                                is the limit. The key to mastering Gutenberg
-                                Blocks & EasyTeach LMS is in the magic + button
-                                (Show image). Whether you want to add a new
-                                lesson, video, quiz, or file, the + (Show image)
-                                button is all you need.
+                                EasyTeach is built on the Gutenberg BLOCK
+                                system, featuring customized buttons that
+                                highlight your course BLOCKS (such as lessons,
+                                quizzes, content, and certificates). Inside your
+                                blocks, the EASY + button (Show image) is the
+                                key to adding multi-media content of all kinds –
+                                anything from YouTube videos to links, text,
+                                images, downloads, and much more.
                             </li>
                             <li>
-                                If you are currently using another website or
-                                page-builder like WP Bakery or Elementor, not to
-                                worry! CLICK HERE to set up EasyTeach to
-                                seamlessly integrate with your existing website!
+                                PRO TIP: As you build your courses, you’ll also
+                                find additional options for customizing your
+                                courses, lessons, and content on the right-hand
+                                side of the screen.
                             </li>
                         </ul>
                     </Page>
 
                     <Page
-                        title="Create an E-Course"
+                        title="How to Create the First Lesson in Your E-COurse"
                         videoSrc={intro}
                         activePage={currentPage}
                         pageNumber={3}
                         goToPage={setCurrentPage}
                         setTitle={setTitle}
                     >
+                        <h3>
+                            Step 1: NAME YOUR COURSE or PRODUCT and SELECT YOUR
+                            COURSE OPTIONS (eg: Psychology 101 or Yoga for
+                            Beginners).
+                        </h3>
+                        <p>
+                            Type your COURSE TITLE in the field labeled “Add
+                            title.”
+                        </p>
+                        <p>
+                            On the right-hand side of the screen, you’ll have
+                            the option to add a “FEATURED IMAGE” for your
+                            course, create an EXCERPT (a short course
+                            description), select “CATEGORIES” for your course
+                            (eg: Finance, Fitness, Fashion). You can also set a
+                            future-publishing date for the course.{' '}
+                        </p>
+                        <h3>Step 2: Create a LESSON within the COURSE</h3>
                         <p>
                             All EasyTeach COURSES are comprised of at least one
-                            LESSON BLOCK which contains at least one CONTENT
-                            BLOCK – But you can structure a course in a variety
-                            of ways, with as many LESSON and CONTENT Blocks as
-                            you wish.
+                            LESSON BLOCK, which contains at least one CONTENT
+                            BLOCK. – But there’s no limit to the number of
+                            LESSON & CONTENT BLOCKS you can include in an
+                            E-COURSE. You can structure any course with this
+                            simple building-block foundation. Each CONTENT BLOCK
+                            can feature anything from videos, PDFs, and PPTs to
+                            web & social media links. Yes, it’s really that
+                            EASY!
                         </p>
-                        <ul>
-                            <li>
-                                Step 1: NAME YOUR COURSE or PRODUCT (eg:
-                                Psychology 101 or Yoga for Beginners)
-                            </li>
-                            <li>
-                                Step 2 : Create a LESSON within the COURSE. All
-                                courses require at least one LESSON block and at
-                                least one CONTENT block inside the LESSON block.
-                                You can structure any course with this simple
-                                building-block foundation. From there, you can
-                                add multiple LESSONS and CONTENT blocks within
-                                each LESSON, featuring videos, PDFs, links, and
-                                so on. PRETTY EASY, HUH?
-                                <ul>
-                                    <li>
-                                        For Example: You could create a daily,
-                                        weekly, or time-structured LESSON or
-                                        create a series of self-paced lessons
-                                        within each course.
-                                    </li>
-                                </ul>
-                            </li>
-                            <li>
-                                Step 3: Click the plus button (show image) and
-                                then select LESSON to create a new Lesson, OR
-                                search for an existing LESSON that you
-                                previously created (Learn more about
-                                DUPLICATE-CONTENT & DUPLICATE-COURSE FEATURES
-                                HERE) – SETH – link to tutorial page on Saving
-                                as New Lesson. For Duplicate Content – just
-                                install Duplicate Post and then instructions for
-                                how to duplicate?).
-                            </li>
-                        </ul>
+                        <p>
+                            To create a LESSON, click the button entitled “ADD
+                            LESSON OR CERTIFICATE” (show image) and then select
+                            “LESSON” to create a new Lesson. You’ll then have
+                            the option to “START A NEW LESSON” or “SEARCH FOR AN
+                            EXISTING LESSON” that you previously created in
+                            another course (Learn more about “DUPLICATE-CONTENT”
+                            & “DUPLICATE-COURSE” FEATURES HERE).
+                        </p>
+                        <p>
+                            To START A NEW LESSON, enter your LESSON title in
+                            the field labeled “Title,” and click CREATE LESSON.
+                        </p>
+                        <p>
+                            Once you have created your lesson or loaded an
+                            existing lesson, you’ll find LESSON options on the
+                            right-hand of your screen. You can create a series
+                            of self-paced lessons within each course OR schedule
+                            content for daily, weekly, or time-structured
+                            LESSONS. To schedule content, simply select the date
+                            and time you want your content available from the
+                            “SCHEDULE FOR FUTURE RELEASE” section. If you’re
+                            offering a self-paced course (anytime, anywhere),
+                            there’s no need for scheduling
+                        </p>
+                        <p>
+                            NOTE: Once you've created a new LESSON, you can move
+                            on to inserting content and quizzes. That’s next on
+                            this tutorial…
+                        </p>
                     </Page>
 
                     <Page
-                        title="Course Content (videos, text, PDFs, PPTs, Links) lives inside CONTENT blocks, which live inside LESSON blocks"
+                        title="HOW-TO ADD COURSE CONTENT (videos, text, PDFs, PPTs, Links)"
                         videoSrc={intro}
                         activePage={currentPage}
                         pageNumber={4}
                         goToPage={setCurrentPage}
                         setTitle={setTitle}
                     >
+                        <p>
+                            CONTENT is added inside CONTENT blocks, which live
+                            inside LESSON blocks.
+                        </p>
                         <ul>
                             <li>
-                                Let’s start with adding a video to your course.
-                                First, click your trusty + button and select
-                                CONTENT from the pop-up box to add a CONTENT
-                                block. You can use any video service that
-                                WordPress supports (i.e Vimeo or YouTube), or
-                                download support for additional video services
-                                via 3rd-party tools and plug-ins. You can ALSO
-                                host your own videos if you're using a service
-                                like Jetpack that offers WordPress video
-                                hosting.
+                                <p>
+                                    STEP 1: Let’s start with adding a video to
+                                    the LESSON you created in the previous step.
+                                    First, click your EASY button in the box
+                                    labeled “ADD CONTENT or QUIZ” and select
+                                    CONTENT from the pop-up box to add a CONTENT
+                                    block. Give your CONTENT a TITLE and click
+                                    “ADD CONTENT”.
+                                </p>
+                                <p>
+                                    For this demo, let's assume you’ll use a
+                                    Vimeo-hosted video.
+                                </p>
+                                <p>
+                                    NOTE: You can use any video service that
+                                    WordPress supports (eg: Vimeo or YouTube);
+                                    or download support for additional video
+                                    services via 3rd-party tools and plug-ins.
+                                    You can ALSO host your own videos if you're
+                                    using a service like Jetpack that offers
+                                    WordPress video hosting.
+                                </p>
                             </li>
                             <li>
-                                For this demo let's assume you use a
-                                Vimeo-hosted video.
-                            </li>
-                            <li>
-                                Click the + button (show image) and select your
-                                item from the pop-up box OR click “Browse All”
-                                to see all of your options. You can select
-                                Vimeo, OR you can paste a Vimeo-video link into
-                                the editor and it will automatically insert the
-                                video for you.
+                                STEP 2: Click the EASY + button (show image) and
+                                select your item from the pop-up box -- OR --
+                                click “Browse All” to see all options. Select
+                                Vimeo, paste your URL in the box labeled “Enter
+                                URL to embed here,” then click the Embed button
+                                and just like that, you’ve added a video to your
+                                course.
                             </li>
                         </ul>
                     </Page>
 
                     <Page
-                        title="Don’t stop at videos!  You can add course content of all kinds!"
+                        title="Add any kind of course content!"
                         videoSrc={intro}
                         activePage={currentPage}
                         pageNumber={5}
@@ -292,22 +321,21 @@ const Tutorial = ({ open = false, toggleOpen, enableExample = false }) => {
                     >
                         <ul>
                             <li>
-                                We support all native (that is, built-in)
-                                WordPress functionality, so that means you can
-                                embed Slideshare presentations, audio podcasts,
-                                Google maps, even “licensed” music from your
-                                favorite multi-media source such as Spotify or
-                                YouTube. Again, just click your trusty + plus
-                                button (show image), select your item from the
-                                pop-up box OR click “Browse All” to see all of
-                                your options. Want to make life even simpler?
-                                Just paste links to popular 3rd party sites and
-                                they will be embedded automatically.
+                                EasyTeach supports all native WordPress
+                                functionality (eg: anything already built-for
+                                WordPress. That means you can embed Slideshare
+                                presentations, audio podcasts, Google maps, even
+                                “licensed” music from your favorite multi-media
+                                source such as Spotify or YouTube. Again, just
+                                click your EASY “ADD CONTENT of QUIZ” button
+                                (show image), select your item from the pop-up
+                                box, OR click “Browse All” to see all options.
                             </li>
                             <li>
                                 That’s how easy it is to build media-filled,
-                                content-rich courses. In our next step, we'll go
-                                over how easy it is to build quizzes.
+                                content-rich E-courses. In our next step, we'll
+                                go over how easy it is to build customizable
+                                quizzes.
                             </li>
                         </ul>
                     </Page>
@@ -340,39 +368,98 @@ const Tutorial = ({ open = false, toggleOpen, enableExample = false }) => {
                                     <li>
                                         Assign point values to each response
                                         (Question 1 = 5 pts, Question 2 = 10
-                                        pts, Question 3 = 20 pts), etc.
+                                        pts, Question 3 = 20 pts), etc, and
+                                        define an overall passing score for the
+                                        quiz.
                                     </li>
                                 </ul>
                             </li>
                             <li>
                                 To build a quiz, navigate to the Lesson where
-                                you want to insert a quiz, click the + button
-                                (show image) and select QUIZ from the pop-up
-                                box. Next, add a title for your quiz and click
-                                “Add quiz.” Click the + again to add your first
-                                question where indicated. Type your question and
-                                then navigate to the panel on the right to
-                                define the kind of questions in the QUESTIONS
-                                SETTINGS section. You can add a questions
-                                explanation, define text for correct and
-                                incorrect answers, switch from text to photo
-                                questions, and define whether your question has
-                                a single answer, multiple answers, or even
-                                written text or essay answers. Lastly, you can
-                                define point value for each question.{' '}
+                                you want to insert a quiz, click the “ADD
+                                CONTENT OR QUIZ” button (show image) and select
+                                QUIZ from the pop-up box.
                             </li>
                             <li>
-                                Now it’s time to define the answer. Adding
-                                answers is as easy as clicking the + button.
-                                Click the button and add your answer text (i.e.
-                                True/False). You will need to add an answer
-                                field for every choice. For example, for a
-                                True/False quiz the first answer box would be
-                                “True,” the second, “False.” Click on the Smiley
-                                Face (show image) to indicate the correct
-                                answer. When the family face is White on a Black
-                                Background, your answer is marked as the correct
-                                answer
+                                Next, add a title for your quiz (eg: Budgeting
+                                101) and click “ADD QUIZ.”
+                            </li>
+                            <li>
+                                <p>
+                                    To add your first question, click the “ADD A
+                                    QUESTION” button. Type your question in the
+                                    field labeled “QUESTION TEXT HERE,” then
+                                    navigate to the panel on the right to define
+                                    QUESTION SETTINGS section. You can add an
+                                    explanation for your questions, define the
+                                    display text for correct and incorrect
+                                    answers, switch from text to photo
+                                    questions, and define whether your question
+                                    has a single correct answer (i.e. True or
+                                    False or multiple choice A-D) or
+                                    multiple-correct answers (A and C). Lastly,
+                                    you can define point value for each
+                                    question.
+                                </p>
+                                <ul>
+                                    <li>
+                                        <p>
+                                            For example, for the TRUE/FALSE
+                                            question (2+2=5), you would choose
+                                        </p>
+                                        <ul>
+                                            <li>Question Type: Text</li>
+                                            <li>Answers Type: Single</li>
+                                            <li>
+                                                Points: Any value you would like
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <p>
+                                    Now it’s time to define the answer. Click on
+                                    “ADD AN ANSWER” to define your answer
+                                    options. Adding answers is as easy as
+                                    clicking the “ADD ANSWER” button. Click the
+                                    button and add your answer text (i.e.
+                                    True/False or A/B/C/D). You will need to add
+                                    an answer field for every choice. Click on
+                                    the Smiley Face (show image) to indicate the
+                                    correct answer. When the SMILEY FACE is
+                                    White on a Black Background, your answer is
+                                    marked as the correct answer (SHOW IMAGE).
+                                    When you choose MULTIPLE as the QUESTION
+                                    TYPE, you can indicate multiple-correct
+                                    answers using the SMILEY FACE
+                                </p>
+                                <ul>
+                                    <li>
+                                        Using our same example, TRUE/FALSE
+                                        question (2+2=5), you would add two
+                                        answers: TRUE and FALSE. To do this,
+                                        click on “ADD AN ANSWER” and enter TRUE
+                                        in the field labeled “ANSWER TEXT HERE.”
+                                        Repeat the process and enter FALSE in
+                                        the field labeled “ANSWER TEXT HERE.”
+                                        Click on the Smiley Face (SHOW IMAGE) to
+                                        indicate which answer is correct. In our
+                                        example, we would click the SMILEY FACE
+                                        on the answer FALSE.
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                You can use any combination of question types
+                                and there are no limitations on the number of
+                                answers!
+                            </li>
+                            <li>
+                                Need teacher-graded quizzes? Essay responses?
+                                Check out our BuddyPress integration (CLICK HERE
+                                TO LEARN MORE) with robust features to manage
+                                your students and their progress.
                             </li>
                         </ul>
                     </Page>
@@ -396,26 +483,30 @@ const Tutorial = ({ open = false, toggleOpen, enableExample = false }) => {
                         </p>
                         <ul>
                             <li>
-                                In the LESSON block, click the button "SAVE AS
-                                NEW" to save a version of your content for use
-                                in other courses.
+                                First you’ll need to save your lesson. You can
+                                do this when you first create your lesson by
+                                clicking on the “SAVE AS NEW LESSON” button
+                                below the title field from the right-hand
+                                toolbar OR you can return to any LESSON you have
+                                created and click on the “SAVE AS NEW LESSON”
+                                button to add it your content library.
                             </li>
                             <li>
-                                If you ever need to add or make changes to the
-                                LESSON you've saved, open the COURSE and you'll
-                                be prompted with the option to update LESSONS
-                                that have updated content.
-                            </li>
-                            <li>
-                                Want to use a previous lesson as a template?
-                                THAT’S EASY, TOO! Click Here to Learn More about
-                                Duplicating Content.
+                                You can now easily add your saved LESSON to any
+                                course. From your Course, click on the ADD A
+                                LESSON OR CERTIFICATE button and select LESSON.
+                                Next search for your existing lesson in the
+                                field entitled SEARCH FOR AN EXISTING LESSON.
+                                Select the desired lesson from the drop down and
+                                SHAZAM! Your lesson has been added to your
+                                course. This is one of our coolest EasyTeach
+                                features designed to save you time!
                             </li>
                         </ul>
                     </Page>
 
                     <Page
-                        title="More Helpful Tips"
+                        title="Bonus Tips"
                         imgSrc={illustration}
                         activePage={currentPage}
                         pageNumber={8}
@@ -426,10 +517,9 @@ const Tutorial = ({ open = false, toggleOpen, enableExample = false }) => {
                         <p>Mak the Most of Gutenberg Editing Tools</p>
                         <ul>
                             <li>
-                                The + icon (show image) will always open a
+                                The EASY + icon (show image) will always open a
                                 pop-up with your recently-used blocks. Click
-                                "Browse All" to access all available blocks,
-                                including "File" or "Download”;.
+                                "Browse All" to access all available blocks.
                             </li>
                             <li>
                                 To save even more time, use the keyboard
@@ -461,6 +551,15 @@ const Tutorial = ({ open = false, toggleOpen, enableExample = false }) => {
                                 </ul>
                             </Fragment>
                         )}
+                        <h3>Need more help?</h3>
+                        <p>
+                            You can return to this tutorial and access our help
+                            resources at any time by navigating to the EasyTeach
+                            LMS Settings & Help page found HERE OR navigate to
+                            the WordPress Dashboard, click on EasyTeach LMS from
+                            the black menu on the left-hand side, and then
+                            select Settings & Help.
+                        </p>
                     </Page>
                 </Modal>
             )}

@@ -4,6 +4,7 @@ import { Header } from 'semantic-ui-react';
 
 import { ProvideQuiz } from './context';
 import Pages from './pages';
+import AlreadyPassed from './already-passed-message';
 
 const Quiz = ({ uuid, parentTitle, title }) => {
     const { isLocked, isActive } = useSelect(
@@ -32,6 +33,7 @@ const Quiz = ({ uuid, parentTitle, title }) => {
                     <Header.Subheader>{parentTitle}</Header.Subheader>
                 )}
             </Header>
+            <AlreadyPassed uuid={uuid} />
             <Pages />
         </ProvideQuiz>
     );

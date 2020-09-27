@@ -20,10 +20,6 @@ const settings = [
                 type: 'string',
                 default: '',
             },
-            type: {
-                type: 'string',
-                default: 'text',
-            },
             answersType: {
                 type: 'string',
                 default: 'single',
