@@ -1,7 +1,7 @@
 import { __ } from '@wordpress/i18n';
 import { Fragment, useState } from '@wordpress/element';
 import { Modal, Button } from '@wordpress/components';
-
+import LoadExample from './examples';
 import './style.scss';
 
 import illustration from './art/basic.png';
@@ -15,6 +15,42 @@ const creatingQuiz =
     '//beta.easyteachlms.com/wp-content/uploads/2020/08/intro.mp4';
 const savingContent =
     '//beta.easyteachlms.com/wp-content/uploads/2020/08/intro.mp4';
+
+const simpleExample = `<!-- wp:easyteachlms/lesson-content {"title":"First Look: Watch Series 6","uuid":"ae02b250-fa88-11ea-97c2-5fc04de8676d"} -->
+<div class="wp-block-easyteachlms-lesson-content" data-title="First Look: Watch Series 6" data-uuid="ae02b250-fa88-11ea-97c2-5fc04de8676d"><!-- wp:paragraph -->
+<p>Let's take a look at the new Watch Series 6 with Watch OS7, available today!</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:core-embed/youtube {"url":"https://www.youtube.com/watch?v=k3oRyAbodu0","type":"video","providerNameSlug":"youtube","className":"wp-embed-aspect-16-9 wp-has-aspect-ratio"} -->
+<figure class="wp-block-embed-youtube wp-block-embed is-type-video is-provider-youtube wp-embed-aspect-16-9 wp-has-aspect-ratio"><div class="wp-block-embed__wrapper">
+https://www.youtube.com/watch?v=k3oRyAbodu0
+</div></figure>
+<!-- /wp:core-embed/youtube -->
+
+<!-- wp:paragraph -->
+<p>Changing some stuff and watching what happens!</p>
+<!-- /wp:paragraph --></div>
+<!-- /wp:easyteachlms/lesson-content -->
+
+<!-- wp:easyteachlms/quiz {"title":"Differences in Watch Series 6 and SE","uuid":"b5728920-fa88-11ea-b41c-815a84a3205c","requirePassing":true} -->
+<div class="wp-block-easyteachlms-quiz" data-title="Differences in Watch Series 6 and SE" data-uuid="b5728920-fa88-11ea-b41c-815a84a3205c"><!-- wp:easyteachlms/question {"question":"Both watches have always on displays"} -->
+<!-- wp:easyteachlms/answer {"answer":"True"} /-->
+
+<!-- wp:easyteachlms/answer {"answer":"False","isCorrect":true} /-->
+<!-- /wp:easyteachlms/question -->
+
+<!-- wp:easyteachlms/question {"question":"What is the correct answer to this question? Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ","answersType":"multiple"} -->
+<!-- wp:easyteachlms/answer {"answer":"Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris","isCorrect":true} /-->
+
+<!-- wp:easyteachlms/answer {"answer":"Voluptate","isCorrect":true} /-->
+<!-- /wp:easyteachlms/question -->
+
+<!-- wp:easyteachlms/question {"question":"The blood ox, or, \u0022pulse ox\u0022 sensor is medical grade?"} -->
+<!-- wp:easyteachlms/answer {"answer":"False","isCorrect":true} /-->
+
+<!-- wp:easyteachlms/answer {"answer":"True"} /-->
+<!-- /wp:easyteachlms/question --></div>
+<!-- /wp:easyteachlms/quiz -->`;
 
 const Page = ({
     title,
@@ -30,6 +66,7 @@ const Page = ({
     if (pageNumber !== activePage) {
         return <Fragment />;
     }
+    console.log('EXAMPLE LOAD', simpleExample);
     setTitle(title);
     return (
         <div
@@ -123,7 +160,12 @@ const Page = ({
     );
 };
 
-const Tutorial = ({ open = false, toggleOpen, enableExample = false }) => {
+const Tutorial = ({
+    open = false,
+    toggleOpen,
+    enableExample = false,
+    courseClientId,
+}) => {
     const [currentPage, setCurrentPage] = useState(1);
     const [title, setTitle] = useState('Welcome to EasyTeach LMS');
     return (
@@ -540,7 +582,10 @@ const Tutorial = ({ open = false, toggleOpen, enableExample = false }) => {
                                         Option 1: Beginner Course with 1 Lesson
                                         Block (Video) + 1 Content Block
                                         (Downloadable PDF Exercise).
-                                        <Button isSecondary>Import Now</Button>
+                                        <LoadExample
+                                            courseClientId={courseClientId}
+                                            template={simpleExample}
+                                        />
                                     </li>
                                     <li>
                                         Option 2: Advanced Course with Multiple
@@ -567,7 +612,11 @@ const Tutorial = ({ open = false, toggleOpen, enableExample = false }) => {
     );
 };
 
-const TutorialButton = ({ disable = false, enableExample = false }) => {
+const TutorialButton = ({
+    disable = false,
+    enableExample = false,
+    courseClientId,
+}) => {
     const [open, toggleOpen] = useState(false);
     return (
         <Fragment>
@@ -580,6 +629,7 @@ const TutorialButton = ({ disable = false, enableExample = false }) => {
                 Begin Tutorial
             </Button>
             <Tutorial
+                courseClientId={courseClientId}
                 open={open}
                 toggleOpen={toggleOpen}
                 enableExample={enableExample}

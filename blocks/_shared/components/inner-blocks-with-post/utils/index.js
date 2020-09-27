@@ -30,6 +30,7 @@ const replaceContent = (clientId, postId, postType, replaceInnerBlocks) => {
     return new Promise((resolve) => {
         post.fetch().then((p) => {
             const parsedBlocks = rawHandler({ HTML: p.content_raw });
+            console.log('parsedBlocks', parsedBlocks);
             replaceInnerBlocks(clientId, parsedBlocks).then(() => {
                 resolve(p);
             });

@@ -38,6 +38,7 @@ const edit = ({ attributes, className, clientId, name, setAttributes }) => {
         return (
             <Fragment>
                 <Controls
+                    clientId={clientId}
                     attributes={attributes}
                     setAttributes={setAttributes}
                 />
@@ -56,7 +57,7 @@ const edit = ({ attributes, className, clientId, name, setAttributes }) => {
     }
 
     return (
-        <Welcome setAttributes={setAttributes}>
+        <Welcome clientId={clientId} setAttributes={setAttributes}>
             <div className={className}>
                 <InnerBlocks
                     allowedBlocks={ALLOWED_BLOCKS}

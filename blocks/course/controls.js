@@ -10,7 +10,7 @@ import { help } from '@wordpress/icons';
 
 import { CourseCreationTutorial } from '@easyteachlms/shared';
 
-const Controls = ({ attributes, setAttributes }) => {
+const Controls = ({ clientId, attributes, setAttributes }) => {
     const { description } = attributes;
     const [open, toggleOpen] = useState(false);
     return (
@@ -37,6 +37,7 @@ const Controls = ({ attributes, setAttributes }) => {
                 </ToolbarButton>
             </Toolbar>
             <CourseCreationTutorial
+                courseClientId={clientId}
                 open={open}
                 toggleOpen={toggleOpen}
                 enableExample

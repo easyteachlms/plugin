@@ -8,7 +8,7 @@ import {
     WelcomeGraphic as illustration,
 } from '@easyteachlms/shared';
 
-const Welcome = ({ welcomeDisabled, children, setAttributes }) => {
+const Welcome = ({ clientId, welcomeDisabled, children, setAttributes }) => {
     const Prompt = () => {
         const Art = () => {
             return (
@@ -32,14 +32,19 @@ const Welcome = ({ welcomeDisabled, children, setAttributes }) => {
                                     Get started building your EasyTeach LMS
                                     powered course.
                                 </strong>{' '}
-                                Over the next 5 minutes we will walk you through
-                                creating your first course, lesson plan, and
-                                course content. At any time you can find this
-                                tutorial, and others, in the EasyTeach LMS
-                                settings in the dashboard.
+                                Over the next 10 minutes we will walk you
+                                through creating your first course, lesson plan,
+                                and course content. At any time you can find
+                                this tutorial, and others, in the EasyTeach LMS
+                                settings in the dashboard or the{' '}
+                                <strong>Need Help</strong>
+                                button in the course toolbar.
                             </p>
 
-                            <CourseCreationButton />
+                            <CourseCreationButton
+                                courseClientId={clientId}
+                                enableExample
+                            />
                         </div>
                     </div>
                 </Segment>
