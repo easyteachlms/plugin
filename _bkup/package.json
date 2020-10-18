@@ -1,6 +1,6 @@
 {
   "name": "easyteachlms",
-  "version": "0.1.0",
+  "version": "3.0.0",
   "private": true,
   "devDependencies": {
     "@wordpress/api-fetch": "^3.16.0",
@@ -13,7 +13,7 @@
     "@wordpress/element": "^2.14.0",
     "@wordpress/i18n": "^3.12.0",
     "@wordpress/url": "^2.15.0",
-    "@wpackio/scripts": "^5.0.0",
+    "@wpackio/scripts": "^4.4.1",
     "babel-eslint": "^10.1.0",
     "eslint": "^7.2.0",
     "eslint-config-airbnb": "^18.1.0",
@@ -24,19 +24,22 @@
     "eslint-plugin-react": "^7.20.0",
     "eslint-plugin-react-hooks": "^4.0.4",
     "lodash": "^4.17.20",
+    "node-sass": "^4.14.0",
     "prettier": "^2.0.5",
-    "sass": "^1.27.0"
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1"
   },
   "scripts": {
     "bootstrap": "wpackio-scripts bootstrap",
     "build": "wpackio-scripts build",
     "start": "wpackio-scripts start",
-    "archive": "wpackio-scripts pack"
+    "archive": "wpackio-scripts pack",
+    "package": "wpackio-scripts pack"
   },
   "dependencies": {
     "@opuscapita/react-autocompletes": "^3.0.1",
     "@wordpress/icons": "^2.4.0",
-    "@wpackio/entrypoint": "^5.0.0",
+    "@wpackio/entrypoint": "^4.4.1",
     "animate.css": "^4.1.0",
     "beautiful-react-hooks": "^0.25.2",
     "classnames": "^2.2.6",
@@ -48,8 +51,6 @@
     "react-html-parser": "^2.0.2",
     "react-navigable": "^1.0.1",
     "react-quiz-component": "^0.3.4",
-    "react-select": "^3.1.0",
-    "react-sortable-hoc": "^1.11.0",
     "semantic-ui-css": "^2.4.1",
     "semantic-ui-react": "^0.88.2",
     "styled-components": "^5.1.0"

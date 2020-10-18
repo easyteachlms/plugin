@@ -1,6 +1,6 @@
 import { Fragment, useState } from '@wordpress/element';
 
-import PostSelectField from './post-select-field';
+import PostsMultiSelectField from './post-select-field';
 
 import './style.scss';
 
@@ -16,7 +16,7 @@ const AddCoursesField = ({ inputField }) => {
         inputField.value = value.join();
     };
 
-    return <PostSelectField postType="Course" />;
+    return <PostsMultiSelectField postType="Course" horizontal />;
 };
 
 export default AddCoursesField;

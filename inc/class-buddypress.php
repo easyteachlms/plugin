@@ -223,6 +223,28 @@ if ( class_exists( 'BP_Group_Extension' ) ) {
 			}
 		}
 
+		public function group_member_item( $buttons, $user_id, $type ) {
+			$buttons['view-student'] = array(
+				'id'                => 'view_student',
+				'position'          => 15,
+				'component'         => 'groups',
+				'must_be_logged_in' => true,
+				'block_self'        => false,
+				'parent_element'    => 'div',
+				'button_element'    => 'a',
+				'link_text'         => 'View Student Progress',
+				'parent_attr'       => array(
+					'class' => 'button-parent',
+				),
+				'button_attr'       => array(
+					'href'         => '',
+					'data-user-id' => $user_id,
+					'class'        => 'student-progress-button',
+				),
+			);
+			return $buttons;
+		}
+
 		/**
 		 * Gets the UUID's of all lessons, files, quizzes?? in a course by pasrsing the data model.
 		 *
@@ -246,4 +268,5 @@ if ( class_exists( 'BP_Group_Extension' ) ) {
 	add_action( 'groups_membership_accepted', array( $group_courses, 'enroll' ), 10, 2 );
 	add_action( 'groups_accept_invite', array( $group_courses, 'enroll' ), 10, 2 );
 	add_action( 'bp_groups_member_after_delete', array( $group_courses, 'unenroll' ), 10, 2 );
+	add_filter( 'bp_nouveau_get_members_buttons', array( $group_courses, 'group_member_item' ), 10, 3 );
 }

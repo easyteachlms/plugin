@@ -106,7 +106,6 @@ module.exports = {
         '@wordpress/dom-ready': 'wp.domReady',
         '@wordpress/edit-post': 'wp.editPost',
         '@wordpress/element': 'wp.element',
-        '@wordpress/escape-html': 'wp.escapeHtml',
         '@wordpress/i18n': 'wp.i18n',
         '@wordpress/plugins': 'wp.plugins',
         '@wordpress/url': 'wp.url',
