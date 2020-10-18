@@ -1,5 +1,13 @@
 .easyteach-tutorial-page {
-    p {
-        font-size: 14px;
+    * {
+        font-size: 16px;
+        line-height: 20px;
+    }
+    h3 {
+        font-size: 20px;
+    }
+    ul {
+        list-style: disc;
+        padding-left: 1em;
     }
 }

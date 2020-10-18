@@ -3,12 +3,48 @@ namespace EasyTeachLMS;
 
 use WPackio\Enqueue;
 class Student {
-	protected $base_permission = 'read';
-
 	public function __construct( $init = false ) {
 		if ( true === $init ) {
 			add_action( 'rest_api_init', array( $this, 'register_rest_endpoint' ) );
 		}
+	}
+
+	public function is_enrolled_in_course( int $post_id ) {
+		if ( ! $post_id ) {
+			global $post;
+			$post_id = $post->ID;
+		}
+
+		$user_id = get_current_user_id();
+		// All editors get access to all courses.
+		if ( user_can( $user_id, 'edit_others_posts' ) ) {
+			return true;
+		}
+		$courses = get_user_meta( $user_id, '_enrolled_courses', true );
+
+		if ( empty( $courses ) ) {
+			return false;
+		} elseif ( in_array( $post_id, $courses ) ) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public function get_student( $user_id ) {
+		$user = get_user_by( 'ID', $user_id );
+		if ( false === $user ) {
+			return false;
+		}
+
+		$student = array(
+			'displayName' => $user->display_name,
+			'name'        => $user->first_name . ' ' . $user->last_name,
+			'id'          => $user_id,
+			'enrolled'    => get_user_meta( $user_id, '_enrolled_courses', true ),
+			'data'        => array(),
+		);
+		return (object) $student;
 	}
 
 	public function register_rest_endpoint() {

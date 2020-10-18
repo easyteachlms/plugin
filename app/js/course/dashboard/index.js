@@ -1,6 +1,6 @@
 import { useSelect, useDispatch } from '@wordpress/data';
 import { Fragment, RawHTML } from '@wordpress/element';
-import { Progress, Divider } from 'semantic-ui-react';
+import { Button, Progress, Divider } from 'semantic-ui-react';
 import { autop } from '@wordpress/autop';
 
 import { DownloadCertificate } from '../_blockController/certificate';
@@ -57,6 +57,7 @@ const Dashboard = ({ id }) => {
                         ? 'Course Completed!'
                         : `Course Progress ${progressRatio}`}
                 </Progress>
+                {0 === progress && <Button>Start Course</Button>}
                 {100 === progress && <DownloadCertificate />}
             </Fragment>
         );

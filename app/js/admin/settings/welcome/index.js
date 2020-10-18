@@ -61,11 +61,19 @@ const Tutorial = () => {
                             <li>
                                 Install and Set Up WooCommerce on your site. For
                                 a step-by-step guide to setting getting started
-                                with WooCommerce, CLICK HERE.
+                                with WooCommerce,{' '}
+                                <a
+                                    href="https://woocommerce.com/posts/how-to-set-up-a-new-woocommerce-store/"
+                                    target="_blank"
+                                >
+                                    CLICK HERE
+                                </a>
+                                .
                             </li>
                             <li>
                                 Create your course in EasyTeach LMS. To access
-                                our tutorial at any time, CLICK HERE.{' '}
+                                our tutorial at any time,{' '}
+                                <CourseCreationButton />
                             </li>
                             <li>
                                 Once you have completed Steps 1 and 2, navigate
@@ -99,7 +107,14 @@ const Tutorial = () => {
                                 <ul>
                                     <li>
                                         For a complete guide to setting up
-                                        products on WooCommerce, CLICK HERE.
+                                        products on WooCommerce,{' '}
+                                        <a
+                                            href="https://docs.woocommerce.com/document/managing-products/"
+                                            target="_blank"
+                                        >
+                                            CLICK HERE
+                                        </a>
+                                        .
                                     </li>
                                     <li>
                                         To add your course to any product
@@ -125,11 +140,17 @@ const Tutorial = () => {
                                                 Be sure to define the Name,
                                                 Price, and any other field you
                                                 might like (for a full how-to
-                                                CLICK HERE). Once you are done,
-                                                click the Publish button. Your
-                                                course will now be available for
-                                                purchase on your site’s
-                                                WooCommerce SHOP page.
+                                                <a
+                                                    href="https://docs.woocommerce.com/document/managing-products/"
+                                                    target="_blank"
+                                                >
+                                                    CLICK HERE
+                                                </a>
+                                                ). Once you are done, click the
+                                                Publish button. Your course will
+                                                now be available for purchase on
+                                                your site’s WooCommerce SHOP
+                                                page.
                                             </li>
                                         </ul>
                                     </li>

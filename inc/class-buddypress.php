@@ -38,18 +38,19 @@ if ( class_exists( 'BP_Group_Extension' ) ) {
 		public function display( $group_id = null ) {
 			$group_id         = bp_get_group_id();
 			$attached_courses = groups_get_groupmeta( $group_id, '_attached_courses' );
+			$attached_courses = apply_filters( 'elms_group_courses', $attached_courses, $group_id );
 			$user_id          = 1;
 			// Go fetch enrolled courses for this user.
-			echo 'Group ID:' . $group_id;
-			print_r( $attached_courses );
-			echo 'Courses to come here';
+			echo '<div class="ui card">';
+			foreach ( $attached_courses as $course_id ) {
+				echo elms_course_card( $course_id );
+			}
+			echo '</div>';
 		}
 
 		public function settings_screen( $group_id = null ) {
 			$attached_courses = groups_get_groupmeta( $group_id, '_attached_courses' );
-			error_log( 'settings screen' );
-			error_log( print_r( $attached_courses, true ) );
-			$value = null;
+			$value            = null;
 			if ( ! empty( $attached_courses ) ) {
 				$value = implode( ',', $attached_courses );
 			}
@@ -60,8 +61,8 @@ if ( class_exists( 'BP_Group_Extension' ) ) {
 				array(
 					'js'        => true,
 					'css'       => true,
-					'js_dep'    => $this->js_deps,
-					'css_dep'   => array( 'semantic-ui' ),
+					'js_dep'    => array_merge( $this->js_deps, array( 'wp-components', 'wp-api', 'wp-escape-html' ) ),
+					'css_dep'   => array( 'wp-components' ),
 					'in_footer' => true,
 					'media'     => 'all',
 				)

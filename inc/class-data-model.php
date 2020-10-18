@@ -293,9 +293,10 @@ class Data_Model {
 			$title = 'Quiz';
 		}
 
-		$points_required_to_pass = $quiz['attrs']['pointsRequiredToPass'];
-		if ( empty( $points_required_to_pass ) ) {
+		if ( ! array_key_exists( 'pointsRequiredToPass', $quiz['attrs'] ) ) {
 			$points_required_to_pass = 100;
+		} else {
+			$points_required_to_pass = $quiz['attrs']['pointsRequiredToPass'];
 		}
 
 		$return = array(
