@@ -25,7 +25,7 @@ function elms_course_card( $post_id ) {
 	?>
 	<div class="ui card">
 		<div class="image">
-			<img src="/images/avatar2/large/kristy.png">
+			<img src="http://easyteach.local/wp-content/uploads/2020/05/rolf-hecken-O0MqTumfxug-1200x800.jpg">
 		</div>
 		<div class="content">
 			<a href="<?php echo esc_url( $permalink ); ?>" class="header">
