@@ -1,22 +1,57 @@
-import { Fragment, useState } from '@wordpress/element';
-
+import { Fragment, useEffect, useState } from '@wordpress/element';
 import PostsMultiSelectField from './post-select-field';
 
 import './style.scss';
 
+const { api } = window.wp;
+
 const AddCoursesField = ({ inputField }) => {
-    console.log(inputField);
-
     const courseIds = inputField.value.split(',').map(Number);
-    console.log('Values we already have');
-    console.log(courseIds);
+    const [defaultValues, setDefaultValues] = useState([]);
 
-    const onChange = (e, d) => {
-        const { value } = d;
-        inputField.value = value.join();
+    const hocOnChange = (selectedOptions) => {
+        console.log('hocOnChange?', selectedOptions);
+        const values = selectedOptions.map((a) => a.value);
+        console.log(values);
+        inputField.value = values.join();
     };
 
-    return <PostsMultiSelectField postType="Course" horizontal />;
+    const fetchDefaultValues = () => {
+        const collection = new api.collections.Course();
+        collection.fetch({ data: { include: courseIds } }).then((matched) => {
+            const available = [];
+            matched.forEach((p) => {
+                available.push({
+                    value: p.id,
+                    label: p.title.rendered,
+                });
+            });
+            setDefaultValues(available);
+        });
+        // We should have an option for if nothing is present, an initial state w no data ever.
+    };
+
+    useEffect(() => {
+        fetchDefaultValues();
+    }, [courseIds]);
+
+    return (
+        <Fragment>
+            {0 !== defaultValues.length && (
+                <PostsMultiSelectField
+                    defaultOptions={defaultValues}
+                    postType="Course"
+                    hocOnChange={hocOnChange}
+                />
+            )}
+            {0 === defaultValues.length && (
+                <PostsMultiSelectField
+                    postType="Course"
+                    hocOnChange={hocOnChange}
+                />
+            )}
+        </Fragment>
+    );
 };
 
 export default AddCoursesField;

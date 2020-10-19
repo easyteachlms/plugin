@@ -26,22 +26,36 @@ if ( class_exists( 'BP_Group_Extension' ) ) {
 				),
 			);
 			parent::init( $args );
-
-			add_action(
-				'init',
-				function() {
-					error_log( 'BP LMS INIT' );
-				}
-			);
 		}
 
+		public function register_assets() {
+			$enqueue = new Enqueue( 'easyTeachLMS', 'dist', '1.0.0', 'plugin', EASYTEACHLMS_FILE );
+			error_log( 'LOOK HERE' );
+			error_log( bp_current_action() );
+			if ( bp_is_single_item() && bp_is_groups_component() && ( bp_is_current_action( 'members' ) || bp_is_current_action( 'easyteach-courses' ) ) ) {
+				$enqueue->enqueue(
+					'app',
+					'buddyPress',
+					array(
+						'js'        => true,
+						'css'       => false,
+						'js_dep'    => array_merge( $this->js_deps, array( 'bp-api-request' ) ),
+						'css_dep'   => array( 'semantic-ui' ),
+						'in_footer' => true,
+						'media'     => 'all',
+					)
+				);
+				wp_enqueue_style( 'semantic-ui' );
+			}
+
+		}
 		public function display( $group_id = null ) {
 			$group_id         = bp_get_group_id();
 			$attached_courses = groups_get_groupmeta( $group_id, '_attached_courses' );
 			$attached_courses = apply_filters( 'elms_group_courses', $attached_courses, $group_id );
 			$user_id          = 1;
 			// Go fetch enrolled courses for this user.
-			echo '<div class="ui card">';
+			echo '<div class="ui cards">';
 			foreach ( $attached_courses as $course_id ) {
 				echo elms_course_card( $course_id );
 			}
@@ -224,24 +238,26 @@ if ( class_exists( 'BP_Group_Extension' ) ) {
 		}
 
 		public function group_member_item( $buttons, $user_id, $type ) {
-			$buttons['view-student'] = array(
-				'id'                => 'view_student',
-				'position'          => 15,
-				'component'         => 'groups',
-				'must_be_logged_in' => true,
-				'block_self'        => false,
-				'parent_element'    => 'div',
-				'button_element'    => 'a',
-				'link_text'         => 'View Student Progress',
-				'parent_attr'       => array(
-					'class' => 'button-parent',
-				),
-				'button_attr'       => array(
-					'href'         => '',
-					'data-user-id' => $user_id,
-					'class'        => 'student-progress-button',
-				),
-			);
+			if ( user_can( get_current_user_id(), 'edit' ) ) {
+				$buttons['view-student'] = array(
+					'id'                => 'view_student',
+					'position'          => 15,
+					'component'         => 'groups',
+					'must_be_logged_in' => true,
+					'block_self'        => false,
+					'parent_element'    => 'div',
+					'button_element'    => 'div',
+					'link_text'         => '&nbsp;',
+					'parent_attr'       => array(
+						'class' => 'button-parent',
+					),
+					'button_attr'       => array(
+						'href'         => '',
+						'data-user-id' => $user_id,
+						'class'        => 'view-student-progress-button',
+					),
+				);
+			}
 			return $buttons;
 		}
 
@@ -265,6 +281,7 @@ if ( class_exists( 'BP_Group_Extension' ) ) {
 	bp_register_group_extension( 'EasyTeachLMS\GroupCourses' );
 
 	$group_courses = new GroupCourses();
+	add_action( 'wp_enqueue_scripts', array( $group_courses, 'register_assets' ) );
 	add_action( 'groups_membership_accepted', array( $group_courses, 'enroll' ), 10, 2 );
 	add_action( 'groups_accept_invite', array( $group_courses, 'enroll' ), 10, 2 );
 	add_action( 'bp_groups_member_after_delete', array( $group_courses, 'unenroll' ), 10, 2 );

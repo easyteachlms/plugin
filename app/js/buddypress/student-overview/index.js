@@ -11,3 +11,67 @@
 // - A button to message through buddypress.
 
 // A component for the group that would let you see a leaderboard of students grades. Another button that would display the students overall grade in the course.
+
+import { Fragment, useState, useEffect } from '@wordpress/element';
+import { Modal, Button, Tab } from 'semantic-ui-react';
+
+const ViewStudentProgressButton = ({ userId, groupId }) => {
+    const [open, setOpen] = useState(false);
+
+    const panes = [
+        {
+            menuItem: 'Assigned Course(s) Progress',
+            render: () => <Tab.Pane attached={false}>Tab 1 Content</Tab.Pane>,
+        },
+        {
+            menuItem: 'All Enrolled Course(s) Progress',
+            render: () => <Tab.Pane attached={false}>Tab 2 Content</Tab.Pane>,
+        },
+    ];
+
+    return (
+        <Fragment>
+            <Modal
+                closeIcon
+                onClose={() => setOpen(false)}
+                onOpen={() => setOpen(true)}
+                open={open}
+                trigger={
+                    <Button
+                        as="div"
+                        onClick={() => {
+                            setOpen(!open);
+                        }}
+                    >
+                        Manage Student
+                    </Button>
+                }
+            >
+                <Modal.Header>Student Progress</Modal.Header>
+                <Modal.Content>
+                    <Modal.Description>
+                        <p>
+                            A table displaying this students progress for all
+                            enrolled and all assigned courses will appear here.
+                            Charts to come later.
+                        </p>
+                    </Modal.Description>
+                    <Tab menu={{ secondary: true }} panes={panes} />
+                </Modal.Content>
+                <Modal.Actions>
+                    <Button
+                        color="black"
+                        onClick={() => {
+                            window.location.href =
+                                'http://easyteach.local/members/srubenstein/messages/compose/?r=john-doe';
+                        }}
+                    >
+                        Message Student
+                    </Button>
+                </Modal.Actions>
+            </Modal>
+        </Fragment>
+    );
+};
+
+export default ViewStudentProgressButton;

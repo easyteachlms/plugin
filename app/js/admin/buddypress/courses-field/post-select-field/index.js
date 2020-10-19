@@ -1,4 +1,4 @@
-import { useEffect, useState } from '@wordpress/element';
+import { useState } from '@wordpress/element';
 import { components } from 'react-select';
 import AsyncSelect from 'react-select/async';
 import { SortableContainer, SortableElement } from 'react-sortable-hoc';
@@ -25,9 +25,13 @@ const SortableMultiValue = SortableElement((props) => {
 });
 const SortableSelect = SortableContainer(AsyncSelect);
 
-const PostsMultiSelectField = ({ postType, horizontal = false }) => {
+const PostsMultiSelectField = ({
+    defaultOptions = [],
+    postType,
+    hocOnChange = false,
+}) => {
     const [inputValue, setInputValue] = useState('');
-    const [selectedTokens, setSelectedTokens] = useState([]);
+    const [selectedTokens, setSelectedTokens] = useState(defaultOptions);
 
     const promiseOptions = (searchTerm) => {
         return new Promise((resolve) => {
@@ -36,8 +40,6 @@ const PostsMultiSelectField = ({ postType, horizontal = false }) => {
                 collection
                     .fetch({ data: { search: searchTerm } })
                     .then((matched) => {
-                        console.log('matched?', searchTerm, matched);
-
                         const available = [];
                         matched.forEach((p) => {
                             available.push({
@@ -45,43 +47,42 @@ const PostsMultiSelectField = ({ postType, horizontal = false }) => {
                                 label: p.title.rendered,
                             });
                         });
-                        console.log('available?', available);
-
                         resolve(available);
                     });
             }, 1000);
         });
     };
 
-    const onChange = (selectedOptions) => setSelectedTokens(selectedOptions);
+    const onChange = (selectedOptions) => {
+        console.log('onChange', selectedOptions);
+        setSelectedTokens(selectedOptions);
+        if (false !== hocOnChange) {
+            hocOnChange(selectedOptions);
+        }
+    };
 
     const onInputChange = (newValue) => {
-        console.log('onInputChange?', newValue);
-        const inputVal = newValue.replace(/\W/g, '');
-        setInputValue(inputVal);
-        return inputVal;
+        setInputValue(newValue);
+        return newValue;
     };
 
     const onSortEnd = ({ oldIndex, newIndex }) => {
         const newValue = arrayMove(selectedTokens, oldIndex, newIndex);
         setSelectedTokens(newValue);
-        console.log(
-            'Values sorted:',
-            newValue.map((i) => i.value),
-        );
     };
 
     return (
         <SortableSelect
             // react-sortable-hoc props:
-            axis={true === horizontal ? 'x' : 'y'}
+            axis="y"
             onSortEnd={onSortEnd}
             distance={4}
             // small fix for https://github.com/clauderic/react-sortable-hoc/pull/352:
             getHelperDimensions={({ node }) => node.getBoundingClientRect()}
             // react-select props:
             isMulti
-            // value={selectedTokens}
+            defaultOptions={defaultOptions}
+            value={selectedTokens}
             onChange={onChange}
             inputValue={inputValue}
             onInputChange={onInputChange}

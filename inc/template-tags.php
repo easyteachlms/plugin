@@ -21,12 +21,27 @@ function elms_course_card( $post_id ) {
 
 	ob_start();
 
-	print_r( $student );
+	// print_r( $student );
 	?>
-	<div class="elms card">
-		<div class="header">
-			<a href="<?php echo esc_url( $permalink ); ?>">
+	<div class="ui card">
+		<div class="image">
+			<img src="/images/avatar2/large/kristy.png">
+		</div>
+		<div class="content">
+			<a href="<?php echo esc_url( $permalink ); ?>" class="header">
 				<?php echo $course->post_title; ?>
+			</a>
+			<div class="meta">
+				<span class="date"></span>
+			</div>
+			<div class="description">
+			Course Description Here
+			</div>
+		</div>
+		<div class="extra content">
+			<a>
+			<i class="user icon"></i>
+			22 Students
 			</a>
 		</div>
 	</div>
