@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-curly-brace-presence */
 // Click handler
 // Fetch user info from rest api
 // Modal that displays Student Name
@@ -13,21 +14,46 @@
 // A component for the group that would let you see a leaderboard of students grades. Another button that would display the students overall grade in the course.
 
 import { Fragment, useState, useEffect } from '@wordpress/element';
-import { Modal, Button, Tab } from 'semantic-ui-react';
+import { Modal, Button, List } from 'semantic-ui-react';
+import apiFetch from '@wordpress/api-fetch';
+
+import CourseTable from './course-table';
 
 const ViewStudentProgressButton = ({ userId, groupId }) => {
     const [open, setOpen] = useState(false);
+    const [courses, setCourses] = useState(false);
 
-    const panes = [
-        {
-            menuItem: 'Assigned Course(s) Progress',
-            render: () => <Tab.Pane attached={false}>Tab 1 Content</Tab.Pane>,
-        },
-        {
-            menuItem: 'All Enrolled Course(s) Progress',
-            render: () => <Tab.Pane attached={false}>Tab 2 Content</Tab.Pane>,
-        },
-    ];
+    const getAttachedCourses = () => {
+        return new Promise((resolve) => {
+            apiFetch({
+                path: `/easyteachlms/v3/cohort/get-courses/?groupId=${groupId}`,
+            }).then((r) => {
+                console.log(r);
+                resolve(r);
+            });
+        });
+    };
+
+    const getStudentInfo = () => {
+        return new Promise((resolve) => {
+            getAttachedCourses().then((courseIds) => {
+                console.log(courseIds);
+                apiFetch({
+                    path: `/easyteachlms/v3/student/get/?userId=${userId}`,
+                }).then((r) => {
+                    console.log('getStudentInfo', r);
+                    const toReturn = r.courses.filter((c) => {
+                        return Object.values(courseIds).includes(c.id);
+                    });
+                    resolve(toReturn);
+                });
+            });
+        });
+    };
+
+    useEffect(() => {
+        // getStudentInfo();
+    }, [userId]);
 
     return (
         <Fragment>
@@ -40,7 +66,10 @@ const ViewStudentProgressButton = ({ userId, groupId }) => {
                     <Button
                         as="div"
                         onClick={() => {
-                            setOpen(!open);
+                            getStudentInfo().then((c) => {
+                                setCourses(c);
+                                setOpen(!open);
+                            });
                         }}
                     >
                         Manage Student
@@ -51,12 +80,23 @@ const ViewStudentProgressButton = ({ userId, groupId }) => {
                 <Modal.Content>
                     <Modal.Description>
                         <p>
-                            A table displaying this students progress for all
-                            enrolled and all assigned courses will appear here.
-                            Charts to come later.
+                            View this {`student's`} progress across all group
+                            courses.
                         </p>
                     </Modal.Description>
-                    <Tab menu={{ secondary: true }} panes={panes} />
+                    <List>
+                        {false !== courses &&
+                            courses.map((e) => {
+                                return (
+                                    <List.Item>
+                                        <List.Header>{e.title}</List.Header>
+                                        <CourseTable
+                                            tableData={e.outline.flat}
+                                        />
+                                    </List.Item>
+                                );
+                            })}
+                    </List>
                 </Modal.Content>
                 <Modal.Actions>
                     <Button

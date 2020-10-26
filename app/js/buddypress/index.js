@@ -19,11 +19,12 @@ const initStudentProgressButton = () => {
         const targets = document.querySelectorAll(
             '.view-student-progress-button',
         );
-        console.log(targets);
 
         targets.forEach((target) => {
+            console.log(target);
             const props = {
                 userId: target.getAttribute('data-user-id'),
+                groupId: target.getAttribute('data-group-id'),
             };
             render(<ViewStudentProgressButton {...props} />, target);
         });

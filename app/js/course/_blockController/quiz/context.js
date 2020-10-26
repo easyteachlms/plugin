@@ -82,7 +82,7 @@ const useProvideQuiz = (uuid) => {
         const computePoints = (answersGiven, correctAnswer, points) => {
             let pointsAwarded = 0;
             const pointsPerAnswer = points / correctAnswer.length;
-
+            console.log('computePoints', answersGiven);
             answersGiven.forEach((answerIndex) => {
                 if (correctAnswer.includes(answerIndex)) {
                     pointsAwarded += pointsPerAnswer;

@@ -98,10 +98,26 @@ class Data_Model {
 	}
 
 	public function is_complete( $uuid, $course_id, $user_id, $site_id ) {
-		$user_progress = get_user_meta( $user_id, "_course_{$course_id}_{$site_id}", true );
+
+		switch_to_blog( $site_id );
+		$meta_key      = "_course_{$course_id}_{$site_id}";
+		$user_progress = \get_user_meta( $user_id, $meta_key, true );
+		restore_current_blog();
+
+		error_log( 'is_complete()' );
+		error_log( $meta_key );
+		error_log( $uuid );
+		error_log( $course_id );
+		error_log( $user_id );
+		error_log( $site_id );
+		error_log( gettype( $user_progress ) );
 		if ( is_array( $user_progress ) && array_key_exists( 'completed', $user_progress ) && in_array( $uuid, $user_progress['completed'] ) ) {
+			error_log( 'true' );
+			error_log( '----' );
 			return true;
 		} else {
+			error_log( 'false' );
+			error_log( '----' );
 			return false;
 		}
 	}
@@ -120,6 +136,7 @@ class Data_Model {
 	 * @return false|array
 	 */
 	public function get_course_structure( int $course_id = 0, $user_id = false, $site_id = false ) {
+		error_log( "get_course_structure({$course_id})" );
 		$post = get_post( $course_id );
 		if ( false === $post ) {
 			return false;
@@ -162,6 +179,8 @@ class Data_Model {
 
 	protected function parse_course( $course, $course_id, $user_id, $site_id ) {
 
+		error_log( 'parse_course()' );
+
 		if ( true !== $this->has_innerBlocks( $course ) ) {
 			return new WP_Error( 'parse-error', __( 'API could not find any innerblocks', 'easyteachlms' ) );
 		}
@@ -191,6 +210,7 @@ class Data_Model {
 						if ( 'easyteachlms/quiz' === $block['blockName'] ) {
 							$block_parsed = $this->parse_quiz( $block, $course_id, $user_id, $site_id );
 							// If this has a quiz then we don't want to allow completion until the quiz is finished.
+							error_log( 'conditionsMet?' );
 							if ( true === $this->is_complete( $uuid, $course_id, $user_id, $site_id ) ) {
 								$block_parsed['conditionsMet'] = true;
 							}
@@ -203,6 +223,7 @@ class Data_Model {
 						$block_parsed['locked']      = $lesson_locked;
 						$outline['total']            = $outline['total'] + 1;
 						// Check for completion status.
+						error_log( 'uuidsCompleted?' );
 						if ( true === $this->is_complete( $uuid, $course_id, $user_id, $site_id ) ) {
 							$outline['completed'] = $outline['completed'] + 1;
 						}
@@ -254,6 +275,7 @@ class Data_Model {
 				$data['locked'] = date( 'Y-m-d H:i:s', strtotime( $block['attrs']['schedule'] ) );
 			}
 		}
+		error_log( "parse({$block['attrs']['title']})" );
 		if ( true === $this->is_complete( $uuid, $course_id, $user_id, $site_id ) ) {
 			$data['completed'] = true;
 		}
@@ -283,10 +305,6 @@ class Data_Model {
 	public function parse_quiz( $quiz, $course_id, $user_id, $site_id ) {
 		$return = array();
 		$uuid   = $quiz['attrs']['uuid'];
-		error_log( 'parse_quiz' );
-		error_log(
-			print_r( $quiz['attrs'], true )
-		);
 
 		$title = $quiz['attrs']['title'];
 		if ( empty( $title ) ) {
@@ -361,7 +379,7 @@ class Data_Model {
 				'points'              => $args['points'],
 			);
 		}
-
+		error_log( 'parse_quiz()' );
 		if ( true === $this->is_complete( $uuid, $course_id, $user_id, $site_id ) ) {
 			$return['completed'] = true;
 		}
