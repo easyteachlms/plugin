@@ -14,7 +14,7 @@ const settings = [
             align: false,
         },
         attributes: {
-            id: {
+            postId: {
                 type: 'integer',
                 default: 0,
             },
@@ -23,6 +23,10 @@ const settings = [
                 default: '',
             },
             title: {
+                type: 'string',
+                default: '',
+            },
+            schedule: {
                 type: 'string',
                 default: '',
             },

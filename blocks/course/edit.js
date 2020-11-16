@@ -3,8 +3,7 @@ import { Fragment } from '@wordpress/element';
 import { useSelect } from '@wordpress/data';
 import { useDidMount } from 'beautiful-react-hooks';
 
-import './edit.scss';
-
+import './style.scss';
 import Welcome from './welcome';
 import Controls from './controls';
 
@@ -38,22 +37,32 @@ const edit = ({ attributes, className, clientId, name, setAttributes }) => {
     if (hasInnerBlocks) {
         return (
             <Fragment>
-                <Controls setAttributes={setAttributes}/>
+                <Controls
+                    clientId={clientId}
+                    attributes={attributes}
+                    setAttributes={setAttributes}
+                />
                 <div className={className}>
-                    <InnerBlocks allowedBlocks={ALLOWED_BLOCKS} renderAppender={
-                        ()=><InnerBlocks.ButtonBlockAppender />
-                    } />
+                    <InnerBlocks
+                        allowedBlocks={ALLOWED_BLOCKS}
+                        renderAppender={() => (
+                            <InnerBlocks.ButtonBlockAppender
+                                clientId={clientId}
+                            />
+                        )}
+                    />
                 </div>
             </Fragment>
         );
     }
 
     return (
-        <Welcome setAttributes={setAttributes}>
+        <Welcome clientId={clientId} setAttributes={setAttributes}>
             <div className={className}>
-                <InnerBlocks allowedBlocks={ALLOWED_BLOCKS} renderAppender={
-                    ()=><InnerBlocks.ButtonBlockAppender />
-                } />
+                <InnerBlocks
+                    allowedBlocks={ALLOWED_BLOCKS}
+                    renderAppender={() => <InnerBlocks.ButtonBlockAppender />}
+                />
             </div>
         </Welcome>
     );

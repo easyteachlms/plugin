@@ -4,7 +4,7 @@ namespace EasyTeachLMS;
 require_once EASYTEACHLMS_VENDOR_PATH . '/autoload.php';
 use WPackio\Enqueue;
 class Admin {
-	protected $js_deps       = array( 'react', 'react-dom', 'wp-element', 'wp-polyfill', 'wp-i18n', 'wp-components', 'wp-api-fetch' );
+	protected $js_deps       = array( 'react', 'react-dom', 'wp-element', 'wp-polyfill', 'wp-i18n', 'wp-components', 'wp-api-fetch', 'wp-mediaelement' );
 	public $default_settings = array(
 		'openEnrollment' => true,
 	);
@@ -16,16 +16,16 @@ class Admin {
 			add_action( 'admin_menu', array( $this, 'register_admin_menu' ) );
 			add_action( 'admin_enqueue_scripts', array( $this, 'admin_page_enqueue' ) );
 			add_action( 'rest_api_init', array( $this, 'rest_routes' ) );
-			add_action( 'admin_footer', array( $this, 'settings_json' ) );
-			add_action( 'wp_footer', array( $this, 'settings_json' ) );
 		}
 	}
+
 	public function admin_page_enqueue( $hook ) {
 		if ( $hook != 'easyteachlms_page_easyteach-lms-settings' ) {
 			return;
 		}
-		$enqueue = new Enqueue( 'easyTeachLMS', 'dist', '1.0.0', 'plugin', plugin_dir_path( __FILE__ ) );
-		$enqueue->enqueue(
+		$enqueue  = new Enqueue( 'easyTeachLMS', 'dist', '1.0.0', 'plugin', plugin_dir_path( __FILE__ ) );
+		$settings = wp_json_encode( $this->get_settings() );
+		$assets   = $enqueue->enqueue(
 			'admin',
 			'settings',
 			array(
@@ -37,6 +37,9 @@ class Admin {
 				'media'     => 'all',
 			)
 		);
+
+		$entry_point = array_pop( $assets['js'] );
+		wp_localize_script( $entry_point['handle'], 'easyTeachSettings', $settings );
 	}
 
 	public function admin_page() {
@@ -63,7 +66,7 @@ class Admin {
 		add_submenu_page(
 			'easyteach-lms',
 			'EasyTeach LMS Settings',
-			'Settings',
+			'Settings & Help',
 			'edit_others_posts',
 			'easyteach-lms-settings',
 			array( $this, 'admin_page' )
@@ -109,10 +112,6 @@ class Admin {
 			'_easyteachlms_settings',
 			$this->default_settings
 		);
-		error_log( 'update_setting' );
-		error_log( print_r( $settings, true ) );
-		error_log( print_r( $setting, true ) );
-		error_log( print_r( $value, true ) );
 		if ( ! array_key_exists( $setting, $settings ) ) {
 			return false;
 		}
@@ -136,11 +135,6 @@ class Admin {
 			'_easyteachlms_settings',
 			$this->default_settings
 		);
-	}
-
-	public function settings_json() {
-		$settings = wp_json_encode( $this->get_settings() );
-		echo "<script>const easyTeachSettings = {$settings}</script>";
 	}
 }
 

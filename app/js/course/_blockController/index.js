@@ -9,9 +9,9 @@ import { select } from '@wordpress/data';
 import * as moment from 'moment';
 
 // Load Our Blocks
-import Certificate from './certificate'
+import Certificate from './certificate';
 import General from './general';
-import Topic from './topic';
+import LessonContent from './lesson-content';
 import Quiz from './quiz';
 
 // Maps Course post_content to EasyTeach LMS block handlers.
@@ -34,12 +34,12 @@ const blockController = (children, data, style, fn) => {
             (block) => block.uuid === uuid,
         );
 
+        console.log('SCHEDULE?');
+        console.log(blockData);
+
         let parentTitle = false;
-        let hasQuiz = false;
-        const parentUuid = false;
         if (blockData.length) {
             parentTitle = blockData[0].parentTitle;
-            hasQuiz = blockData[0].hasQuiz;
         }
 
         // Class Name is so important for us we need to double check it. All of our logic is based on class names.
@@ -48,22 +48,27 @@ const blockController = (children, data, style, fn) => {
             return child;
         }
 
-        if (className.includes('wp-block-easyteachlms-topic')) {
+        if (className.includes('wp-block-easyteachlms-lesson-content')) {
             return (
-                <Topic
-                    title={child.props['data-title']}
-                    className={child.props.className}
+                <LessonContent
                     uuid={uuid}
+                    title={child.props['data-title']}
                     parentTitle={parentTitle}
-                    hasQuiz={hasQuiz}
+                    className={child.props.className}
                 >
                     {child}
-                </Topic>
+                </LessonContent>
             );
         }
 
         if (className.includes('wp-block-easyteachlms-quiz')) {
-            return <Quiz uuid={uuid} />;
+            return (
+                <Quiz
+                    uuid={uuid}
+                    title={child.props['data-title']}
+                    parentTitle={parentTitle}
+                />
+            );
         }
 
         if (className.includes('wp-block-easyteachlms-certificate-date')) {
@@ -77,7 +82,10 @@ const blockController = (children, data, style, fn) => {
             return <Certificate>{child}</Certificate>;
         }
 
-        if (className.includes('wp-block-embed-youtube')) {
+        if (
+            className.includes('wp-block-embed-youtube') ||
+            className.includes('wp-block-embed-vimeo')
+        ) {
             return (
                 <div>
                     <Fragment>

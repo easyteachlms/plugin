@@ -1,43 +1,57 @@
-import { Fragment, useState } from '@wordpress/element';
-import { Dropdown } from 'semantic-ui-react';
+import { Fragment, useEffect, useState } from '@wordpress/element';
+import PostsMultiSelectField from './post-select-field';
 
 import './style.scss';
 
-const AddCoursesField = ({inputField}) => {
-    console.log(inputField);
-    
+const { api } = window.wp;
+
+const AddCoursesField = ({ inputField }) => {
     const courseIds = inputField.value.split(',').map(Number);
-    console.log("Values we already have");
-    console.log(courseIds);
+    const [defaultValues, setDefaultValues] = useState([]);
 
-    // Get input field, a comma seperated list, and then add it to the state.
-    const options = [
-        { text: 'Testing Final Save Mechanism', value: 409 },
-        { text: 'Getting Started', value: 341 },
-    ];
+    const hocOnChange = (selectedOptions) => {
+        console.log('hocOnChange?', selectedOptions);
+        const values = selectedOptions.map((a) => a.value);
+        console.log(values);
+        inputField.value = values.join();
+    };
 
-    const[courses, setCourses] = useState(options);
-    const[loading, setLoadingState] = useState(false);
+    const fetchDefaultValues = () => {
+        const collection = new api.collections.Course();
+        collection.fetch({ data: { include: courseIds } }).then((matched) => {
+            const available = [];
+            matched.forEach((p) => {
+                available.push({
+                    value: p.id,
+                    label: p.title.rendered,
+                });
+            });
+            setDefaultValues(available);
+        });
+        // We should have an option for if nothing is present, an initial state w no data ever.
+    };
 
-    const onChange = (e,d) => {
-        const {value} = d;
-        inputField.value = value.join();
-    }
-    return(
+    useEffect(() => {
+        fetchDefaultValues();
+    }, [courseIds]);
+
+    return (
         <Fragment>
-            <Dropdown
-                placeholder='Course'
-                fluid
-                multiple
-                search
-                selection
-                loading={loading}
-                options={courses}
-                onChange={onChange}
-                // value={courseIds}
-            />
+            {0 !== defaultValues.length && (
+                <PostsMultiSelectField
+                    defaultOptions={defaultValues}
+                    postType="Course"
+                    hocOnChange={hocOnChange}
+                />
+            )}
+            {0 === defaultValues.length && (
+                <PostsMultiSelectField
+                    postType="Course"
+                    hocOnChange={hocOnChange}
+                />
+            )}
         </Fragment>
     );
-}
+};
 
 export default AddCoursesField;

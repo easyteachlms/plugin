@@ -26,30 +26,100 @@ if ( class_exists( 'BP_Group_Extension' ) ) {
 				),
 			);
 			parent::init( $args );
+		}
 
-			add_action(
-				'init',
-				function() {
-					error_log( 'BP LMS INIT' );
-				}
+		public function register_rest_endpoints() {
+			register_rest_route(
+				'easyteachlms/v3',
+				'/cohort/get-courses',
+				array(
+					'methods'             => 'GET',
+					'callback'            => array( $this, 'get_attached_courses_restfully' ),
+					'args'                => array(
+						'groupId' => array(
+							'validate_callback' => function( $param, $request, $key ) {
+								return is_string( $param );
+							},
+						),
+					),
+					'permission_callback' => function () {
+						return current_user_can( 'read' );
+					},
+				)
 			);
+		}
+
+		public function register_assets() {
+			$enqueue = new Enqueue( 'easyTeachLMS', 'dist', '1.0.0', 'plugin', EASYTEACHLMS_FILE );
+			if ( bp_is_single_item() && bp_is_groups_component() && ( bp_is_current_action( 'members' ) || bp_is_current_action( 'easyteach-courses' ) ) ) {
+				$enqueue->enqueue(
+					'app',
+					'buddyPress',
+					array(
+						'js'        => true,
+						'css'       => false,
+						'js_dep'    => array_merge( $this->js_deps, array( 'bp-api-request' ) ),
+						'css_dep'   => array( 'semantic-ui' ),
+						'in_footer' => true,
+						'media'     => 'all',
+					)
+				);
+				wp_enqueue_style( 'semantic-ui' );
+			}
+		}
+
+		public function group_members_overview() {
+			$group         = groups_get_current_group();
+			$group_id      = $group->id;
+			$total_members = groups_get_total_member_count( $group_id );
+			?>
+			<div class="ui piled segment">
+				<h4 class="ui header">Group Overview</h4>
+				<div style="display: flex; flex-direction: row">
+					<div>
+						<div class="ui statistics">
+							<div class="statistic">
+								<div class="value">
+								?
+								</div>
+								<div class="label">
+								Members
+								</div>
+							</div>
+							<div class="statistic">
+								<div class="value">
+									&nbsp;
+								</div>
+								<div class="label">
+								</div>
+							</div>
+						</div>
+					</div>
+					<div style="display: flex; flex-grow: 1; align-items: flex-end; justify-content: flex-end;">
+						<div id="js-react-view-all-courses-progress" class="ui primary button">View Group Progress</div>
+					</div>
+				</div>
+			</div>
+			<?php // vdump( $group ); ?>
+			<?php
 		}
 
 		public function display( $group_id = null ) {
 			$group_id         = bp_get_group_id();
 			$attached_courses = groups_get_groupmeta( $group_id, '_attached_courses' );
+			$attached_courses = apply_filters( 'elms_group_courses', $attached_courses, $group_id );
 			$user_id          = 1;
 			// Go fetch enrolled courses for this user.
-			echo 'Group ID:' . $group_id;
-			print_r( $attached_courses );
-			echo 'Courses to come here';
+			echo '<div class="ui cards">';
+			foreach ( $attached_courses as $course_id ) {
+				echo elms_course_card( $course_id );
+			}
+			echo '</div>';
 		}
 
 		public function settings_screen( $group_id = null ) {
 			$attached_courses = groups_get_groupmeta( $group_id, '_attached_courses' );
-			error_log( 'settings screen' );
-			error_log( print_r( $attached_courses, true ) );
-			$value = null;
+			$value            = null;
 			if ( ! empty( $attached_courses ) ) {
 				$value = implode( ',', $attached_courses );
 			}
@@ -60,8 +130,8 @@ if ( class_exists( 'BP_Group_Extension' ) ) {
 				array(
 					'js'        => true,
 					'css'       => true,
-					'js_dep'    => $this->js_deps,
-					'css_dep'   => array( 'semantic-ui' ),
+					'js_dep'    => array_merge( $this->js_deps, array( 'wp-components', 'wp-api', 'wp-escape-html' ) ),
+					'css_dep'   => array( 'wp-components' ),
 					'in_footer' => true,
 					'media'     => 'all',
 				)
@@ -222,6 +292,44 @@ if ( class_exists( 'BP_Group_Extension' ) ) {
 			}
 		}
 
+		public function get_attached_courses_restfully( \WP_REST_Request $request ) {
+			$group_id         = (int) $request->get_param( 'groupId' );
+			$attached_courses = groups_get_groupmeta( $group_id, '_attached_courses' );
+			error_log( 'get_attached_courses_restfully()' );
+			error_log( $group_id );
+			error_log( print_r( $attached_courses, true ) );
+			$attached_courses = (array) apply_filters( 'elms_group_courses', $attached_courses, $group_id );
+			return $attached_courses;
+		}
+
+		public function group_member_item( $buttons, $user_id, $type ) {
+			if ( user_can( get_current_user_id(), 'edit' ) ) {
+				global $bp;
+				$user     = get_user_by( 'ID', $user_id );
+				$group_id = groups_get_id( $bp->unfiltered_uri[1] );
+				$buttons[ 'view-student-' . $user->user_nicename ] = array(
+					'id'                => 'view-student-' . $user->user_nicename,
+					'position'          => 15 + $user_id,
+					'component'         => 'groups',
+					'must_be_logged_in' => true,
+					'block_self'        => false,
+					'parent_element'    => 'div',
+					'button_element'    => 'div',
+					'link_text'         => '&nbsp;',
+					'parent_attr'       => array(
+						'class' => 'button-parent',
+					),
+					'button_attr'       => array(
+						'href'          => '?userId=' . $user_id,
+						'data-user-id'  => $user_id,
+						'data-group-id' => $group_id,
+						'class'         => 'view-student-progress-button',
+					),
+				);
+			}
+			return $buttons;
+		}
+
 		/**
 		 * Gets the UUID's of all lessons, files, quizzes?? in a course by pasrsing the data model.
 		 *
@@ -232,7 +340,6 @@ if ( class_exists( 'BP_Group_Extension' ) ) {
 
 		}
 
-
 		public function update_lessons() {
 
 		}
@@ -242,7 +349,11 @@ if ( class_exists( 'BP_Group_Extension' ) ) {
 	bp_register_group_extension( 'EasyTeachLMS\GroupCourses' );
 
 	$group_courses = new GroupCourses();
+	add_action( 'wp_enqueue_scripts', array( $group_courses, 'register_assets' ) );
 	add_action( 'groups_membership_accepted', array( $group_courses, 'enroll' ), 10, 2 );
 	add_action( 'groups_accept_invite', array( $group_courses, 'enroll' ), 10, 2 );
 	add_action( 'bp_groups_member_after_delete', array( $group_courses, 'unenroll' ), 10, 2 );
+	add_filter( 'bp_nouveau_get_members_buttons', array( $group_courses, 'group_member_item' ), 10, 3 );
+	add_action( 'bp_before_group_members_content', array( $group_courses, 'group_members_overview' ) );
+	add_action( 'rest_api_init', array( $group_courses, 'register_rest_endpoints' ) );
 }

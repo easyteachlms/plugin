@@ -1,32 +1,48 @@
 import domReady from '@wordpress/dom-ready';
-import { render, useState } from '@wordpress/element';
-import apiFetch from '@wordpress/api-fetch';
-import {
-    Card,
-    CardBody,
-    CardDivider,
-    CardFooter,
-    CardHeader,
-    CardMedia,
-} from '@wordpress/components';
+import { render } from '@wordpress/element';
+import { Card, CardBody, TabPanel } from '@wordpress/components';
 
 import './style.scss';
 
-import WooCommerceSettings from './woocommerce';
-import Tutorial from './tutorial';
+import Welcome from './welcome';
 
 const Settings = () => {
     return (
-        <div>
+        <div id="easyteach-settings-wrapper">
             <h1>EasyTeach LMS Settings</h1>
-            <div id="settings-grid">
-                <div>
-                    <WooCommerceSettings />
-                </div>
-                <div>
-                    <Tutorial />
-                </div>
-            </div>
+            <Card>
+                <TabPanel
+                    initialTabName="welcome"
+                    tabs={[
+                        {
+                            name: 'welcome',
+                            title: 'Welcome',
+                        },
+                        {
+                            name: 'license',
+                            title: 'License Management and Updates',
+                        },
+                    ]}
+                >
+                    {(tab) => {
+                        if ('license' === tab.name) {
+                            return (
+                                <CardBody>
+                                    <p>
+                                        Automatic upgrades through license
+                                        activation coming at end of beta.
+                                    </p>
+                                </CardBody>
+                            );
+                        }
+                        return (
+                            <CardBody>
+                                <Welcome />
+                            </CardBody>
+                        );
+                    }}
+                </TabPanel>
+            </Card>
         </div>
     );
 };

@@ -21,18 +21,45 @@ const selectors = {
     getCertificate(state) {
         return state.certificate;
     },
+    getQuestions(state, uuid) {
+        const { outline } = state.data;
+        const index = outline.flat.findIndex(
+            (obj) => 'quiz' === obj.type && obj.uuid === uuid,
+        );
+        if (outline.flat[index] && outline.flat[index].questions) {
+            return outline.flat[index].questions;
+        }
+        return false;
+    },
+    getPointsRequiredToPass(state, uuid) {
+        const { outline } = state.data;
+        const index = outline.flat.findIndex(
+            (obj) => 'quiz' === obj.type && obj.uuid === uuid,
+        );
+        if (outline.flat[index] && outline.flat[index].pointsRequiredToPass) {
+            return outline.flat[index].pointsRequiredToPass;
+        }
+        return false;
+    },
+    hasUserTakenQuiz(state, uuid) {
+        const { outline } = state.data;
+        const index = outline.flat.findIndex(
+            (obj) => 'quiz' === obj.type && obj.uuid === uuid,
+        );
+        if (outline.flat[index] && outline.flat[index].userScore) {
+            return outline.flat[index].userScore;
+        }
+        return false;
+    },
     getQuiz(state, uuid) {
         const { outline } = state.data;
         const index = outline.flat.findIndex(
-            (obj) =>
-                obj.hasQuiz &&
-                obj.hasOwnProperty('quiz') &&
-                obj.quiz.uuid === uuid,
+            (obj) => 'quiz' === obj.type && obj.uuid === uuid,
         );
         console.log('getQuiz');
         console.log(index);
-        if (outline.flat[index].hasOwnProperty('quiz')) {
-            return outline.flat[index].quiz;
+        if (outline.flat[index]) {
+            return outline.flat[index];
         }
         return false;
     },
@@ -48,8 +75,8 @@ const selectors = {
         console.log('getQuizzes');
         outline.flat.forEach((obj) => {
             console.log(obj);
-            if (true === obj.hasQuiz) {
-                r.push(obj.quiz);
+            if ('quiz' === obj.type) {
+                r.push(obj);
             }
         });
         return r;
@@ -69,6 +96,17 @@ const selectors = {
         }
         const { completed } = state.data.outline;
         return completed;
+    },
+    isLocked(state, uuid) {
+        if (
+            !state.data.hasOwnProperty('outline') ||
+            !state.data.outline.hasOwnProperty('flat')
+        ) {
+            return false;
+        }
+        const { flat } = state.data.outline;
+        const index = flat.findIndex((obj) => obj.uuid === uuid);
+        return flat[index].locked;
     },
     // Check the state of a course element or user, ask in form of a grammatically correct simple question.
     isComplete(state, uuid) {

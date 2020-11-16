@@ -7,7 +7,7 @@ class Course {
 	protected $post_type        = 'course';
 	public $assets              = array();
 	protected $frontend_js_deps = array( 'react', 'react-dom', 'wp-element', 'wp-dom-ready', 'wp-components', 'wp-polyfill', 'wp-i18n', 'wp-api', 'wp-api-fetch', 'wp-data', 'wp-url', 'wp-autop' );
-	protected $block_js_deps    = array( 'react', 'react-dom', 'wp-element', 'wp-components', 'wp-polyfill', 'wp-i18n', 'wp-api' );
+	protected $block_js_deps    = array( 'react', 'react-dom', 'wp-element', 'wp-components', 'wp-polyfill', 'wp-i18n', 'wp-api', 'wp-mediaelement' );
 
 	public function __construct( $init = false ) {
 		if ( true === $init ) {
@@ -156,17 +156,32 @@ class Course {
 		);
 	}
 
+	public function get_settings() {
+		return get_option(
+			'_easyteachlms_settings',
+			array(
+				'openEnrollment' => true,
+			)
+		);
+	}
+
 	public function enqueue_course_frontend() {
 		if ( ! is_singular( 'course' ) ) {
 			return;
 		}
+		$settings = wp_json_encode( $this->get_settings() );
+		wp_localize_script(
+			$this->assets['frontend']['course']['script'],
+			'easyTeachSettings',
+			$settings,
+		);
 		if ( 0 !== $user_data = wp_get_current_user() ) {
 			wp_localize_script(
 				$this->assets['frontend']['course']['script'],
 				'userData',
 				array(
 					'id'   => $user_data->ID,
-					'name' => $user_data->data->user_nicename,
+					'name' => $user_data->display_name,
 				)
 			);
 		}
@@ -226,7 +241,7 @@ class Course {
 				return $excerpt;
 			}
 			$course_id = get_the_ID();
-			$enrolled  = $this->is_enrolled( $course_id );
+			$enrolled  = $this->is_enrolled( $course_id ) ? 'true' : 'false';
 			// Check if already enrolled and display that here.
 			ob_start();
 			?>
@@ -294,7 +309,7 @@ class Course {
 		$user_id = get_current_user_id();
 		// All editors get access to all courses.
 		if ( user_can( $user_id, 'edit_others_posts' ) ) {
-			return true;
+			// return true;
 		}
 		$courses = get_user_meta( $user_id, '_enrolled_courses', true );
 

@@ -2,9 +2,9 @@
 namespace EasyTeachLMS;
 
 use WP_REST_Request;
+use WP_Error;
 /**
  * Course structure should be added as post meta to the course.
- * Whenever a topic is added to a lesson the topic should have post meta that should list the post id's of the lessons where it can be found.
  * Whenever a lesson is added to a course the lesson should have post meta that lists the ids of the courses where it can be found.
  */
 class Data_Model {
@@ -38,7 +38,8 @@ class Data_Model {
 					),
 				),
 				'permission_callback' => function () {
-					return current_user_can( 'read' );
+					// return current_user_can( 'read' );
+					return true;
 				},
 			)
 		);
@@ -82,7 +83,7 @@ class Data_Model {
 	 */
 	public function is_block( $block_name, $block ) {
 		if ( is_array( $block_name ) ) {
-			if ( in_array( $block['blockName'], $block_name ) ) {
+			if ( in_array( $block['blockName'], $block_name, true ) ) {
 				return true;
 			} else {
 				return false;
@@ -97,16 +98,31 @@ class Data_Model {
 	}
 
 	public function is_complete( $uuid, $course_id, $user_id, $site_id ) {
-		$user_progress = get_user_meta( $user_id, "_course_{$course_id}_{$site_id}", true );
+
+		switch_to_blog( $site_id );
+		$meta_key      = "_course_{$course_id}_{$site_id}";
+		$user_progress = \get_user_meta( $user_id, $meta_key, true );
+		restore_current_blog();
+
+		error_log( 'is_complete()' );
+		error_log( $meta_key );
+		error_log( $uuid );
+		error_log( $course_id );
+		error_log( $user_id );
+		error_log( $site_id );
+		error_log( gettype( $user_progress ) );
 		if ( is_array( $user_progress ) && array_key_exists( 'completed', $user_progress ) && in_array( $uuid, $user_progress['completed'] ) ) {
+			error_log( 'true' );
+			error_log( '----' );
 			return true;
 		} else {
+			error_log( 'false' );
+			error_log( '----' );
 			return false;
 		}
 	}
 
 	public function get_course_structure_restfully( \WP_REST_Request $request ) {
-		error_log( 'get_course_structure_restfully' );
 		return $this->get_course_structure(
 			$request->get_param( 'courseId' ),
 			$request->get_param( 'userId' ),
@@ -120,7 +136,7 @@ class Data_Model {
 	 * @return false|array
 	 */
 	public function get_course_structure( int $course_id = 0, $user_id = false, $site_id = false ) {
-		error_log( "get_course_structure({$course_id}, {$user_id}, {$site_id})" );
+		error_log( "get_course_structure({$course_id})" );
 		$post = get_post( $course_id );
 		if ( false === $post ) {
 			return false;
@@ -128,13 +144,13 @@ class Data_Model {
 
 		$parsed = parse_blocks( $post->post_content );
 
-		error_log( print_r( $parsed, true ) );
-
 		if ( empty( $parsed ) ) {
-			return false;
+			return new WP_Error( 'parse-error', __( 'API could not parse course', 'easyteachlms' ) );
 		}
 
-		$outline = $this->parse_course( $parsed, $course_id, $user_id, $site_id );
+		$course  = $this->recursively_search_for_blocks( $parsed, 'blockName', 'easyteachlms/course' );
+		$course  = array_pop( $course );
+		$outline = $this->parse_course( $course, $course_id, $user_id, $site_id );
 
 		$files = $this->recursively_search_for_blocks( $parsed, 'blockName', 'core/file' );
 		$files = $this->parse_files( $files );
@@ -143,62 +159,30 @@ class Data_Model {
 			'id'          => $post->ID,
 			'title'       => $post->post_title,
 			'excerpt'     => $post->post_excerpt,
-			'description' => get_the_excerpt( $course_id ),
+			'description' => null,
 			'points'      => 'NULL', // Gather up all the quiz points as total points here??
 			'outline'     => $outline,
 			'files'       => $files,
 			'enrolled'    => false,
 		);
 
-		error_log( print_r( $structure, true ) );
+		if ( array_key_exists( 'description', $course['attrs'] ) ) {
+			$structure['description'] = $course['attrs']['description'];
+		}
+
+		if ( empty( $structure['excerpt'] ) && ! empty( $structure['description'] ) ) {
+			$structure['excerpt'] = $course['attrs']['description'];
+		}
 
 		return apply_filters( 'easyteachlms_course_structure', $structure, $course_id );
 	}
 
-	/**
-	 * Parses internal block structure and extracts common elements like title and ID
-	 *
-	 * @param mixed $block_name
-	 * @param mixed $block
-	 * @param mixed $key
-	 * @param mixed $outline
-	 * @return void
-	 */
-	protected function parse( $block_name, $block, $course_id, $user_id, $site_id ) {
-		if ( true !== $this->is_block( $block_name, $block ) ) {
-			return;
-		}
-		if ( is_array( $block_name ) ) {
-			$block_name = $block_name[ array_search( $block['blockName'], $block_name ) ];
-		}
+	protected function parse_course( $course, $course_id, $user_id, $site_id ) {
 
-		$uuid = $block['attrs']['uuid'];
-		$data = array(
-			'parentTitle'   => false,
-			'parentUuid'    => false,
-			'title'         => $block['attrs']['title'],
-			'attachedId'    => $block['attrs']['id'],
-			'uuid'          => $uuid,
-			'type'          => $this->get_block_name( ( $block['blockName'] ) ),
-			'hasQuiz'       => false,
-			'conditionsMet' => true,
-			'active'        => false,
-			'completed'     => false,
-		);
-		if ( true === $this->is_complete( $uuid, $course_id, $user_id, $site_id ) ) {
-			$data['completed'] = true;
-		}
-		return $data;
-	}
-
-	protected function parse_course( $blocks, $course_id, $user_id, $site_id ) {
-		$course = $this->recursively_search_for_blocks( $blocks, 'blockName', 'easyteachlms/course' );
-		error_log( 'parse_course' );
-		error_log( print_r( $course, true ) );
-		$course = array_pop( $course );
+		error_log( 'parse_course()' );
 
 		if ( true !== $this->has_innerBlocks( $course ) ) {
-			return false;
+			return new WP_Error( 'parse-error', __( 'API could not find any innerblocks', 'easyteachlms' ) );
 		}
 
 		$outline = array(
@@ -216,30 +200,32 @@ class Data_Model {
 				$outline['structured'][ $lesson_uuid ] = $lesson_parsed;
 				$outline['flat'][]                     = $lesson_parsed;
 
+				$lesson_locked = $lesson_parsed['locked'];
+
 				if ( true === $this->has_innerBlocks( $block ) ) {
 					foreach ( $block['innerBlocks'] as $key => $block ) {
 
-						$uuid                        = $block['attrs']['uuid'];
-						$block_parsed                = $this->parse( 'easyteachlms/topic', $block, $course_id, $user_id, $site_id );
+						$uuid = $block['attrs']['uuid'];
+
+						if ( 'easyteachlms/quiz' === $block['blockName'] ) {
+							$block_parsed = $this->parse_quiz( $block, $course_id, $user_id, $site_id );
+							// If this has a quiz then we don't want to allow completion until the quiz is finished.
+							error_log( 'conditionsMet?' );
+							if ( true === $this->is_complete( $uuid, $course_id, $user_id, $site_id ) ) {
+								$block_parsed['conditionsMet'] = true;
+							}
+						} else {
+							$block_parsed = $this->parse( 'easyteachlms/lesson-content', $block, $course_id, $user_id, $site_id );
+						}
+
 						$block_parsed['parentTitle'] = $lesson_title;
 						$block_parsed['parentUuid']  = $lesson_uuid;
+						$block_parsed['locked']      = $lesson_locked;
 						$outline['total']            = $outline['total'] + 1;
 						// Check for completion status.
+						error_log( 'uuidsCompleted?' );
 						if ( true === $this->is_complete( $uuid, $course_id, $user_id, $site_id ) ) {
 							$outline['completed'] = $outline['completed'] + 1;
-						}
-						// Check for quiz.
-						if ( true === $this->has_innerBlocks( $block ) ) {
-							foreach ( $block['innerBlocks'] as $key => $block ) {
-								if ( 'easyteachlms/quiz' === $block['blockName'] ) {
-									$block_parsed['hasQuiz'] = true;
-									$block_parsed['quiz']    = $this->parse_quiz( $block, $uuid, $course_id, $user_id, $site_id );
-									// If this has a quiz then we don't want to allow completion until the quiz is finished.
-									if ( true !== $this->is_complete( $uuid, $course_id, $user_id, $site_id ) ) {
-										$block_parsed['conditionsMet'] = false;
-									}
-								}
-							}
 						}
 						$outline['flat'][] = $block_parsed;
 						$outline['structured'][ $lesson_uuid ]['outline'][ $uuid ] = $block_parsed;
@@ -247,10 +233,56 @@ class Data_Model {
 				}
 			}
 		}
+
 		return $outline;
 	}
 
-	protected function parse_files( $blocks ) {
+	/**
+	 * Parses internal block structure and extracts common elements like title and ID
+	 *
+	 * @param mixed $block_name
+	 * @param mixed $block
+	 * @param mixed $key
+	 * @param mixed $outline
+	 * @return void
+	 */
+	public function parse( $block_name, $block, $course_id, $user_id, $site_id ) {
+		if ( true !== $this->is_block( $block_name, $block ) ) {
+			return;
+		}
+		if ( is_array( $block_name ) ) {
+			$block_name = $block_name[ array_search( $block['blockName'], $block_name ) ];
+		}
+
+		$uuid = $block['attrs']['uuid'];
+		$data = array(
+			'parentTitle'   => false,
+			'parentUuid'    => false,
+			'title'         => $block['attrs']['title'],
+			'uuid'          => $uuid,
+			'type'          => $this->get_block_name( ( $block['blockName'] ) ),
+			'conditionsMet' => true,
+			'active'        => false,
+			'completed'     => false,
+			'locked'        => false,
+		);
+		if ( ! empty( $block['attrs']['schedule'] ) ) {
+			$now = strtotime( date( 'Y-m-dH:i:s', strtotime( 'now' ) ) );
+			error_log( 'now?' );
+			error_log( $now );
+			error_log( strtotime( $block['attrs']['schedule'] ) );
+			if ( strtotime( $block['attrs']['schedule'] ) > $now ) {
+				$data['locked'] = date( 'Y-m-d H:i:s', strtotime( $block['attrs']['schedule'] ) );
+			}
+		}
+		error_log( "parse({$block['attrs']['title']})" );
+		if ( true === $this->is_complete( $uuid, $course_id, $user_id, $site_id ) ) {
+			$data['completed'] = true;
+		}
+		return $data;
+	}
+
+	public function parse_files( $blocks ) {
 		$return = array();
 		foreach ( $blocks as $file ) {
 			$return[] = array(
@@ -270,7 +302,7 @@ class Data_Model {
 		}
 	}
 
-	protected function parse_quiz( $quiz, $parent_uuid = 0, $course_id, $user_id, $site_id ) {
+	public function parse_quiz( $quiz, $course_id, $user_id, $site_id ) {
 		$return = array();
 		$uuid   = $quiz['attrs']['uuid'];
 
@@ -279,19 +311,24 @@ class Data_Model {
 			$title = 'Quiz';
 		}
 
-		if ( array_key_exists( 'synopsis', $quiz['attrs'] ) && ! empty( $quiz['attrs']['synopsis'] ) ) {
-			$synopsis = $quiz['attrs']['synopsis'];
+		if ( ! array_key_exists( 'pointsRequiredToPass', $quiz['attrs'] ) ) {
+			$points_required_to_pass = 100;
 		} else {
-			$synopsis = '';
+			$points_required_to_pass = $quiz['attrs']['pointsRequiredToPass'];
 		}
 
 		$return = array(
-			'uuid'         => $uuid,
-			'parent'       => $parent_uuid,
-			'quizTitle'    => $title,
-			'quizSynopsis' => $synopsis,
-			'questions'    => array(),
-			'userScore'    => false,
+			'parentTitle'          => false,
+			'parentUuid'           => false,
+			'type'                 => 'quiz',
+			'title'                => $title,
+			'uuid'                 => $uuid,
+			'conditionsMet'        => false, // By default do not allow completion until quiz is completed
+			'active'               => false,
+			'completed'            => false,
+			'pointsRequiredToPass' => $points_required_to_pass,
+			'questions'            => array(),
+			'userScore'            => false,
 		);
 
 		if ( false !== $user_score = $this->get_quiz_score( $uuid, $course_id, $user_id, $site_id ) ) {
@@ -304,13 +341,11 @@ class Data_Model {
 			$args = wp_parse_args(
 				$question['attrs'],
 				array(
-					'question'               => '',
-					'type'                   => 'text',
-					'answersType'            => 'single',
-					'correctAnswerMessage'   => 'Good job! Correct answer.',
-					'incorrectAnswerMessage' => 'Incorrect answer, try again!',
-					'explanation'            => '',
-					'points'                 => 10,
+					'question'    => '',
+					'type'        => 'text',
+					'answersType' => 'single',
+					'explanation' => '',
+					'points'      => 10,
 				)
 			);
 
@@ -324,9 +359,9 @@ class Data_Model {
 				$answers[] = $answer['attrs']['answer'];
 				if ( array_key_exists( 'isCorrect', $answer['attrs'] ) && true === $answer['attrs']['isCorrect'] ) {
 					if ( 'multiple' === $args['answersType'] ) {
-						$correct_answer[] = $index + 1;
+						$correct_answer[] = $index++;
 					} else {
-						$correct_answer = $index + 1;
+						$correct_answer = array( $index );
 					}
 				}
 			}
@@ -336,17 +371,17 @@ class Data_Model {
 
 			// Construct question.
 			$return['questions'][] = array(
-				'question'                  => $args['question'],
-				'questionType'              => $args['type'],
-				// 'questionPic' => '', // if you need to display Picture in Question
-				'answerSelectionType'       => $args['answersType'],
-				'answers'                   => $args['answers'],
-				'correctAnswer'             => $args['correctAnswer'],
-				'messageForCorrectAnswer'   => $args['correctAnswerMessage'],
-				'messageForIncorrectAnswer' => $args['incorrectAnswerMessage'],
-				'explanation'               => $args['explanation'],
-				'point'                     => $args['points'],
+				'question'            => $args['question'],
+				'answerSelectionType' => $args['answersType'],
+				'answers'             => $args['answers'],
+				'correctAnswer'       => $args['correctAnswer'],
+				'explanation'         => $args['explanation'],
+				'points'              => $args['points'],
 			);
+		}
+		error_log( 'parse_quiz()' );
+		if ( true === $this->is_complete( $uuid, $course_id, $user_id, $site_id ) ) {
+			$return['completed'] = true;
 		}
 
 		return $return;

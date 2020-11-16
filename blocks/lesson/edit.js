@@ -1,7 +1,7 @@
-import { v1 as uuidv1 } from 'uuid';
-import { Collapsible, PostAsInnerBlocks } from '@easyteachlms/components';
+import { Collapsible, InnerBlocksWithPost } from '@easyteachlms/components';
+import './style.scss';
 
-const ALLOWED_BLOCKS = ['easyteachlms/topic'];
+const ALLOWED_BLOCKS = ['easyteachlms/lesson-content', 'easyteachlms/quiz'];
 
 const edit = ({
     attributes,
@@ -10,25 +10,31 @@ const edit = ({
     setAttributes,
     isSelected,
 }) => {
-    const { id, lastUpdated, title, uuid } = attributes;
+    const { postId, lastUpdated, schedule, title, uuid } = attributes;
 
-    if (0 === uuid) {
-        setAttributes({
-            uuid: uuidv1(),
-        });
-    }
+    const labels = {
+        headerLabel: 'Start a new lesson',
+        buttonLabel: 'Create lesson',
+    };
 
-    if (0 !== id && '' !== title) {
+    if (0 !== uuid) {
         return (
-            <Collapsible className={className} title={title} postType="lesson">
-                {/** Need to create a new block called topic content, it would use post as innerblocks and we would have a template on the topic block so when you insert it also inserts a topic content block internally. we could then easily use this to import and export content as we see fit. */}
-                <PostAsInnerBlocks
-                    id={id}
+            <Collapsible
+                className={className}
+                title={title}
+                postType="lesson"
+                label="Lesson"
+            >
+                <InnerBlocksWithPost
+                    postId={postId}
                     postType="lesson"
+                    labels={labels}
                     title={title}
                     lastUpdated={lastUpdated}
+                    schedule={schedule}
                     setAttributes={setAttributes}
                     clientId={clientId}
+                    uuid={uuid}
                     isSelected={isSelected}
                     allowedBlocks={ALLOWED_BLOCKS}
                 />
@@ -37,13 +43,16 @@ const edit = ({
     }
 
     return (
-        <PostAsInnerBlocks
-            id={id}
+        <InnerBlocksWithPost
+            postId={postId}
             postType="lesson"
+            labels={labels}
             title={title}
             lastUpdated={lastUpdated}
+            schedule={schedule}
             setAttributes={setAttributes}
             clientId={clientId}
+            uuid={uuid}
             isSelected={isSelected}
             allowedBlocks={ALLOWED_BLOCKS}
         />

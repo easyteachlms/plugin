@@ -1,4 +1,7 @@
 import Collapsible from './collapsible';
-import PostAsInnerBlocks from './post-as-innerblocks';
+import {
+    InnerBlocksWithPost,
+    ButtonBlockAppender,
+} from './inner-blocks-with-post';
 
-export { Collapsible, PostAsInnerBlocks };
+export { Collapsible, InnerBlocksWithPost, ButtonBlockAppender };

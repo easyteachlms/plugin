@@ -1,6 +1,6 @@
 import { useSelect, useDispatch } from '@wordpress/data';
 import { Fragment, RawHTML } from '@wordpress/element';
-import { Progress, Icon } from 'semantic-ui-react';
+import { Button, Progress, Divider } from 'semantic-ui-react';
 import { autop } from '@wordpress/autop';
 
 import { DownloadCertificate } from '../_blockController/certificate';
@@ -8,28 +8,32 @@ import { DownloadCertificate } from '../_blockController/certificate';
 const user = window.userData;
 
 const Dashboard = ({ id }) => {
-    const { isActive, progress, progressRatio, files, quizData, description } = useSelect(
-        (select) => {
-            const active = select('easyteachlms/course').getActive();
-            const data = select('easyteachlms/course').getData(id);
-            const completed = select('easyteachlms/course').getCompleted();
-            const { total } = data.outline;
-            const ratio = `${completed}/${total}`;
-            console.log('<Dashboard>');
-            console.log(data);
-            console.log(select('easyteachlms/course').getQuizzes());
-            return {
-                data,
-                isActive: 'dashboard' === active,
-                progress: 100 * (completed / total),
-                progressRatio: ratio,
-                description: data.description,
-                files: select('easyteachlms/course').getFiles(),
-                quizData: select('easyteachlms/course').getQuizzes(),
-            };
-        },
-        [],
-    );
+    const {
+        isActive,
+        progress,
+        progressRatio,
+        files,
+        quizData,
+        description,
+    } = useSelect((select) => {
+        const active = select('easyteachlms/course').getActive();
+        const data = select('easyteachlms/course').getData(id);
+        const completed = select('easyteachlms/course').getCompleted();
+        const { total } = data.outline;
+        const ratio = `${completed}/${total}`;
+        console.log('<Dashboard>');
+        console.log(data);
+        console.log(select('easyteachlms/course').getQuizzes());
+        return {
+            data,
+            isActive: 'dashboard' === active,
+            progress: 100 * (completed / total),
+            progressRatio: ratio,
+            description: data.description,
+            files: select('easyteachlms/course').getFiles(),
+            quizData: select('easyteachlms/course').getQuizzes(),
+        };
+    }, []);
 
     const { setActive } = useDispatch('easyteachlms/course');
 
@@ -53,28 +57,27 @@ const Dashboard = ({ id }) => {
                         ? 'Course Completed!'
                         : `Course Progress ${progressRatio}`}
                 </Progress>
-                { 100 === progress && (
-                    <DownloadCertificate/>
-                )}
+                {0 === progress && <Button>Start Course</Button>}
+                {100 === progress && <DownloadCertificate />}
             </Fragment>
         );
     };
 
     const CourseDescription = () => {
-        if ( ! description ) {
-            return <Fragment></Fragment>;
+        if (!description) {
+            return <Fragment />;
         }
-        return(
+        return (
             <div>
                 <RawHTML>{autop(description)}</RawHTML>
             </div>
         );
-    }
+    };
 
     const Files = () => {
         console.info('<Files/>');
-        if ( 0 == files.length ) {
-            return <Fragment></Fragment>;
+        if (0 == files.length) {
+            return <Fragment />;
         }
         const f = [];
         files.forEach((file) => {
@@ -89,7 +92,7 @@ const Dashboard = ({ id }) => {
 
         return (
             <Fragment>
-                <h3>Files</h3>
+                <h3>Downloadable Files</h3>
                 <p>
                     <i>Click to download files</i>
                 </p>
@@ -100,8 +103,8 @@ const Dashboard = ({ id }) => {
 
     const Quizzes = () => {
         console.info('<Quizzes/>');
-        if ( 0 == quizData.length ) {
-            return <Fragment></Fragment>;
+        if (0 == quizData.length) {
+            return <Fragment />;
         }
         const q = [];
 
@@ -110,10 +113,10 @@ const Dashboard = ({ id }) => {
                 <li>
                     <a
                         onClick={() => {
-                            setActive(quiz.parent);
+                            setActive(quiz.uuid);
                         }}
                     >
-                        {quiz.quizTitle}
+                        {quiz.title}
                     </a>
                 </li>,
             );
@@ -129,9 +132,10 @@ const Dashboard = ({ id }) => {
 
     return (
         <div>
-            <h2>Hi, {name}</h2>
-            <CourseProgress />
             <CourseDescription />
+            <Divider />
+            <h3>Welcome back, {name}</h3>
+            <CourseProgress />
             <Quizzes />
             <Files />
         </div>

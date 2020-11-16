@@ -20,21 +20,9 @@ const settings = [
                 type: 'string',
                 default: '',
             },
-            type: {
-                type: 'string',
-                default: 'text',
-            },
             answersType: {
                 type: 'string',
                 default: 'single',
-            },
-            correctAnswerMessage: {
-                type: 'string',
-                default: 'Correct answer! Good job.',
-            },
-            incorrectAnswerMessage: {
-                type: 'string',
-                default: 'Incorrect answer! Please try again.',
             },
             explanation: {
                 type: 'string',

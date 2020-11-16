@@ -1,28 +1,55 @@
-import './edit.scss';
+import './style.scss';
 import { __ } from '@wordpress/i18n';
-import { v1 as uuidv1 } from 'uuid';
-import { InnerBlocks } from '@wordpress/block-editor';
-
-import { Collapsible } from '@easyteachlms/components';
+import { Collapsible, InnerBlocksWithPost } from '@easyteachlms/components';
 
 import Controls from './controls';
 
 const ALLOWED_BLOCKS = ['easyteachlms/question'];
 
-const edit = ({ attributes, className, setAttributes }) => {
+const edit = ({
+    attributes,
+    className,
+    setAttributes,
+    isSelected,
+    clientId,
+}) => {
     const { title, uuid } = attributes;
 
-    if (0 === uuid) {
-        setAttributes({
-            uuid: uuidv1(),
-        });
+    const labels = {
+        headerLabel: 'Add quiz to this lesson',
+        buttonLabel: 'Add quiz',
+    };
+
+    if (0 !== uuid) {
+        return (
+            <Collapsible className={className} title={title} label="Quiz">
+                <InnerBlocksWithPost
+                    title={title}
+                    labels={labels}
+                    setAttributes={setAttributes}
+                    clientId={clientId}
+                    uuid={uuid}
+                    isSelected={isSelected}
+                    allowedBlocks={ALLOWED_BLOCKS}
+                />
+                <Controls
+                    attributes={attributes}
+                    setAttributes={setAttributes}
+                />
+            </Collapsible>
+        );
     }
 
     return (
-        <Collapsible className={className} title={title} postType="quiz">
-            <InnerBlocks allowedBlocks={ALLOWED_BLOCKS} />
-            <Controls attributes={attributes} setAttributes={setAttributes} />
-        </Collapsible>
+        <InnerBlocksWithPost
+            title={title}
+            labels={labels}
+            setAttributes={setAttributes}
+            clientId={clientId}
+            uuid={uuid}
+            isSelected={isSelected}
+            allowedBlocks={ALLOWED_BLOCKS}
+        />
     );
 };
 

@@ -1,14 +1,8 @@
-import { useState } from '@wordpress/element';
+import { Fragment, useState } from '@wordpress/element';
 import apiFetch from '@wordpress/api-fetch';
-import {
-    Card,
-    CardBody,
-    CardDivider,
-    CardFooter,
-    CardHeader,
-    CardMedia,
-    ToggleControl,
-} from '@wordpress/components';
+import { ToggleControl } from '@wordpress/components';
+
+const { easyTeachSettings } = window;
 
 const WooCommerceSettings = () => {
     const { openEnrollment } = easyTeachSettings;
@@ -19,28 +13,25 @@ const WooCommerceSettings = () => {
             path: `/easyteachlms/v3/settings/update/?setting=openEnrollment`,
             method: 'POST',
             data: { value: !value },
-        }).then((res) => {
+        }).then(() => {
             setPurchasability(value);
         });
     };
 
     return (
-        <Card>
-            <CardHeader>Enable Course Purchase</CardHeader>
-            <CardBody>
-                <p>
-                    Enabling course purchases will turn off open enrollment for
-                    your courses and require visitors purchase courses through
-                    associated products.
-                </p>
-                <ToggleControl
-                    label="Course Purchasing"
-                    help={enabled ? 'Enabled' : 'Disabled'}
-                    checked={enabled}
-                    onChange={(val) => handler(val)}
-                />
-            </CardBody>
-        </Card>
+        <Fragment>
+            <p>
+                Enabling course purchases will turn off open enrollment for your
+                courses and require visitors purchase courses through associated
+                products.
+            </p>
+            <ToggleControl
+                label="Course Purchasing"
+                help={enabled ? 'Enabled' : 'Disabled'}
+                checked={enabled}
+                onChange={(val) => handler(val)}
+            />
+        </Fragment>
     );
 };
 

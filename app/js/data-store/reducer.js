@@ -3,6 +3,7 @@ const DEFAULT_STATE = {
     active: false,
     certificate: false,
     data: false,
+    quizAnswers: false,
 };
 
 const reducer = (state = DEFAULT_STATE, action) => {
@@ -28,20 +29,19 @@ const reducer = (state = DEFAULT_STATE, action) => {
             };
         case 'SET_QUIZ_SCORE':
             console.log('SET_QUIZ_SCORE');
+            console.log(action);
+            console.log(action.score);
+            console.log(outline.flat);
             // eslint-disable-next-line no-case-declarations
             const quizIndex = outline.flat.findIndex(
-                (obj) =>
-                    obj.hasQuiz &&
-                    // eslint-disable-next-line no-prototype-builtins
-                    obj.hasOwnProperty('quiz') &&
-                    obj.quiz.uuid === action.uuid,
+                (obj) => 'quiz' === obj.type && obj.uuid === action.uuid,
             );
             console.log(quizIndex);
-            console.log(data.outline.flat[quizIndex].quiz.userScore);
-            console.log(action);
-            console.log(action.scores);
-            data.outline.flat[quizIndex].quiz.userScore = action.scores;
-            console.log(data.outline.flat[quizIndex].quiz.userScore);
+            console.log(data.outline.flat[quizIndex].userScore);
+
+            data.outline.flat[quizIndex].userScore = action.score;
+
+            console.log(data.outline.flat[quizIndex].userScore);
             return {
                 ...state,
                 data,
@@ -68,12 +68,11 @@ const reducer = (state = DEFAULT_STATE, action) => {
                 data,
             };
         case 'STORE_CERTIFICATE':
-            let certificate = action.markup;
+            const certificate = action.markup;
             return {
                 ...state,
                 certificate,
             };
-            
     }
     return state;
 };

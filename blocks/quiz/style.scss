@@ -1,0 +1,43 @@
+div[data-type="easyteachlms/quiz"] {
+    background: #f0f0f0;
+    padding-bottom: 0.1em;
+    &.has-child-selected:before {
+        z-index: 0;
+        content: "";
+        position: absolute;
+        border: 1px dashed rgba(66,88,99,.4);
+        pointer-events: none;
+        transition: border-color .1s linear, border-style .1s linear;
+        outline: 1px solid transparent;
+        right: 0;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        box-shadow: none;
+    }
+    .components-toolbar {
+        background: #f0f0f0;
+        border: none;
+    }
+    .block-list-appender {
+        &:before {
+            content: "Add A Question";
+            font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;
+            font-size: 14px;
+            padding-top: 5px;
+            display: inline-block;
+            position: absolute;
+            width: 100%;
+            text-align: center;
+            width: 100%;
+            z-index: 1;
+        }
+        button {
+            position: relative;
+            z-index: 2;
+            svg {
+                opacity: 0;
+            }
+        }
+    }
+}

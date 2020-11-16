@@ -36,9 +36,8 @@ class Quiz {
 			'easyteachlms/quiz',
 			array(
 				// We're only enqueing these in the block editor, not the front end.
-				'editor_script'   => array_pop( $quiz_block['js'] )['handle'],
-				'editor_style'    => array_pop( $quiz_block['css'] )['handle'],
-				'render_callback' => array( $this, 'quiz_callback' ),
+				'editor_script' => array_pop( $quiz_block['js'] )['handle'],
+				'editor_style'  => array_pop( $quiz_block['css'] )['handle'],
 			)
 		);
 
@@ -47,7 +46,7 @@ class Quiz {
 			'question-block',
 			array(
 				'js'        => true,
-				'css'       => false,
+				'css'       => true,
 				'js_dep'    => $js_deps,
 				'css_dep'   => array( 'semantic-ui' ),
 				'in_footer' => true,
@@ -59,6 +58,7 @@ class Quiz {
 			array(
 				// We're only enqueing these in the block editor, not the front end.
 				'editor_script' => array_pop( $question_block['js'] )['handle'],
+				'editor_style'  => array_pop( $question_block['css'] )['handle'],
 			)
 		);
 
@@ -81,14 +81,6 @@ class Quiz {
 				'editor_script' => array_pop( $answer_block['js'] )['handle'],
 			)
 		);
-	}
-
-	public function quiz_callback( $attributes, $content ) {
-		$title = '';
-		if ( ! empty( $attributes['title'] ) ) {
-			$title = $attributes['title'];
-		}
-		return "<div class='wp-block-easyteachlms-quiz' title='{$title}' data-uuid='{$attributes['uuid']}'></div>";
 	}
 
 	// On course save and/or topic save we need to go bundle up all the quiz data into the appropriate data model
