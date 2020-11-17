@@ -73,7 +73,7 @@ if ( class_exists( 'BP_Group_Extension' ) ) {
 			$group_id      = $group->id;
 			$total_members = groups_get_total_member_count( $group_id );
 			?>
-			<div class="ui piled segment">
+			<div class="ui segment">
 				<h4 class="ui header">Group Overview</h4>
 				<div style="display: flex; flex-direction: row">
 					<div>
@@ -295,38 +295,70 @@ if ( class_exists( 'BP_Group_Extension' ) ) {
 		public function get_attached_courses_restfully( \WP_REST_Request $request ) {
 			$group_id         = (int) $request->get_param( 'groupId' );
 			$attached_courses = groups_get_groupmeta( $group_id, '_attached_courses' );
-			error_log( 'get_attached_courses_restfully()' );
-			error_log( $group_id );
-			error_log( print_r( $attached_courses, true ) );
 			$attached_courses = (array) apply_filters( 'elms_group_courses', $attached_courses, $group_id );
 			return $attached_courses;
 		}
 
+
+		/**
+		 * Constructor
+		 *
+		 * @since 3.0.0
+		 *
+		 * @param array $args Optional array having the following parameters {
+		 *     @type string $id                A string to use as the unique ID for the button. Required.
+		 *     @type int    $position          Where to insert the Button. Defaults to 99.
+		 *     @type string $component         The Component's the button is build for (eg: Activity, Groups..). Required.
+		 *     @type bool   $must_be_logged_in Whether the button should only be displayed to logged in users. Defaults to True.
+		 *     @type bool   $block_self        Optional. True if the button should be hidden when a user is viewing his own profile.
+		 *                                     Defaults to False.
+		 *     @type string $parent_element    Whether to use a wrapper. Defaults to false.
+		 *     @type string $parent_attr       set an array of attributes for the parent element.
+		 *     @type string $button_element    Set this to 'button', 'img', or 'a', defaults to anchor.
+		 *     @type string $button_attr       Any attributes required for the button_element
+		 *     @type string $link_text         The text of the link. Required.
+		 * }
+		 */
 		public function group_member_item( $buttons, $user_id, $type ) {
-			if ( user_can( get_current_user_id(), 'edit' ) ) {
+			if ( 'group_member' === $type ) {
 				global $bp;
-				$user     = get_user_by( 'ID', $user_id );
 				$group_id = groups_get_id( $bp->unfiltered_uri[1] );
-				$buttons[ 'view-student-' . $user->user_nicename ] = array(
-					'id'                => 'view-student-' . $user->user_nicename,
-					'position'          => 15 + $user_id,
+
+				$buttons['view-student'] = array(
+					'id'                => 'view-student',
 					'component'         => 'groups',
 					'must_be_logged_in' => true,
 					'block_self'        => false,
-					'parent_element'    => 'div',
-					'button_element'    => 'div',
-					'link_text'         => '&nbsp;',
+					'parent_element'    => false,
 					'parent_attr'       => array(
 						'class' => 'button-parent',
 					),
+					'button_element'    => 'div',
 					'button_attr'       => array(
-						'href'          => '?userId=' . $user_id,
-						'data-user-id'  => $user_id,
 						'data-group-id' => $group_id,
 						'class'         => 'view-student-progress-button',
 					),
+					'link_text'         => '&nbsp;',
+				);
+
+				$buttons['lms-notification'] = array(
+					'id'                => 'lms-notification',
+					'component'         => 'groups',
+					'must_be_logged_in' => true,
+					'block_self'        => false,
+					'parent_element'    => false,
+					'parent_attr'       => array(
+						'class' => 'button-parent',
+					),
+					'button_element'    => 'div',
+					'button_attr'       => array(
+						'data-group-id' => $group_id,
+						'class'         => 'view-student-notification-button',
+					),
+					'link_text'         => '&nbsp;',
 				);
 			}
+
 			return $buttons;
 		}
 
@@ -354,6 +386,6 @@ if ( class_exists( 'BP_Group_Extension' ) ) {
 	add_action( 'groups_accept_invite', array( $group_courses, 'enroll' ), 10, 2 );
 	add_action( 'bp_groups_member_after_delete', array( $group_courses, 'unenroll' ), 10, 2 );
 	add_filter( 'bp_nouveau_get_members_buttons', array( $group_courses, 'group_member_item' ), 10, 3 );
-	add_action( 'bp_before_group_members_content', array( $group_courses, 'group_members_overview' ) );
+	// add_action( 'bp_before_group_members_content', array( $group_courses, 'group_members_overview' ) );
 	add_action( 'rest_api_init', array( $group_courses, 'register_rest_endpoints' ) );
 }

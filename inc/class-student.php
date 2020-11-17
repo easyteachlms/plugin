@@ -118,6 +118,11 @@ class Student {
 							return is_string( $param );
 						},
 					),
+					'newScore' => array(
+						'validate_callback' => function( $param, $request, $key ) {
+							return is_string( $param );
+						},
+					),
 				),
 				'permission_callback' => function () {
 					return current_user_can( 'read' );
@@ -131,25 +136,54 @@ class Student {
 		return $data_model->get_course_structure( $course_id, $user_id, get_current_blog_id() );
 	}
 
+	public function get_notifications( $course_data, $course_id, $user_id ) {
+		// Check for anything that would signal a notification...
+		// Then if that exists add a "notifications" array to the data.
+		$data = false;
+		// if course_data -> outline -> flat // type === quiz -> userScore -> essayAnswers not empty and if the obj therein is grade === false then add to array to return.
+		foreach ( $course_data['outline']['flat'] as $key => $d ) {
+			if ( 'quiz' === $d['type'] ) {
+				if ( array_key_exists( 'userScore', $d ) && array_key_exists( 'essayAnswers', $d['userScore'] ) && ! empty( $d['userScore']['essayAnswers'] ) ) {
+					if ( false === $data ) {
+						$data = array();
+					}
+					$data[ $d['uuid'] ] = array(
+						'data'  => $d['userScore']['essayAnswers'],
+						'score' => $d['userScore']['score'],
+					);
+				}
+			}
+		}
+		return $data;
+	}
+
 	public function get_student_restfully( \WP_REST_Request $request ) {
-		$site_id = get_current_blog_id();
-		$user_id = (int) $request->get_param( 'userId' );
+		$site_id   = get_current_blog_id();
+		$user_slug = $request->get_param( 'userSlug' );
+		$user      = get_user_by( 'slug', $user_slug );
+		$user_id   = $user->id;
 
 		$enrolled_courses = array_unique( get_user_meta( $user_id, '_enrolled_courses', true ) );
 
 		$return = array(
-			'userData'  => array(),
-			'completed' => array(),
-			'courses'   => array(),
+			'userData'      => $user,
+			'completed'     => array(),
+			'courses'       => array(),
+			'notifications' => false,
 		);
 
 		if ( $enrolled_courses ) {
 			$return['enrolled'] = $enrolled_courses;
 			foreach ( $enrolled_courses as $course_id ) {
-				$meta_key    = "_course_{$course_id}_{$site_id}";
-				$course_data = get_user_meta( $user_id, $meta_key, true );
+				$meta_key = "_course_{$course_id}_{$site_id}";
+				// $course_data = get_user_meta( $user_id, $meta_key, true );
+				$course_data   = $this->get_course( $course_id, $user_id );
+				$notifications = $this->get_notifications( $course_data, $course_id, $user_id );
 
-				$return['courses'][] = $this->get_course( $course_id, $user_id );
+				$return['courses'][] = $course_data;
+				if ( false !== $notifications ) {
+					$return['notifications'][ $course_id ] = $notifications;
+				}
 			}
 		}
 
@@ -241,7 +275,24 @@ class Student {
 		$user_id   = (int) $request->get_param( 'userId' );
 		$course_id = (int) $request->get_param( 'courseId' );
 		$uuid      = $request->get_param( 'uuid' );
-		$user_data = json_decode( $request->get_body(), true );
+		$new_score = $request->get_param( 'newScore' );
+
+		error_log( 'new Score??' );
+		error_log( print_r( gettype( $new_score ), true ) );
+
+		$meta_key = "_course_{$course_id}_{$site_id}";
+
+		if ( null !== $new_score ) {
+			$user_data = get_user_meta( $user_id, $meta_key, true );
+			if ( is_array( $user_data ) && array_key_exists( 'scores', $user_data ) && array_key_exists( $uuid, $user_data['scores'] ) ) {
+				$user_data = $user_data['scores'][ $uuid ];
+			} else {
+				return new WP_Error( 'quiz-score-issue', 'Could not correctly ascertain the user data to update quiz score.' );
+			}
+			$user_data['score'] = $new_score;
+		} else {
+			$user_data = json_decode( $request->get_body(), true );
+		}
 
 		error_log( 'update_quiz_progress_restfully!!' );
 		error_log( print_r( $user_data, true ) );
@@ -250,8 +301,6 @@ class Student {
 			return false;
 		}
 
-		$meta_key = "_course_{$course_id}_{$site_id}";
-
 		$data = get_user_meta( $user_id, $meta_key, true );
 		if ( ! is_array( $data ) ) {
 			$data = array(
@@ -259,6 +308,7 @@ class Student {
 				'scores'    => array(),
 			);
 		}
+
 		$passed = $user_data['score'] >= $user_data['pointsRequiredToPass'];
 
 		if ( true === $passed ) {

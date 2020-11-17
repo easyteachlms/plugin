@@ -158,6 +158,7 @@ class Data_Model {
 		$structure = array(
 			'id'          => $post->ID,
 			'title'       => $post->post_title,
+			'link'        => get_permalink( $post->ID ),
 			'excerpt'     => $post->post_excerpt,
 			'description' => null,
 			'points'      => 'NULL', // Gather up all the quiz points as total points here??
