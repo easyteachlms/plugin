@@ -309,7 +309,7 @@ class Course {
 		$user_id = get_current_user_id();
 		// All editors get access to all courses.
 		if ( user_can( $user_id, 'edit_others_posts' ) ) {
-			// return true;
+			return true;
 		}
 		$courses = get_user_meta( $user_id, '_enrolled_courses', true );
 
