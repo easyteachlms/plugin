@@ -211,7 +211,7 @@ if ( class_exists( 'BP_Group_Extension' ) ) {
 			}
 			$attached_courses = array_merge( $attached_courses, array( $course_id ) );
 			if ( ! empty( $attached_courses ) ) {
-				$members = groups_get_group_members( $group_id );
+				$members = groups_get_group_members( array( 'group_id' => $group_id ) );
 				error_log( print_r( $members, true ) );
 				foreach ( $members as $key => $member ) {
 					$user_id = $member[0]->ID;
@@ -229,7 +229,7 @@ if ( class_exists( 'BP_Group_Extension' ) ) {
 				$attached_courses = groups_get_groupmeta( $group_id, '_attached_courses', true );
 			}
 			$attached_courses = array_diff( $attached_courses, array( $course_id ) );
-			$members          = groups_get_group_members( $group_id );
+			$members          = groups_get_group_members( array( 'group_id' => $group_id ) );
 			error_log( print_r( $members, true ) );
 			foreach ( $members as $key => $member ) {
 				$user_id = $member[0]->ID;

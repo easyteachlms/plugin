@@ -88,7 +88,7 @@ class Admin {
 					),
 				),
 				'permission_callback' => function () {
-					return current_user_can( 'edit' );
+					return current_user_can( 'edit_others_posts' );
 				},
 			)
 		);
