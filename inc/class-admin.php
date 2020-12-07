@@ -24,8 +24,10 @@ class Admin {
 			return;
 		}
 		$enqueue  = new Enqueue( 'easyTeachLMS', 'dist', '1.0.0', 'plugin', plugin_dir_path( __FILE__ ) );
-		$settings = wp_json_encode( $this->get_settings() );
-		$assets   = $enqueue->enqueue(
+		$settings = $this->get_settings();
+		error_log( 'Adming Settings?' );
+		error_log( print_r( $settings, true ) );
+		$assets = $enqueue->enqueue(
 			'admin',
 			'settings',
 			array(
@@ -101,7 +103,7 @@ class Admin {
 		error_log( $setting );
 		if ( ! empty( $setting ) ) {
 			error_log( (bool) $value['value'] );
-			return $this->update_setting( $setting, $value['value'] );
+			return $this->update_setting( $setting, (bool) $value['value'] );
 		} else {
 			return false;
 		}
@@ -124,6 +126,9 @@ class Admin {
 			'_easyteachlms_settings',
 			$this->default_settings
 		);
+		error_log( 'Get Setting' );
+		error_log( print_r( $settings, true ) );
+
 		if ( ! array_key_exists( $setting, $settings ) ) {
 			return false;
 		}
@@ -131,10 +136,13 @@ class Admin {
 	}
 
 	public function get_settings() {
-		return get_option(
+		error_log( 'Get Setting' );
+		$settings = get_option(
 			'_easyteachlms_settings',
 			$this->default_settings
 		);
+		error_log( print_r( $settings, true ) );
+		return $settings;
 	}
 }
 

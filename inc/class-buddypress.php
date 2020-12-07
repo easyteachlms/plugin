@@ -108,7 +108,9 @@ if ( class_exists( 'BP_Group_Extension' ) ) {
 			$group_id         = bp_get_group_id();
 			$attached_courses = groups_get_groupmeta( $group_id, '_attached_courses' );
 			$attached_courses = apply_filters( 'elms_group_courses', $attached_courses, $group_id );
-			$user_id          = 1;
+			if ( empty( $attached_courses ) ) {
+				return 'No courses currently selected.';
+			}
 			// Go fetch enrolled courses for this user.
 			echo '<div class="ui cards">';
 			foreach ( $attached_courses as $course_id ) {
@@ -214,6 +216,8 @@ if ( class_exists( 'BP_Group_Extension' ) ) {
 				$members = groups_get_group_members( array( 'group_id' => $group_id ) );
 				error_log( print_r( $members, true ) );
 				foreach ( $members as $key => $member ) {
+					error_log( 'member data' );
+					error_log( print_r( $member, true ) );
 					$user_id = $member[0]->ID;
 					error_log( 'UserID:' );
 					error_log( print_r( $user_id, true ) );

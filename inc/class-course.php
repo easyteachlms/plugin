@@ -157,6 +157,7 @@ class Course {
 	}
 
 	public function get_settings() {
+		// Get the settings option object, default openEnrollment to true if not set.
 		return get_option(
 			'_easyteachlms_settings',
 			array(
