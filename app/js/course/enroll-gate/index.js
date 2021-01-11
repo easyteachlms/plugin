@@ -11,19 +11,30 @@ const Enroll = ({ courseId }) => {
     const { id } = userData;
     const [enrolling, setEnrolling] = useState(false);
     const { enroll } = useDispatch('easyteachlms/course');
-
+    console.log('User ID', id);
     const clickHandler = () => {
         setEnrolling(true);
         apiFetch({
             path: `/easyteachlms/v3/course/enroll/?userId=${id}&courseId=${courseId}`,
             method: 'POST',
             data: { enrolled: true },
-        }).then(() => {
-            setTimeout(() => {
-                enroll(true);
-                setEnrolling(false);
-            }, 1000);
-        });
+        })
+            .then(() => {
+                setTimeout(() => {
+                    enroll(true);
+                    setEnrolling(false);
+                }, 1000);
+            })
+            .catch((e) => {
+                if ('rest_forbidden' === e.code) {
+                    apiFetch({
+                        path: `/easyteachlms/v3/course/redirect-to-login/?courseId=${courseId}`,
+                        method: 'GET',
+                    }).then((url) => {
+                        window.location.href = url;
+                    });
+                }
+            });
     };
     return (
         <div

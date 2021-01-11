@@ -55,6 +55,23 @@ class Admin {
 		<?php
 	}
 
+	public function sell_courses() {
+		$post_type_object = get_post_type_object( 'product' );
+		error_log( print_r( $post_type_object, true ) );
+		if ( ! $post_type_object ) {
+			return;
+		}
+
+		if ( ! current_user_can( 'edit_others_posts' ) ) {
+			return;
+		}
+
+		if ( $post_type_object->_edit_link ) {
+			$link = admin_url( 'post-new.php?post_type=product' );
+			wp_redirect( $link, '302' );
+		}
+	}
+
 	public function register_admin_menu() {
 		add_menu_page(
 			'EasyTeach LMS',
@@ -72,6 +89,14 @@ class Admin {
 			'edit_others_posts',
 			'easyteach-lms-settings',
 			array( $this, 'admin_page' )
+		);
+		add_submenu_page(
+			'easyteach-lms',
+			'Sell Courses',
+			'Sell Courses',
+			'edit_others_posts',
+			'easyteach-lms-sell-courses',
+			array( $this, 'sell_courses' )
 		);
 	}
 
@@ -103,7 +128,7 @@ class Admin {
 		error_log( $setting );
 		if ( ! empty( $setting ) ) {
 			error_log( (bool) $value['value'] );
-			return $this->update_setting( $setting, (bool) $value['value'] );
+			return $this->update_setting( $setting, $value['value'] );
 		} else {
 			return false;
 		}

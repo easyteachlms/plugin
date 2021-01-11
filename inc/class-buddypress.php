@@ -215,9 +215,12 @@ if ( class_exists( 'BP_Group_Extension' ) ) {
 			if ( ! empty( $attached_courses ) ) {
 				$members = groups_get_group_members( array( 'group_id' => $group_id ) );
 				error_log( print_r( $members, true ) );
-				foreach ( $members as $key => $member ) {
+				foreach ( $members['members'] as $key => $member ) {
 					error_log( 'member data' );
 					error_log( print_r( $member, true ) );
+					if ( ! is_object( $member ) || ! property_exists( $member, 'ID' ) ) {
+						continue;
+					}
 					$user_id = $member[0]->ID;
 					error_log( 'UserID:' );
 					error_log( print_r( $user_id, true ) );
