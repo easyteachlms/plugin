@@ -98,11 +98,14 @@ class Data_Model {
 	}
 
 	public function is_complete( $uuid, $course_id, $user_id, $site_id ) {
-
-		switch_to_blog( $site_id );
+		if ( function_exists( 'switch_to_blog' ) ) {
+			switch_to_blog( $site_id );
+		}
 		$meta_key      = "_course_{$course_id}_{$site_id}";
 		$user_progress = \get_user_meta( $user_id, $meta_key, true );
-		restore_current_blog();
+		if ( function_exists( 'restore_current_blog' ) ) {
+			restore_current_blog();
+		}
 
 		error_log( 'is_complete()' );
 		error_log( $meta_key );
@@ -158,6 +161,7 @@ class Data_Model {
 		$structure = array(
 			'id'          => $post->ID,
 			'title'       => $post->post_title,
+			'link'        => get_permalink( $post->ID ),
 			'excerpt'     => $post->post_excerpt,
 			'description' => null,
 			'points'      => 'NULL', // Gather up all the quiz points as total points here??

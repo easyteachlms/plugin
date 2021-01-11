@@ -13,7 +13,8 @@ const WooCommerceSettings = () => {
             path: `/easyteachlms/v3/settings/update/?setting=openEnrollment`,
             method: 'POST',
             data: { value: !value },
-        }).then(() => {
+        }).then((e) => {
+            console.log('Purchasing Enabled?', e);
             setPurchasability(value);
         });
     };

@@ -157,6 +157,7 @@ class Course {
 	}
 
 	public function get_settings() {
+		// Get the settings option object, default openEnrollment to true if not set.
 		return get_option(
 			'_easyteachlms_settings',
 			array(
@@ -169,7 +170,7 @@ class Course {
 		if ( ! is_singular( 'course' ) ) {
 			return;
 		}
-		$settings = wp_json_encode( $this->get_settings() );
+		$settings = $this->get_settings();
 		wp_localize_script(
 			$this->assets['frontend']['course']['script'],
 			'easyTeachSettings',
@@ -211,6 +212,24 @@ class Course {
 	public function rest_routes() {
 		register_rest_route(
 			'easyteachlms/v3',
+			'/course/redirect-to-login',
+			array(
+				'methods'             => 'GET',
+				'callback'            => array( $this, 'rest_redirect_to_login' ),
+				'args'                => array(
+					'courseId' => array(
+						'validate_callback' => function( $param, $request, $key ) {
+							return is_numeric( $param );
+						},
+					),
+				),
+				'permission_callback' => function () {
+					return true;
+				},
+			)
+		);
+		register_rest_route(
+			'easyteachlms/v3',
 			'/course/enroll',
 			array(
 				'methods'             => 'POST',
@@ -250,6 +269,12 @@ class Course {
 			$excerpt = $excerpt . ob_get_clean();
 		}
 		return $excerpt;
+	}
+
+	public function rest_redirect_to_login( \WP_REST_Request $request ) {
+		$course_id   = $request->get_param( 'courseId' );
+		$redirect_to = get_permalink( (int) $course_id );
+		return wp_login_url( $redirect_to );
 	}
 
 	public function rest_enroll_user_in_course( \WP_REST_Request $request ) {
@@ -309,7 +334,7 @@ class Course {
 		$user_id = get_current_user_id();
 		// All editors get access to all courses.
 		if ( user_can( $user_id, 'edit_others_posts' ) ) {
-			// return true;
+			return true;
 		}
 		$courses = get_user_meta( $user_id, '_enrolled_courses', true );
 

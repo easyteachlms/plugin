@@ -19,7 +19,7 @@ import apiFetch from '@wordpress/api-fetch';
 
 import CourseTable from './course-table';
 
-const ViewStudentProgressButton = ({ userId, groupId }) => {
+const ViewStudentProgressButton = ({ userSlug, groupId }) => {
     const [open, setOpen] = useState(false);
     const [courses, setCourses] = useState(false);
 
@@ -39,9 +39,9 @@ const ViewStudentProgressButton = ({ userId, groupId }) => {
             getAttachedCourses().then((courseIds) => {
                 console.log(courseIds);
                 apiFetch({
-                    path: `/easyteachlms/v3/student/get/?userId=${userId}`,
+                    path: `/easyteachlms/v3/student/get/?userSlug=${userSlug}`,
                 }).then((r) => {
-                    console.log('getStudentInfo', r);
+                    console.log('getStudentInfo -- View Progress', r);
                     const toReturn = r.courses.filter((c) => {
                         return Object.values(courseIds).includes(c.id);
                     });
@@ -52,8 +52,8 @@ const ViewStudentProgressButton = ({ userId, groupId }) => {
     };
 
     useEffect(() => {
-        // getStudentInfo();
-    }, [userId]);
+        getStudentInfo();
+    }, [userSlug]);
 
     return (
         <Fragment>
@@ -72,7 +72,7 @@ const ViewStudentProgressButton = ({ userId, groupId }) => {
                             });
                         }}
                     >
-                        Manage Student
+                        View Progress
                     </Button>
                 }
             >
@@ -89,7 +89,9 @@ const ViewStudentProgressButton = ({ userId, groupId }) => {
                             courses.map((e) => {
                                 return (
                                     <List.Item>
-                                        <List.Header>{e.title}</List.Header>
+                                        <List.Header>
+                                            <a href={e.link}>{e.title}</a>
+                                        </List.Header>
                                         <CourseTable
                                             tableData={e.outline.flat}
                                         />
@@ -102,8 +104,7 @@ const ViewStudentProgressButton = ({ userId, groupId }) => {
                     <Button
                         color="black"
                         onClick={() => {
-                            window.location.href =
-                                'http://easyteach.local/members/srubenstein/messages/compose/?r=john-doe';
+                            window.location.href = `http://easyteach.local/members/srubenstein/messages/compose/?r=${userSlug}`;
                         }}
                     >
                         Message Student

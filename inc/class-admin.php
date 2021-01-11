@@ -24,8 +24,10 @@ class Admin {
 			return;
 		}
 		$enqueue  = new Enqueue( 'easyTeachLMS', 'dist', '1.0.0', 'plugin', plugin_dir_path( __FILE__ ) );
-		$settings = wp_json_encode( $this->get_settings() );
-		$assets   = $enqueue->enqueue(
+		$settings = $this->get_settings();
+		error_log( 'Adming Settings?' );
+		error_log( print_r( $settings, true ) );
+		$assets = $enqueue->enqueue(
 			'admin',
 			'settings',
 			array(
@@ -53,6 +55,23 @@ class Admin {
 		<?php
 	}
 
+	public function sell_courses() {
+		$post_type_object = get_post_type_object( 'product' );
+		error_log( print_r( $post_type_object, true ) );
+		if ( ! $post_type_object ) {
+			return;
+		}
+
+		if ( ! current_user_can( 'edit_others_posts' ) ) {
+			return;
+		}
+
+		if ( $post_type_object->_edit_link ) {
+			$link = admin_url( 'post-new.php?post_type=product' );
+			wp_redirect( $link, '302' );
+		}
+	}
+
 	public function register_admin_menu() {
 		add_menu_page(
 			'EasyTeach LMS',
@@ -71,6 +90,14 @@ class Admin {
 			'easyteach-lms-settings',
 			array( $this, 'admin_page' )
 		);
+		add_submenu_page(
+			'easyteach-lms',
+			'Sell Courses',
+			'Sell Courses',
+			'edit_others_posts',
+			'easyteach-lms-sell-courses',
+			array( $this, 'sell_courses' )
+		);
 	}
 
 	public function rest_routes() {
@@ -88,7 +115,7 @@ class Admin {
 					),
 				),
 				'permission_callback' => function () {
-					return current_user_can( 'edit' );
+					return current_user_can( 'edit_others_posts' );
 				},
 			)
 		);
@@ -124,6 +151,9 @@ class Admin {
 			'_easyteachlms_settings',
 			$this->default_settings
 		);
+		error_log( 'Get Setting' );
+		error_log( print_r( $settings, true ) );
+
 		if ( ! array_key_exists( $setting, $settings ) ) {
 			return false;
 		}
@@ -131,10 +161,13 @@ class Admin {
 	}
 
 	public function get_settings() {
-		return get_option(
+		error_log( 'Get Setting' );
+		$settings = get_option(
 			'_easyteachlms_settings',
 			$this->default_settings
 		);
+		error_log( print_r( $settings, true ) );
+		return $settings;
 	}
 }
 

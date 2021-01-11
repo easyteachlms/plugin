@@ -77,12 +77,14 @@ const useProvideQuiz = (uuid) => {
         const grade = {
             totalPointsPossible: 0,
             totalPointsAwarded: 0,
+            essayAnswers: false,
         };
 
         const computePoints = (answersGiven, correctAnswer, points) => {
             let pointsAwarded = 0;
             const pointsPerAnswer = points / correctAnswer.length;
             console.log('computePoints', answersGiven);
+            // If answersGiven is string then save it to the db, notify the user that their quiz will be graded, activate notification for teacher, when teacher grades activate notification for student.
             answersGiven.forEach((answerIndex) => {
                 if (correctAnswer.includes(answerIndex)) {
                     pointsAwarded += pointsPerAnswer;
@@ -92,21 +94,37 @@ const useProvideQuiz = (uuid) => {
         };
 
         quizData.forEach((q, index) => {
-            const { question, correctAnswer, points } = q;
-            const givenAnswer = answers[question];
-            const computedPoints = computePoints(
-                givenAnswer,
-                correctAnswer,
-                points,
-            );
+            const { question, correctAnswer, points, answerSelectionType } = q;
             grade.totalPointsPossible = points + grade.totalPointsPossible;
-            // We need to account for multiple choice and doing points awarded by how many of the answers you got right.
-            if (0 !== computedPoints) {
-                console.log('Correct!', q);
-                grade.totalPointsAwarded =
-                    computedPoints + grade.totalPointsAwarded;
+
+            const givenAnswer = answers[question];
+
+            // We need to account for multiple choice and doing points awarded by how many of the answers you got right. If present then add the qid and the ansewr to the essayAnswers array if no array then create one.
+            if ('text' !== answerSelectionType) {
+                const computedPoints = computePoints(
+                    givenAnswer,
+                    correctAnswer,
+                    points,
+                );
+
+                if (0 !== computedPoints) {
+                    console.log('Correct!', q);
+                    grade.totalPointsAwarded =
+                        computedPoints + grade.totalPointsAwarded;
+                } else {
+                    console.log('Incorrect!', q);
+                }
             } else {
-                console.log('Incorrect!', q);
+                // If this is the first text answer then setup the array
+                if (false === grade.essayAnswers) {
+                    grade.essayAnswers = [];
+                }
+                grade.essayAnswers.push({
+                    question,
+                    givenAnswer,
+                    points,
+                    graded: false,
+                });
             }
         });
 
@@ -122,17 +140,19 @@ const useProvideQuiz = (uuid) => {
         const grade = gradeQuiz(entryData);
         // Go through and grade questions. Submit score.
 
-        const { totalPointsAwarded, totalPointsPossible } = grade;
+        const { totalPointsAwarded, totalPointsPossible, essayAnswers } = grade;
 
         const userScore = {
             score: totalPointsAwarded,
             total: totalPointsPossible,
             // eslint-disable-next-line radix
             pointsRequiredToPass: parseInt(pointsRequiredToPass),
+            essayAnswers,
         };
 
         console.log('userScore', userScore);
 
+        // Check if quiz has any free text answers and if so we need to grade the quiz differently. And display different warnings on completion.
         apiFetch({
             path: `/easyteachlms/v3/student/update-quiz-progress/?userId=${id}&uuid=${uuid}&courseId=${courseId}`,
             method: 'POST',
