@@ -398,9 +398,15 @@ class Course {
 			error_log( 'get_enrolled_courses' );
 			error_log( $site_id );
 			$course = $data_model->get_course_structure( $course_id, $user_id, $site_id );
+			if ( is_wp_error( $course ) ) {
+				continue;
+			}
 			error_log( print_r( $course, true ) );
 
-			$progress          = get_user_meta( (int) $user_id, "_course_{$course_id}_{$site_id}", true );
+			$progress = get_user_meta( (int) $user_id, "_course_{$course_id}_{$site_id}", true );
+			if ( is_wp_error( $progress ) ) {
+				$progress = array();
+			}
 			$progress['total'] = 100 * ( $course['outline']['completed'] / $course['outline']['total'] );
 
 			$data[] = array(

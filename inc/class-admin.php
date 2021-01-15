@@ -72,6 +72,12 @@ class Admin {
 		}
 	}
 
+	public function create_cohort() {
+		// $link = get_bloginfo( 'url' ) . '/groups/create/';
+		$link = menu_page_url( 'bp-groups' );
+		wp_redirect( $link, '302' );
+	}
+
 	public function register_admin_menu() {
 		add_menu_page(
 			'EasyTeach LMS',
@@ -84,19 +90,29 @@ class Admin {
 		);
 		add_submenu_page(
 			'easyteach-lms',
-			'EasyTeach LMS Settings',
-			'Settings & Help',
-			'edit_others_posts',
-			'easyteach-lms-settings',
-			array( $this, 'admin_page' )
-		);
-		add_submenu_page(
-			'easyteach-lms',
 			'Sell Courses',
 			'Sell Courses',
 			'edit_others_posts',
 			'easyteach-lms-sell-courses',
 			array( $this, 'sell_courses' )
+		);
+		if ( function_exists( 'groups_get_groupmeta' ) ) {
+			add_submenu_page(
+				'easyteach-lms',
+				'Create Cohort Group',
+				'Create Cohort Group',
+				'edit_others_posts',
+				'easyteach-lms-create-cohort',
+				array( $this, 'create_cohort' )
+			);
+		}
+		add_submenu_page(
+			'easyteach-lms',
+			'EasyTeach LMS Settings',
+			'Settings & Help',
+			'edit_others_posts',
+			'easyteach-lms-settings',
+			array( $this, 'admin_page' )
 		);
 	}
 
