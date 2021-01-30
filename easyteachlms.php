@@ -49,6 +49,10 @@ class EasyTeachLMS {
 	public $wp_version_required = '5.4.0';
 	public $wp_version_tested   = '5.4.0';
 
+	public function wpack() {
+		return new Enqueue( 'easyTeachLMS', 'dist', '1.0.0', 'plugin', EASYTEACHLMS_FILE );
+	}
+
 	/**
 	 * @var $name   Variable for Base_Plugin used throughout the plugin
 	 */
@@ -151,6 +155,8 @@ class EasyTeachLMS {
 		require_once EASYTEACHLMS_PATH . '/inc/class-student.php';
 		require_once EASYTEACHLMS_PATH . '/inc/class-certificate.php';
 		require_once EASYTEACHLMS_PATH . '/inc/class-woocommerce.php';
+		// Mid year code cleanup begins below here:
+		require_once EASYTEACHLMS_PATH . '/inc/student-tracking/class-student-tracking.php';
 	}
 
 

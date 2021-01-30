@@ -16,7 +16,14 @@ module.exports = {
         credit: true,
     },
     files: [
-        // App Frontend
+        {
+            name: 'student-tracking',
+            entry: {
+                'widget-groups-at-a-glance':
+                    './inc/student-tracking/groups-at-a-glance/index.js',
+            },
+        },
+        // Overall App Scripts, runs both in WP-Admin and Frontend.
         {
             name: 'app',
             entry: {
