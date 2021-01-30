@@ -221,7 +221,7 @@ if ( class_exists( 'BP_Group_Extension' ) ) {
 					if ( ! is_object( $member ) || ! property_exists( $member, 'ID' ) ) {
 						continue;
 					}
-					$user_id = $member[0]->ID;
+					$user_id = $member->ID;
 					error_log( 'UserID:' );
 					error_log( print_r( $user_id, true ) );
 					// Get group members, if there are members then enroll and loop through each user id.

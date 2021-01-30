@@ -141,11 +141,11 @@ class Data_Model {
 	public function get_course_structure( int $course_id = 0, $user_id = false, $site_id = false ) {
 		error_log( "get_course_structure({$course_id})" );
 		$post = get_post( $course_id );
-		if ( false === $post ) {
-			return false;
+		if ( false === $post || null === $post || \is_wp_error( $post ) || ! is_object( $post ) || ! property_exists( $post, 'post_content' ) ) {
+			return new WP_Error( 'fetch-error', __( 'API could not find course with id of ' . $course_id, 'easyteachlms' ) );
 		}
 
-		$parsed = parse_blocks( $post->post_content );
+		$parsed = \parse_blocks( $post->post_content );
 
 		if ( empty( $parsed ) ) {
 			return new WP_Error( 'parse-error', __( 'API could not parse course', 'easyteachlms' ) );

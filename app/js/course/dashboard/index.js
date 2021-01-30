@@ -9,6 +9,7 @@ const user = window.userData;
 
 const Dashboard = ({ id }) => {
     const {
+        data,
         isActive,
         progress,
         progressRatio,
@@ -17,19 +18,19 @@ const Dashboard = ({ id }) => {
         description,
     } = useSelect((select) => {
         const active = select('easyteachlms/course').getActive();
-        const data = select('easyteachlms/course').getData(id);
+        const d = select('easyteachlms/course').getData(id);
         const completed = select('easyteachlms/course').getCompleted();
-        const { total } = data.outline;
+        const { total } = d.outline;
         const ratio = `${completed}/${total}`;
         console.log('<Dashboard>');
         console.log(data);
         console.log(select('easyteachlms/course').getQuizzes());
         return {
-            data,
+            data: d,
             isActive: 'dashboard' === active,
             progress: 100 * (completed / total),
             progressRatio: ratio,
-            description: data.description,
+            description: d.description,
             files: select('easyteachlms/course').getFiles(),
             quizData: select('easyteachlms/course').getQuizzes(),
         };
@@ -57,7 +58,15 @@ const Dashboard = ({ id }) => {
                         ? 'Course Completed!'
                         : `Course Progress ${progressRatio}`}
                 </Progress>
-                {0 === progress && <Button>Start Course</Button>}
+                {0 === progress && (
+                    <Button
+                        onClick={() => {
+                            setActive(data.outline.flat[1].uuid);
+                        }}
+                    >
+                        Start Course
+                    </Button>
+                )}
                 {100 === progress && <DownloadCertificate />}
             </Fragment>
         );

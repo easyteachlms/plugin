@@ -390,7 +390,8 @@ class Course {
 		}
 		$site_id = get_current_blog_id();
 		$courses = get_user_meta( (int) $user_id, '_enrolled_courses', true );
-		$data    = array();
+		error_log( print_r( $courses, true ) );
+		$data = array();
 
 		$data_model = new Data_Model( false );
 
@@ -398,17 +399,24 @@ class Course {
 			error_log( 'get_enrolled_courses' );
 			error_log( $site_id );
 			$course = $data_model->get_course_structure( $course_id, $user_id, $site_id );
-			error_log( print_r( $course, true ) );
+			if ( ! is_wp_error( $course ) ) {
+				$progress = get_user_meta( (int) $user_id, "_course_{$course_id}_{$site_id}", true );
+				if ( is_wp_error( $progress ) || false === $progress || empty( $progress ) ) {
+					$progress = array();
+				}
+				error_log( 'Course:: ' . print_r( $course, true ) );
+				error_log( gettype( $progress ) );
+				$completed         = $course['outline']['completed'];
+				$total             = $course['outline']['total'];
+				$progress['total'] = 100 * ( $completed / $total );
 
-			$progress          = get_user_meta( (int) $user_id, "_course_{$course_id}_{$site_id}", true );
-			$progress['total'] = 100 * ( $course['outline']['completed'] / $course['outline']['total'] );
-
-			$data[] = array(
-				'title'    => $course['title'],
-				'excerpt'  => $course['excerpt'],
-				'progress' => $progress,
-				'url'      => get_permalink( $course_id ),
-			);
+				$data[] = array(
+					'title'    => $course['title'],
+					'excerpt'  => $course['excerpt'],
+					'progress' => $progress,
+					'url'      => get_permalink( $course_id ),
+				);
+			}
 		}
 		return $data;
 	}
@@ -429,7 +437,6 @@ class Course {
 			)
 		);
 		wp_enqueue_script( $this->assets['frontend']['my-courses']['script'] );
-		wp_enqueue_style( $this->assets['frontend']['my-courses']['style'] );
 
 		return "<div id='easyteachlms-enrolled-courses' data-user-id={$user_id}></div>";
 	}
