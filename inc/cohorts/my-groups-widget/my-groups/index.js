@@ -33,12 +33,12 @@ const { apiRequest } = window.bp;
 const AllGroupsOverviewChart = () => {
     const data = [
         {
-            name: 'A new bp 7.0 group',
+            name: 'Test Group A',
             totalMembers: 40,
             completed: 15,
         },
         {
-            name: 'Test Cohort Group',
+            name: 'Test Group B',
             totalMembers: 100,
             completed: 60,
         },

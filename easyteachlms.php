@@ -3,7 +3,7 @@
 Plugin Name: EasyTeach LMS
 Plugin URI: https://easyteachlms.com
 Description: An easy to use LMS for WordPress. Supports additional features from WooCommerce, and BBPress.
-Version: 1.0.0
+Version: 1.1.0-beta
 Author: Cliff Michaels & Associates, LLC.
 Author URI: http://cliffmichaels.com
 GitHub Plugin URI: https://github.com/easyteachlms/plugin
