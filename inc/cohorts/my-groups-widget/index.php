@@ -1,6 +1,6 @@
 <?php
 
-class Groups_At_A_Glance extends Student_Tracking {
+class My_Groups_Widget extends Cohorts {
 	public function __construct( $init = false ) {
 		if ( true === $init ) {
 			add_action( 'wp_dashboard_setup', array( $this, 'the_widget' ) );
@@ -9,7 +9,7 @@ class Groups_At_A_Glance extends Student_Tracking {
 
 	public function the_widget() {
 		wp_add_dashboard_widget(
-			'groups-at-a-glance-widget',
+			'my-groups-widget',
 			'Your Groups At A Glance',
 			array( $this, 'the_widget_callback' ),
 			null, // Control Callback
@@ -21,8 +21,8 @@ class Groups_At_A_Glance extends Student_Tracking {
 
 	public function the_widget_callback( $post, $callback_args ) {
 		$assets  = parent::wpack()->register(
-			'student-tracking',
-			'widget-groups-at-a-glance',
+			'cohorts',
+			'my-groups-widget',
 			array(
 				'js'        => true,
 				'css'       => true,
@@ -38,14 +38,14 @@ class Groups_At_A_Glance extends Student_Tracking {
 		);
 		wp_localize_script(
 			$handles['js'],
-			'groupsAtGlanceWidget',
+			'myGroupsWidget',
 			$callback_args['args'],
 		);
 		wp_enqueue_script( $handles['js'] );
 		wp_enqueue_style( $handles['css'] );
 
-		echo '<div id="groups-at-a-glance-widget-render"></div>';
+		echo '<div id="my-groups-widget-render"></div>';
 	}
 }
 
-new Groups_At_A_Glance( true );
+new My_Groups_Widget( true );

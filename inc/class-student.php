@@ -266,6 +266,7 @@ class Student {
 				}
 			}
 		}
+
 		$data = update_user_meta( (int) $user_id, $meta_key, $data );
 		return $data;
 	}

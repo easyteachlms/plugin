@@ -17,10 +17,9 @@ module.exports = {
     },
     files: [
         {
-            name: 'student-tracking',
+            name: 'cohorts',
             entry: {
-                'widget-groups-at-a-glance':
-                    './inc/student-tracking/groups-at-a-glance/index.js',
+                'my-groups-widget': './inc/cohorts/my-groups-widget/index.js',
             },
         },
         // Overall App Scripts, runs both in WP-Admin and Frontend.
@@ -116,6 +115,7 @@ module.exports = {
         '@wordpress/element': 'wp.element',
         '@wordpress/escape-html': 'wp.escapeHtml',
         '@wordpress/i18n': 'wp.i18n',
+        '@wordpress/icons': 'wp.icons',
         '@wordpress/plugins': 'wp.plugins',
         '@wordpress/url': 'wp.url',
     },

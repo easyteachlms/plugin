@@ -102,25 +102,13 @@ class Data_Model {
 			switch_to_blog( $site_id );
 		}
 		$meta_key      = "_course_{$course_id}_{$site_id}";
-		$user_progress = \get_user_meta( $user_id, $meta_key, true );
+		$user_progress = get_user_meta( $user_id, $meta_key, true );
 		if ( function_exists( 'restore_current_blog' ) ) {
 			restore_current_blog();
 		}
-
-		error_log( 'is_complete()' );
-		error_log( $meta_key );
-		error_log( $uuid );
-		error_log( $course_id );
-		error_log( $user_id );
-		error_log( $site_id );
-		error_log( gettype( $user_progress ) );
 		if ( is_array( $user_progress ) && array_key_exists( 'completed', $user_progress ) && in_array( $uuid, $user_progress['completed'] ) ) {
-			error_log( 'true' );
-			error_log( '----' );
 			return true;
 		} else {
-			error_log( 'false' );
-			error_log( '----' );
 			return false;
 		}
 	}

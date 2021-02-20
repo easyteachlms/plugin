@@ -156,7 +156,7 @@ class EasyTeachLMS {
 		require_once EASYTEACHLMS_PATH . '/inc/class-certificate.php';
 		require_once EASYTEACHLMS_PATH . '/inc/class-woocommerce.php';
 		// Mid year code cleanup begins below here:
-		require_once EASYTEACHLMS_PATH . '/inc/student-tracking/class-student-tracking.php';
+		require_once EASYTEACHLMS_PATH . '/inc/cohorts/class-cohorts.php';
 	}
 
 
