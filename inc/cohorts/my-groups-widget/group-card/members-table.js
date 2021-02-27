@@ -56,7 +56,7 @@ const LessonTable = ({ data }) => {
             sortable: true,
         },
         {
-            name: 'Satus',
+            name: 'Status',
             selector: 'status',
         },
     ];

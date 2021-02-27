@@ -213,12 +213,12 @@ class Data_Model {
 						$block_parsed['parentTitle'] = $lesson_title;
 						$block_parsed['parentUuid']  = $lesson_uuid;
 						$block_parsed['locked']      = $lesson_locked;
-						$outline['total']            = $outline['total'] + 1;
+
 						// Check for completion status.
-						error_log( 'uuidsCompleted?' );
 						if ( true === $this->is_complete( $uuid, $course_id, $user_id, $site_id ) ) {
 							$outline['completed'] = $outline['completed'] + 1;
 						}
+
 						$outline['flat'][] = $block_parsed;
 						$outline['structured'][ $lesson_uuid ]['outline'][ $uuid ] = $block_parsed;
 					}
@@ -227,6 +227,89 @@ class Data_Model {
 		}
 
 		return $outline;
+	}
+
+	public function narrowly_parse_course( $course_id, $user_id, $site_id ) {
+
+		$post = \get_post( $course_id );
+
+		if ( false === $post || null === $post || \is_wp_error( $post ) || ! is_object( $post ) || ! property_exists( $post, 'post_content' ) ) {
+			return new WP_Error( 'fetch-error', __( 'API could not find course with id of ' . $course_id, 'easyteachlms' ) );
+		}
+
+		$parsed = \parse_blocks( $post->post_content );
+
+		if ( empty( $parsed ) ) {
+			return new WP_Error( 'parse-error', __( 'API could not parse course', 'easyteachlms' ) );
+		}
+
+		$course = array_pop( $this->recursively_search_for_blocks( $parsed, 'blockName', 'easyteachlms/course' ) );
+		error_log( 'narrowly_parse_course' . print_r( $course, true ) );
+
+		if ( true !== $this->has_innerBlocks( $course ) ) {
+			return new WP_Error( 'parse-error', __( 'API could not find any innerBlocks', 'easyteachlms' ) );
+		}
+
+		$data = array(
+			'title' => $post->post_title,
+			'data'  => array(),
+		);
+
+		foreach ( $course['innerBlocks'] as $key => $block ) {
+			if ( $this->is_block( 'easyteachlms/lesson', $block ) ) {
+				// Get lesson UUID for use as a key.
+				$lesson_uuid = $block['attrs']['uuid'];
+				// Establish lesson data blob.
+				$data['data'][ $lesson_uuid ] = array(
+					'title' => $block['attrs']['title'],
+					'data'  => array(),
+				);
+				// Parse lesson contents and narrowly extract their block data.
+				if ( true !== $this->has_innerBlocks( $block ) ) {
+					continue;
+				}
+				foreach ( $block['innerBlocks'] as $key => $block ) {
+					$parsed_block = $this->narrowly_parse_block( $block['blockName'], $block, $course_id, $user_id, $site_id );
+					$data['data'][ $lesson_uuid ]['data'][ $block['attrs']['uuid'] ] = $parsed_block;
+				}
+			}
+		}
+
+		return $data;
+	}
+
+	/**
+	 * Parses internal block structure and extracts only a handful of properties.
+	 * Returns title, complete, type, score in a structured manner
+	 *
+	 * @param mixed $block_name
+	 * @param mixed $block
+	 * @param mixed $key
+	 * @param mixed $outline
+	 * @return void
+	 */
+	public function narrowly_parse_block( $block_name, $block, $course_id, $user_id, $site_id ) {
+		if ( true !== $this->is_block( $block_name, $block ) ) {
+			return;
+		}
+
+		$uuid = $block['attrs']['uuid'];
+
+		$data = array(
+			'type'     => $this->get_block_name( $block_name ),
+			'title'    => $block['attrs']['title'],
+			'complete' => false,
+		);
+
+		if ( true === $this->is_complete( $uuid, $course_id, $user_id, $site_id ) ) {
+			$data['complete'] = true;
+		}
+
+		if ( 'easyteachlms/quiz' === $data['type'] ) {
+			$data['score'] = $this->get_quiz_score( $block['attrs']['uuid'], $course_id, $user_id, $site_id );
+		}
+
+		return $data;
 	}
 
 	/**
@@ -258,15 +341,15 @@ class Data_Model {
 			'completed'     => false,
 			'locked'        => false,
 		);
+		// Check if this block has a schedule attached, if so then check if we are after the scheduled opening date
+		// if not then set the lock property to true, this will prevent users from accessing this block.
 		if ( ! empty( $block['attrs']['schedule'] ) ) {
 			$now = strtotime( date( 'Y-m-dH:i:s', strtotime( 'now' ) ) );
-			error_log( 'now?' );
-			error_log( $now );
-			error_log( strtotime( $block['attrs']['schedule'] ) );
 			if ( strtotime( $block['attrs']['schedule'] ) > $now ) {
 				$data['locked'] = date( 'Y-m-d H:i:s', strtotime( $block['attrs']['schedule'] ) );
 			}
 		}
+
 		error_log( "parse({$block['attrs']['title']})" );
 		if ( true === $this->is_complete( $uuid, $course_id, $user_id, $site_id ) ) {
 			$data['completed'] = true;

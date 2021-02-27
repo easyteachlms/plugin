@@ -149,16 +149,11 @@ if ( class_exists( 'BP_Group_Extension' ) ) {
 
 		public function settings_screen_save( $group_id = null ) {
 			global $_POST;
-			$group = groups_get_group( $group_id );
-			error_log( $group_id );
-			error_log( print_r( $_POST, true ) );
-			error_log( print_r( $group, true ) );
+			$group      = groups_get_group( $group_id );
 			$course_ids = array();
 			if ( array_key_exists( '_attached_courses', $_POST ) && ! empty( $_POST['_attached_courses'] ) ) {
 				$course_ids = explode( ',', $_POST['_attached_courses'] );
 			}
-			error_log( 'process:::' );
-			error_log( print_r( $course_ids, true ) );
 			$this->process_form( $group_id, $course_ids );
 		}
 
@@ -306,26 +301,6 @@ if ( class_exists( 'BP_Group_Extension' ) ) {
 			return $attached_courses;
 		}
 
-
-		/**
-		 * Constructor
-		 *
-		 * @since 3.0.0
-		 *
-		 * @param array $args Optional array having the following parameters {
-		 *     @type string $id                A string to use as the unique ID for the button. Required.
-		 *     @type int    $position          Where to insert the Button. Defaults to 99.
-		 *     @type string $component         The Component's the button is build for (eg: Activity, Groups..). Required.
-		 *     @type bool   $must_be_logged_in Whether the button should only be displayed to logged in users. Defaults to True.
-		 *     @type bool   $block_self        Optional. True if the button should be hidden when a user is viewing his own profile.
-		 *                                     Defaults to False.
-		 *     @type string $parent_element    Whether to use a wrapper. Defaults to false.
-		 *     @type string $parent_attr       set an array of attributes for the parent element.
-		 *     @type string $button_element    Set this to 'button', 'img', or 'a', defaults to anchor.
-		 *     @type string $button_attr       Any attributes required for the button_element
-		 *     @type string $link_text         The text of the link. Required.
-		 * }
-		 */
 		public function group_member_item( $buttons, $user_id, $type ) {
 			if ( 'group_member' === $type ) {
 				global $bp;
@@ -369,25 +344,12 @@ if ( class_exists( 'BP_Group_Extension' ) ) {
 			return $buttons;
 		}
 
-		/**
-		 * Gets the UUID's of all lessons, files, quizzes?? in a course by pasrsing the data model.
-		 *
-		 * @param mixed $course_id
-		 * @return array of uuids
-		 */
-		public function get_uuids( $course_id ) {
-
-		}
-
-		public function update_lessons() {
-
-		}
-
 	}
 
 	bp_register_group_extension( 'EasyTeachLMS\GroupCourses' );
 
 	$group_courses = new GroupCourses();
+
 	add_action( 'wp_enqueue_scripts', array( $group_courses, 'register_assets' ) );
 	add_action( 'groups_membership_accepted', array( $group_courses, 'enroll' ), 10, 2 );
 	add_action( 'groups_accept_invite', array( $group_courses, 'enroll' ), 10, 2 );

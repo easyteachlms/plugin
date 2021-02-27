@@ -28,6 +28,7 @@ class Cohorts extends EasyTeachLMS {
 			require_once EASYTEACHLMS_PATH . '/inc/cohorts/my-groups-widget/index.php';
 
 			add_filter( 'bp_rest_groups_prepare_value', array( $this, 'extend_groups_rest_data' ), 10, 3 );
+			add_filter( 'elms_cohort_group_data', array( $this, 'get_group_progress' ), 10, 2 );
 			add_filter( 'elms_cohort_group_data', array( $this, 'get_courses' ), 10, 2 );
 		}
 	}
@@ -51,6 +52,58 @@ class Cohorts extends EasyTeachLMS {
 		return $to_return;
 	}
 
+	public function get_member_progress() {
+		// Get a list of group members and foreach them.
+		$data = array(
+			'user_id_01_xxx' => array(
+				'course_01_post_id' => array(
+					'title' => 'Sample Sales Production Training',
+					'data'  => array(
+						'lesson_01_uuid' => array(
+							'title' => 'Whats new in watch os 7',
+							'data'  => array(
+								'lesson_content_01_uuid' => array(
+									'type'     => 'lesson',
+									'title'    => 'First Look: Watch Series 6',
+									'complete' => true,
+								),
+								'lesson_content_02_uuid' => array(
+									'type'     => 'lesson',
+									'title'    => 'Difference in Watch Series 6 And Beyond',
+									'complete' => false,
+								),
+								'lesson_content_03_uuid' => array(
+									'type'     => 'quiz',
+									'title'    => 'Difference in Watch Series 6 And Beyond',
+									'complete' => true,
+									'score'    => 80,
+								),
+							),
+						),
+						'lesson_02_uuid' => array(
+							'title' => 'Apple Fitness Plus',
+							'data'  => array(
+								'lesson_content_01_uuid' => array(
+									'type'     => 'quiz',
+									'title'    => 'Talking to customers about our new watch',
+									'complete' => false,
+									'score'    => 40,
+								),
+							),
+						),
+					),
+				),
+			),
+		);
+		return $data;
+	}
+
+	/**
+	 * Adds course information to the group property in the BP rest api.
+	 *
+	 * @uses filter->elms_cohort_group_data
+	 * @return WP Rest API Response
+	 */
 	public function extend_groups_rest_data( $response, $request, $item ) {
 		if ( property_exists( $response, 'data' ) ) {
 			$requesting_user = wp_get_current_user();
@@ -61,6 +114,23 @@ class Cohorts extends EasyTeachLMS {
 			$response->data            = apply_filters( 'elms_cohort_group_data', $response->data, $group_id );
 		}
 		return $response;
+	}
+
+	public function get_group_progress( $data, $group_id ) {
+		if ( array_key_exists( 'courses', $data ) && array_key_exists( 'members', $data ) ) {
+			$site_id               = get_current_blog_id();
+			$data_model            = new Data_Model( false );
+			$data['groupProgress'] = array();
+
+			foreach ( $data['members'] as $user_id ) {
+				$data['groupProgress'][ $user_id ] = array();
+
+				foreach ( $data['courses'] as $course_id ) {
+					$data['groupProgress'][ $user_id ][ $course_id ] = $data_model->narrowly_parse_course( $course_id, $user_id, $site_id );
+				}
+			}
+		}
+		return $data;
 	}
 
 	public function get_courses( $data, $group_id ) {
@@ -82,21 +152,6 @@ class Cohorts extends EasyTeachLMS {
 		error_log( print_r( $courses, true ) );
 		// $group_data['members'] = array();
 		// go through each courseId and then construct an array of each member from group_data['members'] and then go get each members data...
-	}
-
-	public function mark_uuid_as( $uuid, $action, $data ) {
-	}
-
-	public function mark_uuid_complete() {
-
-	}
-
-	public function mark_uuid_started() {
-
-	}
-
-	public function mark_quiz_complete() {
-
 	}
 
 }
