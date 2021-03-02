@@ -51,21 +51,10 @@ const Divider = () => {
     );
 };
 
-const TotalGroupProgress = () => {
-    const data = [
-        {
-            name: 'Completed',
-            value: 30,
-            fill: 'var(--wp-admin-theme-color)',
-        },
-        {
-            name: 'Incomplete',
-            value: 10,
-            fill: 'var(--wp-admin-theme-color-darker-20)',
-        },
-    ];
+const TotalGroupProgress = ({ data }) => {
+    console.log('TotalGroupProgress', data);
     return (
-        <BaseControl label="Group Course Work">
+        <BaseControl label="Group Members Who Have Completed All Course Work">
             <div style={{ width: '100%', height: 300 }}>
                 <ResponsiveContainer>
                     <BarChart data={data} layout="vertical">
@@ -95,14 +84,24 @@ const TotalGroupProgress = () => {
     );
 };
 
-const GroupModal = ({ data }) => {
+const Group = ({ data }) => {
     const [isOpen, setOpen] = useState(false);
+    const [chartData, setChartData] = useState([
+        {
+            name: 'Completed',
+            value: 0,
+            fill: 'var(--wp-admin-theme-color)',
+        },
+        {
+            name: 'Incomplete',
+            value: 0,
+            fill: 'var(--wp-admin-theme-color-darker-20)',
+        },
+    ]);
     const openModal = () => setOpen(true);
     const closeModal = () => setOpen(false);
 
-    console.log('GroupModal', data);
-
-    const { name } = data;
+    const { name, link } = data;
 
     const LastActivity = () => {
         if (!data.hasOwnProperty('last_activity_diff')) {
@@ -131,6 +130,48 @@ const GroupModal = ({ data }) => {
         );
     };
 
+    useEffect(() => {
+        const chartDataMembers = {
+            total: 0,
+            complete: 0,
+            incomplete: 0,
+        };
+        console.log('chartDataMembers', data);
+
+        if (false !== data) {
+            const { groupProgress } = data;
+            Object.keys(groupProgress).map((memberId) => {
+                let completed = 0;
+                let total = 0;
+                Object.keys(groupProgress[memberId]).forEach((courseId) => {
+                    if (true === groupProgress[memberId][courseId].complete) {
+                        completed += 1;
+                    }
+                    total += 1;
+                });
+
+                if (completed === total) {
+                    chartDataMembers.complete += 1;
+                } else {
+                    chartDataMembers.incomplete += 1;
+                }
+                chartDataMembers.total += 1;
+            });
+            setChartData([
+                {
+                    name: 'Completed',
+                    value: chartDataMembers.complete,
+                    fill: 'var(--wp-admin-theme-color)',
+                },
+                {
+                    name: 'Incomplete',
+                    value: chartDataMembers.incomplete,
+                    fill: 'var(--wp-admin-theme-color-darker-20)',
+                },
+            ]);
+        }
+    }, [data]);
+
     return (
         <Fragment>
             <Button
@@ -141,6 +182,17 @@ const GroupModal = ({ data }) => {
             >
                 View Group Details
             </Button>
+            <Button
+                isSecondary
+                disabled={false === data}
+                isBusy={false === data}
+                onClick={() => {
+                    window.location = link;
+                }}
+                style={{ marginLeft: '8px' }}
+            >
+                View Group
+            </Button>
             {isOpen && (
                 <Modal
                     title={name}
@@ -149,7 +201,7 @@ const GroupModal = ({ data }) => {
                 >
                     <Fragment>
                         <LastActivity />
-                        <TotalGroupProgress />
+                        <TotalGroupProgress data={chartData} />
                         <Description />
                         <Divider />
                         <MembersTable groupData={data} />
@@ -160,4 +212,4 @@ const GroupModal = ({ data }) => {
     );
 };
 
-export default GroupModal;
+export default Group;

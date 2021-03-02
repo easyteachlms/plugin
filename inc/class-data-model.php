@@ -242,27 +242,42 @@ class Data_Model {
 		if ( empty( $parsed ) ) {
 			return new WP_Error( 'parse-error', __( 'API could not parse course', 'easyteachlms' ) );
 		}
-
-		$course = array_pop( $this->recursively_search_for_blocks( $parsed, 'blockName', 'easyteachlms/course' ) );
-		error_log( 'narrowly_parse_course' . print_r( $course, true ) );
+		$course = $this->recursively_search_for_blocks( $parsed, 'blockName', 'easyteachlms/course' );
+		$course = array_pop( $course );
 
 		if ( true !== $this->has_innerBlocks( $course ) ) {
 			return new WP_Error( 'parse-error', __( 'API could not find any innerBlocks', 'easyteachlms' ) );
 		}
 
 		$data = array(
-			'title' => $post->post_title,
-			'data'  => array(),
+			'title'    => $post->post_title,
+			'progress' => array(
+				'complete' => 0,
+				'total'    => 0,
+			),
+			'data'     => array(),
+			'complete' => false,
+			// Not really using rawTotal at the moment but leaving it in here, this is the raw total of all lesson content blocks progress status.
+			'rawTotal' => array(
+				'complete' => 0,
+				'total'    => 0,
+			),
 		);
 
 		foreach ( $course['innerBlocks'] as $key => $block ) {
 			if ( $this->is_block( 'easyteachlms/lesson', $block ) ) {
+				// Add this lesson to progress total.
+				$data['progress']['total'] = $data['progress']['total'] + 1;
 				// Get lesson UUID for use as a key.
 				$lesson_uuid = $block['attrs']['uuid'];
 				// Establish lesson data blob.
 				$data['data'][ $lesson_uuid ] = array(
-					'title' => $block['attrs']['title'],
-					'data'  => array(),
+					'title'    => $block['attrs']['title'],
+					'progress' => array(
+						'complete' => 0,
+						'total'    => 0,
+					),
+					'data'     => array(),
 				);
 				// Parse lesson contents and narrowly extract their block data.
 				if ( true !== $this->has_innerBlocks( $block ) ) {
@@ -271,11 +286,32 @@ class Data_Model {
 				foreach ( $block['innerBlocks'] as $key => $block ) {
 					$parsed_block = $this->narrowly_parse_block( $block['blockName'], $block, $course_id, $user_id, $site_id );
 					$data['data'][ $lesson_uuid ]['data'][ $block['attrs']['uuid'] ] = $parsed_block;
+
+					$data['data'][ $lesson_uuid ]['progress'] = $this->calculate_lesson_progress( $parsed_block, $data['data'][ $lesson_uuid ]['progress'] );
+				}
+				$data['rawTotal']['complete'] = $data['rawTotal']['complete'] + $data['data'][ $lesson_uuid ]['progress']['complete'];
+				$data['rawTotal']['total']    = $data['rawTotal']['total'] + $data['data'][ $lesson_uuid ]['progress']['total'];
+
+				// Mark the lesson itself as complete when the user has 100% completed all the lesson content blocks.
+				if ( $data['data'][ $lesson_uuid ]['progress']['complete'] === $data['data'][ $lesson_uuid ]['progress']['total'] ) {
+					$data['progress']['complete'] = $data['progress']['complete'] + 1;
 				}
 			}
 		}
 
+		if ( $data['progress']['complete'] === $data['progress']['total'] ) {
+			$data['complete'] = true;
+		}
+
 		return $data;
+	}
+
+	public function calculate_lesson_progress( $parsed_block, $progress ) {
+		$progress['total'] = $progress['total'] + 1;
+		if ( true === $parsed_block['complete'] ) {
+			$progress['complete'] = $progress['complete'] + 1;
+		}
+		return $progress;
 	}
 
 	/**
@@ -305,7 +341,7 @@ class Data_Model {
 			$data['complete'] = true;
 		}
 
-		if ( 'easyteachlms/quiz' === $data['type'] ) {
+		if ( 'quiz' === $data['type'] ) {
 			$data['score'] = $this->get_quiz_score( $block['attrs']['uuid'], $course_id, $user_id, $site_id );
 		}
 

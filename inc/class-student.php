@@ -175,8 +175,6 @@ class Student {
 		if ( $enrolled_courses ) {
 			$return['enrolled'] = $enrolled_courses;
 			foreach ( $enrolled_courses as $course_id ) {
-				$meta_key = "_course_{$course_id}_{$site_id}";
-				// $course_data = get_user_meta( $user_id, $meta_key, true );
 				$course_data   = $this->get_course( $course_id, $user_id );
 				$notifications = $this->get_notifications( $course_data, $course_id, $user_id );
 

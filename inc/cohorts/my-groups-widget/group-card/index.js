@@ -14,7 +14,7 @@ import {
 } from '@wordpress/components';
 
 /** Internal Dependencies: */
-import GroupModal from './modal';
+import Group from './group';
 
 const { apiRequest } = window.bp;
 
@@ -54,7 +54,7 @@ const GroupCard = ({ id, name }) => {
                 <strong>{name}</strong>
             </CardHeader>
             <CardBody>
-                <GroupModal data={groupData} />
+                <Group data={groupData} />
             </CardBody>
         </Card>
     );

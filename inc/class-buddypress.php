@@ -68,42 +68,6 @@ if ( class_exists( 'BP_Group_Extension' ) ) {
 			}
 		}
 
-		public function group_members_overview() {
-			$group         = groups_get_current_group();
-			$group_id      = $group->id;
-			$total_members = groups_get_total_member_count( $group_id );
-			?>
-			<div class="ui segment">
-				<h4 class="ui header">Group Overview</h4>
-				<div style="display: flex; flex-direction: row">
-					<div>
-						<div class="ui statistics">
-							<div class="statistic">
-								<div class="value">
-								?
-								</div>
-								<div class="label">
-								Members
-								</div>
-							</div>
-							<div class="statistic">
-								<div class="value">
-									&nbsp;
-								</div>
-								<div class="label">
-								</div>
-							</div>
-						</div>
-					</div>
-					<div style="display: flex; flex-grow: 1; align-items: flex-end; justify-content: flex-end;">
-						<div id="js-react-view-all-courses-progress" class="ui primary button">View Group Progress</div>
-					</div>
-				</div>
-			</div>
-			<?php // vdump( $group ); ?>
-			<?php
-		}
-
 		public function display( $group_id = null ) {
 			$group_id         = bp_get_group_id();
 			$attached_courses = groups_get_groupmeta( $group_id, '_attached_courses' );
@@ -355,6 +319,6 @@ if ( class_exists( 'BP_Group_Extension' ) ) {
 	add_action( 'groups_accept_invite', array( $group_courses, 'enroll' ), 10, 2 );
 	add_action( 'bp_groups_member_after_delete', array( $group_courses, 'unenroll' ), 10, 2 );
 	add_filter( 'bp_nouveau_get_members_buttons', array( $group_courses, 'group_member_item' ), 10, 3 );
-	// add_action( 'bp_before_group_members_content', array( $group_courses, 'group_members_overview' ) );
+
 	add_action( 'rest_api_init', array( $group_courses, 'register_rest_endpoints' ) );
 }

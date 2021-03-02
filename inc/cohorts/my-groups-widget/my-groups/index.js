@@ -64,6 +64,7 @@ const AllGroupsOverviewChart = () => {
 
 const MyGroups = () => {
     const [groups, setGroups] = useState(false);
+
     const getGroups = () => {
         apiRequest({
             path: '/buddypress/v1/groups',
@@ -81,12 +82,21 @@ const MyGroups = () => {
                 alert(error.message);
             });
     };
+
     useEffect(() => {
         getGroups();
     }, []);
+
     return (
         <Fragment>
-            <AllGroupsOverviewChart />
+            <p>
+                Access all your groups, view member progress, and grade quizzes
+                from here.
+            </p>
+            <p>
+                If you need help getting started with EasyTeach LMS +
+                BuddyPress, <a href="#">click here</a>
+            </p>
             {false !== groups &&
                 groups.map((g) => {
                     const { id, name } = g;

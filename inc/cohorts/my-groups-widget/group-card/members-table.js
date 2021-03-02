@@ -8,36 +8,38 @@ import {
     Animate,
     BaseControl,
     Button,
+    ButtonGroup,
+    Modal,
+    HorizontalRule,
     Flex,
     FlexItem,
     FlexBlock,
     TabPanel,
+    TextareaControl,
     Notice,
 } from '@wordpress/components';
-
-import { Icon, people } from '@wordpress/icons';
-
-import { random, name } from 'faker';
+import apiFetch from '@wordpress/api-fetch';
 
 /**
  * External Dependencies
  */
 // @TODO Later on for optimization https://github.com/jbetancur/react-data-table-component#optimizing-functional-components
 import DataTable from 'react-data-table-component';
+import { TextArea } from 'semantic-ui-react';
 
 const ProgressBar = ({ value }) => {
     console.log('<ProgressBar/>', value);
     return (
         <div
             style={{
-                backgroundColor: '#e7e8e9',
-                paddingRight: `${value}%`,
+                backgroundColor: 'var(--wp-admin-theme-color)',
+                paddingLeft: `${value}%`,
                 width: '100%',
             }}
         >
             <div
                 style={{
-                    backgroundColor: 'var(--wp-admin-theme-color)',
+                    backgroundColor: '#e7e8e9',
                     width: '100%',
                     height: '6px',
                 }}
@@ -46,8 +48,118 @@ const ProgressBar = ({ value }) => {
     );
 };
 
-const LessonTable = ({ data }) => {
-    const { lessonContents } = data;
+const GradeQuiz = ({ uuid, courseId, userId, scoreData }) => {
+    const [open, toggleOpen] = useState(false);
+    const { essayAnswers, pointsRequiredToPass, score, total } = scoreData;
+
+    const finishGradingQuiz = (
+        passed = false,
+        pointsToAward = 0,
+        currentScore = 0,
+    ) => {
+        let newScore = currentScore;
+        // Get existing userScore Data
+        if (true === passed) {
+            newScore = currentScore + pointsToAward;
+        }
+        // Check if quiz has any free text answers and if so we need to grade the quiz differently. And display different warnings on completion.
+        apiFetch({
+            path: `/easyteachlms/v3/student/update-quiz-progress/?userId=${userId}&uuid=${uuid}&courseId=${courseId}&newScore=${newScore}`,
+            method: 'POST',
+        }).then((d) => {
+            console.log(d);
+        });
+    };
+
+    return (
+        <Fragment>
+            {true === open && (
+                <Modal
+                    title="Grade Quiz"
+                    onRequestClose={() => toggleOpen(false)}
+                    className="quiz-grading-modal"
+                >
+                    <p>
+                        <strong>Current Points Awarded:</strong> {score}
+                    </p>
+                    <p>
+                        <strong>Total Points Available:</strong> {total}
+                    </p>
+                    <p>
+                        <strong>Score Required To Pass:</strong>{' '}
+                        {pointsRequiredToPass}
+                    </p>
+                    <HorizontalRule />
+                    <ul>
+                        {essayAnswers.map((q) => {
+                            const { question, givenAnswer, points, graded } = q;
+                            if (true === graded) {
+                                return <Fragment />;
+                            }
+                            return (
+                                <li>
+                                    <p>
+                                        <BaseControl label="Question:">
+                                            <p>
+                                                <strong>{question}</strong>
+                                            </p>
+                                        </BaseControl>
+                                    </p>
+                                    <p>
+                                        <TextareaControl
+                                            label="Given Answer:"
+                                            disabled
+                                            value={givenAnswer}
+                                        />
+                                    </p>
+                                    <ButtonGroup>
+                                        <Button
+                                            isPrimary
+                                            onClick={() => {
+                                                finishGradingQuiz(
+                                                    true,
+                                                    points,
+                                                    score,
+                                                );
+                                            }}
+                                        >
+                                            Correct
+                                        </Button>
+                                        <Button
+                                            isDestructive
+                                            onClick={() => {
+                                                finishGradingQuiz(
+                                                    false,
+                                                    points,
+                                                    score,
+                                                );
+                                            }}
+                                        >
+                                            Incorrect
+                                        </Button>
+                                    </ButtonGroup>
+                                </li>
+                            );
+                        })}
+                    </ul>
+                </Modal>
+            )}
+            <Button
+                isSmall
+                isSecondary
+                onClick={() => {
+                    toggleOpen(true);
+                }}
+            >
+                Grade Quiz
+            </Button>
+        </Fragment>
+    );
+};
+
+const LessonContents = ({ data }) => {
+    const { raw, courseId, userId } = data;
+    console.log('LessonContents?', data);
 
     const columns = [
         {
@@ -58,6 +170,9 @@ const LessonTable = ({ data }) => {
         {
             name: 'Status',
             selector: 'status',
+            cell: (row) => {
+                return row.status;
+            },
         },
     ];
 
@@ -65,12 +180,25 @@ const LessonTable = ({ data }) => {
         <div style={{ paddingLeft: '3.1rem' }}>
             <DataTable
                 columns={columns}
-                data={lessonContents.map((lesson) => {
-                    const { uuid, title } = lesson;
+                data={Object.keys(raw).map((uuid) => {
+                    const { title, complete, type, score } = raw[uuid];
+                    let status = complete ? 'Complete' : 'Incomplete';
+                    if ('quiz' === type && 'object' === typeof score) {
+                        if (1 >= score.essayAnswers.length) {
+                            status = (
+                                <GradeQuiz
+                                    uuid={uuid}
+                                    courseId={courseId}
+                                    userId={userId}
+                                    scoreData={score}
+                                />
+                            );
+                        }
+                    }
                     return {
                         id: uuid,
                         title,
-                        status: 'Incomplete',
+                        status,
                     };
                 })}
                 noTableHead
@@ -83,8 +211,9 @@ const LessonTable = ({ data }) => {
  * Renders a table containing all the lessons, and lesson contents, and progress for a course for a user.
  * @param {*} param0
  */
-const CourseTable = ({ data }) => {
-    const { outline } = data;
+const Lessons = ({ data }) => {
+    const { raw, courseId, userId } = data;
+    console.log('Lessons?', data);
 
     const columns = [
         {
@@ -105,30 +234,29 @@ const CourseTable = ({ data }) => {
         <div style={{ paddingLeft: '3.1rem' }}>
             <DataTable
                 columns={columns}
-                data={Object.keys(outline.structured).map((uuid) => {
-                    const s = outline.structured[uuid];
-                    const { title } = s;
-
+                data={Object.keys(raw).map((uuid) => {
+                    const { title, progress } = raw[uuid];
+                    console.log('rawUUID', raw[uuid]);
+                    const p = (progress.complete / progress.total) * 100;
                     return {
                         id: uuid,
                         title,
-                        progress: random.number({ min: 0, max: 80 }), // The aggregate progress of all lesson contents in a lesson in a course
-                        lessonContents: Object.keys(s.outline).map(
-                            (lessonUuid) => s.outline[lessonUuid],
-                        ),
+                        progress: p,
+                        raw: raw[uuid].data,
+                        userId,
+                        courseId,
                     };
                 })}
                 expandableRows
-                expandableRowsComponent={<LessonTable />}
+                expandableRowsComponent={<LessonContents />}
                 noTableHead
             />
         </div>
     );
 };
 
-const Member = ({ data }) => {
-    const { userId, courses, courseStructure } = data;
-    console.log('Member?', userId, courseStructure);
+const Courses = ({ data }) => {
+    const { raw, userId } = data;
 
     const columns = [
         {
@@ -149,16 +277,19 @@ const Member = ({ data }) => {
         <div style={{ paddingLeft: '3.1rem' }}>
             <DataTable
                 columns={columns}
-                data={courses.map((courseId) => {
-                    const { outline, title } = courseStructure[courseId];
+                data={Object.keys(raw).map((courseId) => {
+                    const { title, progress } = raw[courseId];
+                    const p = (progress.complete / progress.total) * 100;
                     return {
                         title,
-                        outline,
-                        progress: random.number({ min: 40, max: 100 }), // The aggregate progress of all lessons in a course
+                        raw: raw[courseId].data,
+                        progress: p, // The aggregate progress of all lessons in a course
+                        userId,
+                        courseId,
                     };
                 })}
                 expandableRows
-                expandableRowsComponent={<CourseTable />}
+                expandableRowsComponent={<Lessons />}
             />
         </div>
     );
@@ -166,7 +297,7 @@ const Member = ({ data }) => {
 
 const MembersTable = ({ groupData }) => {
     // Would be great if we could have a function to GET group data.
-    const { members, courses, courseStructure } = groupData;
+    const { members, groupProgress } = groupData;
 
     // @TODO Filtering: https://jbetancur.github.io/react-data-table-component/?path=/story/filtering--example-1
     // const filteredItems = members.filter(item => item.name && item.name.toLowerCase().includes(filterText.toLowerCase()));
@@ -179,11 +310,18 @@ const MembersTable = ({ groupData }) => {
         },
         {
             name: 'Actions',
-            selector: 'actions',
+            selector: 'messageLink',
             cell: (row) => {
+                const { messageLink } = row;
                 return (
                     <div>
-                        <Button isSecondary isSmall>
+                        <Button
+                            isSecondary
+                            isSmall
+                            onClick={() => {
+                                window.location = messageLink;
+                            }}
+                        >
                             Contact
                         </Button>
                     </div>
@@ -197,16 +335,16 @@ const MembersTable = ({ groupData }) => {
             <BaseControl label="Members">
                 <DataTable
                     columns={columns}
-                    data={members.map((userId) => {
+                    data={members.map(({ messageLink, name, userId }) => {
                         return {
-                            name: name.findName(),
+                            messageLink,
+                            name,
+                            raw: groupProgress[userId],
                             userId,
-                            courses,
-                            courseStructure,
                         };
                     })}
                     expandableRows
-                    expandableRowsComponent={<Member />}
+                    expandableRowsComponent={<Courses />}
                 />
             </BaseControl>
         </Fragment>
