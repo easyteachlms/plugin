@@ -61,11 +61,10 @@ class WooCom {
 
 	public function process_order( $order_id ) {
 		$order   = \wc_get_order( $order_id );
-		$user_id = \wp_get_current_user()->ID;
+		$user_id = $order->get_user_id();
 
-		if ( sizeof( $order->get_items() ) > 0 ) {
+		if ( count( $order->get_items() ) > 0 ) {
 			foreach ( $order->get_items() as $item ) {
-
 				// Simple product authorization.
 				$product_id = $item['product_id'];
 				$this->authorize_purchase( $product_id, $user_id );
@@ -75,7 +74,6 @@ class WooCom {
 	}
 
 	public function tab( $tabs ) {
-		// unset( $tabs['inventory'] );
 		$tabs['easyteachlms'] = array(
 			'label'    => 'EasyTeachLMS',
 			'target'   => 'easy_teach_lms_data',
