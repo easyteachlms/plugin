@@ -14,7 +14,8 @@ class WooCom {
 			add_action( 'woocommerce_product_data_panels', array( $this, 'tab_content' ) );
 			add_action( 'woocommerce_process_product_meta', array( $this, 'save_fields' ), 10, 2 );
 			// Enrollment
-			add_action( 'woocommerce_payment_complete', array( $this, 'process_order' ), 10, 3 );
+			// add_action( 'woocommerce_payment_complete', array( $this, 'process_order' ), 10, 1 );
+			add_action( 'woocommerce_order_status_completed', array( $this, 'process_order' ), 10, 1 );
 
 			// We're going to force some options on WooCommerce
 			add_action( 'init', array( $this, 'force_enable_accounts' ) );
@@ -68,7 +69,6 @@ class WooCom {
 				// Simple product authorization.
 				$product_id = $item['product_id'];
 				$this->authorize_purchase( $product_id, $user_id );
-
 			}
 		}
 	}
