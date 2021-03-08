@@ -318,7 +318,8 @@ if ( class_exists( 'BP_Group_Extension' ) ) {
 	add_action( 'groups_membership_accepted', array( $group_courses, 'enroll' ), 10, 2 );
 	add_action( 'groups_accept_invite', array( $group_courses, 'enroll' ), 10, 2 );
 	add_action( 'bp_groups_member_after_delete', array( $group_courses, 'unenroll' ), 10, 2 );
-	add_filter( 'bp_nouveau_get_members_buttons', array( $group_courses, 'group_member_item' ), 10, 3 );
+	// Disabling this for the time being, needs to be updated to use new narrowly parsed course data from the cohort widget.
+	// add_filter( 'bp_nouveau_get_members_buttons', array( $group_courses, 'group_member_item' ), 10, 3 );
 
 	add_action( 'rest_api_init', array( $group_courses, 'register_rest_endpoints' ) );
 }

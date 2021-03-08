@@ -103,24 +103,29 @@ class Student {
 				'methods'             => 'POST',
 				'callback'            => array( $this, 'update_quiz_progress_restfully' ),
 				'args'                => array(
-					'userId'   => array(
+					'userId'      => array(
 						'validate_callback' => function( $param, $request, $key ) {
 							return is_string( $param );
 						},
 					),
-					'uuid'     => array(
+					'uuid'        => array(
 						'validate_callback' => function( $param, $request, $key ) {
 							return is_string( $param );
 						},
 					),
-					'courseId' => array(
+					'courseId'    => array(
 						'validate_callback' => function( $param, $request, $key ) {
 							return is_string( $param );
 						},
 					),
-					'newScore' => array(
+					'newScore'    => array(
 						'validate_callback' => function( $param, $request, $key ) {
 							return is_string( $param );
+						},
+					),
+					'essayAnswer' => array(
+						'validate_callback' => function( $param, $request, $key ) {
+							return is_numeric( $param );
 						},
 					),
 				),
@@ -270,14 +275,12 @@ class Student {
 	}
 
 	public function update_quiz_progress_restfully( \WP_REST_Request $request ) {
-		$site_id   = get_current_blog_id();
-		$user_id   = (int) $request->get_param( 'userId' );
-		$course_id = (int) $request->get_param( 'courseId' );
-		$uuid      = $request->get_param( 'uuid' );
-		$new_score = $request->get_param( 'newScore' );
-
-		error_log( 'new Score??' );
-		error_log( print_r( gettype( $new_score ), true ) );
+		$site_id      = get_current_blog_id();
+		$user_id      = (int) $request->get_param( 'userId' );
+		$course_id    = (int) $request->get_param( 'courseId' );
+		$uuid         = $request->get_param( 'uuid' );
+		$new_score    = $request->get_param( 'newScore' );
+		$essay_answer = $request->get_param( 'essayAnswer' );
 
 		$meta_key = "_course_{$course_id}_{$site_id}";
 
@@ -316,11 +319,19 @@ class Student {
 			// If the user has already completed/passed this quiz but then submits another entry that fails then the completion should be removed, so find the diff between an array with all the completed and one with this completed item and return that.
 			$data['completed'] = array_diff( $data['completed'], array( $uuid ) );
 		}
+
+		// If we're passing in an essay answer index then we need to set it as graded.
+		if ( null !== $essay_answer ) {
+			$user_data['essayAnswers'][ $essay_answer ]['graded'] = true;
+		}
+
 		$data['scores'][ $uuid ] = $user_data;
+
 		error_log( 'User ID' );
 		error_log( $user_id );
 		error_log( $meta_key );
 		error_log( print_r( $data, true ) );
+
 		$data = update_user_meta( (int) $user_id, $meta_key, $data );
 		return $data;
 	}

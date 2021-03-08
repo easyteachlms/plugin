@@ -19,6 +19,10 @@ const Settings = () => {
                             title: 'Welcome',
                         },
                         {
+                            name: 'buddypress',
+                            title: 'Groups (BuddyPress)',
+                        },
+                        {
                             name: 'license',
                             title: 'License Management and Updates',
                         },
@@ -31,6 +35,16 @@ const Settings = () => {
                                     <p>
                                         Automatic upgrades through license
                                         activation coming at end of beta.
+                                    </p>
+                                </CardBody>
+                            );
+                        }
+                        if ('buddypress' === tab.name) {
+                            return (
+                                <CardBody>
+                                    <p>
+                                        Instructions and tutorial for enabling
+                                        Group functionality aka BuddyPress
                                     </p>
                                 </CardBody>
                             );

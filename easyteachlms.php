@@ -203,7 +203,7 @@ class EasyTeachLMS {
 				<p>EasyTeach is also a POWERFUL Content Management System, featuring Gutenberg’s Drag & Drop Editor to save you time and effort at every turn, no matter what kind of look and feel you need to create for your user experience.</p>
 				<ul style="padding-left: 15px;list-style: disc;">
 					<li>Ready to create your first course? <a href="<?php echo $new_course_link; ?>">Start Here</a></li>
-					<li style="opacity: 0.6">Need to set up an EasyTeach WordPress Web Template with Built In Demo Content? <a href="#">START HERE (COMING SOON)</a></li>
+					<li>Ready to enable BuddyPress functionality and manage a group of students? <a href="<?php echo $settings_link; ?>">Start Here</li>
 					<li>Need instructions or resources for Easy Teach? <a href="<?php echo $settings_link; ?>">Start Here</a></li>
 				</ul>
 			</div>

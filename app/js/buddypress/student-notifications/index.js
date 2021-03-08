@@ -171,9 +171,7 @@ const ViewStudentNotifications = ({ userSlug, groupId }) => {
                 <Modal.Header>Grade Quiz</Modal.Header>
                 <Modal.Content>
                     <Modal.Description>
-                        <p>
-                            Student has quiz answers that requires attention...
-                        </p>
+                        <p>Student has quiz answers that require attention:</p>
                     </Modal.Description>
                     <List divided relaxed>
                         {false !== notifications &&

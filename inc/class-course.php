@@ -406,9 +406,13 @@ class Course {
 				}
 				error_log( 'Course:: ' . print_r( $course, true ) );
 				error_log( gettype( $progress ) );
-				$completed         = $course['outline']['completed'];
-				$total             = $course['outline']['total'];
-				$progress['total'] = 100 * ( $completed / $total );
+				$completed = $course['outline']['completed'];
+				$total     = $course['outline']['total'];
+				if ( 0 !== $total ) {
+					$progress['total'] = 100 * ( $completed / $total );
+				} else {
+					$progress['total'] = 0;
+				}
 
 				$data[] = array(
 					'title'    => $course['title'],

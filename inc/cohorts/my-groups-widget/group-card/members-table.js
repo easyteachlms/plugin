@@ -56,6 +56,7 @@ const GradeQuiz = ({ uuid, courseId, userId, scoreData }) => {
         passed = false,
         pointsToAward = 0,
         currentScore = 0,
+        essayAnswerIndex,
     ) => {
         let newScore = currentScore;
         // Get existing userScore Data
@@ -64,7 +65,7 @@ const GradeQuiz = ({ uuid, courseId, userId, scoreData }) => {
         }
         // Check if quiz has any free text answers and if so we need to grade the quiz differently. And display different warnings on completion.
         apiFetch({
-            path: `/easyteachlms/v3/student/update-quiz-progress/?userId=${userId}&uuid=${uuid}&courseId=${courseId}&newScore=${newScore}`,
+            path: `/easyteachlms/v3/student/update-quiz-progress/?userId=${userId}&uuid=${uuid}&courseId=${courseId}&newScore=${newScore}&essayAnswer=${essayAnswerIndex}`,
             method: 'POST',
         }).then((d) => {
             console.log(d);
@@ -91,7 +92,7 @@ const GradeQuiz = ({ uuid, courseId, userId, scoreData }) => {
                     </p>
                     <HorizontalRule />
                     <ul>
-                        {essayAnswers.map((q) => {
+                        {essayAnswers.map((q, index) => {
                             const { question, givenAnswer, points, graded } = q;
                             if (true === graded) {
                                 return <Fragment />;
@@ -120,6 +121,7 @@ const GradeQuiz = ({ uuid, courseId, userId, scoreData }) => {
                                                     true,
                                                     points,
                                                     score,
+                                                    index,
                                                 );
                                             }}
                                         >
@@ -132,6 +134,7 @@ const GradeQuiz = ({ uuid, courseId, userId, scoreData }) => {
                                                     false,
                                                     points,
                                                     score,
+                                                    index,
                                                 );
                                             }}
                                         >
@@ -184,7 +187,30 @@ const LessonContents = ({ data }) => {
                     const { title, complete, type, score } = raw[uuid];
                     let status = complete ? 'Complete' : 'Incomplete';
                     if ('quiz' === type && 'object' === typeof score) {
-                        if (1 >= score.essayAnswers.length) {
+                        // Determine if there are any essay answers needing to be graded.
+                        const needsGrading = score.essayAnswers.filter((e) => {
+                            console.log('needGrades??', e);
+                            return true !== e.graded;
+                        });
+                        console.log(
+                            'needsGrading?',
+                            needsGrading,
+                            needsGrading.length,
+                        );
+                        if (
+                            1 >= score.essayAnswers.length &&
+                            0 !== needsGrading.length
+                        ) {
+                            console.log(
+                                'Condition 1:',
+                                score.essayAnswers.length,
+                                1 >= score.essayAnswers.length,
+                            );
+                            console.log(
+                                'Condition 2:',
+                                needsGrading,
+                                1 >= needsGrading.length,
+                            );
                             status = (
                                 <GradeQuiz
                                     uuid={uuid}
