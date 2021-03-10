@@ -388,39 +388,21 @@ class Course {
 		if ( false === $user_id ) {
 			return;
 		}
-		$site_id = get_current_blog_id();
 		$courses = get_user_meta( (int) $user_id, '_enrolled_courses', true );
-		error_log( print_r( $courses, true ) );
+
 		$data = array();
 
-		$data_model = new Data_Model( false );
-
 		foreach ( $courses as $course_id ) {
-			error_log( 'get_enrolled_courses' );
-			error_log( $site_id );
-			$course = $data_model->get_course_structure( $course_id, $user_id, $site_id );
+			$course = get_post( $course_id );
 			if ( ! is_wp_error( $course ) ) {
-				$progress = get_user_meta( (int) $user_id, "_course_{$course_id}_{$site_id}", true );
-				if ( is_wp_error( $progress ) || false === $progress || empty( $progress ) ) {
-					$progress = array();
-				}
-				error_log( 'Course:: ' . print_r( $course, true ) );
-				error_log( gettype( $progress ) );
-				$completed = $course['outline']['completed'];
-				$total     = $course['outline']['total'];
-				if ( 0 !== $total ) {
-					$progress['total'] = 100 * ( $completed / $total );
-				} else {
-					$progress['total'] = 0;
-				}
-
 				$data[] = array(
-					'title'    => $course['title'],
-					'excerpt'  => $course['excerpt'],
-					'progress' => $progress,
+					'title'    => $course->post_title,
+					'excerpt'  => get_the_excerpt( $course_id ),
+					'progress' => 0,
 					'url'      => get_permalink( $course_id ),
 				);
 			}
+			wp_reset_postdata();
 		}
 		return $data;
 	}
@@ -429,7 +411,15 @@ class Course {
 		if ( false === $user_id ) {
 			return;
 		}
+		if ( empty( $this->assets ) ) {
+			$this->register_assets();
+		}
+		if ( empty( $this->assets ) ) {
+			return '<h2>No Scripts</h2>';
+		}
+
 		$user_data = get_userdata( (int) $user_id );
+
 		wp_localize_script(
 			$this->assets['frontend']['my-courses']['script'],
 			'myCoursesData',
@@ -437,7 +427,6 @@ class Course {
 				'id'      => $user_data->ID,
 				'name'    => $user_data->data->user_nicename,
 				'courses' => $this->get_enrolled_courses( $user_data->ID ),
-
 			)
 		);
 		wp_enqueue_script( $this->assets['frontend']['my-courses']['script'] );
