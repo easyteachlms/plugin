@@ -321,7 +321,7 @@ const Courses = ({ data }) => {
     );
 };
 
-const MembersTable = ({ groupData }) => {
+const MembersTable = ({ groupData, sortBy }) => {
     // Would be great if we could have a function to GET group data.
     const { members, groupProgress } = groupData;
 

@@ -5,6 +5,7 @@ import { Card, CardBody, TabPanel } from '@wordpress/components';
 import './style.scss';
 
 import Welcome from './welcome';
+import BuddyPress from './buddypress';
 
 const Settings = () => {
     return (
@@ -42,10 +43,7 @@ const Settings = () => {
                         if ('buddypress' === tab.name) {
                             return (
                                 <CardBody>
-                                    <p>
-                                        Instructions and tutorial for enabling
-                                        Group functionality aka BuddyPress
-                                    </p>
+                                    <BuddyPress />
                                 </CardBody>
                             );
                         }

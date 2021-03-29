@@ -4,7 +4,6 @@ import { useState } from '@wordpress/element';
 import classNames from 'classnames';
 import { __ } from '@wordpress/i18n';
 import { Toolbar, ToolbarButton } from '@wordpress/components';
-import { chevronDown, chevronRight } from '@wordpress/icons';
 
 const Collapsible = ({
     title,
@@ -39,7 +38,7 @@ const Collapsible = ({
         <div className={classNames(className, 'lmsui-collapsible')}>
             <Toolbar label="Options" style={toolbarStyle}>
                 <ToolbarButton
-                    icon={open ? chevronDown : chevronRight}
+                    icon={open ? 'arrow-down-alt2' : 'arrow-right-alt2'}
                     label={__(`${labelPrefix}: ${title}`)}
                     onClick={collapseHandler}
                 >

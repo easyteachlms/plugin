@@ -51,7 +51,7 @@ const Divider = () => {
     );
 };
 
-const TotalGroupProgress = ({ data }) => {
+const TotalGroupProgress = ({ data, setSortBy }) => {
     console.log('TotalGroupProgress', data);
     return (
         <BaseControl label="Group Members Who Have Completed All Course Work">
@@ -64,17 +64,8 @@ const TotalGroupProgress = ({ data }) => {
                         <Tooltip />
                         <Bar
                             dataKey="value"
-                            onClick={(d) => {
-                                console.log(d.name);
-                                if ('Completed' === d.name) {
-                                    alert(
-                                        'Filtering to show students who have completed all uuids...(tktktk)',
-                                    );
-                                } else {
-                                    alert(
-                                        'Filtering to show students WHO HAVE NOT COMPLETED all uuids...(tktktk)',
-                                    );
-                                }
+                            onClick={({ name }) => {
+                                setSortBy(name);
                             }}
                         />
                     </BarChart>
@@ -85,6 +76,7 @@ const TotalGroupProgress = ({ data }) => {
 };
 
 const Group = ({ data }) => {
+    const [sortBy, setSortBy] = useState(false);
     const [isOpen, setOpen] = useState(false);
     const [chartData, setChartData] = useState([
         {
@@ -201,10 +193,13 @@ const Group = ({ data }) => {
                 >
                     <Fragment>
                         <LastActivity />
-                        <TotalGroupProgress data={chartData} />
+                        <TotalGroupProgress
+                            data={chartData}
+                            setSortBy={setSortBy}
+                        />
                         <Description />
                         <Divider />
-                        <MembersTable groupData={data} />
+                        <MembersTable groupData={data} sortBy={sortBy} />
                     </Fragment>
                 </Modal>
             )}

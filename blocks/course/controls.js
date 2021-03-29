@@ -6,7 +6,6 @@ import {
     ToolbarButton,
     Icon,
 } from '@wordpress/components';
-import { help } from '@wordpress/icons';
 
 import { CourseCreationTutorial } from '@easyteachlms/shared';
 
@@ -29,7 +28,7 @@ const Controls = ({ clientId, attributes, setAttributes }) => {
                 </div>
                 {/* <ToolbarButton icon={ 'groups' } label="Manage Students">Manage Students</ToolbarButton> */}
                 <ToolbarButton
-                    icon={help}
+                    icon="sos"
                     label="Need Help?"
                     onClick={() => toggleOpen(true)}
                 >
