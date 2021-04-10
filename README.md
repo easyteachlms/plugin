@@ -8,8 +8,3 @@
 2. 
 
 ## Notes:
-- Sunday Meeting:
-
-3. Enrollment on courses.
-
-... BuddyPress dashboard student and teacher dashboard?
