@@ -16,7 +16,7 @@ import Dashboard from './dashboard';
 import Outline from './outline';
 import Enroll from './enroll-gate';
 
-import dataStore from '../data-store';
+import '../data-store';
 
 const Course = ({ id, children }) => {
     const reactElms = ReactHtmlParser(children);

@@ -23,7 +23,7 @@ const Dashboard = ({ id }) => {
         const { total } = d.outline;
         const ratio = `${completed}/${total}`;
         console.log('<Dashboard>');
-        console.log(data);
+        console.log(d);
         console.log(select('easyteachlms/course').getQuizzes());
         return {
             data: d,

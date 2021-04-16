@@ -104,6 +104,7 @@ const selectors = {
         ) {
             return false;
         }
+        
         const { flat } = state.data.outline;
         const index = flat.findIndex((obj) => obj.uuid === uuid);
         return flat[index].locked;

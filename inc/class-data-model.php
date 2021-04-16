@@ -226,6 +226,8 @@ class Data_Model {
 			}
 		}
 
+		error_log(print_r($outline, true));
+
 		return $outline;
 	}
 
@@ -361,6 +363,7 @@ class Data_Model {
 		if ( true !== $this->is_block( $block_name, $block ) ) {
 			return;
 		}
+		
 		if ( is_array( $block_name ) ) {
 			$block_name = $block_name[ array_search( $block['blockName'], $block_name ) ];
 		}

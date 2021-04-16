@@ -12,7 +12,7 @@ const LessonContent = ({ parentTitle, title, uuid, className, children }) => {
         courseId,
     } = useSelect((select) => {
         return {
-            isLocked: select('easyteachlms/course').isLocked(uuid),
+            isLocked: false,
             conditionsMet: select('easyteachlms/course').areConditionsMet(uuid),
             isComplete: select('easyteachlms/course').isComplete(uuid),
             isActive: select('easyteachlms/course').getActive() === uuid,
