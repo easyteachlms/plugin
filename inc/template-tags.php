@@ -18,15 +18,17 @@ function elms_course_card( $post_id ) {
 
 	$course    = get_post( $post_id );
 	$permalink = get_permalink( $course );
+	$post_thumbnail_id = get_post_thumbnail_id( $post );
+	$post_thumbnail = wp_get_attachment_image_src($post_thumbnail_id, 'medium')
 
 	ob_start();
 
 	// print_r( $student );
 	?>
 	<div class="ui card">
-		<div class="image">
-			<img src="http://easyteach.local/wp-content/uploads/2020/05/rolf-hecken-O0MqTumfxug-1200x800.jpg">
-		</div>
+		<?php if ( false !== $post_thumbnail  ) {
+			echo '<div class="image"><img src="'.$post_thumbnail[0].'"></div>';
+		}?>
 		<div class="content">
 			<a href="<?php echo esc_url( $permalink ); ?>" class="header">
 				<?php echo $course->post_title; ?>
