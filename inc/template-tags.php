@@ -19,7 +19,7 @@ function elms_course_card( $post_id ) {
 	$course    = get_post( $post_id );
 	$permalink = get_permalink( $course );
 	$post_thumbnail_id = get_post_thumbnail_id( $post );
-	$post_thumbnail = wp_get_attachment_image_src($post_thumbnail_id, 'medium')
+	$post_thumbnail = wp_get_attachment_image_src($post_thumbnail_id, 'medium');
 
 	ob_start();
 
@@ -33,18 +33,9 @@ function elms_course_card( $post_id ) {
 			<a href="<?php echo esc_url( $permalink ); ?>" class="header">
 				<?php echo $course->post_title; ?>
 			</a>
-			<div class="meta">
-				<span class="date"></span>
-			</div>
 			<div class="description">
-			Course Description Here
+				<?php echo get_the_excerpt( $course );?>
 			</div>
-		</div>
-		<div class="extra content">
-			<a>
-			<i class="user icon"></i>
-			22 Students
-			</a>
 		</div>
 	</div>
 	<?php
