@@ -1,11 +1,9 @@
 <?php
-namespace EasyTeachLMS;
-
-use WPackio\Enqueue;
-class Student {
+class Student extends EasyTeachLMS {
 	public function __construct( $init = false ) {
 		if ( true === $init ) {
 			add_action( 'rest_api_init', array( $this, 'register_rest_endpoint' ) );
+			add_action('easyteach_get_student', array($this, 'get_student'), 10, 1);
 		}
 	}
 
@@ -44,6 +42,7 @@ class Student {
 			'enrolled'    => get_user_meta( $user_id, '_enrolled_courses', true ),
 			'data'        => array(),
 		);
+		
 		return (object) $student;
 	}
 
@@ -338,3 +337,7 @@ class Student {
 }
 
 new Student( true );
+
+function easyteach_get_student($user_id) {
+	return do_action('easyteach_get_student', $user_id);
+}

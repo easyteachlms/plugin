@@ -20,7 +20,6 @@ class Course {
 			add_action( 'wp_enqueue_scripts', array( $this, 'enroll_button_enqueue' ) );
 			add_filter( 'the_excerpt', array( $this, 'enroll_button' ) );
 			add_action( 'rest_api_init', array( $this, 'rest_routes' ) );
-			add_filter( 'easyteachlms_course_structure', array( $this, 'check_enrollment' ), 10, 2 );
 
 			// My Courses:
 			add_action( 'easyteachlms_woocom_courses', array( $this, 'woocom_purchased_courses_grid' ), 10, 1 );

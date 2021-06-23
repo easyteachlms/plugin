@@ -13,11 +13,11 @@ class WooCom {
 			add_filter( 'woocommerce_product_data_tabs', array( $this, 'tab' ) );
 			add_action( 'woocommerce_product_data_panels', array( $this, 'tab_content' ) );
 			add_action( 'woocommerce_process_product_meta', array( $this, 'save_fields' ), 10, 2 );
+			
 			// Enrollment
-			// add_action( 'woocommerce_payment_complete', array( $this, 'process_order' ), 10, 1 );
 			add_action( 'woocommerce_order_status_completed', array( $this, 'process_order' ), 10, 1 );
 
-			// We're going to force some options on WooCommerce
+			// We're going to force some options on WooCommerce to ensure end user is using users.
 			add_action( 'init', array( $this, 'force_enable_accounts' ) );
 
 			// Add My Courses to WooCommerce Account Page:

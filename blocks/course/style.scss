@@ -1,7 +1,10 @@
 div[data-type="easyteachlms/course"] {
+    &.is-selected .block-list-appender:before {
+        content: "Add Lesson or Certificate";
+    }
     .block-list-appender {
         &:before {
-            content: "Add Lesson or Certificate";
+            content: "Click to Focus Editor";
             font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;
             font-size: 14px;
             padding-top: 5px;

@@ -6,10 +6,8 @@
  * @param mixed $post_id
  * @return void
  */
-function elms_course_card( $post_id ) {
-	$user_id = get_current_user_id();
-	$student = new EasyTeachLMS\Student( false );
-	$student = $student->get_student( $user_id );
+function easyteach_course_card( $post_id ) {
+	$student = easyteach_get_student( get_current_user_id()); 
 
 	$enrolled = false;
 	if ( in_array( $post_id, $student->enrolled ) ) {
@@ -22,8 +20,6 @@ function elms_course_card( $post_id ) {
 	$post_thumbnail = wp_get_attachment_image_src($post_thumbnail_id, 'medium');
 
 	ob_start();
-
-	// print_r( $student );
 	?>
 	<div class="ui card">
 		<?php if ( false !== $post_thumbnail  ) {

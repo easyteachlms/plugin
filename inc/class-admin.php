@@ -8,6 +8,7 @@ class Admin {
 	public $default_settings = array(
 		'openEnrollment' => true,
 	);
+	
 	// Register Teacher role
 	// Register Student role
 	// Cohorts?

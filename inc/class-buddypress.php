@@ -78,7 +78,7 @@ if ( class_exists( 'BP_Group_Extension' ) ) {
 			// Go fetch enrolled courses for this user.
 			echo '<div class="ui cards">';
 			foreach ( $attached_courses as $course_id ) {
-				echo elms_course_card( $course_id );
+				echo easyteach_course_card( $course_id );
 			}
 			echo '</div>';
 		}

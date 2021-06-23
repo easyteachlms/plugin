@@ -2,7 +2,7 @@
 /*
 Plugin Name: EasyTeach LMS
 Plugin URI: https://easyteachlms.com
-Description: An easy to use LMS for WordPress. Supports additional features from WooCommerce, and BBPress.
+Description: An easy to use LMS for WordPress. Supports additional features from WooCommerce, and BuddyPress.
 Version: 4.5.1-beta
 Author: Cliff Michaels & Associates, LLC.
 Author URI: http://cliffmichaels.com
@@ -13,11 +13,6 @@ GitHub Plugin URI: https://github.com/easyteachlms/plugin
 if ( ! defined( 'ABSPATH' ) ) {
 	return;
 }
-
-// Load WC_AM_Client class if it exists.
-// if ( ! class_exists( 'WC_AM_Client_2_7' ) ) {
-// require_once plugin_dir_path( __FILE__ ) . 'wc-am-client.php';
-// }
 
 $easyteach_lms_file = __FILE__;
 /* Find our plugin, wherever it may live! */
@@ -36,7 +31,6 @@ define( 'EASYTEACHLMS_VENDOR_PATH', WP_PLUGIN_DIR . '/' . basename( dirname( $ea
 define( 'EASYTEACHLMS_URL', plugin_dir_url( __FILE__ ) );
 
 require_once EASYTEACHLMS_VENDOR_PATH . '/autoload.php';
-use tgmpa\tgmpa;
 use WPackio\Enqueue;
 
 /**
@@ -45,12 +39,12 @@ use WPackio\Enqueue;
  * @package
  */
 class EasyTeachLMS {
-	protected $plugin_version   = '5.0.0';
+	protected static $plugin_version   = '4.5.1';
 	public $wp_version_required = '5.4.0';
 	public $wp_version_tested   = '5.4.0';
 
-	public function wpack() {
-		return new Enqueue( 'easyTeachLMS', 'dist', '1.0.0', 'plugin', EASYTEACHLMS_FILE );
+	public function wpackio() {
+		return new Enqueue( 'easyTeachLMS', 'dist', self::$plugin_version, 'plugin', EASYTEACHLMS_FILE );
 	}
 
 	/**
@@ -82,20 +76,6 @@ class EasyTeachLMS {
 	 */
 	public function __construct( $init = false ) {
 		if ( true === $init ) {
-			// Load WC_AM_Client class if it exists.
-			// $wcam_lib = false;
-			// if ( ! class_exists( 'WC_AM_Client_2_7' ) ) {
-			// require_once EASYTEACHLMS_PATH . 'wc-am-client.php';
-			// } else {
-			// Preferred positive integer product_id.
-			// $wcam_lib = new WC_AM_Client_2_7( EASYTEACHLMS_FILE, 132967, '1.0.0', 'plugin', 'http://wc/', 'EasyTeach LMS' );
-			// }
-
-			// if ( is_object( $wcam_lib ) && $wcam_lib->get_api_key_status( false ) ) {
-			// Code to load your plugin or theme here.
-			// This code will not run until the API Key is activated.
-			// }
-
 			$this->include_files();
 
 			add_action( 'init', array( $this, 'semantic_ui_css_loader' ) );
@@ -155,7 +135,7 @@ class EasyTeachLMS {
 		require_once EASYTEACHLMS_PATH . '/inc/class-student.php';
 		require_once EASYTEACHLMS_PATH . '/inc/class-certificate.php';
 		require_once EASYTEACHLMS_PATH . '/inc/class-woocommerce.php';
-		// Mid year code cleanup begins below here:
+		// Mid year code cleanup begins below here: I would structure our different modules in this structure, if a module has javascript include it with the module.
 		require_once EASYTEACHLMS_PATH . '/inc/cohorts/class-cohorts.php';
 	}
 
@@ -187,12 +167,7 @@ class EasyTeachLMS {
 		flush_rewrite_rules();
 	}
 
-	public function deactivate() {
-
-	}
-
 	public function welcome_admin_notice() {
-
 		/* Check transient, if available display notice */
 		if ( ! get_option( 'easyteachlms-welcome-2' ) ) {
 			$new_course_link = admin_url( 'post-new.php?post_type=course' );
@@ -210,7 +185,6 @@ class EasyTeachLMS {
 			<?php
 		}
 	}
-
 }
 
 require EASYTEACHLMS_PATH . '/vendor/plugin-installs.php';

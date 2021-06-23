@@ -8,7 +8,6 @@ import './style.scss';
 
 import illustration from './art/basic.png';
 
-const intro = '//beta.easyteachlms.com/wp-content/uploads/2020/08/intro.mp4';
 const lessonsVideo =
     '//beta.easyteachlms.com/wp-content/uploads/2020/10/Lessons.mp4';
 const quizVideo = '//beta.easyteachlms.com/wp-content/uploads/2020/10/Quiz.mp4';
