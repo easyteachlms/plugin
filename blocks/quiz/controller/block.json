@@ -1,0 +1,27 @@
+{
+	"name": "easyteachlms/quiz",
+	"category": "education",
+	"attributes": {
+		"title": {
+			"type": "string",
+            "default": ""
+        },
+        "uuid": {
+			"type": "string",
+            "default": 0
+        },
+        "pointsRequiredToPass": {
+			"type": "integer",
+            "default": 80
+        },
+        "requiredPassing": {
+			"type": "boolean",
+            "default": false
+        }
+	},
+    "parent": ["easyteachlms/lesson"],
+	"supports": {
+		"html": false,
+        "align": false
+	}
+}

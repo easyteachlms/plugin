@@ -79,6 +79,7 @@ class EasyTeachLMS {
 			$this->include_files();
 
 			add_action( 'init', array( $this, 'semantic_ui_css_loader' ) );
+			
 			add_action( 'init', array( $this, 'rewrite' ) );
 			add_action( 'init', array( $this, 'rewrite_tags' ) );
 			add_filter( 'block_categories', array( $this, 'register_block_category' ), 10, 2 );
@@ -130,13 +131,16 @@ class EasyTeachLMS {
 		require_once EASYTEACHLMS_PATH . '/inc/class-certificate.php';
 		require_once EASYTEACHLMS_PATH . '/inc/class-course.php';
 		require_once EASYTEACHLMS_PATH . '/inc/class-data-model.php';
+		require_once EASYTEACHLMS_PATH . '/inc/class-enrollment.php';
 		require_once EASYTEACHLMS_PATH . '/inc/class-lesson.php';
-		require_once EASYTEACHLMS_PATH . '/inc/class-quiz.php';
+		
 		require_once EASYTEACHLMS_PATH . '/inc/class-student.php';
 		require_once EASYTEACHLMS_PATH . '/inc/class-certificate.php';
 		require_once EASYTEACHLMS_PATH . '/inc/class-woocommerce.php';
 		// Mid year code cleanup begins below here: I would structure our different modules in this structure, if a module has javascript include it with the module.
 		require_once EASYTEACHLMS_PATH . '/inc/cohorts/class-cohorts.php';
+
+		require_once EASYTEACHLMS_PATH . '/blocks/quiz/index.php';
 	}
 
 

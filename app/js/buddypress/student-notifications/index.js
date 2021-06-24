@@ -62,7 +62,7 @@ const ViewStudentNotifications = ({ userSlug, groupId }) => {
         }
         // Check if quiz has any free text answers and if so we need to grade the quiz differently. And display different warnings on completion.
         apiFetch({
-            path: `/easyteachlms/v3/student/update-quiz-progress/?userId=${userData.ID}&uuid=${uuid}&courseId=${courseId}&newScore=${newScore}`,
+            path: `/easyteachlms/v3/quiz/submit/?userId=${userData.ID}&uuid=${uuid}&courseId=${courseId}&newScore=${newScore}`,
             method: 'POST',
         }).then((d) => {
             console.log(d);

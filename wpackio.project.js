@@ -82,9 +82,9 @@ module.exports = {
         {
             name: 'quiz',
             entry: {
-                'quiz-block': './blocks/quiz/index.js',
-                'question-block': './blocks/question/index.js',
-                'answer-block': './blocks/answer/index.js',
+                'quiz-block': './blocks/quiz/controller/index.js',
+                'question-block': './blocks/quiz/question/index.js',
+                'answer-block': './blocks/quiz/answer/index.js',
             },
         },
     ],

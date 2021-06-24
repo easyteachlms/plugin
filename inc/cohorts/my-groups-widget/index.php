@@ -20,7 +20,7 @@ class My_Groups_Widget extends Cohorts {
 	}
 
 	public function the_widget_callback( $post, $callback_args ) {
-		$assets  = parent::wpack()->register(
+		$assets  = parent::wpackio()->register(
 			'cohorts',
 			'my-groups-widget',
 			array(
