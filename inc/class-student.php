@@ -7,28 +7,6 @@ class Student extends EasyTeachLMS {
 		}
 	}
 
-	public function is_enrolled_in_course( int $post_id ) {
-		if ( ! $post_id ) {
-			global $post;
-			$post_id = $post->ID;
-		}
-
-		$user_id = get_current_user_id();
-		// All editors get access to all courses.
-		if ( user_can( $user_id, 'edit_others_posts' ) ) {
-			return true;
-		}
-		$courses = get_user_meta( $user_id, '_enrolled_courses', true );
-
-		if ( empty( $courses ) ) {
-			return false;
-		} elseif ( in_array( $post_id, $courses ) ) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
 	public function get_student( $user_id ) {
 		$user = get_user_by( 'ID', $user_id );
 		if ( false === $user ) {
@@ -49,7 +27,7 @@ class Student extends EasyTeachLMS {
 	public function register_rest_endpoints() {
 		register_rest_route(
 			'easyteachlms/v3',
-			'/student/get',
+			'/student/get', // Should this be get-progress?
 			array(
 				'methods'             => 'GET',
 				'callback'            => array( $this, 'get_student_restfully' ),
@@ -236,7 +214,3 @@ class Student extends EasyTeachLMS {
 }
 
 new Student( true );
-
-function easyteach_get_student($user_id) {
-	return do_action('easyteach_get_student', $user_id);
-}

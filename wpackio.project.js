@@ -48,48 +48,29 @@ module.exports = {
         },
         // Blocks
         {
-            name: 'ghost-block',
+            name: 'blocks',
             entry: {
-                block: './blocks/ghost-block/index.js',
+                course: './inc/course/controller/index.js',
+                certificate: './inc/certificate/controller/index.js',
+                certificateDate: './inc/certificate/date/index.js',
+                certificateStudentName: './inc/certificate/student-name/index.js',
+                lesson: './inc/lesson/controller/index.js',
+                lessonContent: './inc/lesson/controller/index.js',
+                ghost: './inc/ghost-block/index.js',
+                quiz: './inc/quiz/controller/index.js',
+                quizAnswer: './inc/quiz/answer/index.js',
+                quizQuestion: './inc/quiz/question/index.js',
             },
+            optimizeForGutenberg: true,
         },
         {
-            name: 'course-block',
+            name: 'frontend',
             entry: {
-                block: './blocks/course/index.js',
-            },
-        },
-        {
-            name: 'certificate',
-            entry: {
-                'certificate-block': './blocks/certificate/index.js',
-                'date-block': './blocks/certificate-date/index.js',
-                'student-block': './blocks/certificate-student/index.js',
-            },
-        },
-        {
-            name: 'lesson-block',
-            entry: {
-                block: './blocks/lesson/index.js',
-            },
-        },
-        {
-            name: 'lesson-content-block',
-            entry: {
-                block: './blocks/lesson-content/index.js',
-            },
-        },
-        {
-            name: 'quiz',
-            entry: {
-                'quiz-block': './blocks/quiz/controller/index.js',
-                'question-block': './blocks/quiz/question/index.js',
-                'answer-block': './blocks/quiz/answer/index.js',
+                course: './inc/course/frontend/index.js',
+                quiz: './inc/quiz/frontend/index.js',
             },
         },
     ],
-    // Output path relative to the context directory
-    // We need relative path here, else, we can not map to publicPath
     outputPath: 'dist',
     hasReact: true,
     hasSass: true,
@@ -120,20 +101,14 @@ module.exports = {
         '@wordpress/url': 'wp.url',
     },
     alias: {
-        '@easyteachlms/shared': path.resolve(__dirname, 'app/js/_shared'),
         '@easyteachlms/components': path.resolve(
             __dirname,
-            'blocks/_shared/components',
+            'inc/_shared-js/components',
         ),
-        '@easyteachlms/utils': path.resolve(__dirname, 'blocks/_shared/utils'),
+        '@easyteachlms/utils': path.resolve(__dirname, 'inc/_shared-js/utils'),
     },
     errorOverlay: true,
-    // Auto optimization by webpack
-    // Split all common chunks with default config
-    // <https://webpack.js.org/plugins/split-chunks-plugin/#optimization-splitchunks>
-    // Won't hurt because we use PHP to automate loading
     optimizeSplitChunks: true,
-    // Usually PHP and other files to watch and reload when changed
     watch: './inc|includes/**/*.php',
     packageFiles: [
         'inc/**',

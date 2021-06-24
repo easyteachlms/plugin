@@ -31,6 +31,7 @@ class Enrollment extends EasyTeachLMS {
 			add_filter( 'the_excerpt', array( $this, 'enroll_button' ) );
 			add_action( 'wp_enqueue_scripts', array( $this, 'enroll_button_enqueue' ) );
 			add_action( 'rest_api_init', array( $this, 'register_rest_endpoints' ) );
+			add_filter( 'query_vars', array( $this, 'add_forceEnroll_queryvar' ) );
 			
 			/**
 			 * These hooks allow you to use do_action('enroll_user', $user_id, $course_id) to programatically enroll a user, the same goes for unenroll_user.
@@ -210,6 +211,28 @@ class Enrollment extends EasyTeachLMS {
 				},
 			)
 		);
+
+		/**
+		 * For use in the courses enroll gate, if the user is not logged in you can use this endpoint to redirec them to wp-login
+		 */
+		register_rest_route(
+			'easyteachlms/v3',
+			'/course/redirect-to-login',
+			array(
+				'methods'             => 'GET',
+				'callback'            => array( $this, 'restfully_redirect_to_login' ),
+				'args'                => array(
+					'courseId' => array(
+						'validate_callback' => function( $param, $request, $key ) {
+							return is_numeric( $param );
+						},
+					),
+				),
+				'permission_callback' => function () {
+					return true; // Allow the public to redirect to wp-login.php. 
+				},
+			)
+		);
 	}
 
 	public function restfully_enroll_user( \WP_REST_Request $request ) {
@@ -222,6 +245,33 @@ class Enrollment extends EasyTeachLMS {
 		$user_id   = $request->get_param( 'userId' );
 		$course_id = $request->get_param( 'courseId' );
 		return $this->unenroll( $user_id, $course_id );
+	}
+
+	public function restfully_redirect_to_login( \WP_REST_Request $request ) {
+		$course_id   = $request->get_param( 'courseId' );
+		$redirect_to = add_query_arg( array(
+			'forceEnroll' = true,
+			'nonce' => wp_create_nonce(wp_json_encode( $request )),
+		), get_permalink( (int) $course_id ) );
+		return wp_login_url( $redirect_to );
+	}
+
+	public function add_forceEnroll_queryvar($qvars) {
+		$qvars[] = 'forceEnroll';
+		return $qvars;
+	}
+
+	public function force_enrollment() {
+		if ( !is_singular('course') ) {
+			return;
+		}
+		if ( true === get_query_var( 'forceEnroll', false ) ) {
+			$user_id = get_current_user_id();
+			$course_id = get_the_ID();
+			if (false === $this->is_user_enrolled($course_id, $user_id) ) {
+				$this->enroll( $user_id, $course_id );
+			}
+		}
 	}
 
     public function log_enrollment_on_course( $user_id, $course_id ) {

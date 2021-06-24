@@ -6,7 +6,7 @@ import {
     CardDivider,
     CardFooter,
 } from '@wordpress/components';
-import { CourseCreationButton, WelcomeGraphic } from '@easyteachlms/shared';
+import { CourseCreationButton, WelcomeGraphic } from '@easyteachlms/components';
 import WooCommerceGraphic from './woocommerce-selling.gif';
 import WooCommerceSettings from '../woocommerce';
 

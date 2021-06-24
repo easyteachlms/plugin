@@ -25,7 +25,42 @@ class WooCom {
 			add_filter( 'query_vars', array( $this, 'courses_query_vars' ), 0 );
 			add_filter( 'woocommerce_account_menu_items', array( $this, 'add_courses_link' ) );
 			add_action( 'woocommerce_account_courses_endpoint', array( $this, 'courses_content' ) );
+			add_action( 'easyteachlms_woocom_courses', array( $this, 'woocom_purchased_courses_grid' ), 10, 1 );
 		}
+	}
+
+	public function my_courses_grid( $user_id = false ) {
+		if ( false === $user_id ) {
+			return;
+		}
+		if ( empty( $this->assets ) ) {
+			$this->register_assets();
+		}
+		if ( empty( $this->assets ) ) {
+			return '<h2>No Scripts</h2>';
+		}
+
+		$user_data = get_userdata( (int) $user_id );
+
+		wp_localize_script(
+			$this->assets['frontend']['my-courses']['script'],
+			'myCoursesData',
+			array(
+				'id'      => $user_data->ID,
+				'name'    => $user_data->data->user_nicename,
+				'courses' => apply_filters('easyteach_get_user_courses', $user_data->ID),
+			)
+		);
+		wp_enqueue_script( $this->assets['frontend']['my-courses']['script'] );
+
+		return "<div id='easyteachlms-enrolled-courses' data-user-id={$user_id}></div>";
+	}
+
+	public function woocom_purchased_courses_grid( $user_id = false ) {
+		if ( false === $user_id ) {
+			return;
+		}
+		echo $this->my_courses_grid( $user_id );
 	}
 
 	// NEEDS:

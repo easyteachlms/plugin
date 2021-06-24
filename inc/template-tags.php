@@ -1,6 +1,15 @@
 <?php
 
 /**
+ * Given a user id retrieve that user's info as a student.
+ * @param mixed $user_id 
+ * @return mixed 
+ */
+function easyteach_get_student($user_id) {
+	return do_action('easyteach_get_student', $user_id);
+}
+
+/**
  * Diplays a Semantic UI styled card for a course, checks if currently logged in user has access either through purchase or buddypress group.
  *
  * @param mixed $post_id

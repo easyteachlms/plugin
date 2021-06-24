@@ -7,7 +7,7 @@ import { Fragment } from '@wordpress/element';
 /**
  * Internal dependencies
  */
-import { BuddyPressTutorialButton } from '@easyteachlms/shared';
+import { BuddyPressTutorialButton } from '@easyteachlms/components';
 
 const BuddyPress = () => {
     return (

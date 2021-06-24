@@ -94,22 +94,6 @@ class EasyTeachLMS {
 		}
 	}
 
-	/**
-	 * Initializes the Base_Plugin() class
-	 *
-	 * Checks for an existing Base_Plugin() instance
-	 * and if it doesn't find one, creates it.
-	 *
-	 * @uses Base_Plugin()
-	 */
-	// public function &init() {
-	// static $instance = false;
-	// if ( ! $instance ) {
-	// $instance = new EasyTeachLMS();
-	// }
-	// return $instance;
-	// }
-
 	public function force_gutenberg( $editors, $post_type ) {
 		error_log( 'force_gutenberg' );
 		if ( 'course' === $post_type ) {
@@ -126,21 +110,21 @@ class EasyTeachLMS {
 	}
 
 	public function include_files() {
+		
+		require_once EASYTEACHLMS_PATH . '/inc/certificate/index.php';
+		require_once EASYTEACHLMS_PATH . '/inc/cohorts/index.php';
+		require_once EASYTEACHLMS_PATH . '/inc/course/index.php';
+		require_once EASYTEACHLMS_PATH . '/inc/ghost-block/index.php';
+		require_once EASYTEACHLMS_PATH . '/inc/lesson/index.php';
+		require_once EASYTEACHLMS_PATH . '/inc/quiz/index.php';
+		require_once EASYTEACHLMS_PATH . '/inc/updater/index.php';
+
 		require_once EASYTEACHLMS_PATH . '/inc/template-tags.php';
 		require_once EASYTEACHLMS_PATH . '/inc/class-admin.php';
-		require_once EASYTEACHLMS_PATH . '/inc/class-certificate.php';
-		require_once EASYTEACHLMS_PATH . '/inc/class-course.php';
 		require_once EASYTEACHLMS_PATH . '/inc/class-data-model.php';
 		require_once EASYTEACHLMS_PATH . '/inc/class-enrollment.php';
-		require_once EASYTEACHLMS_PATH . '/inc/class-lesson.php';
-		
 		require_once EASYTEACHLMS_PATH . '/inc/class-student.php';
-		require_once EASYTEACHLMS_PATH . '/inc/class-certificate.php';
 		require_once EASYTEACHLMS_PATH . '/inc/class-woocommerce.php';
-		// Mid year code cleanup begins below here: I would structure our different modules in this structure, if a module has javascript include it with the module.
-		require_once EASYTEACHLMS_PATH . '/inc/cohorts/class-cohorts.php';
-
-		require_once EASYTEACHLMS_PATH . '/blocks/quiz/index.php';
 	}
 
 
@@ -172,8 +156,7 @@ class EasyTeachLMS {
 	}
 
 	public function welcome_admin_notice() {
-		/* Check transient, if available display notice */
-		if ( ! get_option( 'easyteachlms-welcome-2' ) ) {
+		if ( ! get_option( 'easyteachlms-welcome-' . EASYTEACHLMS_VERSION ) ) {
 			$new_course_link = admin_url( 'post-new.php?post_type=course' );
 			$settings_link   = get_bloginfo( 'wpurl' ) . '/wp-admin/admin.php?page=easyteach-lms-settings';
 			?>
@@ -194,7 +177,3 @@ class EasyTeachLMS {
 require EASYTEACHLMS_PATH . '/vendor/plugin-installs.php';
 
 $easy_teach_lms = new EasyTeachLMS( true );
-
-function lms_throw_error( $msg ) {
-	error_log( print_r( $msg, true ) );
-}
