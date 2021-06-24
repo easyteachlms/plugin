@@ -12,7 +12,7 @@ import { Segment } from 'semantic-ui-react';
 import {
     CourseCreationButton,
     WelcomeGraphic as illustration,
-} from '@easyteachlms/shared';
+} from '@easyteachlms/components';
 
 const Welcome = ({ clientId, welcomeDisabled, children, setAttributes }) => {
     const Prompt = () => {

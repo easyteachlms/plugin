@@ -26,7 +26,6 @@ module.exports = {
         {
             name: 'app',
             entry: {
-                course: './app/js/course/index.js',
                 enrollButton: './app/js/enroll-button/index.js',
                 myCourses: './app/js/my-courses/index.js',
                 buddyPress: './app/js/buddypress/index.js',
