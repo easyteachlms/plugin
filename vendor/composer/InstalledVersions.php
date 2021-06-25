@@ -30,7 +30,7 @@ private static $installed = array (
     'aliases' => 
     array (
     ),
-    'reference' => '2e22ec95c648fa5c96e47c32becdc714a1bde555',
+    'reference' => 'fc8199a10c4350f6183bc051bec2f36534c34a14',
     'name' => 'cliffmichaels/easyteachlms',
   ),
   'versions' => 
@@ -42,7 +42,7 @@ private static $installed = array (
       'aliases' => 
       array (
       ),
-      'reference' => '2e22ec95c648fa5c96e47c32becdc714a1bde555',
+      'reference' => 'fc8199a10c4350f6183bc051bec2f36534c34a14',
     ),
     'tgmpa/tgm-plugin-activation' => 
     array (

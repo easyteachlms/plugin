@@ -72,7 +72,7 @@ class Course extends EasyTeachLMS {
         return '<div '.$block_wrapper_attributes.'></div>';
 	}
 
-	public function register_block() {
+	public function register_course_block() {
 		$enqueue = parent::wpackio();
 		
         $course_block = $enqueue->register(

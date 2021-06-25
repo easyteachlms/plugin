@@ -250,7 +250,7 @@ class Enrollment extends EasyTeachLMS {
 	public function restfully_redirect_to_login( \WP_REST_Request $request ) {
 		$course_id   = $request->get_param( 'courseId' );
 		$redirect_to = add_query_arg( array(
-			'forceEnroll' = true,
+			'forceEnroll' => true,
 			'nonce' => wp_create_nonce(wp_json_encode( $request )),
 		), get_permalink( (int) $course_id ) );
 		return wp_login_url( $redirect_to );
