@@ -3,7 +3,6 @@ import domReady from '@wordpress/dom-ready';
 import { withState } from '@wordpress/compose';
 import { Fragment, render, useEffect } from '@wordpress/element';
 import { Dropdown } from 'semantic-ui-react';
-import { useDidMount } from 'beautiful-react-hooks';
 import { capitalize } from '@easyteachlms/utils';
 
 // Load initial value from rendered DOM.
@@ -49,9 +48,9 @@ const SearchForCourse = withState({
             });
     };
 
-    useDidMount(() => {
+    useEffect(() => {
         loadPosts();
-    });
+    }, []);
 
     useEffect(() => {
         setInputValue();

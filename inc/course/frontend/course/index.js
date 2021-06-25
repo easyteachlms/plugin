@@ -5,9 +5,8 @@ import domReady from '@wordpress/dom-ready';
 import ReactHtmlParser from 'react-html-parser';
 
 import { useSelect, useDispatch } from '@wordpress/data';
-import { Fragment, render } from '@wordpress/element';
+import { Fragment, render, useEffect } from '@wordpress/element';
 import { getQueryArg } from '@wordpress/url';
-import { useDidMount } from 'beautiful-react-hooks';
 
 import { Grid, Segment } from 'semantic-ui-react';
 
@@ -53,10 +52,10 @@ const Course = ({ id, children }) => {
         }
     };
 
-    useDidMount(() => {
+    useEffect(() => {
         // Get data
         windowState();
-    });
+    }, []);
 
     return (
         <Segment loading={!loaded} style={{ minHeight: '100px' }}>
