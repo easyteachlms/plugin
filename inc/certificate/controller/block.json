@@ -1,0 +1,29 @@
+{
+	"apiVersion": 1.0,
+	"name": "easyteachlms/certificate",
+	"category": "education",
+	"attributes": {
+		"backgroundColor": {
+            "type": "string",
+            "default": ""
+        },
+        "borderColor": {
+            "type": "string",
+            "default": ""
+        },
+        "requiredScore": {
+            "type": "integer",
+            "default": 80
+        },
+        "uuid": {
+            "type": "string",
+            "default": 0
+        }
+	},
+    "parent": ["easyteachlms/course"],
+	"supports": {
+		"html": false,
+        "align": false,
+        "multiple": false
+	}
+}

@@ -1,81 +1,47 @@
 <?php
+
 class Certificate extends EasyTeachLMS {
-	protected $js_deps = array( 'react', 'react-dom', 'wp-element', 'wp-components', 'wp-compose', 'wp-polyfill', 'wp-i18n', 'wp-api' );
+    public function __construct($init = false) {
+        if ( true === $init ) {
+            add_action( 'init', array( $this, 'register_block' ) );
+        }
+    }
 
-	public function __construct( $init = false ) {
-		if ( true === $init ) {
-			add_action( 'init', array( $this, 'register_block' ) );
-		}
-	}
+    public function render_certificate($attributes, $content, $block) {
+        wp_enqueue_script( apply_filters('easyteach_frontend_certificate_js', null) );
+        wp_enqueue_style( apply_filters('easyteach_frontend_certificate_css', null) );
+        
+        $block_wrapper_attributes = get_block_wrapper_attributes( array(
+            'data-uuid' => $attributes['uuid'],
+        ) );
+        $content = '<div '.$block_wrapper_attributes.'></div>';
+        return $content;
+    }
 
-	// Certificates At the end of the course should be another innerblocks area, or rather, maybe its a block that gets dropped in. Either way we need an innerblock area for certificates, you'd be able to add images, headings, paragraphs, lists, and then we'd have some child blocks like Student Name, Student Score, Date, Course Name.
-
-	public function register_block() {
-		$enqueue = new Enqueue( 'easyTeachLMS', 'dist', '1.0.0', 'plugin', plugin_dir_path( __FILE__ ) );
-
-		// Certificate
-		$js_deps = $this->js_deps;
-
-		$certificate_block = $enqueue->register(
+    public function register_block() {
+		$enqueue = parent::wpackio();
+		
+        $certificate_block = $enqueue->register(
+			'blocks',
 			'certificate',
-			'certificate-block',
 			array(
 				'js'        => true,
-				'css'       => false,
-				'js_dep'    => $js_deps,
+				'css'       => true,
+				'js_dep'    => array(),
 				'css_dep'   => array(),
 				'in_footer' => true,
 				'media'     => 'all',
 			)
 		);
-
-		register_block_type(
-			'easyteachlms/certificate',
+        
+        register_block_type_from_metadata(
+			plugin_dir_path( __DIR__ ) . '/controller',
 			array(
 				'editor_script' => array_pop( $certificate_block['js'] )['handle'],
-			)
-		);
-
-		$date = $enqueue->register(
-			'certificate',
-			'date-block',
-			array(
-				'js'        => true,
-				'css'       => false,
-				'js_dep'    => $js_deps,
-				'css_dep'   => array(),
-				'in_footer' => true,
-				'media'     => 'all',
-			)
-		);
-
-		register_block_type(
-			'easyteachlms/certificate-date',
-			array(
-				'editor_script' => array_pop( $date['js'] )['handle'],
-			)
-		);
-
-		$student_name = $enqueue->register(
-			'certificate',
-			'student-block',
-			array(
-				'js'        => true,
-				'css'       => false,
-				'js_dep'    => $js_deps,
-				'css_dep'   => array(),
-				'in_footer' => true,
-				'media'     => 'all',
-			)
-		);
-
-		register_block_type(
-			'easyteachlms/certificate-student',
-			array(
-				'editor_script' => array_pop( $student_name['js'] )['handle'],
+				'render_callback' => array( $this, 'render_certificate' ),
 			)
 		);
 	}
 }
 
-new Certificate( true );
+new Certificate(true);

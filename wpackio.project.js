@@ -66,8 +66,10 @@ module.exports = {
             name: 'frontend',
             entry: {
                 course: './inc/course/frontend/index.js',
+                certificate: './inc/certificate/frontend/index.js',
                 quiz: './inc/quiz/frontend/index.js',
             },
+            optimizeForGutenberg: true,
         },
     ],
     outputPath: 'dist',

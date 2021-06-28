@@ -6,14 +6,14 @@ import { InnerBlocks, InspectorControls } from '@wordpress/block-editor';
 
 import Certificate from './component';
 
-const ALLOWED_BLOCKS = ['core/heading', 'core/paragraph', 'core/image', 'core/list', 'core/spacer', 'easyteachlms/certificate-date', 'easyteachlms/certificate-student'];
+const ALLOWED_BLOCKS = ['core/heading', 'core/paragraph', 'core/image', 'core/list', 'core/spacer', 'easyteachlms/certificate-date', 'easyteachlms/certificate-student-name'];
 
 const TEMPLATE = [
     [ 'core/spacer', { height: 170 } ],
     [ 'core/heading', { content: 'Certificate of Completion' } ],
     [ 'core/heading', { content: 'Getting started with EasyTeach LMS', level: 4 } ],
     [ 'easyteachlms/certificate-date' ],
-    [ 'easyteachlms/certificate-student' ],
+    [ 'easyteachlms/certificate-student-name' ],
 ];
 
 const Controls = ({backgroundColor, borderColor, requiredScore, setAttributes}) => {
