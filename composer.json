@@ -4,7 +4,7 @@
     "type": "project",
     "require": {
         "tgmpa/tgm-plugin-activation": "^2.6",
-        "wpackio/enqueue": "^2.1"
+        "wpackio/enqueue": "^3.2"
     },
     "authors": [
         {

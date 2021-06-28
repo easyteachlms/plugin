@@ -3,7 +3,9 @@
  */
 import { __ } from '@wordpress/i18n';
 import { useState, Fragment } from '@wordpress/element';
+import { RichText } from "@wordpress/block-editor";
 import {
+    BaseControl,
     TextareaControl,
     Toolbar,
     ToolbarButton,
@@ -51,12 +53,16 @@ const Controls = ({ clientId, attributes, setAttributes }) => {
                     marginTop: '1em',
                 }}
             >
-                <TextareaControl
-                    label="Course Description"
-                    placeholder="Enter a short description for this course here..."
-                    value={description}
-                    onChange={(value) => setAttributes({ description: value })}
-                />
+
+                <BaseControl label="Course Description">
+                    <RichText
+                        tagName="div"
+                        value={ description }
+                        allowedFormats={ [ 'core/bold', 'core/italic', 'core/link' ] }
+                        onChange={(value) => setAttributes({ description: value })}
+                        placeholder={ __( 'Enter a short description for this course here...' ) }
+                    />
+                </BaseControl>
             </div>
         </Fragment>
     );

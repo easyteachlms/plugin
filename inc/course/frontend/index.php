@@ -57,15 +57,18 @@ class CourseFrontend extends EasyTeachLMS {
 			)
 		);
 
+		$this->js_handle = array_pop( $course_frontend['js'] )['handle'];
+        $this->css_handle = array_pop( $course_frontend['css'] )['handle'];
+
         $settings = $this->get_settings();
 		wp_localize_script(
-			$this->assets['frontend']['course']['script'],
+			$this->js_handle,
 			'easyTeachSettings',
 			$settings,
 		);
 		if ( 0 !== $user_data = wp_get_current_user() ) {
 			wp_localize_script(
-				$this->assets['frontend']['course']['script'],
+				$this->js_handle,
 				'userData',
 				array(
 					'id'   => $user_data->ID,
@@ -74,8 +77,6 @@ class CourseFrontend extends EasyTeachLMS {
 			);
 		}
 
-        $this->js_handle = array_pop( $course_frontend['js'] )['handle'];
-        $this->css_handle = array_pop( $course_frontend['css'] )['handle'];
 	}
 }
 

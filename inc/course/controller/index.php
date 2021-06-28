@@ -7,10 +7,6 @@
 class Course extends EasyTeachLMS {
 	protected $post_type        = 'course';
 
-	protected $frontend_js_deps = array( 'react', 'react-dom', 'wp-element', 'wp-dom-ready', 'wp-components', 'wp-polyfill', 'wp-i18n', 'wp-api', 'wp-api-fetch', 'wp-data', 'wp-url', 'wp-autop' );
-
-	protected $block_js_deps    = array( 'react', 'react-dom', 'wp-element', 'wp-components', 'wp-polyfill', 'wp-i18n', 'wp-api', 'wp-mediaelement', 'wp-primitives' );
-
 	/**
 	 * @param bool $init 
 	 * @return void 
@@ -81,7 +77,7 @@ class Course extends EasyTeachLMS {
 			array(
 				'js'        => true,
 				'css'       => true,
-				'js_dep'    => array( 'react', 'react-dom', 'wp-element', 'wp-components', 'wp-polyfill', 'wp-i18n' ),
+				'js_dep'    => array(),
 				'css_dep'   => array(),
 				'in_footer' => true,
 				'media'     => 'all',

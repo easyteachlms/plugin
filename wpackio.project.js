@@ -54,7 +54,7 @@ module.exports = {
                 certificateDate: './inc/certificate/date/index.js',
                 certificateStudentName: './inc/certificate/student-name/index.js',
                 lesson: './inc/lesson/controller/index.js',
-                lessonContent: './inc/lesson/controller/index.js',
+                lessonContent: './inc/lesson/content/index.js',
                 ghost: './inc/ghost-block/index.js',
                 quiz: './inc/quiz/controller/index.js',
                 quizAnswer: './inc/quiz/answer/index.js',

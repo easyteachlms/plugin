@@ -1,18 +1,15 @@
 <?php
-namespace EasyTeachLMS;
-
-use WPackio\Enqueue;
-class Lesson {
+class Lesson extends EasyTeachLMS {
 	protected $post_type = 'lesson';
-	protected $js_deps   = array( 'react', 'react-dom', 'wp-element', 'wp-components', 'wp-compose', 'wp-polyfill', 'wp-i18n', 'wp-api', 'wp-date', 'moment' );
 
 	public function __construct( $init = false ) {
 		if ( true === $init ) {
-			add_action( 'init', array( $this, 'init' ) );
+			add_action( 'init', array( $this, 'register_lesson_post_type' ) );
+			add_action( 'init', array( $this, 'register_lesson_block' ) );
 		}
 	}
 
-	public function init() {
+	public function register_lesson_post_type() {
 		$args = array(
 			'labels'              => array(
 				'name'               => __( 'Lessons', 'post type general name' ),
@@ -70,57 +67,52 @@ class Lesson {
 				);
 			}
 		);
-
-		$this->register_block();
 	}
 
 	public function show_post_content_raw( $object, $field_name, $request ) {
 		return get_post( $object['id'] )->post_content;
 	}
 
-	public function register_block() {
-		$enqueue = new Enqueue( 'easyTeachLMS', 'dist', '1.0.0', 'plugin', plugin_dir_path( __FILE__ ) );
+	public function check_schedule($attributes) {
+		$scheduled_date = $attributes['schedule'];
+		// If todays date is before the $scheduled_date then return false;
+		return true;
+	}
 
-		$js_deps = $this->js_deps;
+	public function render_lesson($attributes, $content, $block) {
+		wp_enqueue_script( apply_filters('easyteach_frontend_lesson_js', null) );
+        wp_enqueue_style( apply_filters('easyteach_frontend_lesson_css', null) );
+        //  Check for schedule, if not correct then DO NOT DISPLAY.
+		$content = $this->check_schedule($attributes) ? $content : 'Lesson Will Unlock At XYZ';
+        $block_wrapper_attributes = get_block_wrapper_attributes( array(
+            'data-uuid' => $attributes['uuid'],
+			'data-title' => $attributes['title'],
+        ) );
+        return '<div '.$block_wrapper_attributes.'>'.$content.'</div>';
+	}
 
-		$lesson_block = $enqueue->register(
-			'lesson-block',
-			'block',
+	public function register_lesson_block() {
+		$enqueue = parent::wpackio();
+		
+        $lesson_block = $enqueue->register(
+			'blocks',
+			'lesson',
 			array(
 				'js'        => true,
 				'css'       => true,
-				'js_dep'    => $js_deps,
+				'js_dep'    => array(),
 				'css_dep'   => array(),
 				'in_footer' => true,
 				'media'     => 'all',
 			)
 		);
-
-		register_block_type(
-			'easyteachlms/lesson',
+        
+        register_block_type_from_metadata(
+			plugin_dir_path( __DIR__ ) . '/controller',
 			array(
 				'editor_script' => array_pop( $lesson_block['js'] )['handle'],
 				'editor_style'  => array_pop( $lesson_block['css'] )['handle'],
-			)
-		);
-
-		$lesson_content_block = $enqueue->register(
-			'lesson-content-block',
-			'block',
-			array(
-				'js'        => true,
-				'css'       => true,
-				'js_dep'    => $js_deps,
-				'css_dep'   => array(),
-				'in_footer' => true,
-				'media'     => 'all',
-			),
-		);
-		register_block_type(
-			'easyteachlms/lesson-content',
-			array(
-				'editor_script' => array_pop( $lesson_content_block['js'] )['handle'],
-				'editor_style'  => array_pop( $lesson_content_block['css'] )['handle'],
+				'render_callback' => array( $this, 'render_lesson' ),
 			)
 		);
 	}

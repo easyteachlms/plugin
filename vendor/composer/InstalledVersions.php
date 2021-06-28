@@ -30,7 +30,7 @@ private static $installed = array (
     'aliases' => 
     array (
     ),
-    'reference' => 'fc8199a10c4350f6183bc051bec2f36534c34a14',
+    'reference' => '47906268ee806910593ed3293c4a5b92d4268654',
     'name' => 'cliffmichaels/easyteachlms',
   ),
   'versions' => 
@@ -42,7 +42,7 @@ private static $installed = array (
       'aliases' => 
       array (
       ),
-      'reference' => 'fc8199a10c4350f6183bc051bec2f36534c34a14',
+      'reference' => '47906268ee806910593ed3293c4a5b92d4268654',
     ),
     'tgmpa/tgm-plugin-activation' => 
     array (
@@ -55,12 +55,12 @@ private static $installed = array (
     ),
     'wpackio/enqueue' => 
     array (
-      'pretty_version' => '2.2.1',
-      'version' => '2.2.1.0',
+      'pretty_version' => '3.2.1',
+      'version' => '3.2.1.0',
       'aliases' => 
       array (
       ),
-      'reference' => '3f7b42e871d17d26cd90083cfe2b0dbc5bed0f54',
+      'reference' => '1d405e739d32947fd87514a14d8b8bb9b744eabc',
     ),
   ),
 );
