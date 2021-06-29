@@ -32,18 +32,12 @@ module.exports = {
             },
         },
         {
-            name: 'admin',
+            name: 'wpAdmin',
             entry: {
+                wooCommerceCourseField: './inc/woocommerce/index.js',
                 settings: './app/js/admin/settings/index.js',
                 buddyPress: './app/js/admin/buddypress/index.js',
-            },
-        },
-        // WordPress Plugins
-        {
-            name: 'woocommerce',
-            entry: {
-                productEdit: './app/js/woocommerce/product-edit.js',
-            },
+            }
         },
         // Blocks
         {

@@ -1,11 +1,7 @@
 <?php
-namespace EasyTeachLMS;
 
-use WPackio\Enqueue;
-
-class WooCom {
+class WooCommerce extends EasyTeachLMS {
 	protected $attachment_meta_key = '_attached_course';
-	protected $js_deps             = array( 'react', 'react-dom', 'wp-element', 'wp-components', 'wp-polyfill', 'wp-i18n', 'wp-api' );
 
 	public function __construct( $init = false ) {
 		if ( true === $init ) {
@@ -33,25 +29,19 @@ class WooCom {
 		if ( false === $user_id ) {
 			return;
 		}
-		if ( empty( $this->assets ) ) {
-			$this->register_assets();
-		}
-		if ( empty( $this->assets ) ) {
-			return '<h2>No Scripts</h2>';
-		}
 
 		$user_data = get_userdata( (int) $user_id );
 
-		wp_localize_script(
-			$this->assets['frontend']['my-courses']['script'],
-			'myCoursesData',
-			array(
-				'id'      => $user_data->ID,
-				'name'    => $user_data->data->user_nicename,
-				'courses' => apply_filters('easyteach_get_user_courses', $user_data->ID),
-			)
-		);
-		wp_enqueue_script( $this->assets['frontend']['my-courses']['script'] );
+		// wp_localize_script(
+		// 	$this->assets['frontend']['my-courses']['script'],
+		// 	'myCoursesData',
+		// 	array(
+		// 		'id'      => $user_data->ID,
+		// 		'name'    => $user_data->data->user_nicename,
+		// 		'courses' => apply_filters('easyteach_get_user_courses', $user_data->ID),
+		// 	)
+		// );
+		// wp_enqueue_script( $this->assets['frontend']['my-courses']['script'] );
 
 		return "<div id='easyteachlms-enrolled-courses' data-user-id={$user_id}></div>";
 	}
@@ -60,7 +50,7 @@ class WooCom {
 		if ( false === $user_id ) {
 			return;
 		}
-		echo $this->my_courses_grid( $user_id );
+		// echo $this->my_courses_grid( $user_id );
 	}
 
 	// NEEDS:
@@ -119,15 +109,17 @@ class WooCom {
 	}
 
 	public function tab_content() {
-		$enqueue = new Enqueue( 'easyTeachLMS', 'dist', '1.0.0', 'plugin', plugin_dir_path( __FILE__ ) );
+		$enqueue = parent::wpackio();
+		
 		wp_enqueue_style( 'semantic-ui' );
+
 		$enqueue->enqueue(
-			'woocommerce',
-			'productEdit',
+			'wpAdmin',
+			'wooCommerceCourseField',
 			array(
 				'js'        => true,
 				'css'       => true,
-				'js_dep'    => $this->js_deps,
+				'js_dep'    => array(),
 				'css_dep'   => array( 'semantic-ui' ),
 				'in_footer' => true,
 				'media'     => 'all',
