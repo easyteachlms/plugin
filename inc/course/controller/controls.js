@@ -42,18 +42,11 @@ const Controls = ({ clientId, attributes, setAttributes }) => {
                     Need Help?
                 </ToolbarButton>
             </Toolbar>
-            <CourseCreationTutorial
-                courseClientId={clientId}
-                open={open}
-                toggleOpen={toggleOpen}
-                enableExample
-            />
             <div
                 style={{
                     marginTop: '1em',
                 }}
             >
-
                 <BaseControl label="Course Description">
                     <RichText
                         tagName="div"
@@ -64,6 +57,12 @@ const Controls = ({ clientId, attributes, setAttributes }) => {
                     />
                 </BaseControl>
             </div>
+            <CourseCreationTutorial
+                courseClientId={clientId}
+                open={open}
+                toggleOpen={toggleOpen}
+                enableExample
+            />
         </Fragment>
     );
 };

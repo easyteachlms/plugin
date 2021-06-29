@@ -1,7 +1,14 @@
+/**
+ * WordPress Dependencies
+ */
 import { __ } from '@wordpress/i18n';
 import { Fragment } from '@wordpress/element';
 import { Card, CardBody, CardDivider } from '@wordpress/components';
+import { useBlockProps } from '@wordpress/block-editor';
 
+/**
+ * Internal Dependencies
+ */
 import Create from './create';
 import Search from './search';
 
@@ -16,9 +23,10 @@ const InitialState = ({
     clientId,
 }) => {
     const { buttonLabel, headerLabel } = labels;
+    const blockProps = useBlockProps({});
     return (
-        <div className={className}>
-            <Card size="large">
+        <div {...blockProps}>
+            <Card size="large" style={{marginTop: '1em'}}>
                 {false !== postType && (
                     <Fragment>
                         <CardBody>

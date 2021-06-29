@@ -1,3 +1,6 @@
+/**
+ * WordPress Dependencies
+ */
 import domReady from '@wordpress/dom-ready';
 import { render, useState } from '@wordpress/element';
 import apiFetch from '@wordpress/api-fetch';

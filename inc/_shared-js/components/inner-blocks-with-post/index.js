@@ -1,14 +1,19 @@
-// HOC that maintains a connection to a external post
-
+/**
+ * WordPress Dependencies
+ */
 import { __ } from '@wordpress/i18n';
 import { Fragment } from '@wordpress/element';
-import { InnerBlocks as WPInnerBlocks } from '@wordpress/block-editor';
+import { InnerBlocks } from '@wordpress/block-editor';
+import { select } from '@wordpress/data';
 
+/**
+ * Internal Dependencies
+ */
 import InitialState from './initial-state';
 import Controls from './controls';
 
-const ButtonBlockAppender = (props) => {
-    return <WPInnerBlocks.ButtonBlockAppender {...props} />;
+const ButtonBlockAppender = ({clientId}) => {
+    return <InnerBlocks.ButtonBlockAppender clientId={clientId} />;
 };
 
 const InnerBlocksWithPost = ({
@@ -28,9 +33,13 @@ const InnerBlocksWithPost = ({
     orientation,
     __experimentalCaptureToolbars = false,
 }) => {
+    // const hasInnerSelectedBlock = select('core/block-editor').hasSelectedInnerBlock(
+    //     clientId,
+    //     false,
+    // );
     // Explicitly, if no setAttributes is passed or false is speciically passed treat this as "save" mode and only display content.
     if (false === setAttributes) {
-        return <WPInnerBlocks.Content />;
+        return <InnerBlocks.Content />;
     }
 
     if (0 === uuid) {
@@ -49,14 +58,9 @@ const InnerBlocksWithPost = ({
         <Fragment>
             {false !== setAttributes && (
                 <Fragment>
-                    <WPInnerBlocks
+                    <InnerBlocks
                         allowedBlocks={allowedBlocks}
-                        // renderAppender={
-                        //     false === postType
-                        //         ? renderAppender
-                        //         : () => <ButtonBlockAppender />
-                        // }
-                        renderAppender={() => <ButtonBlockAppender />}
+                        renderAppender={() => isSelected ? <ButtonBlockAppender {...clientId}/> : false}
                         orientation={orientation}
                         __experimentalCaptureToolbars={
                             __experimentalCaptureToolbars

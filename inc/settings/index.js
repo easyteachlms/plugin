@@ -1,9 +1,14 @@
+/**
+ * WordPress Dependencies
+ */
 import domReady from '@wordpress/dom-ready';
 import { render } from '@wordpress/element';
 import { Card, CardBody, TabPanel } from '@wordpress/components';
 
+/**
+ * Internal Dependencies
+ */
 import './style.scss';
-
 import Welcome from './welcome';
 import BuddyPress from './buddypress';
 

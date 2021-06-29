@@ -1,9 +1,15 @@
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-/* eslint-disable jsx-a11y/no-static-element-interactions */
-import { useState } from '@wordpress/element';
+/**
+ * External Dependencies
+ */
 import classNames from 'classnames';
+
+/**
+ * WordPress Dependencies
+ */
+import { useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { Toolbar, ToolbarButton } from '@wordpress/components';
+import { useBlockProps } from '@wordpress/block-editor';
 
 const Collapsible = ({
     title,
@@ -34,8 +40,12 @@ const Collapsible = ({
         toolbarStyle.border = 'none';
     }
 
+    const blockProps = useBlockProps({
+        className: classNames(className)
+    });
+
     return (
-        <div className={classNames(className, 'lmsui-collapsible')}>
+        <div {...blockProps}>
             <Toolbar label="Options" style={toolbarStyle}>
                 <ToolbarButton
                     icon={open ? 'arrow-down-alt2' : 'arrow-right-alt2'}

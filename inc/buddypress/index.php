@@ -1,6 +1,6 @@
 <?php
 namespace EasyTeachLMS;
-
+use EasyTeachLMS;
 use WPackio\Enqueue;
 use BP_Group_Extension;
 
@@ -323,3 +323,5 @@ if ( class_exists( 'BP_Group_Extension' ) ) {
 
 	add_action( 'rest_api_init', array( $group_courses, 'register_rest_endpoints' ) );
 }
+
+// Cohorts?

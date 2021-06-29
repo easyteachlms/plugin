@@ -1,23 +1,49 @@
+/**
+ * WordPress Dependencies
+ */
 import { __ } from '@wordpress/i18n';
-import { InnerBlocks, RichText } from '@wordpress/block-editor';
-import { Fragment } from '@wordpress/element';
+import { 
+    __experimentalUseInnerBlocksProps as useInnerBlocksProps,
+    InnerBlocks,
+    RichText,
+    useBlockProps,
+} from '@wordpress/block-editor';
 import { TextareaControl } from '@wordpress/components';
-import Controls from './controls';
 
+/**
+ * Internal Dependencies
+ */
+import Controls from './controls';
 import './style.scss';
 
-const edit = ({ attributes, className, setAttributes }) => {
+const ALLOWED_BLOCKS = ['easyteachlms/answer'];
+
+const edit = ({ attributes, clientId, setAttributes }) => {
     const { question, answersType } = attributes;
 
-    const ALLOWED_BLOCKS = ['easyteachlms/answer'];
+    const blockProps = useBlockProps();
+    
+    let innerBlockProps = false;
+    if ( 'text' !== answersType ) {
+        innerBlockProps = useInnerBlocksProps({},{
+            allowedBlocks: ALLOWED_BLOCKS,
+            renderAppender: () => {
+                // if ( !isSelected ) {
+                //     return false;
+                // }
+                return (
+                    <InnerBlocks.ButtonBlockAppender
+                        clientId={clientId}
+                    />
+                )
+            }
+        });
+    }
 
     return (
-        <Fragment>
+        <div {...blockProps}>
             <Controls attributes={attributes} setAttributes={setAttributes} />
-            <div
-                className={className}
-                style={{ paddingLeft: '2em', paddingRight: '1em' }}
-            >
+            <div style={{ paddingLeft: '2em', paddingRight: '1em' }}>
                 <RichText
                     tagName="div"
                     value={question}
@@ -27,15 +53,8 @@ const edit = ({ attributes, className, setAttributes }) => {
                     keepPlaceholderOnFocus
                     allowedFormats={['core/bold', 'core/italic']}
                 />
-                {'text' !== answersType && (
-                    <InnerBlocks
-                        allowedBlocks={ALLOWED_BLOCKS}
-                        renderAppender={() => (
-                            <InnerBlocks.ButtonBlockAppender>
-                                Add an Answer
-                            </InnerBlocks.ButtonBlockAppender>
-                        )}
-                    />
+                {false !== innerBlockProps && (
+                    <div {...innerBlockProps}/>
                 )}
                 {'text' === answersType && (
                     <TextareaControl
@@ -44,7 +63,7 @@ const edit = ({ attributes, className, setAttributes }) => {
                     />
                 )}
             </div>
-        </Fragment>
+        </div>
     );
 };
 

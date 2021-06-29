@@ -16,28 +16,27 @@ module.exports = {
         credit: true,
     },
     files: [
+        // {
+        //     name: 'cohorts',
+        //     entry: {
+        //         'my-groups-widget': './inc/cohorts/my-groups-widget/index.js',
+        //     },
+        // },
         {
-            name: 'cohorts',
+            name: 'misc',
             entry: {
-                'my-groups-widget': './inc/cohorts/my-groups-widget/index.js',
+                enrollButton: './inc/enroll-button/index.js',
             },
-        },
-        // Overall App Scripts, runs both in WP-Admin and Frontend.
-        {
-            name: 'app',
-            entry: {
-                enrollButton: './app/js/enroll-button/index.js',
-                myCourses: './app/js/my-courses/index.js',
-                buddyPress: './app/js/buddypress/index.js',
-            },
+            optimizeForGutenberg: true,
         },
         {
             name: 'wpAdmin',
             entry: {
                 wooCommerceCourseField: './inc/woocommerce/index.js',
-                settings: './app/js/admin/settings/index.js',
-                buddyPress: './app/js/admin/buddypress/index.js',
-            }
+                settings: './inc/settings/index.js',
+                buddyPress: './inc/buddypress/index.js',
+            },
+            optimizeForGutenberg: true,
         },
         // Blocks
         {

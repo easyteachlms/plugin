@@ -1,10 +1,6 @@
 <?php
-namespace EasyTeachLMS;
 
-require_once EASYTEACHLMS_VENDOR_PATH . '/autoload.php';
-use WPackio\Enqueue;
-class Admin {
-	protected $js_deps       = array( 'react', 'react-dom', 'wp-element', 'wp-polyfill', 'wp-i18n', 'wp-components', 'wp-api-fetch', 'wp-mediaelement' );
+class Settings extends EasyTeachLMS {
 	public $default_settings = array(
 		'openEnrollment' => true,
 	);
@@ -14,9 +10,28 @@ class Admin {
 	// Cohorts?
 	public function __construct( $init = false ) {
 		if ( true === $init ) {
+			add_action( 'admin_notices', array( $this, 'welcome_admin_notice' ) );
 			add_action( 'admin_menu', array( $this, 'register_admin_menu' ) );
 			add_action( 'admin_enqueue_scripts', array( $this, 'admin_page_enqueue' ) );
 			add_action( 'rest_api_init', array( $this, 'rest_routes' ) );
+		}
+	}
+
+	public function welcome_admin_notice() {
+		if ( ! get_option( 'easyteachlms-welcome-' . EASYTEACHLMS_VERSION ) ) {
+			$new_course_link = admin_url( 'post-new.php?post_type=course' );
+			$settings_link   = get_bloginfo( 'wpurl' ) . '/wp-admin/admin.php?page=easyteach-lms-settings';
+			?>
+			<div class="updated notice is-dismissible">
+				<h3>Welcome to EasyTeach LMS – The World’s most DYNAMIC and CUSTOMIZABLE Learning Management System designed for WordPress.</h3>
+				<p>EasyTeach is also a POWERFUL Content Management System, featuring Gutenberg’s Drag & Drop Editor to save you time and effort at every turn, no matter what kind of look and feel you need to create for your user experience.</p>
+				<ul style="padding-left: 15px;list-style: disc;">
+					<li>Ready to create your first course? <a href="<?php echo $new_course_link; ?>">Start Here</a></li>
+					<li>Ready to enable BuddyPress functionality and manage a group of students? <a href="<?php echo $settings_link; ?>">Start Here</li>
+					<li>Need instructions or resources for Easy Teach? <a href="<?php echo $settings_link; ?>">Start Here</a></li>
+				</ul>
+			</div>
+			<?php
 		}
 	}
 
@@ -24,17 +39,16 @@ class Admin {
 		if ( $hook != 'easyteachlms_page_easyteach-lms-settings' ) {
 			return;
 		}
-		$enqueue  = new Enqueue( 'easyTeachLMS', 'dist', '1.0.0', 'plugin', plugin_dir_path( __FILE__ ) );
+		$enqueue = parent::wpackio();
 		$settings = $this->get_settings();
-		error_log( 'Adming Settings?' );
-		error_log( print_r( $settings, true ) );
+		
 		$assets = $enqueue->enqueue(
 			'admin',
 			'settings',
 			array(
 				'js'        => true,
 				'css'       => true,
-				'js_dep'    => $this->js_deps,
+				'js_dep'    => array( 'wp-mediaelement' ),
 				'css_dep'   => array( 'wp-components' ),
 				'in_footer' => true,
 				'media'     => 'all',
@@ -188,4 +202,4 @@ class Admin {
 	}
 }
 
-new Admin( true );
+new Settings( true );

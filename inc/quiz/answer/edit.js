@@ -1,9 +1,9 @@
 import { __ } from '@wordpress/i18n';
 import { useSelect, dispatch } from '@wordpress/data';
 import { TextControl, Toolbar } from '@wordpress/components';
-import { BlockControls } from '@wordpress/block-editor';
+import { BlockControls, useBlockProps } from '@wordpress/block-editor';
 
-const edit = ({ attributes, className, clientId, setAttributes }) => {
+const edit = ({ attributes, clientId, setAttributes }) => {
     const { answer, isCorrect } = attributes;
 
     const { answersType, otherAnswers } = useSelect(
@@ -59,8 +59,10 @@ const edit = ({ attributes, className, clientId, setAttributes }) => {
         };
     };
 
+    const blockProps = useBlockProps();
+
     return (
-        <div className={className}>
+        <div {...blockProps}>
             <BlockControls>
                 <Toolbar controls={[true].map(createControls)} />
             </BlockControls>

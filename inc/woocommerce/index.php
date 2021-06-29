@@ -1,5 +1,6 @@
 <?php
-
+namespace EasyTeachLMS;
+use EasyTeachLMS;
 class WooCommerce extends EasyTeachLMS {
 	protected $attachment_meta_key = '_attached_course';
 
@@ -192,4 +193,4 @@ class WooCommerce extends EasyTeachLMS {
 
 }
 
-$woocommerce = new WooCom( true );
+$woocommerce = new WooCommerce( true );

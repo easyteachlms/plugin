@@ -1,4 +1,5 @@
 {
+	"apiVersion": 2,
 	"name": "easyteachlms/question",
 	"category": "education",
     "icon": "editor-help",
