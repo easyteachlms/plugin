@@ -1,4 +1,7 @@
 div[data-type="easyteachlms/lesson"] {
+    & > div.collapsible-content {
+        padding-left: 1em;
+    }
     & > div.collapsible-content > div.block-editor-inner-blocks > div > div.wp-block:not(.block-list-appender) {
         padding-bottom: 0.25em;
         margin-bottom: 0.25em;

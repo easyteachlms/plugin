@@ -41,7 +41,7 @@ const Collapsible = ({
     }
 
     const blockProps = useBlockProps({
-        className: classNames(className)
+        className: classNames(className),
     });
 
     return (

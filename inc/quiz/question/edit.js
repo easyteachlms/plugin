@@ -25,7 +25,11 @@ const edit = ({ attributes, clientId, setAttributes }) => {
     
     let innerBlockProps = false;
     if ( 'text' !== answersType ) {
-        innerBlockProps = useInnerBlocksProps({},{
+        innerBlockProps = useInnerBlocksProps({
+            style: {
+                paddingLeft: '0.8em',
+            }
+        },{
             allowedBlocks: ALLOWED_BLOCKS,
             renderAppender: () => {
                 // if ( !isSelected ) {
@@ -43,26 +47,24 @@ const edit = ({ attributes, clientId, setAttributes }) => {
     return (
         <div {...blockProps}>
             <Controls attributes={attributes} setAttributes={setAttributes} />
-            <div style={{ paddingLeft: '2em', paddingRight: '1em' }}>
-                <RichText
-                    tagName="div"
-                    value={question}
-                    onChange={(q) => setAttributes({ question: q })}
-                    style={{ fontSize: '21px', fontFamily: 'sans-serif' }}
-                    placeholder="Question Text Here"
-                    keepPlaceholderOnFocus
-                    allowedFormats={['core/bold', 'core/italic']}
+            <RichText
+                tagName="div"
+                value={question}
+                onChange={(q) => setAttributes({ question: q })}
+                style={{ fontSize: '21px', fontFamily: 'sans-serif' }}
+                placeholder="Question Text Here"
+                keepPlaceholderOnFocus
+                allowedFormats={['core/bold', 'core/italic']}
+            />
+            {false !== innerBlockProps && (
+                <div {...innerBlockProps}/>
+            )}
+            {'text' === answersType && (
+                <TextareaControl
+                    label="Text answers will not be automatically graded and admins will be required to manually score this quiz."
+                    disabled
                 />
-                {false !== innerBlockProps && (
-                    <div {...innerBlockProps}/>
-                )}
-                {'text' === answersType && (
-                    <TextareaControl
-                        label="Text answers will not be automatically graded and admins will be required to manually score this quiz."
-                        disabled
-                    />
-                )}
-            </div>
+            )}
         </div>
     );
 };
