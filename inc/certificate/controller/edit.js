@@ -1,15 +1,34 @@
-import { __ } from '@wordpress/i18n';
+/**
+ * External Dependencies
+ */
 import { v1 as uuidv1 } from 'uuid';
-import { Collapsible } from '@easyteachlms/components';
-import { ColorPicker, PanelBody, RangeControl } from '@wordpress/components';
-import { InnerBlocks, InspectorControls } from '@wordpress/block-editor';
 
-import Certificate from './component';
+/**
+ * WordPress Dependencies
+ */
+import { __ } from '@wordpress/i18n';
+import { useState } from '@wordpress/element';
+import { 
+    ColorPicker,
+    Modal,
+    PanelBody, 
+    RangeControl,
+    ToolbarButton
+} from '@wordpress/components';
+import { 
+    __experimentalUseInnerBlocksProps as useInnerBlocksProps, 
+    InspectorControls
+} from '@wordpress/block-editor';
+
+/**
+ * Internal Dependencies
+ */
+import { Collapsible } from '@easyteachlms/components';
 
 const ALLOWED_BLOCKS = ['core/heading', 'core/paragraph', 'core/image', 'core/list', 'core/spacer', 'easyteachlms/certificate-date', 'easyteachlms/certificate-student-name'];
 
 const TEMPLATE = [
-    [ 'core/spacer', { height: 170 } ],
+    [ 'core/spacer', { height: 40 } ],
     [ 'core/heading', { content: 'Certificate of Completion' } ],
     [ 'core/heading', { content: 'Getting started with EasyTeach LMS', level: 4 } ],
     [ 'easyteachlms/certificate-date' ],
@@ -53,11 +72,24 @@ const Controls = ({backgroundColor, borderColor, requiredScore, setAttributes}) 
 const edit = ({
     attributes,
     className,
-    clientId,
     setAttributes,
-    isSelected,
 }) => {
     const { uuid, backgroundColor, borderColor, requiredScore } = attributes; 
+
+    const [previewOpen, togglePreview] = useState(false);
+
+    const innerBlockProps = useInnerBlocksProps({
+        style: {
+            border: '4px solid',
+            borderColor,
+            backgroundColor,
+            padding: '1em',
+            marginTop: '1em',
+        }
+    }, {
+        allowedBlocks: ALLOWED_BLOCKS,
+        template: TEMPLATE,
+    });
 
     if (0 === uuid) {
         setAttributes({
@@ -66,11 +98,18 @@ const edit = ({
     }
 
     return (
-        <Collapsible title='Completion Certificate' postType="certificate">
+        <Collapsible className={className} title='Completion Certificate' postType="certificate" toolbarExtra={()=>{
+            return(<ToolbarButton icon="printer" label={__(`Preview`)}>Print Preview</ToolbarButton>);
+        }}>
+            {previewOpen && (
+                <Modal
+                    title="This is my modal"
+                    onRequestClose={ () => togglePreview(false) }>
+                    <h1>Hi!</h1>
+                </Modal>
+            )}
             <Controls backgroundColor={backgroundColor} borderColor={borderColor} setAttributes={setAttributes} requiredScore={requiredScore}/>
-            <Certificate backgroundColor={backgroundColor} borderColor={borderColor} display={false} className={className}>
-                <InnerBlocks allowedBlocks={ALLOWED_BLOCKS} template={TEMPLATE}/>
-            </Certificate>
+            <div {...innerBlockProps}/>
         </Collapsible>
     );
 };

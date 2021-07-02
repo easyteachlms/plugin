@@ -3,8 +3,7 @@
  */
 import { __ } from '@wordpress/i18n';
 import { Fragment } from '@wordpress/element';
-import { Button } from '@wordpress/components';
-import { Segment } from 'semantic-ui-react';
+import { Card, CardBody, CardDivider, CardFooter, Button, CardHeader, Flex, FlexBlock, FlexItem } from '@wordpress/components';
 
 /**
  * Internal Dependencies
@@ -26,34 +25,38 @@ const Welcome = ({ clientId, welcomeDisabled, children, setAttributes }) => {
 
         return (
             <Fragment>
-                <Segment>
-                    <div style={{ display: 'flex', flexGrow: 1 }}>
-                        <div style={{ width: '50%' }}>
-                            <Art />
-                        </div>
-                        <div style={{ width: '50%' }}>
-                            <h1>Hi! First time here?</h1>
-                            <p>
-                                <strong>
-                                    Get started building your EasyTeach LMS
-                                    powered course.
-                                </strong>{' '}
-                                Over the next 10 minutes we will walk you
-                                through creating your first course, lesson plan,
-                                and course content. At any time you can find
-                                this tutorial, and others, in the EasyTeach LMS
-                                settings in the dashboard or the{' '}
-                                <strong>Need Help</strong>
-                                button in the course toolbar.
-                            </p>
+                <Card>
+                    <CardHeader>
+                    Hi! First time here?
+                    </CardHeader>
+                    <CardBody>
+                        <Flex>
+                            <FlexBlock>
+                                <Art />
+                            </FlexBlock>
+                            <FlexBlock>
+                                <p>
+                                    <strong>
+                                        Get started building your EasyTeach LMS
+                                        powered course.
+                                    </strong>{' '}
+                                    Over the next 10 minutes we will walk you
+                                    through creating your first course, lesson plan,
+                                    and course content. At any time you can find
+                                    this tutorial, and others, in the EasyTeach LMS
+                                    settings in the dashboard or the{' '}
+                                    <strong>Need Help</strong>
+                                    button in the course toolbar.
+                                </p>
 
-                            <CourseCreationButton
-                                courseClientId={clientId}
-                                enableExample
-                            />
-                        </div>
-                    </div>
-                </Segment>
+                                <CourseCreationButton
+                                    courseClientId={clientId}
+                                    enableExample
+                                />
+                            </FlexBlock>
+                        </Flex>
+                    </CardBody>
+                </Card>
             </Fragment>
         );
     };

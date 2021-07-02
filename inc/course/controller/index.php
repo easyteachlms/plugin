@@ -65,7 +65,8 @@ class Course extends EasyTeachLMS {
         $block_wrapper_attributes = get_block_wrapper_attributes( array(
             'data-course-id' => $attributes['id'],
         ) );
-        return '<div '.$block_wrapper_attributes.'></div>';
+		
+        return '<div '.$block_wrapper_attributes.'>'.$content.'</div>';
 	}
 
 	public function register_course_block() {

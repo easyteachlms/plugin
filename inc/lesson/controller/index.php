@@ -74,20 +74,27 @@ class Lesson extends EasyTeachLMS {
 	}
 
 	public function check_schedule($attributes) {
-		$scheduled_date = $attributes['schedule'];
+		if ( !array_key_exists('schedule', $attributes) ) {
+			return true;
+		}
+		$scheduled_date = new DateTime($attributes['schedule']);
+		$current_date = new DateTime();
 		// If todays date is before the $scheduled_date then return false;
-		return true;
+		return $scheduled_date <= $current_date;
 	}
 
 	public function render_lesson($attributes, $content, $block) {
 		wp_enqueue_script( apply_filters('easyteach_frontend_lesson_js', null) );
         wp_enqueue_style( apply_filters('easyteach_frontend_lesson_css', null) );
         //  Check for schedule, if not correct then DO NOT DISPLAY.
-		$content = $this->check_schedule($attributes) ? $content : 'Lesson Will Unlock At XYZ';
-        $block_wrapper_attributes = get_block_wrapper_attributes( array(
+		
+		$content = $this->check_schedule($attributes) ? $content : wp_sprintf( 'This lesson will unlock at: %s', date('d-m-y', $attributes['schedule']) );
+        
+		$block_wrapper_attributes = get_block_wrapper_attributes( array(
             'data-uuid' => $attributes['uuid'],
 			'data-title' => $attributes['title'],
         ) );
+
         return '<div '.$block_wrapper_attributes.'>'.$content.'</div>';
 	}
 
@@ -100,7 +107,7 @@ class Lesson extends EasyTeachLMS {
 			array(
 				'js'        => true,
 				'css'       => true,
-				'js_dep'    => array(),
+				'js_dep'    => array('wp-api'),
 				'css_dep'   => array(),
 				'in_footer' => true,
 				'media'     => 'all',

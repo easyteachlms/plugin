@@ -38,7 +38,6 @@ class Lesson_Content extends EasyTeachLMS {
 				'render_callback' => array( $this, 'render_lesson_content' ),
 			)
 		);
-        error_log('Lesson-Content Block:' .print_r($registered_block, true));
 	}
 }
 

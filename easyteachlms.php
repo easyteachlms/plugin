@@ -85,8 +85,6 @@ class EasyTeachLMS {
 				}
 				return $editors;
 			}, 10, 2 );
-
-			add_action( 'init', array( $this, 'semantic_ui_css_loader' ) );
 			
 			add_action( 'init', array( $this, 'rewrite' ) );
 			add_action( 'init', array( $this, 'rewrite_tags' ) );
@@ -123,10 +121,6 @@ class EasyTeachLMS {
 
 	function include_buddypress_support() {
 		require_once EASYTEACHLMS_PATH . '/inc/buddypress/index.php';
-	}
-
-	public function semantic_ui_css_loader() {
-		wp_register_style( 'semantic-ui', '//cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css' );
 	}
 
 	function register_block_category( $categories, $post ) {

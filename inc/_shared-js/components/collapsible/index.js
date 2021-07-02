@@ -18,6 +18,7 @@ const Collapsible = ({
     children,
     defaultOpen = true,
     label = false,
+    toolbarExtra = false
 }) => {
     const [open, setState] = useState(defaultOpen);
 
@@ -51,10 +52,15 @@ const Collapsible = ({
                     icon={open ? 'arrow-down-alt2' : 'arrow-right-alt2'}
                     label={__(`${labelPrefix}: ${title}`)}
                     onClick={collapseHandler}
+                    style={false !== toolbarExtra ? {
+                        justifyContent: 'flex-start',
+                        flexGrow: 1,
+                    } : null}
                 >
                     <strong>{__(`${labelPrefix}: `)}</strong>&nbsp;
                     {__(` ${title}`)}
                 </ToolbarButton>
+                {false !== toolbarExtra && toolbarExtra()}
             </Toolbar>
             {true === open && (
                 <div className="collapsible-content">{children}</div>

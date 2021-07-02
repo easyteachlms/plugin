@@ -4,8 +4,6 @@ import { select } from '@wordpress/data';
 import { Button } from '@wordpress/components';
 import { rawHandler, getSaveContent } from '@wordpress/blocks';
 
-const { api } = window.wp;
-
 const capitalize = (s) => {
     if ('string' !== typeof s) return '';
     return s.charAt(0).toUpperCase() + s.slice(1);
@@ -22,6 +20,8 @@ const replaceContent = (clientId, postId, postType, replaceInnerBlocks) => {
     ) {
         return false;
     }
+
+    const { api } = window.wp;
 
     const type = capitalize(postType);
     const post = new api.models[type]({ id: postId });
@@ -41,6 +41,8 @@ const replaceContent = (clientId, postId, postType, replaceInnerBlocks) => {
 const saveAsPost = (title, type, clientId, setAttributes, toggleLoading) => {
     toggleLoading(true);
 
+    const { api } = window.wp;
+
     console.log('Saving Post');
     console.log(title);
     console.log(type);
@@ -50,13 +52,14 @@ const saveAsPost = (title, type, clientId, setAttributes, toggleLoading) => {
     const getBlockContent = () => {
         const { attributes, innerBlocks } = currentBlock;
         return getSaveContent(
-            'easyteachlms/ghost-block',
+            'easyteachlms/lesson',
             attributes,
             innerBlocks,
         );
     };
 
     const content = getBlockContent();
+    console.log("getBlockContent?", content);
 
     const post = new api.models[type]({ title, content });
 

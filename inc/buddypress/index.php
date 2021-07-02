@@ -59,12 +59,11 @@ if ( class_exists( 'BP_Group_Extension' ) ) {
 						'js'        => true,
 						'css'       => false,
 						'js_dep'    => array_merge( $this->js_deps, array( 'bp-api-request' ) ),
-						'css_dep'   => array( 'semantic-ui' ),
+						'css_dep'   => array(),
 						'in_footer' => true,
 						'media'     => 'all',
 					)
 				);
-				wp_enqueue_style( 'semantic-ui' );
 			}
 		}
 

@@ -111,8 +111,6 @@ class WooCommerce extends EasyTeachLMS {
 
 	public function tab_content() {
 		$enqueue = parent::wpackio();
-		
-		wp_enqueue_style( 'semantic-ui' );
 
 		$enqueue->enqueue(
 			'wpAdmin',
@@ -121,7 +119,7 @@ class WooCommerce extends EasyTeachLMS {
 				'js'        => true,
 				'css'       => true,
 				'js_dep'    => array(),
-				'css_dep'   => array( 'semantic-ui' ),
+				'css_dep'   => array(),
 				'in_footer' => true,
 				'media'     => 'all',
 			)

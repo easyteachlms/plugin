@@ -75,13 +75,15 @@ const Controls = ({
                         </PanelRow>
                         {false !== postType && (
                             <Fragment>
-                                <PanelRow>
-                                    <TextControl
-                                        label="ID"
-                                        value={postId}
-                                        disabled
-                                    />
-                                </PanelRow>
+                                {0 !== postId && (
+                                    <PanelRow>
+                                        <TextControl
+                                            label="Post ID"
+                                            value={postId}
+                                            disabled
+                                        />
+                                    </PanelRow>
+                                )}
                                 <PanelRow>
                                     <SaveAsPostButton
                                         title={title}

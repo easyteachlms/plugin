@@ -78,10 +78,13 @@ const edit = ({ attributes, clientId, isSelected, setAttributes }) => {
         );
     }
 
+
     return (
-        <Welcome clientId={clientId} setAttributes={setAttributes}>
-            <div {...innerBlockProps}/>
-        </Welcome>
+        <div {...blockProps}>
+            <Welcome clientId={clientId} setAttributes={setAttributes}>
+                <div {...innerBlockProps}/>
+            </Welcome>
+        </div>
     );
 };
 

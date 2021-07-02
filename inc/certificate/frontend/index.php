@@ -41,7 +41,7 @@ class CertificateFrontend extends EasyTeachLMS {
 				'js'        => true,
 				'css'       => true,
 				'js_dep'    => array(),
-				'css_dep'   => array( 'semantic-ui' ),
+				'css_dep'   => array(),
 				'in_footer' => true,
 				'media'     => 'all',
 			)

@@ -21,7 +21,7 @@ class Question extends EasyTeachLMS {
 				'js'        => true,
 				'css'       => true,
 				'js_dep'    => array( 'react', 'react-dom', 'wp-element', 'wp-components', 'wp-polyfill', 'wp-i18n' ),
-				'css_dep'   => array( 'semantic-ui' ),
+				'css_dep'   => array(),
 				'in_footer' => true,
 				'media'     => 'all',
 			)

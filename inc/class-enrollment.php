@@ -126,7 +126,7 @@ class Enrollment extends EasyTeachLMS {
 					'js'        => true,
 					'css'       => false,
 					'js_dep'    => array( 'react', 'react-dom', 'wp-element', 'wp-dom-ready', 'wp-components', 'wp-polyfill', 'wp-i18n', 'wp-api', 'wp-api-fetch', 'wp-data', 'wp-url', 'wp-autop' ),
-					'css_dep'   => array( 'semantic-ui' ),
+					'css_dep'   => array(),
 					'in_footer' => true,
 					'media'     => 'all',
 				)
