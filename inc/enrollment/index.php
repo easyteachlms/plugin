@@ -4,6 +4,8 @@
  * @package 
  */
 class Enrollment extends EasyTeachLMS {
+	public $enroll_button_js_handle = false;
+
     public function __construct($init = false) {
         if ( true === $init ) {
 			/**
@@ -31,11 +33,15 @@ class Enrollment extends EasyTeachLMS {
 			 * NOTE: Users with 'edit_others_posts' will return true every time.
 			 */
 			add_filter( 'easyteach_is_this_user_enrolled', array($this, 'is_user_enrolled'), 10, 2);
+            
+            /**
+             * This filter, when passed with a $post_id and $user_id will return a enrollment gate for the given course (post_id). A button will display and clicking it will enroll the $user_id to the $post_id.
+             */
+            add_filter( 'easyteach_course_enroll_gate', array($this, 'default_enroll_gate'), 10, 2 );
 			
 			//
 			add_filter( 'post_class', array( $this, 'is_enrolled_post_class' ), 10, 3 );
-			add_filter( 'the_excerpt', array( $this, 'enroll_button_for_standard_loop' ) );
-			add_action( 'wp_enqueue_scripts', array( $this, 'enroll_button_enqueue' ) );
+			add_action( 'wp_enqueue_scripts', array( $this, 'enroll_button_register' ) );
 			add_action( 'rest_api_init', array( $this, 'register_rest_endpoints' ) );
 			add_filter( 'query_vars', array( $this, 'add_forceEnroll_queryvar' ) );
 			
@@ -64,7 +70,7 @@ class Enrollment extends EasyTeachLMS {
 
 		// All editors get access to all courses.
 		if ( user_can( $user_id, 'edit_others_posts' ) ) {
-			return true;
+			// return true;
 		}
 
 		$courses = get_user_meta( $user_id, '_enrolled_courses', true );
@@ -123,44 +129,26 @@ class Enrollment extends EasyTeachLMS {
 		return $classes;
 	}
 
-	public function enroll_button_enqueue() {
-		if ( is_post_type_archive( 'course' ) ) {
-			return parent::wpackio()->enqueue(
-				'app',
-				'enrollButton',
-				array(
-					'js'        => true,
-					'css'       => false,
-					'js_dep'    => array( 'react', 'react-dom', 'wp-element', 'wp-dom-ready', 'wp-components', 'wp-polyfill', 'wp-i18n', 'wp-api', 'wp-api-fetch', 'wp-data', 'wp-url', 'wp-autop' ),
-					'css_dep'   => array(),
-					'in_footer' => true,
-					'media'     => 'all',
-				)
-			);
-		}
+	public function enroll_button_register() {
+		$button_js = parent::wpackio()->enqueue(
+			'frontend',
+			'enrollButton',
+			array(
+				'js'        => true,
+				'css'       => false,
+				'js_dep'    => array(),
+				'css_dep'   => array(),
+				'in_footer' => true,
+				'media'     => 'all',
+			)
+		);
+
+        $this->enroll_button_js_handle = array_pop( $button_js['js'] )['handle'];
 	}
 
-	public function enroll_button_for_standard_loop( $excerpt ) {
-		if ( is_post_type_archive( 'course' ) && in_the_loop() && is_main_query() ) {
-			$user = wp_get_current_user();
-			if ( 0 === $user ) {
-				return $excerpt;
-			}
-			$course_id = get_the_ID();
-			$enrolled  = $this->is_user_enrolled( $course_id, $user->ID ) ? 'true' : 'false';
-			$permalink = get_permalink( $course_id );
-			$label = apply_filters('easyteach_enrolled_button_text', 'true' === $enrolled ? 'Access Course' : 'Enroll Now', $enrolled);
-
-			if ( 'true' === $enrolled ) {
-				return $excerpt . '<div class="easyteachlms-enrolled-button"><a href="' . esc_url($permalink) . '">'.__($label).'</a></div>';
-			}
-			ob_start();
-			?>
-			<div class="easyteachlms-enroll-button" data-enrolled=<?php echo esc_attr( $enrolled ); ?> data-userId=<?php echo esc_attr($user->ID); ?> data-courseId=<?php echo esc_attr($course_id); ?> data-courseLink=<?php echo esc_url( $permalink ); ?>><?php echo __($label);?></div>
-			<?php
-			$excerpt = $excerpt . ob_get_clean();
-		}
-		return $excerpt;
+	public function default_enroll_gate($course_id, $user_id = false) {
+		wp_enqueue_script( $this->enroll_button_js_handle );
+		return wp_sprintf( '<div class="easyteach-enroll-gate"><h2>%s</h2><p><button class="js-enroll-in-course-button button" data-course-id="%s" data-user-id="%s">%s</button></p></div>', 'You are not currently enrolled in this course', $course_id, $user_id, 'Enroll in this course' );
 	}
 
 	public function register_rest_endpoints() {
@@ -271,7 +259,8 @@ class Enrollment extends EasyTeachLMS {
 		if ( !is_singular('course') ) {
 			return;
 		}
-		if ( true === get_query_var( 'forceEnroll', false ) ) {
+		$nonce = wp_verify_nonce( get_query_var( 'nonce', false ) );
+		if ( true === get_query_var( 'forceEnroll', false ) && 1 === $nonce ) {
 			$user_id = get_current_user_id();
 			$course_id = get_the_ID();
 			if (false === $this->is_user_enrolled($course_id, $user_id) ) {

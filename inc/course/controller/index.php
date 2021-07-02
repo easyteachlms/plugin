@@ -77,7 +77,7 @@ class Course extends EasyTeachLMS {
         ) );
 
 		if ( !$enrolled ) {
-			$content = 'You Must Be Enrolled!';
+			$content = apply_filters('easyteach_course_enroll_gate', $attributes['id'], get_current_user_id());
 		}
 		
         return '<div '.$block_wrapper_attributes.'>'.$content.'</div>';

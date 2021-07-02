@@ -104,7 +104,7 @@ class EasyTeachLMS {
 	public function include_files() {
 		require_once EASYTEACHLMS_PATH . '/inc/certificate/index.php';
 		require_once EASYTEACHLMS_PATH . '/inc/course/index.php';
-		require_once EASYTEACHLMS_PATH . '/inc/enroll-button/index.php';
+		require_once EASYTEACHLMS_PATH . '/inc/enrollment/index.php';
 		require_once EASYTEACHLMS_PATH . '/inc/ghost-block/index.php';
 		require_once EASYTEACHLMS_PATH . '/inc/lesson/index.php';
 		require_once EASYTEACHLMS_PATH . '/inc/quiz/index.php';
@@ -113,7 +113,6 @@ class EasyTeachLMS {
 		require_once EASYTEACHLMS_PATH . '/inc/woocommerce/index.php';
 
 		require_once EASYTEACHLMS_PATH . '/inc/class-data-model.php';
-		require_once EASYTEACHLMS_PATH . '/inc/class-enrollment.php';
 		require_once EASYTEACHLMS_PATH . '/inc/class-student.php';
 		require_once EASYTEACHLMS_PATH . '/inc/template-tags.php';
 	}

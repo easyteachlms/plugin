@@ -23,13 +23,6 @@ module.exports = {
         //     },
         // },
         {
-            name: 'misc',
-            entry: {
-                enrollButton: './inc/enroll-button/index.js',
-            },
-            optimizeForGutenberg: true,
-        },
-        {
             name: 'wpAdmin',
             entry: {
                 wooCommerceCourseField: './inc/woocommerce/index.js',
@@ -60,6 +53,7 @@ module.exports = {
             entry: {
                 course: './inc/course/frontend/index.js',
                 certificate: './inc/certificate/frontend/index.js',
+                enrollButton: './inc/enrollment/index.js',
                 lesson: './inc/lesson/frontend/index.js',
                 quiz: './inc/quiz/frontend/index.js',
             },
