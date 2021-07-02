@@ -8,7 +8,9 @@ class Answer extends EasyTeachLMS {
     }
 
     public function render_answer($attributes, $content, $block) {
-        return $content;
+        $block_wrapper_attributes = get_block_wrapper_attributes();
+
+        return '<div '.$block_wrapper_attributes.'>'.$content.'</div>';
     }
 
     public function register_block() {

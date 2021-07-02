@@ -25,6 +25,9 @@
         }
 	},
     "parent": ["easyteachlms/course"],
+    "providesContext": {
+		"lessonUuid": "uuid"
+	},
 	"supports": {
 		"html": false,
         "align": false

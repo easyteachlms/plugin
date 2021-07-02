@@ -7,8 +7,10 @@ class Question extends EasyTeachLMS {
         }
     }
 
-    public function render_answer($attributes, $content, $block) {
-        return $content;
+    public function render_question($attributes, $content, $block) {
+        $block_wrapper_attributes = get_block_wrapper_attributes();
+
+        return '<div '.$block_wrapper_attributes.'>'.$content.'</div>';
     }
 
     public function register_block() {
@@ -32,7 +34,7 @@ class Question extends EasyTeachLMS {
 			array(
 				'editor_script' => array_pop( $question_block['js'] )['handle'],
 				'editor_style'  => array_pop( $question_block['css'] )['handle'],
-				'render_callback' => array( $this, 'render_answer' ),
+				'render_callback' => array( $this, 'render_question' ),
 			)
 		);
 	}

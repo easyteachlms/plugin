@@ -25,10 +25,16 @@ class Enrollment extends EasyTeachLMS {
 			 * @return array
 			 */
 			add_filter( 'easyteach_get_user_courses', array($this, 'get_enrolled_courses'), 10, 1 );
+
+			/**
+			 * This filter when passed with $post_id and $user_id will return true or false if the $user_id is enrolled in the $post_id course.
+			 * NOTE: Users with 'edit_others_posts' will return true every time.
+			 */
+			add_filter( 'easyteach_is_this_user_enrolled', array($this, 'is_user_enrolled'), 10, 2);
 			
 			//
 			add_filter( 'post_class', array( $this, 'is_enrolled_post_class' ), 10, 3 );
-			add_filter( 'the_excerpt', array( $this, 'enroll_button' ) );
+			add_filter( 'the_excerpt', array( $this, 'enroll_button_for_standard_loop' ) );
 			add_action( 'wp_enqueue_scripts', array( $this, 'enroll_button_enqueue' ) );
 			add_action( 'rest_api_init', array( $this, 'register_rest_endpoints' ) );
 			add_filter( 'query_vars', array( $this, 'add_forceEnroll_queryvar' ) );
@@ -134,7 +140,7 @@ class Enrollment extends EasyTeachLMS {
 		}
 	}
 
-	public function enroll_button( $excerpt ) {
+	public function enroll_button_for_standard_loop( $excerpt ) {
 		if ( is_post_type_archive( 'course' ) && in_the_loop() && is_main_query() ) {
 			$user = wp_get_current_user();
 			if ( 0 === $user ) {

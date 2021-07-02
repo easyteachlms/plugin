@@ -12,11 +12,19 @@ class Quiz extends EasyTeachLMS {
         wp_enqueue_script( apply_filters('easyteach_frontend_quiz_js', null) );
         wp_enqueue_style( apply_filters('easyteach_frontend_quiz_css', null) );
         
+        $uuid = $attributes['uuid'];
+		$parent_uuid = array_key_exists('lessonUuid', $block->context) ? $block->context['lessonUuid'] : false;
+		$is_active = $uuid === get_query_var( 'content-uuid', false );
+		
         $block_wrapper_attributes = get_block_wrapper_attributes( array(
-            'data-uuid' => $attributes['uuid'],
+			'data-parent-uuid' => $parent_uuid,
+            'data-uuid' => $uuid,
+			'data-title' => $attributes['title'],
+			'data-active' => $is_active,
+			'style' => !$is_active ? 'display: none;' : null,
         ) );
-        $content = '<div '.$block_wrapper_attributes.'></div>';
-        return $content;
+
+        return '<div '.$block_wrapper_attributes.'>'.$content.'</div>';
     }
 
     public function register_block() {

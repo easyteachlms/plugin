@@ -6,6 +6,7 @@ class Lesson extends EasyTeachLMS {
 		if ( true === $init ) {
 			add_action( 'init', array( $this, 'register_lesson_post_type' ) );
 			add_action( 'init', array( $this, 'register_lesson_block' ) );
+			add_filter( 'query_vars', array( $this, 'register_query_vars' ), 20, 1 );
 		}
 	}
 
@@ -69,6 +70,16 @@ class Lesson extends EasyTeachLMS {
 		);
 	}
 
+	/**
+	 * Handles the url/query var for content-uuid for lesson-content and quiz blocks
+	 * @param mixed $qvars 
+	 * @return mixed 
+	 */
+	public function register_query_vars( $qvars ) {
+		$qvars[] = 'content-uuid';
+		return $qvars;
+	}
+
 	public function show_post_content_raw( $object, $field_name, $request ) {
 		return get_post( $object['id'] )->post_content;
 	}
@@ -79,8 +90,28 @@ class Lesson extends EasyTeachLMS {
 		}
 		$scheduled_date = new DateTime($attributes['schedule']);
 		$current_date = new DateTime();
-		// If todays date is before the $scheduled_date then return false;
+		// If scheduled date is in the past or right now then return true.
 		return $scheduled_date <= $current_date;
+	}
+
+	/**
+	 * Compile array of uuids from the lesson-content and quiz blocks inside.
+	 * @param mixed $block 
+	 * @return array()
+	 */
+	public function get_child_uuids($block) {
+		$inner_blocks = $block->parsed_block['innerBlocks'];
+		$all_inner_attrs = array_column($inner_blocks, 'attrs');
+		return array_column($all_inner_attrs, 'uuid');
+	}
+
+	public function is_child_uuid_active($block) {
+		$currently_active_uuid = get_query_var('content-uuid', false);
+		if ( false === $currently_active_uuid ) {
+			return false;
+		}
+		$uuids = $this->get_child_uuids($block);
+		return in_array($currently_active_uuid, $uuids);
 	}
 
 	public function render_lesson($attributes, $content, $block) {
@@ -93,6 +124,7 @@ class Lesson extends EasyTeachLMS {
 		$block_wrapper_attributes = get_block_wrapper_attributes( array(
             'data-uuid' => $attributes['uuid'],
 			'data-title' => $attributes['title'],
+			'data-active' => $this->is_child_uuid_active($block),
         ) );
 
         return '<div '.$block_wrapper_attributes.'>'.$content.'</div>';

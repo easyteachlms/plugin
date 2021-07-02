@@ -58,13 +58,27 @@ class Course extends EasyTeachLMS {
 		register_post_type( $this->post_type, $args );
 	}
 
-	public function render_course($attributes, $content, $block) {
+	public function check_enrollment($post_id = false) {
+		if ( false === $post_id ) {
+			return false;
+		}
+		return apply_filters('easyteach_is_this_user_enrolled', $post_id, get_current_user_id());
+	}
+
+	public function render_course($attributes, $content) {
+		$enrolled = $this->check_enrollment($attributes['id']);
+
 		wp_enqueue_script( apply_filters('easyteach_frontend_course_js', null) );
         wp_enqueue_style( apply_filters('easyteach_frontend_course_css', null) );
         
         $block_wrapper_attributes = get_block_wrapper_attributes( array(
             'data-course-id' => $attributes['id'],
+			'data-enrolled' => $enrolled,
         ) );
+
+		if ( !$enrolled ) {
+			$content = 'You Must Be Enrolled!';
+		}
 		
         return '<div '.$block_wrapper_attributes.'>'.$content.'</div>';
 	}
