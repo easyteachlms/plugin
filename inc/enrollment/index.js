@@ -6,7 +6,7 @@ import apiFetch from '@wordpress/api-fetch';
 
 const doEnrollment = (userId, courseId) => {
     apiFetch({
-        path: `/easyteachlms/v3/course/enroll/?userId=${userId}&courseId=${courseId}`,
+        path: `/easyteachlms/v4/course/enroll/?userId=${userId}&courseId=${courseId}`,
         method: 'POST',
         data: { enrolled: true },
     })
@@ -19,7 +19,7 @@ const doEnrollment = (userId, courseId) => {
         // Handle if the user is not logged in, redirect them to login and tell wp-login what course to redirec to after you're enrolled.
         if ('rest_forbidden' === e.code) {
             apiFetch({
-                path: `/easyteachlms/v3/course/redirect-to-login/?courseId=${courseId}`,
+                path: `/easyteachlms/v4/course/redirect-to-login/?courseId=${courseId}`,
                 method: 'GET',
             }).then((url) => {
                 window.location.href = url;
@@ -33,7 +33,9 @@ domReady(() => {
     targets.forEach((target) => {
         const userId = target.getAttribute('data-user-id');
         const courseId = target.getAttribute('data-course-id');
-        target.addEventListener('click', doEnrollment(userId, courseId));
+        target.addEventListener('click', ()=> {
+            doEnrollment(userId, courseId);
+        });
     });
 });
  

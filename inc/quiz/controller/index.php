@@ -55,7 +55,7 @@ class Quiz extends EasyTeachLMS {
 
     public function register_rest_endpoints() {
         register_rest_route(
-			'easyteachlms/v3',
+			'easyteachlms/v4',
 			'/quiz/submit',
 			array(
 				'methods'             => 'POST',

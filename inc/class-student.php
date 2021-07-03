@@ -26,7 +26,7 @@ class Student extends EasyTeachLMS {
 
 	public function register_rest_endpoints() {
 		register_rest_route(
-			'easyteachlms/v3',
+			'easyteachlms/v4',
 			'/student/get', // Should this be get-progress?
 			array(
 				'methods'             => 'GET',
@@ -45,7 +45,7 @@ class Student extends EasyTeachLMS {
 		);
 
 		register_rest_route(
-			'easyteachlms/v3',
+			'easyteachlms/v4',
 			'/student/update-progress',
 			array(
 				'methods'             => 'POST',

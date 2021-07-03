@@ -29,7 +29,7 @@ const MarkComplete = ({
             onClick={() => {
                 setStatus(true);
                 apiFetch({
-                    path: `/easyteachlms/v3/student/update-progress/?userId=${userId}&uuid=${uuid}&courseId=${courseId}`,
+                    path: `/easyteachlms/v4/student/update-progress/?userId=${userId}&uuid=${uuid}&courseId=${courseId}`,
                     method: 'POST',
                     data: { completed: true },
                 }).then(() => {

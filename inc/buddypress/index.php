@@ -30,7 +30,7 @@ if ( class_exists( 'BP_Group_Extension' ) ) {
 
 		public function register_rest_endpoints() {
 			register_rest_route(
-				'easyteachlms/v3',
+				'easyteachlms/v4',
 				'/cohort/get-courses',
 				array(
 					'methods'             => 'GET',

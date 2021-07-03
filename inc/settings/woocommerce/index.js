@@ -10,7 +10,7 @@ const WooCommerceSettings = () => {
 
     const handler = (value) => {
         apiFetch({
-            path: `/easyteachlms/v3/settings/update/?setting=openEnrollment`,
+            path: `/easyteachlms/v4/settings/update/?setting=openEnrollment`,
             method: 'POST',
             data: { value: !value },
         }).then((e) => {

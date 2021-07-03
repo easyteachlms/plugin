@@ -26,7 +26,7 @@ const ViewStudentProgressButton = ({ userSlug, groupId }) => {
     const getAttachedCourses = () => {
         return new Promise((resolve) => {
             apiFetch({
-                path: `/easyteachlms/v3/cohort/get-courses/?groupId=${groupId}`,
+                path: `/easyteachlms/v4/cohort/get-courses/?groupId=${groupId}`,
             }).then((r) => {
                 console.log(r);
                 resolve(r);
@@ -39,7 +39,7 @@ const ViewStudentProgressButton = ({ userSlug, groupId }) => {
             getAttachedCourses().then((courseIds) => {
                 console.log(courseIds);
                 apiFetch({
-                    path: `/easyteachlms/v3/student/get/?userSlug=${userSlug}`,
+                    path: `/easyteachlms/v4/student/get/?userSlug=${userSlug}`,
                 }).then((r) => {
                     console.log('getStudentInfo -- View Progress', r);
                     const toReturn = r.courses.filter((c) => {

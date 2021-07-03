@@ -11,7 +11,7 @@ class Enrollment extends EasyTeachLMS {
 			/**
 			 * This filter is used in the data model and provides a `enrolled` class in the course data object wherever used.
 			 */
-            add_filter( 'easyteachlms_course_structure', array( $this, 'verify_and_return_course_object' ), 10, 2 );
+            // add_filter( 'easyteach_course_structure', array( $this, 'verify_and_return_course_object' ), 10, 2 );
 			
 			/**
 			 * This filter when passed with $user_id apply_filters('easyteach_get_user_courses', $user_id) will return a multidimensional array of the passed user's courses:
@@ -156,7 +156,7 @@ class Enrollment extends EasyTeachLMS {
 		 * Enroll a user to a course.
 		 */
 		register_rest_route(
-			'easyteachlms/v3',
+			'easyteachlms/v4',
 			'/course/enroll',
 			array(
 				'methods'             => 'POST',
@@ -183,7 +183,7 @@ class Enrollment extends EasyTeachLMS {
 		 * Un-enroll a user from a course.
 		 */
 		register_rest_route(
-			'easyteachlms/v3',
+			'easyteachlms/v4',
 			'/course/unenroll',
 			array(
 				'methods'             => 'POST',
@@ -210,7 +210,7 @@ class Enrollment extends EasyTeachLMS {
 		 * For use in the courses enroll gate, if the user is not logged in you can use this endpoint to redirec them to wp-login
 		 */
 		register_rest_route(
-			'easyteachlms/v3',
+			'easyteachlms/v4',
 			'/course/redirect-to-login',
 			array(
 				'methods'             => 'GET',
@@ -259,8 +259,7 @@ class Enrollment extends EasyTeachLMS {
 		if ( !is_singular('course') ) {
 			return;
 		}
-		$nonce = wp_verify_nonce( get_query_var( 'nonce', false ) );
-		if ( true === get_query_var( 'forceEnroll', false ) && 1 === $nonce ) {
+		if ( true === get_query_var( 'forceEnroll', false ) ) {
 			$user_id = get_current_user_id();
 			$course_id = get_the_ID();
 			if (false === $this->is_user_enrolled($course_id, $user_id) ) {

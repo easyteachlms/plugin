@@ -133,7 +133,7 @@ class Settings extends EasyTeachLMS {
 
 	public function rest_routes() {
 		register_rest_route(
-			'easyteachlms/v3',
+			'easyteachlms/v4',
 			'/settings/update',
 			array(
 				'methods'             => 'POST',

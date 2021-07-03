@@ -157,7 +157,7 @@ const useProvideQuiz = (uuid) => {
 
         // Check if quiz has any free text answers and if so we need to grade the quiz differently. And display different warnings on completion.
         apiFetch({
-            path: `/easyteachlms/v3/quiz/submit/?userId=${id}&uuid=${uuid}&courseId=${courseId}`,
+            path: `/easyteachlms/v4/quiz/submit/?userId=${id}&uuid=${uuid}&courseId=${courseId}`,
             method: 'POST',
             data: userScore,
         }).then(() => {

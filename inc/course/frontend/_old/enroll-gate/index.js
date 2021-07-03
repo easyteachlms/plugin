@@ -15,7 +15,7 @@ const Enroll = ({ courseId }) => {
     const clickHandler = () => {
         setEnrolling(true);
         apiFetch({
-            path: `/easyteachlms/v3/course/enroll/?userId=${id}&courseId=${courseId}`,
+            path: `/easyteachlms/v4/course/enroll/?userId=${id}&courseId=${courseId}`,
             method: 'POST',
             data: { enrolled: true },
         })
@@ -28,7 +28,7 @@ const Enroll = ({ courseId }) => {
             .catch((e) => {
                 if ('rest_forbidden' === e.code) {
                     apiFetch({
-                        path: `/easyteachlms/v3/course/redirect-to-login/?courseId=${courseId}`,
+                        path: `/easyteachlms/v4/course/redirect-to-login/?courseId=${courseId}`,
                         method: 'GET',
                     }).then((url) => {
                         window.location.href = url;

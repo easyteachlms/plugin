@@ -114,17 +114,16 @@ class Lesson extends EasyTeachLMS {
 		return in_array($currently_active_uuid, $uuids);
 	}
 
-	public function render_lesson($attributes, $content, $block) {
-		wp_enqueue_script( apply_filters('easyteach_frontend_lesson_js', null) );
-        wp_enqueue_style( apply_filters('easyteach_frontend_lesson_css', null) );
-        //  Check for schedule, if not correct then DO NOT DISPLAY.
-		
-		$content = $this->check_schedule($attributes) ? $content : wp_sprintf( 'This lesson will unlock at: %s', date('d-m-y', $attributes['schedule']) );
+	public function render_lesson($attributes, $content, $block) {	
+		$content = $this->check_schedule($attributes) ? $content : wp_sprintf( 'This lesson will unlock at: %s', date('y-m-d H:i:s', strtotime($attributes['schedule'])) );
+
+		$has_active_child = $this->is_child_uuid_active($block);
         
 		$block_wrapper_attributes = get_block_wrapper_attributes( array(
             'data-uuid' => $attributes['uuid'],
 			'data-title' => $attributes['title'],
-			'data-active' => $this->is_child_uuid_active($block),
+			'data-active' => $has_active_child,
+			'style' => !$has_active_child ? 'display: none;' : null,
         ) );
 
         return '<div '.$block_wrapper_attributes.'>'.$content.'</div>';

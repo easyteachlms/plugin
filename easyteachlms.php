@@ -88,7 +88,7 @@ class EasyTeachLMS {
 			
 			add_action( 'init', array( $this, 'rewrite' ) );
 			add_action( 'init', array( $this, 'rewrite_tags' ) );
-			add_filter( 'block_categories', array( $this, 'register_block_category' ), 10, 2 );
+			add_filter( 'block_categories_all', array( $this, 'register_block_category' ), 10, 2 );
 
 
 			register_activation_hook( EASYTEACHLMS_FILE, array( $this, 'activate' ) );
@@ -122,19 +122,18 @@ class EasyTeachLMS {
 		require_once EASYTEACHLMS_PATH . '/inc/buddypress/index.php';
 	}
 
-	function register_block_category( $categories, $post ) {
-		if ( ! in_array( $post->post_type, array( 'course', 'lesson' ) ) ) {
-			return $categories;
-		}
-		return array_merge(
-			$categories,
-			array(
+	function register_block_category( $block_categories, $editor_context ) {
+		if ( ! empty( $editor_context->post ) ) {
+			array_push(
+				$block_categories,
 				array(
 					'slug'  => 'education',
 					'title' => __( 'Education', 'easyteachlms' ),
-				),
-			)
-		);
+					'icon'  => null,
+				)
+			);
+		}
+		return $block_categories;
 	}
 
 	public function activate() {

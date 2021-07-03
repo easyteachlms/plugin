@@ -58,27 +58,17 @@ class Course extends EasyTeachLMS {
 		register_post_type( $this->post_type, $args );
 	}
 
-	public function check_enrollment($post_id = false) {
-		if ( false === $post_id ) {
-			return false;
-		}
-		return apply_filters('easyteach_is_this_user_enrolled', $post_id, get_current_user_id());
-	}
-
 	public function render_course($attributes, $content) {
-		$enrolled = $this->check_enrollment($attributes['id']);
-
-		wp_enqueue_script( apply_filters('easyteach_frontend_course_js', null) );
-        wp_enqueue_style( apply_filters('easyteach_frontend_course_css', null) );
+		$user_id = get_current_user_id();
+		$post_id = $attributes['id'];
         
         $block_wrapper_attributes = get_block_wrapper_attributes( array(
             'data-course-id' => $attributes['id'],
-			'data-enrolled' => $enrolled,
+			'data-user-id' => $user_id,
+			'data-enrolled' => apply_filters('easyteach_is_this_user_enrolled', $post_id, $user_id),
         ) );
 
-		if ( !$enrolled ) {
-			$content = apply_filters('easyteach_course_enroll_gate', $attributes['id'], get_current_user_id());
-		}
+		$content = apply_filters('easyteach_course_render', $content, array('id' => $attributes['id'], 'user_id' => $user_id) );
 		
         return '<div '.$block_wrapper_attributes.'>'.$content.'</div>';
 	}

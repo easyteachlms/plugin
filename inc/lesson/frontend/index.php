@@ -40,7 +40,7 @@ class LessonFrontend extends EasyTeachLMS {
 			'lesson',
 			array(
 				'js'        => true,
-				'css'       => true,
+				'css'       => false,
 				'js_dep'    => array(),
 				'css_dep'   => array(),
 				'in_footer' => true,
@@ -49,7 +49,7 @@ class LessonFrontend extends EasyTeachLMS {
 		);
 
         $this->js_handle = array_pop( $lesson_frontend['js'] )['handle'];
-        $this->css_handle = array_pop( $lesson_frontend['css'] )['handle'];
+        // $this->css_handle = array_pop( $lesson_frontend['css'] )['handle'];
 	}
 }
 

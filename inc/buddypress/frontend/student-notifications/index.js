@@ -10,7 +10,7 @@ const ViewStudentNotifications = ({ userSlug, groupId }) => {
     const getAttachedCourses = () => {
         return new Promise((resolve) => {
             apiFetch({
-                path: `/easyteachlms/v3/cohort/get-courses/?groupId=${groupId}`,
+                path: `/easyteachlms/v4/cohort/get-courses/?groupId=${groupId}`,
             }).then((r) => {
                 console.log(r);
                 resolve(r);
@@ -23,7 +23,7 @@ const ViewStudentNotifications = ({ userSlug, groupId }) => {
             getAttachedCourses().then((courseIds) => {
                 console.log(courseIds);
                 apiFetch({
-                    path: `/easyteachlms/v3/student/get/?userSlug=${userSlug}`,
+                    path: `/easyteachlms/v4/student/get/?userSlug=${userSlug}`,
                 }).then((r) => {
                     console.log('getStudentInfo - View Notifications', r);
                     setUserData(r.userData);
@@ -62,7 +62,7 @@ const ViewStudentNotifications = ({ userSlug, groupId }) => {
         }
         // Check if quiz has any free text answers and if so we need to grade the quiz differently. And display different warnings on completion.
         apiFetch({
-            path: `/easyteachlms/v3/quiz/submit/?userId=${userData.ID}&uuid=${uuid}&courseId=${courseId}&newScore=${newScore}`,
+            path: `/easyteachlms/v4/quiz/submit/?userId=${userData.ID}&uuid=${uuid}&courseId=${courseId}&newScore=${newScore}`,
             method: 'POST',
         }).then((d) => {
             console.log(d);

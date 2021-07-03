@@ -1,26 +1,28 @@
 <?php
-namespace EasyTeachLMS;
-
 use WP_REST_Request;
 use WP_Error;
 /**
  * Course structure should be added as post meta to the course.
  * Whenever a lesson is added to a course the lesson should have post meta that lists the ids of the courses where it can be found.
  */
-class Data_Model {
+class Data_Model extends EasyTeachLMS {
 	protected $course_id = false;
 	protected $user_id   = false;
 	protected $site_id   = false;
-
 	public function __construct( $init = false ) {
 		if ( true === $init ) {
 			add_action( 'rest_api_init', array( $this, 'register_rest_endpoint' ) );
+			/**
+			 * Example how to get the course structure using php.
+			 * apply_filters('easyteach_get_course_structure',  int $course_id = 0, $user_id = false, $site_id = false);
+			 */
+			add_filter( 'easyteach_get_course_structure', array($this, 'get_course_structure'), 10, 4);
 		}
 	}
 
 	public function register_rest_endpoint() {
 		register_rest_route(
-			'easyteachlms/v3',
+			'easyteachlms/v4',
 			'/course/get',
 			array(
 				'methods'             => 'GET',
@@ -36,10 +38,14 @@ class Data_Model {
 							return is_numeric( $param );
 						},
 					),
+					'includeContent'   => array(
+						'validate_callback' => function( $param, $request, $key ) {
+							return is_string( $param );
+						},
+					),
 				),
 				'permission_callback' => function () {
-					// return current_user_can( 'read' );
-					return true;
+					return current_user_can( 'read' );
 				},
 			)
 		);
@@ -97,27 +103,28 @@ class Data_Model {
 		}
 	}
 
-	public function is_complete( $uuid, $course_id, $user_id, $site_id ) {
-		if ( function_exists( 'switch_to_blog' ) ) {
-			switch_to_blog( $site_id );
-		}
-		$meta_key      = "_course_{$course_id}_{$site_id}";
-		$user_progress = get_user_meta( $user_id, $meta_key, true );
-		if ( function_exists( 'restore_current_blog' ) ) {
-			restore_current_blog();
-		}
-		if ( is_array( $user_progress ) && array_key_exists( 'completed', $user_progress ) && in_array( $uuid, $user_progress['completed'] ) ) {
-			return true;
-		} else {
-			return false;
-		}
-	}
+	// public function is_complete( $uuid, $course_id, $user_id, $site_id ) {
+	// 	if ( function_exists( 'switch_to_blog' ) ) {
+	// 		switch_to_blog( $site_id );
+	// 	}
+	// 	$meta_key      = "_course_{$course_id}_{$site_id}";
+	// 	$user_progress = get_user_meta( $user_id, $meta_key, true );
+	// 	if ( function_exists( 'restore_current_blog' ) ) {
+	// 		restore_current_blog();
+	// 	}
+	// 	if ( is_array( $user_progress ) && array_key_exists( 'completed', $user_progress ) && in_array( $uuid, $user_progress['completed'] ) ) {
+	// 		return true;
+	// 	} else {
+	// 		return false;
+	// 	}
+	// }
 
 	public function get_course_structure_restfully( \WP_REST_Request $request ) {
 		return $this->get_course_structure(
 			$request->get_param( 'courseId' ),
 			$request->get_param( 'userId' ),
-			get_current_blog_id()
+			get_current_blog_id(),
+			'true' === $request->get_param('includeContent'),
 		);
 	}
 
@@ -126,107 +133,133 @@ class Data_Model {
 	 * @param int $post_id
 	 * @return false|array
 	 */
-	public function get_course_structure( int $course_id = 0, $user_id = false, $site_id = false ) {
-		error_log( "get_course_structure({$course_id})" );
+	public function get_course_structure( int $course_id = 0, $user_id = false, $site_id = false, $include_content = false ) {
 		$post = get_post( $course_id );
 		if ( false === $post || null === $post || \is_wp_error( $post ) || ! is_object( $post ) || ! property_exists( $post, 'post_content' ) ) {
-			return new WP_Error( 'fetch-error', __( 'API could not find course with id of ' . $course_id, 'easyteachlms' ) );
+			return new WP_Error( 'fetch-error', __( 'API could not find course with id of ' . $course_id.'.', 'easyteachlms' ) );
+		}
+
+		if ( !has_block('easyteachlms/course', $post->post_content) ) {
+			return new WP_Error( 'course-error', __( 'API did not find easyteachlms/course block in course '.$course_id.' content.', 'easyteachlms' ) );
 		}
 
 		$parsed = \parse_blocks( $post->post_content );
 
 		if ( empty( $parsed ) ) {
-			return new WP_Error( 'parse-error', __( 'API could not parse course', 'easyteachlms' ) );
+			return new WP_Error( 'parse-error', __( 'API could not parse course ' .$course_id.'.', 'easyteachlms' ) );
 		}
 
-		$course  = $this->recursively_search_for_blocks( $parsed, 'blockName', 'easyteachlms/course' );
+		// @TODO what is the best way to search for and get the first easyteachlms/course block that can be found, regardless of how nested it is. 
+		$course  = $this->recursively_search_for_blocks( $parsed, 'blockName', 'easyteachlms/course' );		
 		$course  = array_pop( $course );
-		$outline = $this->parse_course( $course, $course_id, $user_id, $site_id );
+
+		$outline = $this->parse_course_block( $course, $course_id, $user_id, $site_id, $include_content );
 
 		$files = $this->recursively_search_for_blocks( $parsed, 'blockName', 'core/file' );
 		$files = $this->parse_files( $files );
 
-		$structure = array(
+		$description = array_key_exists( 'description', $course['attrs'] ) ? $course['attrs']['description'] : false;
+
+		return array(
 			'id'          => $post->ID,
 			'title'       => $post->post_title,
-			'link'        => get_permalink( $post->ID ),
+			'permalink'   => get_permalink( $post->ID ),
 			'excerpt'     => $post->post_excerpt,
-			'description' => null,
-			'points'      => 'NULL', // Gather up all the quiz points as total points here??
+			'description' => $description,
+			'scoring' => array(
+				'totalPointsAvailable' => 0, // Gather up all the points on quizzes,
+				'requiredToPass' => 0, // Get the required to pass from certificate, otherwise calculate 80% of the total points available. 
+			),
 			'outline'     => $outline,
-			'files'       => $files,
-			'enrolled'    => false,
+			'files'       => $files, // Gather up all the files
 		);
-
-		if ( array_key_exists( 'description', $course['attrs'] ) ) {
-			$structure['description'] = $course['attrs']['description'];
-		}
-
-		if ( empty( $structure['excerpt'] ) && ! empty( $structure['description'] ) ) {
-			$structure['excerpt'] = $course['attrs']['description'];
-		}
-
-		return apply_filters( 'easyteachlms_course_structure', $structure, $course_id );
 	}
 
-	protected function parse_course( $course, $course_id, $user_id, $site_id ) {
+	protected function parse_course_block( $course, $course_id, $user_id, $site_id, $include_content ) {
 
-		error_log( 'parse_course()' );
 
 		if ( true !== $this->has_innerBlocks( $course ) ) {
-			return new WP_Error( 'parse-error', __( 'API could not find any innerblocks', 'easyteachlms' ) );
+			return new WP_Error( 'parse-error', __( 'API could not find any innerBlocks', 'easyteachlms' ) );
 		}
 
 		$outline = array(
+			// Indexes
 			'structured' => array(),
 			'flat'       => array(),
-			'completed'  => 0,
-			'total'      => 0,
+			// User info, @todo that we need to think about optimizing data calls for. 
+			/**
+			 * What we should do is parse the course without user info, just give us the structure...
+			 * with a flag for also including the content.
+			 * That will cache using the transient api the information (the non content version - so the content flag should be added after)
+			 * We then have another function, and rest endpoint, that will get the cached (or new if uncached) version of the parsed course and then insert the user data from another function/rest-endpoint. 
+			 * Both will have filters, allowing for modifying the information at the course and student level. 
+			 * 
+			 * With this in place now we are only making two data calls to create a single page interface. 
+			 * We can also use just the student info on our php version of the interface to do the simplest of things like submit quiz scores /get quiz scores, and to mark complete. 
+			 * 
+			 * In the student info should perhaps add something that would let developers do do_action('easyteach_student_action', array('action', 'userId', 'courseId', 'data'));. If we don't get those three things pass errors.... so that if we want to developers could do their own add_action('my_watch_video_action', function($video_id, $user_id, $course_id) {
+			 * do_action('easyteach_student_action', array(
+			 * 'action' => 'completed-video',
+			 * 'courseId' => $course_id,
+			 * 'userId' => $user_id,
+			 * 'data' => array('video-id' => $video_id)
+ 			 * ))
+			 * })
+			 * 
+			 * what we will do is add_action('easyteach_student_action', function($action){
+			 * $action = $action['action'];
+			 * $user_id = $action['userId'];
+			 * $course_id = $action['courseId'];
+			 * $data = $action['data'];
+			 * // Get the current user meta splice this in array[$action]
+			 * update_user_meta($user_id, "{$course_id}", $merged_Data)
+			 * })
+			 */
+			'completed'  => false,
+			'total'      => 0, // Get total lesson contents and quizzes to do. 
 		);
 
 		foreach ( $course['innerBlocks'] as $key => $block ) {
 			if ( $this->is_block( 'easyteachlms/lesson', $block ) ) {
 				$lesson_uuid                           = $block['attrs']['uuid'];
 				$lesson_title                          = $block['attrs']['title'];
+				
+				// Parse lesson
 				$lesson_parsed                         = $this->parse( 'easyteachlms/lesson', $block, $course_id, $user_id, $site_id );
+
+				// Add parsed lesson data to the structured and flat indexes. 
 				$outline['structured'][ $lesson_uuid ] = $lesson_parsed;
 				$outline['flat'][]                     = $lesson_parsed;
 
-				$lesson_locked = $lesson_parsed['locked'];
-
 				if ( true === $this->has_innerBlocks( $block ) ) {
 					foreach ( $block['innerBlocks'] as $key => $block ) {
-
 						$uuid = $block['attrs']['uuid'];
 
 						if ( 'easyteachlms/quiz' === $block['blockName'] ) {
 							$block_parsed = $this->parse_quiz( $block, $course_id, $user_id, $site_id );
+							$flat_block = $block_parsed;
 							// If this has a quiz then we don't want to allow completion until the quiz is finished.
-							error_log( 'conditionsMet?' );
-							if ( true === $this->is_complete( $uuid, $course_id, $user_id, $site_id ) ) {
-								$block_parsed['conditionsMet'] = true;
-							}
+							// error_log( 'conditionsMet?' );
+							// if ( true === $this->is_complete( $uuid, $course_id, $user_id, $site_id ) ) {
+							// 	$block_parsed['conditionsMet'] = true;
+							// }
 						} else {
 							$block_parsed = $this->parse( 'easyteachlms/lesson-content', $block, $course_id, $user_id, $site_id );
+							$flat_block = $block_parsed;
+							if ( array_key_exists('innerBlocks', $block) && $include_content ) {
+								$flat_block['innerBlocks'] = $block['innerBlocks'];
+							}
 						}
 
 						$block_parsed['parentTitle'] = $lesson_title;
 						$block_parsed['parentUuid']  = $lesson_uuid;
-						$block_parsed['locked']      = $lesson_locked;
 
-						// Check for completion status.
-						if ( true === $this->is_complete( $uuid, $course_id, $user_id, $site_id ) ) {
-							$outline['completed'] = $outline['completed'] + 1;
-						}
-
-						$outline['flat'][] = $block_parsed;
+						$outline['flat'][] = $flat_block;
 						$outline['structured'][ $lesson_uuid ]['outline'][ $uuid ] = $block_parsed;
 					}
 				}
 			}
 		}
-
-		error_log(print_r($outline, true));
 
 		return $outline;
 	}
@@ -376,7 +409,7 @@ class Data_Model {
 			'uuid'          => $uuid,
 			'type'          => $this->get_block_name( ( $block['blockName'] ) ),
 			'conditionsMet' => true,
-			'active'        => false,
+			'active'        => false, // if this is lesson-content... 
 			'completed'     => false,
 			'locked'        => false,
 		);
@@ -389,10 +422,6 @@ class Data_Model {
 			}
 		}
 
-		error_log( "parse({$block['attrs']['title']})" );
-		if ( true === $this->is_complete( $uuid, $course_id, $user_id, $site_id ) ) {
-			$data['completed'] = true;
-		}
 		return $data;
 	}
 
@@ -493,10 +522,9 @@ class Data_Model {
 				'points'              => $args['points'],
 			);
 		}
-		error_log( 'parse_quiz()' );
-		if ( true === $this->is_complete( $uuid, $course_id, $user_id, $site_id ) ) {
-			$return['completed'] = true;
-		}
+		// if ( true === $this->is_complete( $uuid, $course_id, $user_id, $site_id ) ) {
+		// 	$return['completed'] = true;
+		// }
 
 		return $return;
 	}
