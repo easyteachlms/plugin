@@ -10,9 +10,9 @@ class Updater extends EasyTeachLMS {
             define( 'EDD_ITEM_ID', 2317 );
             define( 'EDD_ITEM_NAME', 'EasyTeach LMS' );
 
-            if( !class_exists( 'EDD_SL_Plugin_Updater' ) ) {
+            if( !class_exists( 'EasyTeachLMSPluginUpdater' ) ) {
                 // load our custom updater
-                include( dirname( __FILE__ ) . '/EDD_SL_Plugin_Updater.php' );
+                include( dirname( __FILE__ ) . '/plugin-updater.php' );
             }
 			
 			add_action( 'admin_init', array($this, 'register_license_key_options') );
@@ -36,7 +36,7 @@ class Updater extends EasyTeachLMS {
         $license_key = trim( get_option( 'easyteachlms_license_key' ) );
 
         // setup the updater
-        $edd_updater = new EDD_SL_Plugin_Updater( EDD_STORE_URL, EASYTEACHLMS_FILE,
+        $updater = new EasyTeachLMSPluginUpdater( EDD_STORE_URL, EASYTEACHLMS_FILE,
             array(
                 'version' => EASYTEACHLMS_VERSION,
                 'license' => $license_key,

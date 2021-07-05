@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  * @author Easy Digital Downloads
  * @version 1.8.0
  */
-class EDD_SL_Plugin_Updater {
+class EasyTeachLMSPluginUpdater {
 
 	private $api_url              = '';
 	private $api_data             = array();
@@ -53,7 +53,7 @@ class EDD_SL_Plugin_Updater {
 		 *
 		 * @param array $edd_plugin_data Array of EDD SL plugin data.
 		 */
-		do_action( 'post_edd_sl_plugin_updater_setup', $edd_plugin_data );
+		do_action( 'post_easyteach_plugin_setup', $edd_plugin_data );
 
 		// Set up hooks.
 		$this->init();
