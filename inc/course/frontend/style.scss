@@ -7,23 +7,27 @@
         display: none!important;
     }
     .menu {
-        max-width: 30%;
+        font-family: sans-serif;
+        font-size: 0.8em;
+        min-width: 30%;
         padding-right: 1em;
         [data-selected="true"] > span {
             font-weight: bold;
         }
+        span {
+            display: flex;
+            align-items: center;
+            & > .dashicon {
+                margin-right: 5px;
+            }
+        }
+        & > ul:first-of-type > li:first-child,
         li > ul > li {
             cursor: pointer;
             &:hover {
-                opacity: 0.8;
-                text-decoration: underline;
-            }
-            span {
-                display: flex;
-                align-items: center;
+                opacity: 0.75;
+                font-weight: bold;
             }
         }
-    }
-    .content {
     }
 }

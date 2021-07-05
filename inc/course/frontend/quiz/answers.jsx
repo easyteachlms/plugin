@@ -15,8 +15,8 @@ const Answers = ({ question, answers, help, points, type }) => {
     const [selectedAnswer, setSelectedAnswer] = useState(false);
     
     useEffect(()=>{
+        console.log("ENTRYDATA", entryData);
         if ( undefined !== entryData && undefined !== entryData[question] && entryData[question].length !== 0 ) {
-            console.log('EntryData Changed??', entryData[question], entryData);
             setSelectedAnswer(entryData[question], answers);
         }
     },[entryData]);
@@ -33,9 +33,8 @@ const Answers = ({ question, answers, help, points, type }) => {
         return (
             <div>
                 <TextareaControl
-                    label="Text Question"
-                    help="Your answer here"
-                    value={ text }
+                    label="Your Answer:"
+                    help={help}
                     onChange={ ( text ) => handler(text, null) }
                 />
             </div>

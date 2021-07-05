@@ -22,27 +22,20 @@ const edit = ({ attributes, clientId, setAttributes }) => {
     const { question, answersType } = attributes;
 
     const blockProps = useBlockProps();
-    
-    let innerBlockProps = false;
-    if ( 'text' !== answersType ) {
-        innerBlockProps = useInnerBlocksProps({
-            style: {
-                paddingLeft: '0.8em',
-            }
-        },{
-            allowedBlocks: ALLOWED_BLOCKS,
-            renderAppender: () => {
-                // if ( !isSelected ) {
-                //     return false;
-                // }
-                return (
-                    <InnerBlocks.ButtonBlockAppender
-                        clientId={clientId}
-                    />
-                )
-            }
-        });
-    }
+    const innerBlockProps = useInnerBlocksProps({
+        style: {
+            paddingLeft: '0.8em',
+        }
+    },{
+        allowedBlocks: ALLOWED_BLOCKS,
+        renderAppender: () => {
+            return (
+                <InnerBlocks.ButtonBlockAppender
+                    clientId={clientId}
+                />
+            )
+        }
+    });
 
     return (
         <div {...blockProps}>
@@ -56,7 +49,7 @@ const edit = ({ attributes, clientId, setAttributes }) => {
                 keepPlaceholderOnFocus
                 allowedFormats={['core/bold', 'core/italic']}
             />
-            {false !== innerBlockProps && (
+            {'text' !== answersType && (
                 <div {...innerBlockProps}/>
             )}
             {'text' === answersType && (

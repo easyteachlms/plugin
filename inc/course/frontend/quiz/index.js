@@ -18,10 +18,6 @@ const Quiz = ({ uuid, courseId, userId, data }) => {
     }
     return (
         <ProvideQuiz uuid={uuid} courseId={courseId} userId={userId} data={data}>
-            <div>
-                <h2>{title}</h2>
-                <p><i>{parentTitle}</i></p>
-            </div>
             <AlreadyPassed uuid={uuid} />
             <Pages />
         </ProvideQuiz>

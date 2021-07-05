@@ -34,7 +34,7 @@
     "bootstrap": "wpackio-scripts bootstrap",
     "build": "wpackio-scripts build",
     "start": "wpackio-scripts start",
-    "archive": "wpackio-scripts pack"
+    "package": "wpackio-scripts pack"
   },
   "dependencies": {
     "@opuscapita/react-autocompletes": "^3.0.1",

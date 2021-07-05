@@ -13,7 +13,7 @@ class Settings extends EasyTeachLMS {
 			add_action( 'admin_notices', array( $this, 'welcome_admin_notice' ) );
 			add_action( 'admin_menu', array( $this, 'register_admin_menu' ) );
 			add_action( 'admin_enqueue_scripts', array( $this, 'admin_page_enqueue' ) );
-			add_action( 'rest_api_init', array( $this, 'rest_routes' ) );
+			add_action( 'rest_api_init', array( $this, 'register_rest_endpoint' ) );
 		}
 	}
 
@@ -43,7 +43,7 @@ class Settings extends EasyTeachLMS {
 		$settings = $this->get_settings();
 		
 		$assets = $enqueue->enqueue(
-			'admin',
+			'wpAdmin',
 			'settings',
 			array(
 				'js'        => true,
@@ -131,7 +131,7 @@ class Settings extends EasyTeachLMS {
 		);
 	}
 
-	public function rest_routes() {
+	public function register_rest_endpoint() {
 		register_rest_route(
 			'easyteachlms/v4',
 			'/settings/update',

@@ -17,7 +17,7 @@
     - [] Quiz attempts (uuid, attempts with most recent on bottom (a multidimensional array with datetime and grade ))
     - [] Quiz completions (uuid, multidimensional array when a quiz is submitted with higher than or equal to passing score with datetime and the score)
     - [x] Lesson content completions (uuid, date and time of completion)
-- [] easy digital downloads Update API and place in plugin settings...
+- [] EDD Update API, place fields in plugin settings on wp-admin.
 - [] New course select field from select2 that we can use everywhere we need to (product multi course selection and  buddypress multicourse selection)
 
 - [] Certificate

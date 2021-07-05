@@ -9,8 +9,9 @@ import { Card, CardBody, TabPanel } from '@wordpress/components';
  * Internal Dependencies
  */
 import './style.scss';
-import Welcome from './welcome';
 import BuddyPress from './buddypress';
+import License from './license';
+import Welcome from './welcome';
 
 const Settings = () => {
     return (
@@ -38,10 +39,7 @@ const Settings = () => {
                         if ('license' === tab.name) {
                             return (
                                 <CardBody>
-                                    <p>
-                                        Automatic upgrades through license
-                                        activation coming at end of beta.
-                                    </p>
+                                    <License/>
                                 </CardBody>
                             );
                         }
