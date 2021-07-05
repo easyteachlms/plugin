@@ -1,5 +1,11 @@
+/**
+ * WordPress Dependencies
+ */
 import { Fragment } from '@wordpress/element';
-import { Icon, List, Message } from 'semantic-ui-react';
+
+/**
+ * Internal Dependencies
+ */
 import { useQuiz } from './context';
 
 const Results = () => {
@@ -12,38 +18,36 @@ const Results = () => {
             `Required to Pass: ${submitted.pointsRequiredToPass}`,
             `Your Score: ${submitted.score}`,
         ];
-        return <Message header="Scores" list={items} />;
+        return items.map(e => {
+            return(<div>{e}</div>);
+        });
     };
 
     return (
         <Fragment>
             <h3>Quiz Results</h3>
             <PointsToolbar />
-            <List divided size="large">
+            <ul>
                 {quizData.map((page) => {
                     const { answers, answerSelectionType, question } = page;
                     const yourAnswers = entryData[question];
                     return (
-                        <List.Item>
+                        <li>
                             <span>{question}</span>
-                            <List>
+                            <ol>
                                 {answers.map((answer, index) => (
-                                    <List.Item>
-                                        <Icon
-                                            name={
-                                                yourAnswers.includes(index)
+                                    <li>
+                                        {yourAnswers.includes(index)
                                                     ? 'check circle'
-                                                    : 'remove circle'
-                                            }
-                                        />
+                                                    : 'remove circle'}
                                         {answer}
-                                    </List.Item>
+                                    </li>
                                 ))}
-                            </List>
-                        </List.Item>
+                            </ol>
+                        </li>
                     );
                 })}
-            </List>
+            </ul>
         </Fragment>
     );
 };

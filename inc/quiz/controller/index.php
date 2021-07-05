@@ -8,10 +8,7 @@ class Quiz extends EasyTeachLMS {
         }
     }
 
-    public function render_quiz($attributes, $content, $block) {
-        wp_enqueue_script( apply_filters('easyteach_frontend_quiz_js', null) );
-        wp_enqueue_style( apply_filters('easyteach_frontend_quiz_css', null) );
-        
+    public function render_quiz($attributes, $content, $block) {        
         $uuid = $attributes['uuid'];
 		$parent_uuid = array_key_exists('lessonUuid', $block->context) ? $block->context['lessonUuid'] : false;
 		$is_active = $uuid === get_query_var( 'content-uuid', false );
@@ -20,7 +17,7 @@ class Quiz extends EasyTeachLMS {
 			'data-parent-uuid' => $parent_uuid,
             'data-uuid' => $uuid,
 			'data-title' => $attributes['title'],
-			'data-active' => $is_active,
+			'data-active' => $is_active ? 'true' : 'false',
 			'style' => !$is_active ? 'display: none;' : null,
         ) );
 

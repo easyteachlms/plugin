@@ -327,8 +327,12 @@ class Enrollment extends EasyTeachLMS {
 		return $data;
 	}
 
+	/**
+	 * Once a month we should clean out the enrollment roster on courses if the user isn't active or deleted?
+	 * @return void 
+	 */
 	public function cron_clean_roster() {
-		// twice a month we should look at
+
 	}
 }
 

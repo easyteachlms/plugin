@@ -115,6 +115,7 @@ class Lesson extends EasyTeachLMS {
 	}
 
 	public function render_lesson($attributes, $content, $block) {	
+		// If this lesson is not open yet then display the scheduled time it will open, otherwise show the content.
 		$content = $this->check_schedule($attributes) ? $content : wp_sprintf( 'This lesson will unlock at: %s', date('y-m-d H:i:s', strtotime($attributes['schedule'])) );
 
 		$has_active_child = $this->is_child_uuid_active($block);
@@ -122,7 +123,7 @@ class Lesson extends EasyTeachLMS {
 		$block_wrapper_attributes = get_block_wrapper_attributes( array(
             'data-uuid' => $attributes['uuid'],
 			'data-title' => $attributes['title'],
-			'data-active' => $has_active_child,
+			'data-active' => $has_active_child ? 'true' : 'false',
 			'style' => !$has_active_child ? 'display: none;' : null,
         ) );
 

@@ -24,18 +24,15 @@ class CourseFrontend extends EasyTeachLMS {
         }
     }
 
-	public function render_course_outline($course_id, $user_id) {
-		error_log('render_course_outline' .print_r($course_id, true));
-		$course_structure = apply_filters('easyteach_get_course_structure', $course_id, $user_id, get_current_blog_id(), true);
-		vdump($course_structure);
-	}
-
 	public function render_frontend($content, $data) {
-		wp_enqueue_script( $this->js_handle );
-        wp_enqueue_style( $this->css_handle );
-
 		$post_id = $data['id'];
 		$user_id = $data['user_id'];
+		$enrolled = $data['enrolled'];
+
+		if ( true === $enrolled ) {
+			wp_enqueue_script( $this->js_handle );
+			wp_enqueue_style( $this->css_handle );
+		}
 		
 		if ( ! apply_filters('easyteach_is_this_user_enrolled', $post_id, $user_id) ) {
 			$content = apply_filters('easyteach_course_enroll_gate', $post_id, $user_id);

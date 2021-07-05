@@ -16,7 +16,7 @@ class Lesson_Content extends EasyTeachLMS {
 			'data-parent-uuid' => $parent_uuid,
             'data-uuid' => $uuid,
 			'data-title' => $attributes['title'],
-			'data-active' => $is_active,
+			'data-active' => $is_active ? 'true' : 'false',
 			'style' => !$is_active ? 'display: none;' : null,
         ) );
 

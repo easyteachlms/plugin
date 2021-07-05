@@ -61,14 +61,15 @@ class Course extends EasyTeachLMS {
 	public function render_course($attributes, $content) {
 		$user_id = get_current_user_id();
 		$post_id = $attributes['id'];
+		$is_enrolled = apply_filters('easyteach_is_this_user_enrolled', $post_id, $user_id);
         
         $block_wrapper_attributes = get_block_wrapper_attributes( array(
             'data-course-id' => $attributes['id'],
 			'data-user-id' => $user_id,
-			'data-enrolled' => apply_filters('easyteach_is_this_user_enrolled', $post_id, $user_id),
+			'data-enrolled' => $is_enrolled,
         ) );
 
-		$content = apply_filters('easyteach_course_render', $content, array('id' => $attributes['id'], 'user_id' => $user_id) );
+		$content = apply_filters('easyteach_course_render', $content, array('id' => $attributes['id'], 'user_id' => $user_id, 'enrolled' => $is_enrolled));
 		
         return '<div '.$block_wrapper_attributes.'>'.$content.'</div>';
 	}

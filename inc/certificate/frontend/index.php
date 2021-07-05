@@ -34,21 +34,21 @@ class CertificateFrontend extends EasyTeachLMS {
     public function register_frontend_assets() {
 		$enqueue = parent::wpackio();
 		
-        $certificate_frontend = $enqueue->register(
-			'frontend',
-			'quiz',
-			array(
-				'js'        => true,
-				'css'       => true,
-				'js_dep'    => array(),
-				'css_dep'   => array(),
-				'in_footer' => true,
-				'media'     => 'all',
-			)
-		);
+        // $certificate_frontend = $enqueue->register(
+		// 	'frontend',
+		// 	'quiz',
+		// 	array(
+		// 		'js'        => true,
+		// 		'css'       => true,
+		// 		'js_dep'    => array(),
+		// 		'css_dep'   => array(),
+		// 		'in_footer' => true,
+		// 		'media'     => 'all',
+		// 	)
+		// );
 
-        $this->js_handle = array_pop( $certificate_frontend['js'] )['handle'];
-        $this->css_handle = array_pop( $certificate_frontend['css'] )['handle'];
+        // $this->js_handle = array_pop( $certificate_frontend['js'] )['handle'];
+        // $this->css_handle = array_pop( $certificate_frontend['css'] )['handle'];
 	}
 }
 

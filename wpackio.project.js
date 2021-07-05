@@ -16,12 +16,6 @@ module.exports = {
         credit: true,
     },
     files: [
-        // {
-        //     name: 'cohorts',
-        //     entry: {
-        //         'my-groups-widget': './inc/cohorts/my-groups-widget/index.js',
-        //     },
-        // },
         {
             name: 'wpAdmin',
             entry: {
@@ -54,8 +48,6 @@ module.exports = {
                 course: './inc/course/frontend/index.js',
                 certificate: './inc/certificate/frontend/index.js',
                 enrollButton: './inc/enrollment/index.js',
-                lesson: './inc/lesson/frontend/index.js',
-                quiz: './inc/quiz/frontend/index.js',
             },
             optimizeForGutenberg: true,
         },

@@ -10,32 +10,14 @@ import apiFetch from '@wordpress/api-fetch';
 const quizContext = createContext();
 
 // Provider hook that creates auth object and handles state
-const useProvideQuiz = (uuid) => {
+const useProvideQuiz = (uuid, courseId, userId, data) => {
+    const { pointsRequiredToPass, questions } = data;
     // Internal context state
-    const [quizData, setQuizData] = useState([]);
+    const [quizData, setQuizData] = useState(questions);
     const [entryData, setEntryData] = useState({});
-    const [activeItem, setActiveItem] = useState(0);
+    const [activePage, setActivePage] = useState(0);
     const [disabled, toggleDisabled] = useState(true);
     const [submitted, setSubmission] = useState(false);
-
-    // easyteachlms/course wp data redux store actions
-    const { setComplete, setQuizScore, setConditionsMet } = useDispatch(
-        'easyteachlms/course',
-    );
-
-    // Get course id, questions, and the points required to pass from our wp data redux store.
-    const { courseId, questions, pointsRequiredToPass } = useSelect(
-        (select) => {
-            return {
-                courseId: select('easyteachlms/course').getCourseId(),
-                questions: select('easyteachlms/course').getQuestions(uuid),
-                pointsRequiredToPass: select(
-                    'easyteachlms/course',
-                ).getPointsRequiredToPass(uuid),
-            };
-        },
-        [uuid],
-    );
 
     const checkForUnAnsweredQuestions = () => {
         console.log('checkForUnAnsweredQuestions');
@@ -71,7 +53,7 @@ const useProvideQuiz = (uuid) => {
         } else if ('text' === type) {
             s[question] = answer;
         }
-        setEntryData({ ...entryData, s });
+        setEntryData({ ...entryData, ...s });
         console.log('handler', entryData);
     };
 
@@ -163,18 +145,18 @@ const useProvideQuiz = (uuid) => {
         }).then(() => {
             console.log('grading', userScore, pointsRequiredToPass);
             passthroughFlag(false);
-            setQuizScore(uuid, userScore);
+            // setQuizScore(uuid, userScore);
             // If score is high enough score??
             if (userScore.score >= pointsRequiredToPass) {
-                setConditionsMet(uuid);
-                setComplete(uuid);
+                // setConditionsMet(uuid);
+                // setComplete(uuid);
             }
             setSubmission(userScore);
             console.log('---------- Done ---------');
         });
     };
 
-    const initEntry = () => {
+    const initEntry = (questions) => {
         const entry = {};
         questions.forEach((q) => {
             const { question } = q;
@@ -184,9 +166,10 @@ const useProvideQuiz = (uuid) => {
     };
 
     useEffect(() => {
-        initEntry();
         console.log('QUIZ CONTEXT', questions, entryData);
-        setQuizData(questions);
+        if ( false !== questions && 0 !== questions.length ) {
+            initEntry(questions);
+        }
     }, [questions]);
 
     useEffect(() => {
@@ -196,8 +179,8 @@ const useProvideQuiz = (uuid) => {
     // Return the quiz state and functions
     return {
         quizData,
-        activeItem,
-        setActiveItem,
+        activePage,
+        setActivePage,
         disabled,
         entryData,
         answerHandler,
@@ -207,8 +190,8 @@ const useProvideQuiz = (uuid) => {
 };
 
 // Provider component, wrap all your sub components to have access to quiz state.
-const ProvideQuiz = ({ uuid, children }) => {
-    const quiz = useProvideQuiz(uuid);
+const ProvideQuiz = ({ uuid, courseId, userId, data, children }) => {
+    const quiz = useProvideQuiz(uuid, courseId, userId, data);
     return <quizContext.Provider value={quiz}>{children}</quizContext.Provider>;
 };
 
