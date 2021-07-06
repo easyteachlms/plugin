@@ -21,7 +21,7 @@ const License = () => {
 
     return (
         <div>
-            <p>License Activation... "seth-test"</p>
+            <p>Please enter your license and click activate in order to receive automattic updates.</p>
             <TextControl
                 label="License Key"
                 value={ false !== licenseKey ? licenseKey : null }

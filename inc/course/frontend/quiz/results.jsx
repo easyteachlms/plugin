@@ -25,7 +25,7 @@ const Results = () => {
 
     return (
         <Fragment>
-            <h3>Quiz Results</h3>
+            <h4>Quiz Results</h4>
             <PointsToolbar />
             <ul>
                 {quizData.map((page) => {

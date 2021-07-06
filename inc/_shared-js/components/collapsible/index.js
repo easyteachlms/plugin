@@ -16,7 +16,7 @@ const Collapsible = ({
     postType = false,
     className,
     children,
-    defaultOpen = true,
+    defaultOpen = false,
     label = false,
     toolbarExtra = false
 }) => {
@@ -36,13 +36,14 @@ const Collapsible = ({
 
     const toolbarStyle = {
         width: '100%',
+        borderLeft: '3px solid',
     };
     if (false === postType) {
         toolbarStyle.border = 'none';
     }
 
     const blockProps = useBlockProps({
-        className: classNames(className),
+        className: classNames(className, {open}),
     });
 
     return (

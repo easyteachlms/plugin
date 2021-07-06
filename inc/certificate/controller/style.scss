@@ -1,0 +1,6 @@
+div[data-type="easyteachlms/certificate"] {
+    opacity: 0.8;
+    &.open {
+        opacity: 1.0;
+    }
+}

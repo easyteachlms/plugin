@@ -18,7 +18,8 @@ div[data-type="easyteachlms/question"] {
     //     background: #f0f0f0;
     //     border: none;
     // }
-    & > div > div.block-editor-inner-blocks > div > div.block-list-appender.wp-block {
+    & > div.block-editor-block-list__layout > div.block-list-appender {
+        margin-left: 0;
         &:before {
             content: "+ Add a Answer";
             font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;

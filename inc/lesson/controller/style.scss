@@ -1,6 +1,10 @@
 div[data-type="easyteachlms/lesson"] {
+    opacity: 0.8;
+    &.open {
+        opacity: 1.0;
+    }
     & > div.collapsible-content {
-        padding-left: 1em;
+        // padding-left: 1em;
     }
     & > div.collapsible-content > div.block-editor-inner-blocks > div > div.wp-block:not(.block-list-appender) {
         padding-bottom: 0.25em;
@@ -13,7 +17,8 @@ div[data-type="easyteachlms/lesson"] {
         }
     }
     &.is-selected {
-        & > div.collapsible-content > div.block-editor-inner-blocks > div > div.block-list-appender.wp-block {
+        & > div.collapsible-content > div.block-editor-inner-blocks > div > div.block-list-appender {
+            margin-left: 0;
             &:before {
                 content: "+ Add Content or Quiz to this Lesson";
                 font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;

@@ -102,6 +102,7 @@ class Quiz extends EasyTeachLMS {
 
         $meta_key = "_course_{$course_id}_{$site_id}";
 
+        // @TODO redo this so it uses the new student data api
         if ( null !== $new_score ) {
             $user_data = get_user_meta( $user_id, $meta_key, true );
             if ( is_array( $user_data ) && array_key_exists( 'scores', $user_data ) && array_key_exists( $uuid, $user_data['scores'] ) ) {

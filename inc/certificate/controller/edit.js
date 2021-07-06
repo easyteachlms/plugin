@@ -24,6 +24,7 @@ import {
  * Internal Dependencies
  */
 import { Collapsible } from '@easyteachlms/components';
+import './style.scss';
 
 const ALLOWED_BLOCKS = ['core/heading', 'core/paragraph', 'core/image', 'core/list', 'core/spacer', 'easyteachlms/certificate-date', 'easyteachlms/certificate-student-name'];
 

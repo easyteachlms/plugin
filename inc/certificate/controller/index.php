@@ -38,6 +38,7 @@ class Certificate extends EasyTeachLMS {
 			plugin_dir_path( __DIR__ ) . '/controller',
 			array(
 				'editor_script' => array_pop( $certificate_block['js'] )['handle'],
+				'editor_style' => array_pop( $certificate_block['css'] )['handle'],
 				'render_callback' => array( $this, 'render_certificate' ),
 			)
 		);
