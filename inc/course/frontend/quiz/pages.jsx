@@ -21,6 +21,10 @@ const Pages = () => {
         submitted,
     } = useQuiz();
 
+    if (false === quizData) {
+        return <Fragment/>
+    }
+
     if (false !== submitted) {
         return <Results />;
     }

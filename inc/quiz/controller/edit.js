@@ -35,6 +35,7 @@ const edit = ({
                 <Controls
                     attributes={attributes}
                     setAttributes={setAttributes}
+                    clientId={clientId}
                 />
             </Collapsible>
         );

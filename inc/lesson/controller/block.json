@@ -22,6 +22,10 @@
         "uuid": {
             "type": "string",
             "default": 0
+        },
+        "requiresPassing": {
+            "type": "string",
+            "default": ""
         }
 	},
     "parent": ["easyteachlms/course"],

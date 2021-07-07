@@ -5,27 +5,36 @@
 import apiFetch from '@wordpress/api-fetch';
 import { Flex, FlexBlock, FlexItem } from '@wordpress/components';
 
-const Toolbar = ({uuid, userId, courseId, type}) => {
+/**
+ * Internal Dependencies
+ */
+import { useCourse } from './context';
+
+const Toolbar = () => {
+    const { currentlyActive, userId, courseId, userCompleted, setCompleted } = useCourse();
+    
     const MarkComplete = () => {
         return(
             <button onClick={()=>{
-                console.log('Completed!', uuid);
-                console.log({uuid, userId, courseId, type});
+                console.log('Completed->');
                 apiFetch({
                     path: `/easyteachlms/v4/student/update-progress/`,
                     method: 'POST',
                     data: { 
-                        action: 'lesson-content-complete',
+                        action: 'complete',
                         courseId,
+                        uuid: currentlyActive.target,
                         data: {
-                            uuid,
                             status: 'complete'
                         },
                         userId,
                     },
                 }).then( e => {
                     setTimeout(() => {
-                        console.log('Result->', e);
+                        const tmp = userCompleted;
+                        tmp.push(currentlyActive.target);
+                        setCompleted(tmp);
+                        console.log('Result->', e, tmp);
                     }, 1000);
                 });
             }}>

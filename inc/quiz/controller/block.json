@@ -15,7 +15,7 @@
 			"type": "integer",
             "default": 80
         },
-        "requiredPassing": {
+        "requirePassing": {
 			"type": "boolean",
             "default": false
         }

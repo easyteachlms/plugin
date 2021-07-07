@@ -9,6 +9,7 @@ import { render } from '@wordpress/element';
  * Internal Dependencies
  */
 import './style.scss';
+import { ProvideCourse } from './context';
 import CourseWrapper from './course-wrapper';
 
 domReady(() => {
@@ -16,11 +17,12 @@ domReady(() => {
     courses.forEach((course) => {
         const userId = course.getAttribute('data-user-id');
         const courseId = course.getAttribute('data-course-id');
-
         render(
-            <CourseWrapper userId={userId} courseId={courseId}>
-                {course.innerHTML}
-            </CourseWrapper>,
+            <ProvideCourse courseId={courseId} userId={userId}>
+                <CourseWrapper>
+                    {course.innerHTML}
+                </CourseWrapper>
+            </ProvideCourse>,
             course
         );
     });

@@ -97,7 +97,7 @@ class Cohorts extends EasyTeachLMS {
 				$data['groupProgress'][ $user['userId'] ] = array();
 
 				foreach ( $data['courses'] as $course_id ) {
-					$data['groupProgress'][ $user['userId'] ][ $course_id ] = $data_model->narrowly_parse_course( $course_id, $user['userId'], $site_id );
+					// $data['groupProgress'][ $user['userId'] ][ $course_id ] = $data_model->narrowly_parse_course( $course_id, $user['userId'], $site_id );
 				}
 			}
 		}

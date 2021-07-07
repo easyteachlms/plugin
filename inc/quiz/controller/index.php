@@ -78,11 +78,6 @@ class Quiz extends EasyTeachLMS {
 							return is_string( $param );
 						},
 					),
-					'essayAnswer' => array(
-						'validate_callback' => function( $param, $request, $key ) {
-							return is_numeric( $param );
-						},
-					),
 				),
 				'permission_callback' => function () {
 					return current_user_can( 'read' );
@@ -92,72 +87,54 @@ class Quiz extends EasyTeachLMS {
     }
 
     public function restfully_handle_quiz_submission( \WP_REST_Request $request ) {
-        $site_id      = get_current_blog_id();
-
         $user_id      = (int) $request->get_param( 'userId' );
         $course_id    = (int) $request->get_param( 'courseId' );
         $uuid         = $request->get_param( 'uuid' );
         $new_score    = $request->get_param( 'newScore' );
-        $essay_answer = $request->get_param( 'essayAnswer' );
+        $entry        = $request->get_body();
 
-        $meta_key = "_course_{$course_id}_{$site_id}";
+        $quiz_submission_data = array(
+			'action' => 'quiz-submission',
+			'courseId' => $course_id,
+			'uuid' => $uuid,
+            'userId' => $user_id,
+			'data' => array(
+				'score' => $new_score,
+                'entry' => $entry,
+			)
+        );
 
-        // @TODO redo this so it uses the new student data api
-        if ( null !== $new_score ) {
-            $user_data = get_user_meta( $user_id, $meta_key, true );
-            if ( is_array( $user_data ) && array_key_exists( 'scores', $user_data ) && array_key_exists( $uuid, $user_data['scores'] ) ) {
-                $user_data = $user_data['scores'][ $uuid ];
-            } else {
-                return new WP_Error( 'quiz-score-issue', 'Could not correctly ascertain the user data to update quiz score.' );
-            }
-            $user_data['score'] = $new_score;
-        } else {
-            $user_data = json_decode( $request->get_body(), true );
-        }
-
-        error_log( 'update_quiz_progress_restfully!!' );
-        error_log( print_r( $user_data, true ) );
-
-        if ( ! array_key_exists( 'score', $user_data ) && ! array_key_exists( 'total', $user_data ) && ! array_key_exists( 'pointsRequiredToPass', $user_data ) ) {
-            return false;
-        }
-
-        $data = get_user_meta( $user_id, $meta_key, true );
-        if ( ! is_array( $data ) ) {
-            $data = array(
-                'completed' => array(),
-                'scores'    => array(),
-            );
-        }
-
-        $passed = $user_data['score'] >= $user_data['pointsRequiredToPass'];
-
-        if ( true === $passed ) {
-            $data['completed'][] = $uuid;
-        } elseif ( array_key_exists( 'completed', $data ) && in_array( $uuid, $data['completed'] ) ) {
-            // If the user has already completed/passed this quiz but then submits another entry that fails then the completion should be removed, so find the diff between an array with all the completed and one with this completed item and return that.
-            $data['completed'] = array_diff( $data['completed'], array( $uuid ) );
-        }
-
-        // If we're passing in an essay answer index then we need to set it as graded.
-        if ( null !== $essay_answer ) {
-            $user_data['essayAnswers'][ $essay_answer ]['graded'] = true;
-        }
-
-        $data['scores'][ $uuid ] = $user_data;
-
-        error_log( $user_id );
-        error_log( $meta_key );
-        error_log( print_r( $data, true ) );
-        error_log('---');
-
-        $updated = update_user_meta( (int) $user_id, $meta_key, $data );
-        if ( false !== $updated ) {
-            return $data['scores'][ $uuid ];
-        } else {
-            return new WP_Error( 'quiz-submission-issue', 'Could not update user meta and finish scoring ' . $user_id . ' quiz submission.' );
-        }
+        return do_action('easyteach_student_action', $quiz_submission_data);
     }
 }
 
 new Quiz(true);
+
+
+// $passed = $user_data['score'] >= $user_data['pointsRequiredToPass'];
+
+// if ( true === $passed ) {
+//     $data['completed'][] = $uuid;
+// } elseif ( array_key_exists( 'completed', $data ) && in_array( $uuid, $data['completed'] ) ) {
+//     // If the user has already completed/passed this quiz but then submits another entry that fails then the completion should be removed, so find the diff between an array with all the completed and one with this completed item and return that.
+//     $data['completed'] = array_diff( $data['completed'], array( $uuid ) );
+// }
+
+// // If we're passing in an essay answer index then we need to set it as graded.
+// if ( null !== $essay_answer ) {
+//     $user_data['essayAnswers'][ $essay_answer ]['graded'] = true;
+// }
+
+// $data['scores'][ $uuid ] = $user_data;
+
+// error_log( $user_id );
+// error_log( $meta_key );
+// error_log( print_r( $data, true ) );
+// error_log('---');
+
+// $updated = update_user_meta( (int) $user_id, $meta_key, $data );
+// if ( false !== $updated ) {
+//     return $data['scores'][ $uuid ];
+// } else {
+//     return new WP_Error( 'quiz-submission-issue', 'Could not update user meta and finish scoring ' . $user_id . ' quiz submission.' );
+// }

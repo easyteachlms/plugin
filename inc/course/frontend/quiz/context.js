@@ -1,23 +1,51 @@
+/**
+ * WordPress Dependencies
+ */
 import {
     useState,
     useEffect,
     useContext,
     createContext,
+    Fragment,
 } from '@wordpress/element';
-import { useSelect, useDispatch } from '@wordpress/data';
+import { Spinner } from '@wordpress/components';
 import apiFetch from '@wordpress/api-fetch';
+
+/**
+ * Internal Dependencies
+ */
+import { useCourse } from '../context';
 
 const quizContext = createContext();
 
 // Provider hook that creates auth object and handles state
-const useProvideQuiz = (uuid, courseId, userId, data) => {
-    const { pointsRequiredToPass, questions } = data;
+const useProvideQuiz = () => {
+    const { userId, courseId, currentlyActive, courseData } = useCourse();
+    const [uuid, setUuid] = useState(false);
+
     // Internal context state
-    const [quizData, setQuizData] = useState(questions);
+    const [quizData, setQuizData] = useState(false);
     const [entryData, setEntryData] = useState({});
     const [activePage, setActivePage] = useState(0);
+    const [passingGrade, setPassingGrade] = useState(80);
     const [disabled, toggleDisabled] = useState(true);
-    const [submitted, setSubmission] = useState(false);
+    const [submitted, setSubmission] = useState(false); // We'll need to do a check to show already submitted when we have recent activity??
+
+    const initQuizData = () => {
+        if ( false === courseData || false === currentlyActive || 'quiz' !== currentlyActive.type ) {
+            return;
+        }
+
+        const data = courseData.outline.flat.find(o => o.uuid === currentlyActive.target);
+        const { pointsRequiredToPass, questions } = data;
+
+        setQuizData(questions);
+        initEntry(questions);
+
+        setPassingGrade(pointsRequiredToPass);
+        
+        setUuid(currentlyActive.target);
+    }
 
     const checkForUnAnsweredQuestions = () => {
         console.log('checkForUnAnsweredQuestions');
@@ -118,12 +146,9 @@ const useProvideQuiz = (uuid, courseId, userId, data) => {
     };
 
     const onCompleteAction = (passthroughFlag) => {
-        const { id } = window.userData;
-        console.log('---------- Done ---------');
-        console.log('onCompleteAction', quizData, id);
-        console.log(entryData);
         const grade = gradeQuiz(entryData);
-        // Go through and grade questions. Submit score.
+        console.log('---------- Done ---------');
+        console.log('onCompleteAction', quizData, entryData, grade);
 
         const { totalPointsAwarded, totalPointsPossible, essayAnswers } = grade;
 
@@ -138,22 +163,22 @@ const useProvideQuiz = (uuid, courseId, userId, data) => {
         console.log('userScore', userScore);
 
         // Check if quiz has any free text answers and if so we need to grade the quiz differently. And display different warnings on completion.
-        apiFetch({
-            path: `/easyteachlms/v4/quiz/submit/?userId=${id}&uuid=${uuid}&courseId=${courseId}`,
-            method: 'POST',
-            data: userScore,
-        }).then(() => {
-            console.log('grading', userScore, pointsRequiredToPass);
-            passthroughFlag(false);
-            // setQuizScore(uuid, userScore);
-            // If score is high enough score??
-            if (userScore.score >= pointsRequiredToPass) {
-                // setConditionsMet(uuid);
-                // setComplete(uuid);
-            }
-            setSubmission(userScore);
-            console.log('---------- Done ---------');
-        });
+        // apiFetch({
+        //     path: `/easyteachlms/v4/quiz/submit/?userId=${userId}&uuid=${uuid}&courseId=${courseId}`,
+        //     method: 'POST',
+        //     data: userScore,
+        // }).then(() => {
+        //     console.log('grading', userScore, pointsRequiredToPass);
+        //     passthroughFlag(false);
+        //     // setQuizScore(uuid, userScore);
+        //     // If score is high enough score??
+        //     if (userScore.score >= pointsRequiredToPass) {
+        //         // setConditionsMet(uuid);
+        //         // setComplete(uuid);
+        //     }
+        //     setSubmission(userScore);
+        //     console.log('---------- Done ---------');
+        // });
     };
 
     const initEntry = (questions) => {
@@ -165,16 +190,15 @@ const useProvideQuiz = (uuid, courseId, userId, data) => {
         setEntryData(entry);
     };
 
-    useEffect(() => {
-        console.log('QUIZ CONTEXT', questions, entryData);
-        if ( false !== questions && 0 !== questions.length ) {
-            initEntry(questions);
-        }
-    }, [questions]);
+    useEffect(()=>{
+        setTimeout(()=>{
+            initQuizData();
+        }, 700);
+    }, [courseData, currentlyActive]);
 
     useEffect(() => {
         checkForUnAnsweredQuestions();
-    }, [entryData, questions]);
+    }, [entryData, quizData]);
 
     // Return the quiz state and functions
     return {
@@ -186,12 +210,18 @@ const useProvideQuiz = (uuid, courseId, userId, data) => {
         answerHandler,
         onCompleteAction,
         submitted,
+        userId,
+        uuid,
     };
 };
 
 // Provider component, wrap all your sub components to have access to quiz state.
-const ProvideQuiz = ({ uuid, courseId, userId, data, children }) => {
-    const quiz = useProvideQuiz(uuid, courseId, userId, data);
+const ProvideQuiz = ({children}) => {
+    const quiz = useProvideQuiz();
+    console.log('ProvideQuiz', quiz);
+    if ( false === quiz.quizData ) {
+        return <Fragment><h4>Loading Quiz... <Spinner/></h4></Fragment>;
+    }
     return <quizContext.Provider value={quiz}>{children}</quizContext.Provider>;
 };
 

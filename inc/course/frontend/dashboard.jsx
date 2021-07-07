@@ -3,11 +3,16 @@
  */
 import { RawHTML } from '@wordpress/element';
 
-const Dashboard = ({courseInfo}) => {
-    const { description, files, title } = courseInfo;
+/**
+ * Internal Dependencies
+ */
+import { useCourse } from './context';
+
+const Dashboard = () => {
+    const {courseDescription} = useCourse();
     return(
         <div>
-            <RawHTML>{description}</RawHTML>
+            <RawHTML>{courseDescription}</RawHTML>
         </div>
     );
 }

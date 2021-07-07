@@ -1,5 +1,4 @@
 <?php
-use WP_Error;
 /**
  * Course structure should be added as post meta to the course.
  * Whenever a lesson is added to a course the lesson should have post meta that lists the ids of the courses where it can be found.
@@ -195,48 +194,18 @@ class Data_Model extends EasyTeachLMS {
 		}
 
 		$outline = array(
-			// Indexes
 			'structured' => array(),
 			'flat'       => array(),
-			// User info, @todo that we need to think about optimizing data calls for. 
-			/**
-			 * What we should do is parse the course without user info, just give us the structure...
-			 * with a flag for also including the content.
-			 * That will cache using the transient api the information (the non content version - so the content flag should be added after)
-			 * We then have another function, and rest endpoint, that will get the cached (or new if uncached) version of the parsed course and then insert the user data from another function/rest-endpoint. 
-			 * Both will have filters, allowing for modifying the information at the course and student level. 
-			 * 
-			 * With this in place now we are only making two data calls to create a single page interface. 
-			 * We can also use just the student info on our php version of the interface to do the simplest of things like submit quiz scores /get quiz scores, and to mark complete. 
-			 * 
-			 * In the student info should perhaps add something that would let developers do do_action('easyteach_student_action', array('action', 'userId', 'courseId', 'data'));. If we don't get those three things pass errors.... so that if we want to developers could do their own add_action('my_watch_video_action', function($video_id, $user_id, $course_id) {
-			 * do_action('easyteach_student_action', array(
-			 * 'action' => 'completed-video',
-			 * 'courseId' => $course_id,
-			 * 'userId' => $user_id,
-			 * 'data' => array('video-id' => $video_id)
- 			 * ))
-			 * })
-			 * 
-			 * what we will do is add_action('easyteach_student_action', function($action){
-			 * $action = $action['action'];
-			 * $user_id = $action['userId'];
-			 * $course_id = $action['courseId'];
-			 * $data = $action['data'];
-			 * // Get the current user meta splice this in array[$action]
-			 * update_user_meta($user_id, "{$course_id}", $merged_Data)
-			 * })
-			 */
-			'completed'  => false,
 			'total'      => 0, // Get total lesson contents and quizzes to do. 
 		);
 
 		foreach ( $course['innerBlocks'] as $key => $block ) {
+			$next_block = array_key_exists($key+1, $course['innerBlocks']) ? $course['innerBlocks'][$key+1] : false;
 			if ( $this->is_block( 'easyteachlms/lesson', $block ) ) {
-				// Setup lesson block...
+				// Setup Lesson Block:
 				$lesson_uuid   = $block['attrs']['uuid'];
 				$lesson_title  = $block['attrs']['title'];
-				$lesson_parsed = $this->parse( 'easyteachlms/lesson', $block, $course_id, $user_id, $site_id );
+				$lesson_parsed = $this->parse( 'easyteachlms/lesson', $block, $next_block );
 				$lesson_contents = array();
 
 				// Parse innerBlocks of lesson (content and quizzes)
@@ -245,14 +214,8 @@ class Data_Model extends EasyTeachLMS {
 
 						if ( 'easyteachlms/quiz' === $block['blockName'] ) {
 							$block_parsed = $this->parse_quiz( $block, $course_id, $user_id, $site_id );
-							
-							// If this has a quiz then we don't want to allow completion until the quiz is finished.
-							// error_log( 'conditionsMet?' );
-							// if ( true === $this->is_complete( $uuid, $course_id, $user_id, $site_id ) ) {
-							// 	$block_parsed['conditionsMet'] = true;
-							// }
 						} else {
-							$block_parsed = $this->parse( 'easyteachlms/lesson-content', $block, $course_id, $user_id, $site_id );
+							$block_parsed = $this->parse( 'easyteachlms/lesson-content', $block );
 							if ( array_key_exists('innerBlocks', $block) && $include_innerblocks ) {
 								$block_parsed['innerBlocks'] = $block['innerBlocks'];
 							}
@@ -261,6 +224,7 @@ class Data_Model extends EasyTeachLMS {
 						if ( true === $block_parsed['active'] ) {
 							$lsson_parsed['active'] = true;
 						}
+
 						$block_parsed['parentTitle'] = $lesson_title;
 						$block_parsed['parentUuid']  = $lesson_uuid;
 						
@@ -290,7 +254,7 @@ class Data_Model extends EasyTeachLMS {
 	 * @param mixed $outline
 	 * @return void
 	 */
-	public function parse( $block_name, $block, $course_id, $user_id, $site_id ) {
+	public function parse( $block_name, $block, $next_block = false ) {
 		if ( true !== $this->is_block( $block_name, $block ) ) {
 			return;
 		}
@@ -306,10 +270,9 @@ class Data_Model extends EasyTeachLMS {
 			'title'         => $block['attrs']['title'],
 			'uuid'          => $uuid,
 			'type'          => $this->get_block_name( ( $block['blockName'] ) ),
-			'conditionsMet' => true,
 			'active'        => false,
-			'completed'     => false,
 			'locked'        => $this->is_locked($block['attrs']),
+			'requiresPassing' => array_key_exists('requiresPassing', $block['attrs']) && !empty($block['attrs']['requiresPassing']) ? $block['attrs']['requiresPassing'] : false,
 		);
 
 		return $data;
@@ -324,15 +287,6 @@ class Data_Model extends EasyTeachLMS {
 			);
 		}
 		return $return;
-	}
-
-	public function get_quiz_score( $uuid, $course_id, $user_id, $site_id ) {
-		$user_progress = get_user_meta( $user_id, "_course_{$course_id}_{$site_id}", true );
-		if ( is_array( $user_progress ) && array_key_exists( 'scores', $user_progress ) && array_key_exists( $uuid, $user_progress['scores'] ) ) {
-			return $user_progress['scores'][ $uuid ];
-		} else {
-			return false;
-		}
 	}
 
 	public function parse_quiz( $quiz, $course_id, $user_id, $site_id ) {
@@ -356,17 +310,10 @@ class Data_Model extends EasyTeachLMS {
 			'type'                 => 'quiz',
 			'title'                => $title,
 			'uuid'                 => $uuid,
-			'conditionsMet'        => false, // By default do not allow completion until quiz is completed
 			'active'               => false,
-			'completed'            => false,
 			'pointsRequiredToPass' => $points_required_to_pass,
 			'questions'            => array(),
-			'userScore'            => false,
 		);
-
-		if ( false !== $user_score = $this->get_quiz_score( $uuid, $course_id, $user_id, $site_id ) ) {
-			$return['userScore'] = $user_score;
-		}
 
 		$questions = $quiz['innerBlocks'];
 		foreach ( $questions as $question ) {
@@ -412,138 +359,8 @@ class Data_Model extends EasyTeachLMS {
 				'points'              => $args['points'],
 			);
 		}
-		// if ( true === $this->is_complete( $uuid, $course_id, $user_id, $site_id ) ) {
-		// 	$return['completed'] = true;
-		// }
 
 		return $return;
-	}
-
-	/**
-	 * 
-	 * 
-	 * LEGACY???
-	 * 
-	 * 
-	 */
-
-	public function narrowly_parse_course( $course_id, $user_id, $site_id ) {
-
-		$post = \get_post( $course_id );
-
-		if ( false === $post || null === $post || \is_wp_error( $post ) || ! is_object( $post ) || ! property_exists( $post, 'post_content' ) ) {
-			return new WP_Error( 'fetch-error', __( 'API could not find course with id of ' . $course_id, 'easyteachlms' ) );
-		}
-
-		$parsed = \parse_blocks( $post->post_content );
-
-		if ( empty( $parsed ) ) {
-			return new WP_Error( 'parse-error', __( 'API could not parse course', 'easyteachlms' ) );
-		}
-		$course = $this->recursively_search_for_blocks( $parsed, 'blockName', 'easyteachlms/course' );
-		$course = array_pop( $course );
-
-		if ( true !== $this->has_innerBlocks( $course ) ) {
-			return new WP_Error( 'parse-error', __( 'API could not find any innerBlocks', 'easyteachlms' ) );
-		}
-
-		$data = array(
-			'title'    => $post->post_title,
-			'progress' => array(
-				'complete' => 0,
-				'total'    => 0,
-			),
-			'data'     => array(),
-			'complete' => false,
-			// Not really using rawTotal at the moment but leaving it in here, this is the raw total of all lesson content blocks progress status.
-			'rawTotal' => array(
-				'complete' => 0,
-				'total'    => 0,
-			),
-		);
-
-		foreach ( $course['innerBlocks'] as $key => $block ) {
-			if ( $this->is_block( 'easyteachlms/lesson', $block ) ) {
-				// Add this lesson to progress total.
-				$data['progress']['total'] = $data['progress']['total'] + 1;
-				// Get lesson UUID for use as a key.
-				$lesson_uuid = $block['attrs']['uuid'];
-				// Establish lesson data blob.
-				$data['data'][ $lesson_uuid ] = array(
-					'title'    => $block['attrs']['title'],
-					'progress' => array(
-						'complete' => 0,
-						'total'    => 0,
-					),
-					'data'     => array(),
-				);
-				// Parse lesson contents and narrowly extract their block data.
-				if ( true !== $this->has_innerBlocks( $block ) ) {
-					continue;
-				}
-				foreach ( $block['innerBlocks'] as $key => $block ) {
-					$parsed_block = $this->narrowly_parse_block( $block['blockName'], $block, $course_id, $user_id, $site_id );
-					$data['data'][ $lesson_uuid ]['data'][ $block['attrs']['uuid'] ] = $parsed_block;
-
-					$data['data'][ $lesson_uuid ]['progress'] = $this->calculate_lesson_progress( $parsed_block, $data['data'][ $lesson_uuid ]['progress'] );
-				}
-				$data['rawTotal']['complete'] = $data['rawTotal']['complete'] + $data['data'][ $lesson_uuid ]['progress']['complete'];
-				$data['rawTotal']['total']    = $data['rawTotal']['total'] + $data['data'][ $lesson_uuid ]['progress']['total'];
-
-				// Mark the lesson itself as complete when the user has 100% completed all the lesson content blocks.
-				if ( $data['data'][ $lesson_uuid ]['progress']['complete'] === $data['data'][ $lesson_uuid ]['progress']['total'] ) {
-					$data['progress']['complete'] = $data['progress']['complete'] + 1;
-				}
-			}
-		}
-
-		if ( $data['progress']['complete'] === $data['progress']['total'] ) {
-			$data['complete'] = true;
-		}
-
-		return $data;
-	}
-
-	public function calculate_lesson_progress( $parsed_block, $progress ) {
-		$progress['total'] = $progress['total'] + 1;
-		if ( true === $parsed_block['complete'] ) {
-			$progress['complete'] = $progress['complete'] + 1;
-		}
-		return $progress;
-	}
-
-	/**
-	 * Parses internal block structure and extracts only a handful of properties.
-	 * Returns title, complete, type, score in a structured manner
-	 *
-	 * @param mixed $block_name
-	 * @param mixed $block
-	 * @param mixed $key
-	 * @param mixed $outline
-	 * @return void
-	 */
-	public function narrowly_parse_block( $block_name, $block, $course_id, $user_id, $site_id ) {
-		if ( true !== $this->is_block( $block_name, $block ) ) {
-			return;
-		}
-
-		$uuid = $block['attrs']['uuid'];
-
-		$data = array(
-			'type'     => $this->get_block_name( $block_name ),
-			'title'    => $block['attrs']['title'],
-			'complete' => false,
-		);
-
-		if ( true === $this->is_complete( $uuid, $course_id, $user_id, $site_id ) ) {
-			$data['complete'] = true;
-		}
-
-		if ( 'quiz' === $data['type'] ) {
-			$data['score'] = $this->get_quiz_score( $block['attrs']['uuid'], $course_id, $user_id, $site_id );
-		}
-
-		return $data;
 	}
 }
 

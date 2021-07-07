@@ -80,21 +80,21 @@ class Student extends EasyTeachLMS {
 	private function _sample() {
 		// Running this action:
 		do_action('easyteach_student_action', array(
-			'action' => 'lesson-content-complete',
+			'action' => 'complete',
 			'courseId' => 99999,
+			'uuid' => 'ajsjf-asdfnasdf-anns',
+			'userId' => 9999,
 			'data' => array(
-				'uuid' => 'ajsjf-asdfnasdf-anns',
-				'status' => 'complete',
+				'status' => 'complete'
 			)
 		));
 		// Would result in this data...
 		$shape = array(
 			'courseId' => 99999,
 			'data' => array(
-				'lesson-content-complete' => array(
-					'timestamp1' => array(
-						'uuid' => 'ajsjf-asdfnasdf-anns',
-						'status' => 'complete',
+				'uuid' => array(
+					'lesson-content-complete' => array(
+						'timestamp1' => 'complete'
 					),
 				),
 			),
@@ -103,10 +103,34 @@ class Student extends EasyTeachLMS {
 	}
 
 	public function get_user_data_by_course_id($user_id, $course_id) {
-		$key = md5($this->get_user_meta_key($user_id, $course_id));
+		$key = 'elms_' . md5($this->get_user_meta_key($user_id, $course_id));
 		return get_user_meta($user_id, $key, true);
 	}
+
+	public function surface_only_most_recent_by_uuid($data) {
+		error_log("Surface". print_r($data, true));
+		$data = $data['data'];
+		$return = array();
+		foreach ($data as $uuid => $actions) {
+			foreach($actions as $action => $acts) {
+				if ( !array_key_exists($uuid, $return) ) {
+					$most_recent_key = array_key_last($acts);
+					$return[$uuid] = array();
+					$return[$uuid][$action] = array(
+						'data' => $acts[$most_recent_key],
+						'timestamp' => $most_recent_key,
+					);
+				}
+			}
+		}
+		return $return;
+	}
 	
+	/**
+	 * Rest response fetches multiple data points on user meta, returns multiple course info.
+	 * @param WP_REST_Request $request 
+	 * @return array 
+	 */
 	public function get_student_restfully( \WP_REST_Request $request ) {
 		$course_id = $request->get_param( 'courseId' );
 		$user_id   = $request->get_param( 'userId' );
@@ -127,9 +151,9 @@ class Student extends EasyTeachLMS {
 		$enrolled_courses = array_unique( get_user_meta( $user_id, '_enrolled_courses', true ) );
 
 		$return = array(
-			'userData'      => $user_data,
-			'data'          => false,
-			'enrolled'      => false,
+			'userData' => $user_data,
+			'data'     => false,
+			'enrolled' => false,
 		);
 
 
@@ -143,9 +167,11 @@ class Student extends EasyTeachLMS {
 		if ( null === $course_id ) {
 			foreach ($enrolled_courses as $id) {
 				$data[$id] = $this->get_user_data_by_course_id($user_id, $id);
+				$data[$id]['mostRecent'] = $this->surface_only_most_recent_by_uuid($data[$id]);
 			}
 		} else {
 			$data[$course_id] = $this->get_user_data_by_course_id($user_id, $course_id);
+			$data[$course_id]['mostRecent'] = $this->surface_only_most_recent_by_uuid($data[$course_id]);
 		}
 		$return['data'] = $data;
 
@@ -156,6 +182,7 @@ class Student extends EasyTeachLMS {
 		'action' => '',
 		'cohortId' => false,
 		'courseId' => false,
+		'uuid' => false,
 		'data' => false,
 		'userId' => '',
 	)) {
@@ -163,6 +190,7 @@ class Student extends EasyTeachLMS {
 		$user_id = array_key_exists('courseId', $action_data) ? $action_data['userId'] : false;
 		$course_id = array_key_exists('courseId', $action_data) ? $action_data['courseId'] : false;
 		$cohort_id = array_key_exists('cohortId', $action_data) ? $action_data['cohortId'] : false;
+		$uuid = array_key_exists('uuid', $action_data) ? $action_data['uuid'] : false;
 		$action = array_key_exists('action', $action_data) ? $action_data['action'] : false;
 		$data = array_key_exists('data', $action_data) && is_array($action_data['data']) ? $action_data['data'] : false;
 		if ( false === $user_id ) {
@@ -177,8 +205,11 @@ class Student extends EasyTeachLMS {
 		if ( false === $data ) {
 			return new WP_Error('no-data', 'No data passed to run_student_action', $action_data);
 		}
+		if ( false === $uuid ) {
+			return new WP_Error('no-uuid', 'No uuid pased to run_student_action', $action_data);
+		}
 
-		$key = md5($this->get_user_meta_key($user_id, false === $cohort_id ? $course_id : $cohort_id));
+		$key = 'elms_'. md5($this->get_user_meta_key($user_id, false === $cohort_id ? $course_id : $cohort_id));
 		
 		// If false !== $cohort_id then check for buddypress and run this against buddypress group meta instead.
 		$now_data = get_user_meta($user_id, $key, true);
@@ -189,15 +220,19 @@ class Student extends EasyTeachLMS {
 				'data' => array(),
 			);
 		}
+
+		if ( ! array_key_exists($uuid, $now_data['data'] ) ) {
+			$now_data['data'][$uuid] = array();
+		}
 		
-		if ( ! array_key_exists($action, $now_data['data'] ) ) {
-			$now_data['data'][$action] = array();
+		if ( ! array_key_exists($action, $now_data['data'][$uuid] ) ) {
+			$now_data['data'][$uuid][$action] = array();
 		}
 
 		$right_now = new DateTime("now", wp_timezone());
 		$timestamp = $right_now->getTimestamp();
 
-		$now_data['data'][$action][$timestamp] = $data;
+		$now_data['data'][$uuid][$action][$timestamp] = $data;
 
 		// If false !== $cohort_id then check for buddypress and run this against buddypress group meta instead.
 		$success = update_user_meta( $user_id, $key, $now_data );
@@ -211,6 +246,11 @@ class Student extends EasyTeachLMS {
 		return $now_data;
 	}
 
+	/**
+	 * @TODO come back in here and make everything EXCEPT the $data an arg that gets type checked by wordpress instead of us. 
+	 * @param WP_REST_Request $request 
+	 * @return mixed 
+	 */
 	public function update_progress_restfully( \WP_REST_Request $request ) {
 		$action_data = json_decode( $request->get_body(), true );
 		$response = do_action('easyteach_student_action', $action_data);

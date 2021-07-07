@@ -11,6 +11,7 @@ import { useQuiz } from './context';
 
 const AlreadyPassed = ({ uuid }) => {
     const { submitted } = useQuiz();
+    
     const hasUserTakenQuiz = false;
     const isComplete = false;
 
