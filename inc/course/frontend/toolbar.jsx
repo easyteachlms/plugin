@@ -30,12 +30,10 @@ const Toolbar = () => {
                         userId,
                     },
                 }).then( e => {
-                    setTimeout(() => {
-                        const tmp = userCompleted;
-                        tmp.push(currentlyActive.target);
-                        setCompleted(tmp);
-                        console.log('Result->', e, tmp);
-                    }, 1000);
+                    const tmp = userCompleted;
+                    tmp.push(currentlyActive.target);
+                    setCompleted(tmp);
+                    console.log('Result->', e, tmp);
                 });
             }}>
                 Mark Complete

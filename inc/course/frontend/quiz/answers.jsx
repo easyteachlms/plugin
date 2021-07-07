@@ -15,7 +15,6 @@ const Answers = ({ question, answers, help, points, type }) => {
     const [selectedAnswer, setSelectedAnswer] = useState(false);
     
     useEffect(()=>{
-        console.log("ENTRYDATA", entryData);
         if ( undefined !== entryData && undefined !== entryData[question] && entryData[question].length !== 0 ) {
             setSelectedAnswer(entryData[question], answers);
         }

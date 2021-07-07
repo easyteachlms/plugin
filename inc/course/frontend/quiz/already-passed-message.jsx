@@ -9,21 +9,14 @@ import { Card, CardBody, CardHeader } from '@wordpress/components';
  */
 import { useQuiz } from './context';
 
-const AlreadyPassed = ({ uuid }) => {
-    const { submitted } = useQuiz();
+const AlreadyPassed = () => {
+    const { alreadySubmitted } = useQuiz();
     
-    const hasUserTakenQuiz = false;
-    const isComplete = false;
-
-    if (false === hasUserTakenQuiz) {
+    if (false === alreadySubmitted) {
         return <Fragment />;
     }
 
-    if (false !== hasUserTakenQuiz && false !== submitted) {
-        return <Fragment />;
-    }
-
-    const { score, pointsRequiredToPass } = hasUserTakenQuiz;
+    const { score, pointsRequiredToPass } = alreadySubmitted;
     const cardBody = score >= pointsRequiredToPass ? `You passed with a score of: ${score}` : `You did not pass, you scored ${score}, please try again.`;
 
     return (

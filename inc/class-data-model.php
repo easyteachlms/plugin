@@ -196,7 +196,7 @@ class Data_Model extends EasyTeachLMS {
 		$outline = array(
 			'structured' => array(),
 			'flat'       => array(),
-			'total'      => 0, // Get total lesson contents and quizzes to do. 
+			'total'      => 0,
 		);
 
 		foreach ( $course['innerBlocks'] as $key => $block ) {
@@ -214,11 +214,13 @@ class Data_Model extends EasyTeachLMS {
 
 						if ( 'easyteachlms/quiz' === $block['blockName'] ) {
 							$block_parsed = $this->parse_quiz( $block, $course_id, $user_id, $site_id );
+							$outline['total']++;
 						} else {
 							$block_parsed = $this->parse( 'easyteachlms/lesson-content', $block );
 							if ( array_key_exists('innerBlocks', $block) && $include_innerblocks ) {
 								$block_parsed['innerBlocks'] = $block['innerBlocks'];
 							}
+							$outline['total']++;
 						}
 
 						if ( true === $block_parsed['active'] ) {

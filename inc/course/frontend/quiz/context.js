@@ -20,7 +20,7 @@ const quizContext = createContext();
 
 // Provider hook that creates auth object and handles state
 const useProvideQuiz = () => {
-    const { userId, courseId, currentlyActive, courseData } = useCourse();
+    const { userId, courseId, currentlyActive, courseData, userCompleted, setCompleted, quizAttempts } = useCourse();
     const [uuid, setUuid] = useState(false);
 
     // Internal context state
@@ -29,7 +29,8 @@ const useProvideQuiz = () => {
     const [activePage, setActivePage] = useState(0);
     const [passingGrade, setPassingGrade] = useState(80);
     const [disabled, toggleDisabled] = useState(true);
-    const [submitted, setSubmission] = useState(false); // We'll need to do a check to show already submitted when we have recent activity??
+    const [alreadySubmitted, setExistingSubmission] = useState(false);
+    const [submitted, setSubmission] = useState(false);
 
     const initQuizData = () => {
         if ( false === courseData || false === currentlyActive || 'quiz' !== currentlyActive.type ) {
@@ -45,6 +46,15 @@ const useProvideQuiz = () => {
         setPassingGrade(pointsRequiredToPass);
         
         setUuid(currentlyActive.target);
+        console.log('quizAttempts1', quizAttempts, quizAttempts[currentlyActive.target]);
+        if ( 0 !== quizAttempts.length && undefined !== quizAttempts[currentlyActive.target] ) {
+            console.log('quizAttempts2', quizAttempts);
+            // Set quiz attempts here?
+            setExistingSubmission({
+                score: quizAttempts[currentlyActive.target].score,
+                pointsRequiredToPass: parseInt(pointsRequiredToPass),
+            });
+        }
     }
 
     const checkForUnAnsweredQuestions = () => {
@@ -148,37 +158,30 @@ const useProvideQuiz = () => {
     const onCompleteAction = (passthroughFlag) => {
         const grade = gradeQuiz(entryData);
         console.log('---------- Done ---------');
-        console.log('onCompleteAction', quizData, entryData, grade);
+        console.log('onCompleteAction', courseData, quizData, entryData, grade);
 
-        const { totalPointsAwarded, totalPointsPossible, essayAnswers } = grade;
-
-        const userScore = {
-            score: totalPointsAwarded,
-            total: totalPointsPossible,
-            // eslint-disable-next-line radix
-            pointsRequiredToPass: parseInt(pointsRequiredToPass),
-            essayAnswers,
-        };
-
-        console.log('userScore', userScore);
+        const { totalPointsAwarded, totalPointsPossible } = grade;
 
         // Check if quiz has any free text answers and if so we need to grade the quiz differently. And display different warnings on completion.
-        // apiFetch({
-        //     path: `/easyteachlms/v4/quiz/submit/?userId=${userId}&uuid=${uuid}&courseId=${courseId}`,
-        //     method: 'POST',
-        //     data: userScore,
-        // }).then(() => {
-        //     console.log('grading', userScore, pointsRequiredToPass);
-        //     passthroughFlag(false);
-        //     // setQuizScore(uuid, userScore);
-        //     // If score is high enough score??
-        //     if (userScore.score >= pointsRequiredToPass) {
-        //         // setConditionsMet(uuid);
-        //         // setComplete(uuid);
-        //     }
-        //     setSubmission(userScore);
-        //     console.log('---------- Done ---------');
-        // });
+        apiFetch({
+            path: `/easyteachlms/v4/quiz/submit/?userId=${userId}&uuid=${uuid}&courseId=${courseId}&newScore=${totalPointsAwarded}&passingScore=${parseInt(passingGrade)}`,
+            method: 'POST',
+            data: entryData,
+        }).then(() => {
+            passthroughFlag(false);
+            
+            // If score is high enough mark as complete.
+            if (totalPointsAwarded >= parseInt(passingGrade)) {
+                const tmp = userCompleted;
+                tmp.push(uuid);
+                setCompleted(tmp);
+            }
+            setExistingSubmission(false);
+            setSubmission({
+                score: totalPointsAwarded,
+                pointsRequiredToPass: parseInt(passingGrade),
+            });
+        });
     };
 
     const initEntry = (questions) => {
@@ -192,9 +195,10 @@ const useProvideQuiz = () => {
 
     useEffect(()=>{
         setTimeout(()=>{
+            // Check courseData see if we have already completed this, if so then 
             initQuizData();
         }, 700);
-    }, [courseData, currentlyActive]);
+    }, [courseData, currentlyActive, quizAttempts]);
 
     useEffect(() => {
         checkForUnAnsweredQuestions();
@@ -209,6 +213,7 @@ const useProvideQuiz = () => {
         entryData,
         answerHandler,
         onCompleteAction,
+        alreadySubmitted,
         submitted,
         userId,
         uuid,

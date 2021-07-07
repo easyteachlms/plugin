@@ -28,7 +28,7 @@ class Student extends EasyTeachLMS {
 	public function register_rest_endpoints() {
 		register_rest_route(
 			'easyteachlms/v4',
-			'/student/get', // Should this be get-progress?
+			'/student/get-progress', // Should this be get-progress?
 			array(
 				'methods'             => 'GET',
 				'callback'            => array( $this, 'get_student_restfully' ),
@@ -70,7 +70,7 @@ class Student extends EasyTeachLMS {
 	}
 
 	public function get_user_meta_key($user_id, $object_id) {
-		return wp_json_encode(array($user_id, $object_id));
+		return wp_json_encode(array((int) $user_id, (int) $object_id));
 	}
 
 	/**
@@ -93,7 +93,7 @@ class Student extends EasyTeachLMS {
 			'courseId' => 99999,
 			'data' => array(
 				'uuid' => array(
-					'lesson-content-complete' => array(
+					'complete' => array(
 						'timestamp1' => 'complete'
 					),
 				),
@@ -108,19 +108,19 @@ class Student extends EasyTeachLMS {
 	}
 
 	public function surface_only_most_recent_by_uuid($data) {
-		error_log("Surface". print_r($data, true));
+		error_log("Student Surface ". print_r($data, true));
 		$data = $data['data'];
 		$return = array();
 		foreach ($data as $uuid => $actions) {
 			foreach($actions as $action => $acts) {
+				$most_recent_key = array_key_last($acts);
 				if ( !array_key_exists($uuid, $return) ) {
-					$most_recent_key = array_key_last($acts);
 					$return[$uuid] = array();
-					$return[$uuid][$action] = array(
-						'data' => $acts[$most_recent_key],
-						'timestamp' => $most_recent_key,
-					);
 				}
+				$return[$uuid][$action] = array(
+					'data' => $acts[$most_recent_key],
+					'timestamp' => $most_recent_key,
+				);
 			}
 		}
 		return $return;
@@ -186,6 +186,8 @@ class Student extends EasyTeachLMS {
 		'data' => false,
 		'userId' => '',
 	)) {
+		error_log('run_student_action()');
+		error_log(print_r($action_data, true));
 		// Triple check data.
 		$user_id = array_key_exists('courseId', $action_data) ? $action_data['userId'] : false;
 		$course_id = array_key_exists('courseId', $action_data) ? $action_data['courseId'] : false;
@@ -209,7 +211,7 @@ class Student extends EasyTeachLMS {
 			return new WP_Error('no-uuid', 'No uuid pased to run_student_action', $action_data);
 		}
 
-		$key = 'elms_'. md5($this->get_user_meta_key($user_id, false === $cohort_id ? $course_id : $cohort_id));
+		$key = 'elms_'. md5($this->get_user_meta_key($user_id, $course_id));
 		
 		// If false !== $cohort_id then check for buddypress and run this against buddypress group meta instead.
 		$now_data = get_user_meta($user_id, $key, true);
@@ -236,12 +238,12 @@ class Student extends EasyTeachLMS {
 
 		// If false !== $cohort_id then check for buddypress and run this against buddypress group meta instead.
 		$success = update_user_meta( $user_id, $key, $now_data );
-
-		if ( false === $success ) {
+		error_log(print_r($success, true));
+		if ( true !== $success ) {
 			return new WP_Error('failed-to-run-action', 'Could not save data for ' . $action, $now_data);
 		}
-
-		error_log( "Testing ->>".print_r($now_data, true) );
+		error_log($key);
+		error_log( "Testing ->> ".print_r($now_data, true) );
 
 		return $now_data;
 	}

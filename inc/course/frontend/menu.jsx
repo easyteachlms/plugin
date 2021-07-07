@@ -1,7 +1,7 @@
 /**
  * WordPress Dependencies
  */
-import { Fragment } from '@wordpress/element';
+import { Fragment, useState, useEffect } from '@wordpress/element';
 import { addQueryArgs } from '@wordpress/url';
 import { Dashicon } from '@wordpress/components';
 
@@ -11,8 +11,17 @@ import { Dashicon } from '@wordpress/components';
 import { useCourse } from './context';
 
 const Menu = () => {
-    const {currentlyActive, menuItems, userCompleted, handleMenuClick, setCurrentlyActive, loaded} = useCourse();
+    const {
+        currentlyActive, 
+        menuItems, 
+        userCompleted, 
+        handleMenuClick, 
+        setCurrentlyActive, 
+        loaded
+    } = useCourse();
+
     const { history, location } = window;
+
     if ( false === loaded ) {
         return <Fragment></Fragment>
     }
@@ -39,7 +48,8 @@ const Menu = () => {
                 setCurrentlyActive({
                     parent: false,
                     target: 'dashboard',
-                    title: 'Dashboard'
+                    title: 'Dashboard',
+                    type: 'dashboard'
                 });
             }}>
                 <span><Dashicon icon="admin-home" />Dashboard</span>
