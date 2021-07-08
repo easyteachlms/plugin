@@ -2,16 +2,23 @@
  * WordPress Dependencies
  */
 import { Fragment } from '@wordpress/element';
+import { Dashicon } from '@wordpress/components';
 
 /**
  * Internal Dependencies
  */
 import { useQuiz } from './context';
 
+const Icon = ({correct}) => {   
+    if ( correct ) {
+        return <Dashicon icon="yes-alt"/>
+    }
+    return <Dashicon icon="no"/>
+}
+
 const Results = () => {
     const { entryData, quizData, submitted } = useQuiz();
     
-
     const PointsToolbar = () => {
         const items = [
             `Total Points: ${submitted.total}`,
@@ -37,10 +44,10 @@ const Results = () => {
                             <ol>
                                 {answers.map((answer, index) => (
                                     <li>
-                                        {yourAnswers.includes(index)
-                                                    ? 'check circle'
-                                                    : 'remove circle'}
-                                        {answer}
+                                       <span style={{display: 'flex', alignItems: 'center'}}>
+                                            <Icon correct={yourAnswers.includes(index)}/>
+                                            {answer}
+                                       </span>
                                     </li>
                                 ))}
                             </ol>
