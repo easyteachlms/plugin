@@ -13,11 +13,13 @@ const Dashboard = () => {
     const {courseDescription, files} = useCourse();
     return(
         <div>
-            <div className="course-description">
-                <RawHTML>{courseDescription}</RawHTML>
-            </div>
+            {false !== courseDescription && (
+                <div className="course-description">
+                    <RawHTML>{courseDescription}</RawHTML>
+                </div>
+            )}
             <Certificate/>
-            {false !== files && (
+            {false !== files && 0 !== files.length && (
                 <Fragment>
                     <h4>Downloadbale Files</h4>
                     <ul>

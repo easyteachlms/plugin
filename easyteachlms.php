@@ -3,7 +3,7 @@
 Plugin Name: EasyTeach LMS
 Plugin URI: https://easyteachlms.com
 Description: An easy to use LMS for WordPress. Supports additional features from WooCommerce, and BuddyPress.
-Version: 4.5.1-beta
+Version: 4.5.2-beta
 Author: Cliff Michaels & Associates, LLC.
 Author URI: http://cliffmichaels.com
 GitHub Plugin URI: https://github.com/easyteachlms/plugin
@@ -24,7 +24,7 @@ if ( isset( $plugin ) ) {
 	$easyteach_lms_file = $network_plugin;
 }
 
-define( 'EASYTEACHLMS_VERSION', '4.5.1' );
+define( 'EASYTEACHLMS_VERSION', '4.5.2' );
 define( 'EASYTEACHLMS_FILE', $easyteach_lms_file );
 define( 'EASYTEACHLMS_PATH', WP_PLUGIN_DIR . '/' . basename( dirname( $easyteach_lms_file ) ) );
 define( 'EASYTEACHLMS_VENDOR_PATH', WP_PLUGIN_DIR . '/' . basename( dirname( $easyteach_lms_file ) ) . '/vendor/' );

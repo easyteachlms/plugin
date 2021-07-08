@@ -35,4 +35,9 @@
             }
         }
     }
+    .wp-block-image {
+        & > img {
+            max-width: 100%!important;
+        }
+    }
 }
