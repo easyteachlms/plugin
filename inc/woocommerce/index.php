@@ -112,13 +112,15 @@ class WooCommerce extends EasyTeachLMS {
 	public function tab_content() {
 		$enqueue = parent::wpackio();
 
+		wp_register_script('select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js', array('jquery'));
+
 		$enqueue->enqueue(
 			'wpAdmin',
 			'wooCommerceCourseField',
 			array(
 				'js'        => true,
 				'css'       => true,
-				'js_dep'    => array(),
+				'js_dep'    => array('select2'),
 				'css_dep'   => array(),
 				'in_footer' => true,
 				'media'     => 'all',
@@ -130,7 +132,11 @@ class WooCommerce extends EasyTeachLMS {
 		ob_start();
 		?>
 		<div id="easy_teach_lms_data" class="panel woocommerce_options_panel hidden">
-			<div id="elms-product-field"></div>
+			<select class="js-easyteachlms-course-field" multiple="multiple">
+				<option value="AL">Alabama</option>
+				<option value="SC">South Carolina</option>
+				<option value="WY">Wyoming</option>
+			</select>
 			<input id="elms-attached-product" name="elms_attached_product" value="<?php echo $attached_course; ?>" type="hidden"/>
 		</div>
 		<?php
