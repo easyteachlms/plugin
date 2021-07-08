@@ -10,27 +10,51 @@ import { Dashicon } from '@wordpress/components';
  */
 import { useCourse } from './context';
 
+const Icon = ({type, complete}) => {   
+    if ( complete ) {
+        return <Dashicon icon="yes-alt"/>
+    }
+    return 'quiz' === type ? <Dashicon icon="editor-help" /> : <Dashicon icon="text-page" />;
+}
+
 const Menu = () => {
     const {
-        currentlyActive, 
-        menuItems, 
-        userCompleted, 
-        handleMenuClick, 
-        setCurrentlyActive, 
+        currentlyActive,
+        menuItems,
+        userCompleted,
+        handleMenuClick,
+        setCurrentlyActive,
         loaded
     } = useCourse();
 
+    const [items, setItems] = useState(false);
+
     const { history, location } = window;
 
-    if ( false === loaded ) {
-        return <Fragment></Fragment>
-    }
+    useEffect(()=>{
+        console.log("Detected Changes", currentlyActive, userCompleted);
+        const newItems = menuItems.map(m => {
+            return {
+                title: m.title,
+                active: currentlyActive.parent === m.uuid,
+                subs: m.subItems.map(e => {
+                    return {
+                        title: e.title,
+                        active: currentlyActive.target === e.uuid,
+                        uuid: e.uuid,
+                        parentUuid: e.parentUuid,
+                        type: e.type,
+                        complete: userCompleted.includes(e.uuid),
+                    }
+                })
+            }
+        });
+        console.log('newItems', newItems);
+        setItems([...newItems]);
+    },[userCompleted, currentlyActive, menuItems]);
 
-    const Icon = ({uuid, type}) => {   
-        if ( userCompleted.includes(uuid) ) {
-            return <Dashicon icon="yes-alt"/>
-        }
-        return 'quiz' === type ? <Dashicon icon="editor-help" /> : <Dashicon icon="text-page" />;
+    if ( false === loaded || false === items ) {
+        return <Fragment></Fragment>
     }
 
     return(
@@ -51,18 +75,17 @@ const Menu = () => {
             }}>
                 <span><Dashicon icon="admin-home" />Dashboard</span>
             </li>
-            {menuItems.map(m => {
+            {items.map(m => {
                 return(
-                    <li data-selected={currentlyActive.parent === m.uuid}><span>{m.title}</span>
+                    <li data-selected={m.active}><span><span>{m.title}</span></span>
                         <ul>
-                        {m.subItems.map(e => {
+                        {m.subs.map(e => {
                             return(
                                 <li
-                                    data-completed={false}
-                                    data-selected={currentlyActive.target === e.uuid}
+                                    data-selected={e.active}
                                     onClick={() => handleMenuClick(e.parentUuid, e.uuid)}
                                 >
-                                    <span><Icon uuid={e.uuid} type={e.type}/> {e.title}</span>
+                                    <span><Icon type={e.type} complete={e.complete}/><span>{e.title}</span></span>
                                 </li>
                             );
                         })}

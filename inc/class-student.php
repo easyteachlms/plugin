@@ -109,6 +109,9 @@ class Student extends EasyTeachLMS {
 
 	public function surface_only_most_recent_by_uuid($data) {
 		error_log("Student Surface ". print_r($data, true));
+		if ( !array_key_exists('data', $data) ) {
+			return false;
+		}
 		$data = $data['data'];
 		$return = array();
 		foreach ($data as $uuid => $actions) {

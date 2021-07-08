@@ -157,9 +157,6 @@ const useProvideQuiz = () => {
 
     const onCompleteAction = (passthroughFlag) => {
         const grade = gradeQuiz(entryData);
-        
-        
-
         const { totalPointsAwarded, totalPointsPossible } = grade;
 
         // Check if quiz has any free text answers and if so we need to grade the quiz differently. And display different warnings on completion.
@@ -169,12 +166,12 @@ const useProvideQuiz = () => {
             data: entryData,
         }).then(() => {
             passthroughFlag(false);
-            
+            console.log('Grading Complete', totalPointsAwarded, parseInt(passingGrade));
             // If score is high enough mark as complete.
             if (totalPointsAwarded >= parseInt(passingGrade)) {
                 const tmp = userCompleted;
                 tmp.push(uuid);
-                setCompleted(tmp);
+                setCompleted([...tmp]);
             }
             setExistingSubmission(false);
             setSubmission({

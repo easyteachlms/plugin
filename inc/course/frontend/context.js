@@ -214,12 +214,11 @@ const useProvideUserData = (courseId, userId) => {
             const quizSubmissions = Object.keys(actions).filter(x => 'quiz-submission' === x);
             
             if ( 0 !== quizSubmissions.length ) {
-                
                 submissions[id] = {...userData.data[id]['quiz-submission'].data};
             }
         });
 
-        setCompleted(completed);
+        setCompleted([...completed]);
         setQuizAttempts(submissions);
     },[userData]);
 

@@ -16,7 +16,6 @@ const Toolbar = () => {
     const MarkComplete = () => {
         return(
             <button onClick={()=>{
-                
                 apiFetch({
                     path: `/easyteachlms/v4/student/update-progress/`,
                     method: 'POST',
@@ -32,8 +31,7 @@ const Toolbar = () => {
                 }).then( e => {
                     const tmp = userCompleted;
                     tmp.push(currentlyActive.target);
-                    setCompleted(tmp);
-                    
+                    setCompleted([...tmp]);
                 });
             }}>
                 Mark Complete

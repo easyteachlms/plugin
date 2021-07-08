@@ -44,7 +44,7 @@ const Certificate = () => {
     // If userId has met the requirements for courseId then display a button to print the certificate.
     // If user id has completed all the totals
     // Then present with the option to download/print a certificate on dashboard();
-    if ( ! userCompleted >= total ) {
+    if ( ! userCompleted.length >= total ) {
         return <Fragment/>
     }
     return(
