@@ -1,3 +1,6 @@
+/**
+ * WordPress Dependencies
+ */
 import { __ } from '@wordpress/i18n';
 import { useEffect } from '@wordpress/element';
 import { InspectorControls } from '@wordpress/block-editor';
@@ -25,7 +28,7 @@ const Controls = ({ attributes, setAttributes, clientId }) => {
     // Enforce require passing on the next lesson block.
     useEffect(()=>{
         if ( true === requirePassing ) {
-            console.log(nextLessonBlockClientId, 'UUID: ' + uuid);
+            
             updateBlockAttributes(nextLessonBlockClientId, {requiresPassing: uuid});
         } else {
             updateBlockAttributes(nextLessonBlockClientId, {requiresPassing: ''});
@@ -55,7 +58,7 @@ const Controls = ({ attributes, setAttributes, clientId }) => {
                             }
                             checked={requirePassing}
                             onChange={() =>{
-                                console.log(attributes, requirePassing);
+                                
                                 setAttributes({
                                     requirePassing: !requirePassing,
                                 });

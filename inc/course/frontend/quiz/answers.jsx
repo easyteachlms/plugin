@@ -54,7 +54,7 @@ const Answers = ({ question, answers, help, points, type }) => {
                         }
                     })}
                     onChange={ ( answer ) => {
-                        console.log("Option?", answer, answers);
+                        
                         handler(answer, findIndex(answer));
                     } }
                 />

@@ -132,10 +132,7 @@ class WooCommerce extends EasyTeachLMS {
 		);
 
 		$attached_courses = get_post_meta( get_the_ID(), $this->attachment_meta_key, true );
-		error_log("Received::");
-		error_log(print_r($attached_courses, true));
 		$attached_courses = sanitize_text_field(wp_json_encode($attached_courses, true));
-		error_log($attached_courses);
 		ob_start();
 		?>
 		<div id="easy_teach_lms_data" class="panel woocommerce_options_panel hidden">

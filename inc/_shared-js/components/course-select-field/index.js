@@ -83,9 +83,9 @@ const WPTokenSearchField = ({ postType = 'post', value, onSaveValue }) => {
         if ( false === debouncedSearchTerm ) {
             return;
         }
-        console.log('Run a search for: ', debouncedSearchTerm);
+        
         doSearch(searchTerm, postType).then(s => {
-            console.log("Found:", s);
+            
             setData(s);
         });
     },[debouncedSearchTerm]);
@@ -94,12 +94,12 @@ const WPTokenSearchField = ({ postType = 'post', value, onSaveValue }) => {
      * Handle setting suggestions from search data.
      */
     useEffect(() => {
-        console.log('Data Changed:', data);
+        
         const newSuggestions = data.map(m => {
-            console.log('...', m);
+            
             return m.title;
         });
-        console.log("newSuggestions ->", newSuggestions);
+        
         if ( 0 !== newSuggestions.length ) {
             setSuggestions(newSuggestions);
         }
@@ -118,14 +118,14 @@ const WPTokenSearchField = ({ postType = 'post', value, onSaveValue }) => {
             value={ selectedTokens }
             suggestions={ suggestions }
             onChange={ ( tokens ) => {
-                console.log('onChange TOKENS->', tokens);
+                
                 const tmp = [];
                 tokens.forEach(t => {
                     const matchedToken = findTokenInData(t);
-                    console.log("matchedToken = ", matchedToken);
+                    
                     tmp.push(matchedToken);
                 });
-                console.log('onChange Matched->', tmp);
+                
                 setSelectedTokens([...tmp]);
             } }
             onInputChange={ token => setSearchTerm(token) }

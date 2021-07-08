@@ -46,9 +46,9 @@ const useProvideQuiz = () => {
         setPassingGrade(pointsRequiredToPass);
         
         setUuid(currentlyActive.target);
-        console.log('quizAttempts1', quizAttempts, quizAttempts[currentlyActive.target]);
+        
         if ( 0 !== quizAttempts.length && undefined !== quizAttempts[currentlyActive.target] ) {
-            console.log('quizAttempts2', quizAttempts);
+            
             // Set quiz attempts here?
             setExistingSubmission({
                 score: quizAttempts[currentlyActive.target].score,
@@ -58,7 +58,7 @@ const useProvideQuiz = () => {
     }
 
     const checkForUnAnsweredQuestions = () => {
-        console.log('checkForUnAnsweredQuestions');
+        
         const test = Object.keys(entryData);
         let unansweredQuestions = 0;
         test.forEach((e) => {
@@ -67,7 +67,7 @@ const useProvideQuiz = () => {
                 unansweredQuestions++;
             }
         });
-        console.log('unansweredQuestions', unansweredQuestions);
+        
         if (0 === unansweredQuestions) {
             toggleDisabled(false);
         } else {
@@ -92,7 +92,7 @@ const useProvideQuiz = () => {
             s[question] = answer;
         }
         setEntryData({ ...entryData, ...s });
-        console.log('handler', entryData);
+        
     };
 
     const gradeQuiz = (answers) => {
@@ -105,7 +105,7 @@ const useProvideQuiz = () => {
         const computePoints = (answersGiven, correctAnswer, points) => {
             let pointsAwarded = 0;
             const pointsPerAnswer = points / correctAnswer.length;
-            console.log('computePoints', answersGiven);
+            
             // If answersGiven is string then save it to the db, notify the user that their quiz will be graded, activate notification for teacher, when teacher grades activate notification for student.
             answersGiven.forEach((answerIndex) => {
                 if (correctAnswer.includes(answerIndex)) {
@@ -130,11 +130,11 @@ const useProvideQuiz = () => {
                 );
 
                 if (0 !== computedPoints) {
-                    console.log('Correct!', q);
+                    
                     grade.totalPointsAwarded =
                         computedPoints + grade.totalPointsAwarded;
                 } else {
-                    console.log('Incorrect!', q);
+                    
                 }
             } else {
                 // If this is the first text answer then setup the array
@@ -151,14 +151,14 @@ const useProvideQuiz = () => {
         });
 
         // We should pass tmpQuestions to the db for the user and store their entire quiz record there as it was that would be useful.
-        console.log(grade);
+        
         return grade;
     };
 
     const onCompleteAction = (passthroughFlag) => {
         const grade = gradeQuiz(entryData);
-        console.log('---------- Done ---------');
-        console.log('onCompleteAction', courseData, quizData, entryData, grade);
+        
+        
 
         const { totalPointsAwarded, totalPointsPossible } = grade;
 
@@ -223,7 +223,7 @@ const useProvideQuiz = () => {
 // Provider component, wrap all your sub components to have access to quiz state.
 const ProvideQuiz = ({children}) => {
     const quiz = useProvideQuiz();
-    console.log('ProvideQuiz', quiz);
+    
     if ( false === quiz.quizData ) {
         return <Fragment><h4>Loading Quiz... <Spinner/></h4></Fragment>;
     }

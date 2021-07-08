@@ -202,7 +202,6 @@ const useProvideUserData = (courseId, userId) => {
         const completed = [];
         const submissions = {};
         const uuids = Object.keys(userData.data);
-        console.log('userData2:', userData);
 
         uuids.forEach(id => {
             const actions = userData.data[id];
@@ -213,9 +212,9 @@ const useProvideUserData = (courseId, userId) => {
             }
 
             const quizSubmissions = Object.keys(actions).filter(x => 'quiz-submission' === x);
-            console.log(quizSubmissions);
+            
             if ( 0 !== quizSubmissions.length ) {
-                console.log(userData.data[id]['quiz-submission']);
+                
                 submissions[id] = {...userData.data[id]['quiz-submission'].data};
             }
         });
@@ -237,7 +236,7 @@ const useProvideUserData = (courseId, userId) => {
      * Handle Dom Changes
      */
     useEffect(()=>{
-        console.log("currentlyActive?", currentlyActive);
+        
         if ( false !== currentlyActive.target ) {
             handleDomChange(currentlyActive.parent, currentlyActive.target);
         }

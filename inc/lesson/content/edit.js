@@ -17,7 +17,7 @@ const edit = ({
 
     if (0 !== uuid) {
         return (
-            <Collapsible className={className} title={title} label="Content">
+            <Collapsible className={className} title={title} label="Content" defaultOpen={false}>
                 <InnerBlocksWithPost
                     title={title}
                     labels={labels}

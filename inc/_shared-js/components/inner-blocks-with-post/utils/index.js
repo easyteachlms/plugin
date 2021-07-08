@@ -25,12 +25,12 @@ const replaceContent = (clientId, postId, postType, replaceInnerBlocks) => {
 
     const type = capitalize(postType);
     const post = new api.models[type]({ id: postId });
-    console.log(post);
+    
 
     return new Promise((resolve) => {
         post.fetch().then((p) => {
             const parsedBlocks = rawHandler({ HTML: p.content_raw });
-            console.log('parsedBlocks', parsedBlocks);
+            
             replaceInnerBlocks(clientId, parsedBlocks).then(() => {
                 resolve(p);
             });
@@ -43,10 +43,10 @@ const saveAsPost = (title, type, clientId, setAttributes, toggleLoading) => {
 
     const { api } = window.wp;
 
-    console.log('Saving Post');
-    console.log(title);
-    console.log(type);
-    console.log(clientId);
+    
+    
+    
+    
     const currentBlock = select('core/block-editor').getBlock(clientId);
 
     const getBlockContent = () => {
@@ -59,7 +59,7 @@ const saveAsPost = (title, type, clientId, setAttributes, toggleLoading) => {
     };
 
     const content = getBlockContent();
-    console.log("getBlockContent?", content);
+    
 
     const post = new api.models[type]({ title, content });
 

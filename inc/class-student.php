@@ -238,12 +238,9 @@ class Student extends EasyTeachLMS {
 
 		// If false !== $cohort_id then check for buddypress and run this against buddypress group meta instead.
 		$success = update_user_meta( $user_id, $key, $now_data );
-		error_log(print_r($success, true));
 		if ( true !== $success ) {
 			return new WP_Error('failed-to-run-action', 'Could not save data for ' . $action, $now_data);
 		}
-		error_log($key);
-		error_log( "Testing ->> ".print_r($now_data, true) );
 
 		return $now_data;
 	}

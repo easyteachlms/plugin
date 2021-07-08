@@ -16,7 +16,7 @@ const Collapsible = ({
     postType = false,
     className,
     children,
-    defaultOpen = false,
+    defaultOpen = true,
     label = false,
     toolbarExtra = false
 }) => {

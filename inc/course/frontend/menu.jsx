@@ -26,10 +26,7 @@ const Menu = () => {
         return <Fragment></Fragment>
     }
 
-    console.log('userCompleted???', userCompleted);
-
-    const Icon = ({uuid, type}) => {
-        console.log("Icon", userCompleted.includes(uuid), uuid, userCompleted);
+    const Icon = ({uuid, type}) => {   
         if ( userCompleted.includes(uuid) ) {
             return <Dashicon icon="yes-alt"/>
         }

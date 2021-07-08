@@ -72,7 +72,6 @@ class Settings extends EasyTeachLMS {
 
 	public function sell_courses() {
 		$post_type_object = get_post_type_object( 'product' );
-		error_log( print_r( $post_type_object, true ) );
 		if ( ! $post_type_object ) {
 			return;
 		}
@@ -155,10 +154,7 @@ class Settings extends EasyTeachLMS {
 	public function restfully_update_setting( \WP_REST_Request $request ) {
 		$setting = $request->get_param( 'setting' );
 		$value   = json_decode( $request->get_body(), true );
-		error_log( 'rest' );
-		error_log( $setting );
 		if ( ! empty( $setting ) ) {
-			error_log( (bool) $value['value'] );
 			return $this->update_setting( $setting, $value['value'] );
 		} else {
 			return false;
@@ -182,8 +178,6 @@ class Settings extends EasyTeachLMS {
 			'_easyteachlms_settings',
 			$this->default_settings
 		);
-		error_log( 'Get Setting' );
-		error_log( print_r( $settings, true ) );
 
 		if ( ! array_key_exists( $setting, $settings ) ) {
 			return false;
@@ -192,12 +186,10 @@ class Settings extends EasyTeachLMS {
 	}
 
 	public function get_settings() {
-		error_log( 'Get Setting' );
 		$settings = get_option(
 			'_easyteachlms_settings',
 			$this->default_settings
 		);
-		error_log( print_r( $settings, true ) );
 		return $settings;
 	}
 }

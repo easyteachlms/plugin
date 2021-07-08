@@ -70,11 +70,11 @@ const PostFetchToolbar = ({
 
     const checkForUpdates = () => {
         if (undefined !== postId && null !== postId && 0 !== postId) {
-            console.info('Watching for updates...');
+            
             const type = capitalize(postType);
             const post = new wp.api.models[type]({ id: postId });
             post.fetch().then((post) => {
-                console.log(lastUpdated, post);
+                
                 if (lastUpdated !== post.modified_gmt) {
                     setFlag(true);
                 }

@@ -99,7 +99,7 @@ const edit = ({
     }
 
     return (
-        <Collapsible className={className} title='Completion Certificate' postType="certificate" toolbarExtra={()=>{
+        <Collapsible className={className} title='Completion Certificate' defaultOpen={false} postType="certificate" toolbarExtra={()=>{
             return(<ToolbarButton icon="printer" label={__(`Preview`)}>Print Preview</ToolbarButton>);
         }}>
             {previewOpen && (

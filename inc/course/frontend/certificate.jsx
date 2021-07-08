@@ -37,10 +37,7 @@ const Certificate = () => {
             .from(certificate, 'string')
             .set(opts)
             .outputPdf()
-            .then((e) => {
-                console.log('Download Cert');
-                console.log(certificate);
-            })
+            .then((e) => {})
             .save();
     };
 

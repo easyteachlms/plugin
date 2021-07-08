@@ -10,7 +10,7 @@ import { useQuiz } from './context';
 
 const Results = () => {
     const { entryData, quizData, submitted } = useQuiz();
-    console.log('<Results/>', submitted);
+    
 
     const PointsToolbar = () => {
         const items = [

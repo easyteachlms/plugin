@@ -189,7 +189,6 @@ class Updater extends EasyTeachLMS {
 				$license_data = json_decode( wp_remote_retrieve_body( $response ) );
 	
 				if ( false === $license_data->success ) {
-					error_log(print_r($license_data, true));
 	
 					switch( $license_data->error ) {
 	
