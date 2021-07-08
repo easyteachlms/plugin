@@ -9,11 +9,9 @@ class CertificateDate extends EasyTeachLMS {
 
     public function render_date($attributes, $content, $block) {    
         // get todays date
-        $block_wrapper_attributes = get_block_wrapper_attributes( array(
-            'data-date' => null,
-        ) );
-        $content = '<div '.$block_wrapper_attributes.'></div>';
-        return $content;
+        $block_wrapper_attributes = get_block_wrapper_attributes();
+		$todays_date = date('d-m-Y');;
+        return '<div '.$block_wrapper_attributes.'>'.$todays_date.'</div>';
     }
 
     public function register_block() {

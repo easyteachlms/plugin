@@ -8,14 +8,11 @@ class Certificate extends EasyTeachLMS {
     }
 
     public function render_certificate($attributes, $content, $block) {
-        wp_enqueue_script( apply_filters('easyteach_frontend_certificate_js', null) );
-        wp_enqueue_style( apply_filters('easyteach_frontend_certificate_css', null) );
-        
         $block_wrapper_attributes = get_block_wrapper_attributes( array(
             'data-uuid' => $attributes['uuid'],
+			'style' => wp_sprintf( 'border-color: %s; background-color: %s', $attributes['borderColor'], $attributes['backgroundColor']),
         ) );
-        $content = '<div '.$block_wrapper_attributes.'></div>';
-        return $content;
+        return '<div '.$block_wrapper_attributes.'>'.$content.'</div>';
     }
 
     public function register_block() {

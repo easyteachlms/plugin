@@ -17,6 +17,8 @@ domReady(() => {
     courses.forEach((course) => {
         const userId = course.getAttribute('data-user-id');
         const courseId = course.getAttribute('data-course-id');
+        const certificate = course.querySelector('.wp-block-easyteachlms-certificate');
+        certificate.remove();
         render(
             <ProvideCourse courseId={courseId} userId={userId}>
                 <CourseWrapper>

@@ -2,7 +2,7 @@
 namespace EasyTeachLMS;
 use EasyTeachLMS;
 class WooCommerce extends EasyTeachLMS {
-	protected $attachment_meta_key = '_attached_course';
+	protected $attachment_meta_key = '_attached_courses';
 
 	public function __construct( $init = false ) {
 		if ( true === $init ) {
@@ -68,19 +68,25 @@ class WooCommerce extends EasyTeachLMS {
 	}
 
 	protected function authorize_purchase( $product_id, $user_id ) {
-		$course_id = get_post_meta( $product_id, $this->attachment_meta_key, true );
-		if ( ! $course_id ) {
+		// Get attached courses for the
+		$course_ids = get_post_meta( $product_id, $this->attachment_meta_key, true );
+		if ( ! $course_ids ) {
 			return ''; // Exit early this is not an order that needs processing.
 		}
 
-		do_action( 'enroll_user', $user_id, $course_id );
+		// Make an array of just the ids from course_ids
+		$course_ids = array_column($course_ids, 'id');
+
+		foreach ($course_ids as $course_id) {
+			do_action( 'enroll_user', $user_id, $course_id );
+		}
 
 		$data = get_user_meta( $user_id, '_purchased_courses', true );
 
 		if ( ! $data ) {
-			$data = array( $product_id );
+			$data = $course_ids;
 		} else {
-			$data[] = $product_id;
+			$data[] = array_merge($data, $course_ids);
 		}
 
 		update_user_meta( $user_id, '_purchased_courses', $data );
@@ -112,44 +118,44 @@ class WooCommerce extends EasyTeachLMS {
 	public function tab_content() {
 		$enqueue = parent::wpackio();
 
-		wp_register_script('select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js', array('jquery'));
-
 		$enqueue->enqueue(
 			'wpAdmin',
 			'wooCommerceCourseField',
 			array(
 				'js'        => true,
 				'css'       => true,
-				'js_dep'    => array('select2'),
+				'js_dep'    => array('wp-api'),
 				'css_dep'   => array(),
 				'in_footer' => true,
 				'media'     => 'all',
 			)
 		);
 
-		$attached_course = get_post_meta( get_the_ID(), $this->attachment_meta_key, true );
-
+		$attached_courses = get_post_meta( get_the_ID(), $this->attachment_meta_key, true );
+		error_log("Received::");
+		error_log(print_r($attached_courses, true));
+		$attached_courses = sanitize_text_field(wp_json_encode($attached_courses, true));
+		error_log($attached_courses);
 		ob_start();
 		?>
 		<div id="easy_teach_lms_data" class="panel woocommerce_options_panel hidden">
-			<select class="js-easyteachlms-course-field" multiple="multiple">
-				<option value="AL">Alabama</option>
-				<option value="SC">South Carolina</option>
-				<option value="WY">Wyoming</option>
-			</select>
-			<input id="elms-attached-product" name="elms_attached_product" value="<?php echo $attached_course; ?>" type="hidden"/>
+			<div id="easyteach-course-field"></div>
+			<input name="elms_attached_courses" type="hidden" value=""/>
 		</div>
 		<?php
 		echo ob_get_clean();
 	}
 
 	public function save_fields( $id, $post ) {
-		if ( ! empty( $_POST['elms_attached_product'] ) ) {
-			update_post_meta( $id, $this->attachment_meta_key, $_POST['elms_attached_product'] );
+		if ( ! empty( $_POST['elms_attached_courses'] ) ) {
+			$data = json_decode(stripslashes($_POST['elms_attached_courses']), true);
+			error_log("Saved::");
+			error_log(print_r($_POST['elms_attached_courses'], true));
+			error_log(print_r($data, true));
+			update_post_meta( $id, $this->attachment_meta_key, $data );
 		} else {
 			delete_post_meta( $id, $this->attachment_meta_key );
 		}
-		error_log( print_r( get_post_meta( $id, $this->attachment_meta_key ), true ) );
 	}
 
 	public function array_insert( &$array, $position, $insert ) {

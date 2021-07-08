@@ -46,7 +46,6 @@ module.exports = {
             name: 'frontend',
             entry: {
                 course: './inc/course/frontend/index.js',
-                certificate: './inc/certificate/frontend/index.js',
                 enrollButton: './inc/enrollment/index.js',
             },
             optimizeForGutenberg: true,

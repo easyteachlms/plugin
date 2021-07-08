@@ -1,15 +1,49 @@
 /**
+ * External Dependencies
+ */
+import html2pdf from 'html2pdf.js';
+
+/**
  * WordPress Dependencies
  */
- import { Fragment, RawHTML } from '@wordpress/element';
+import {
+    Fragment,
+    RawHTML,
+    renderToString,
+    useState,
+    useEffect,
+} from '@wordpress/element';
 
- /**
-  * Internal Dependencies
-  */
- import { useCourse } from './context';
+/**
+ * Internal Dependencies
+ */
+import { useCourse } from './context';
 
 const Certificate = () => {
-    const {userId, userCompleted, total} = useCourse();
+    const {certificate, userCompleted, total} = useCourse();
+
+    function generate() {
+        const opts = {
+            margin: 0,
+            filename: 'certificate.pdf',
+            image: { type: 'jpeg', quality: 1.00 },
+            html2canvas: {
+                scale: 1,
+            },
+            jsPDF: { unit: 'in', format: 'letter', orientation: 'landscape' },
+        };
+
+        html2pdf()
+            .from(certificate, 'string')
+            .set(opts)
+            .outputPdf()
+            .then((e) => {
+                console.log('Download Cert');
+                console.log(certificate);
+            })
+            .save();
+    };
+
     // If userId has met the requirements for courseId then display a button to print the certificate.
     // If user id has completed all the totals
     // Then present with the option to download/print a certificate on dashboard();
@@ -18,8 +52,10 @@ const Certificate = () => {
     }
     return(
         <div>
-            <h4>Certificate</h4>
-            <button>Download Certificate</button>
+            <hr/>
+            <h4>Certificate of Completion</h4>
+            <p>Congratulations on the completion of this course! Click the button below to generate and download your certificate of completion.</p>
+            <button onClick={()=>generate()}>Download Certificate</button>
         </div>
     );
 }

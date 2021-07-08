@@ -14,6 +14,7 @@ const useProvideUserData = (courseId, userId) => {
     const [loaded, toggleLoaded] = useState(false);
     const [courseData, setCourseData] = useState(false);
     const [courseDescription, setCourseDescription] = useState(false);
+    const [certificate, setCertificate] = useState(false);
     
     const [userCompleted, setCompleted] = useState([]);
     const [quizAttempts, setQuizAttempts] = useState([]);
@@ -39,6 +40,7 @@ const useProvideUserData = (courseId, userId) => {
             setFiles(res.files);
             setScoring(res.scoring);
             setCourseDescription(res.description);
+            setCertificate(res.certificate);
 
             // Construct Menu Items:
             const items = [];
@@ -256,6 +258,7 @@ const useProvideUserData = (courseId, userId) => {
         files,
         scoring,
         total,
+        certificate,
         getMenuItem,
         handleMenuClick,
         setCurrentlyActive,

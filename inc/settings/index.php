@@ -23,11 +23,11 @@ class Settings extends EasyTeachLMS {
 			$settings_link   = get_bloginfo( 'wpurl' ) . '/wp-admin/admin.php?page=easyteach-lms-settings';
 			?>
 			<div class="updated notice is-dismissible">
-				<h3>Welcome to EasyTeach LMS – The World’s most DYNAMIC and CUSTOMIZABLE Learning Management System designed for WordPress.</h3>
+				<h3>Thank you for installing EasyTeach LMS (Beta) – The World’s most DYNAMIC and CUSTOMIZABLE Learning Management System designed for WordPress.</h3>
 				<p>EasyTeach is also a POWERFUL Content Management System, featuring Gutenberg’s Drag & Drop Editor to save you time and effort at every turn, no matter what kind of look and feel you need to create for your user experience.</p>
 				<ul style="padding-left: 15px;list-style: disc;">
 					<li>Ready to create your first course? <a href="<?php echo $new_course_link; ?>">Start Here</a></li>
-					<li>Ready to enable BuddyPress functionality and manage a group of students? <a href="<?php echo $settings_link; ?>">Start Here</li>
+					<li><strike>Ready to enable BuddyPress functionality and manage a group of students? <a href="<?php echo $settings_link; ?>">Start Here</a></strike><br/><strong>Attention:</strong> <i>BuddyPress functionality is being updated to support the upcoming BP 9.0, expect to see an <strong>update in your dashboard by July 24th 2021 bringing back updated BP functionality</strong>.<br/>For more info about BuddyPress 9.0 <a href="https://wptavern.com/buddypress-9-0-scheduled-for-short-development-cycle-to-ship-block-based-widgets-ahead-of-wordpress-5-8" target="_blank" rel="noreferrer noopener">click here</a></i></li>
 					<li>Need instructions or resources for Easy Teach? <a href="<?php echo $settings_link; ?>">Start Here</a></li>
 				</ul>
 			</div>

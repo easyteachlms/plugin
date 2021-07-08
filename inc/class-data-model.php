@@ -172,6 +172,9 @@ class Data_Model extends EasyTeachLMS {
 		$description = array_key_exists( 'description', $course['attrs'] ) ? $course['attrs']['description'] : false;
 
 		$outline = $this->parse_course_block( $course, $course_id, $user_id, $site_id, $include_content );
+		
+		$certificate = $this->recursively_search_for_blocks( $parsed, 'blockName', 'easyteachlms/certificate' );
+		$certificate = ! empty($certificate) ? render_block(array_pop($certificate)) : false;
 
 		return array(
 			'id'          => $post->ID,
@@ -185,6 +188,7 @@ class Data_Model extends EasyTeachLMS {
 			),
 			'outline'     => $outline,
 			'files'       => $files, // Gather up all the files
+			'certificate' => $certificate,
 		);
 	}
 

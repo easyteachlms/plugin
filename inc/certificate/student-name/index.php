@@ -9,11 +9,8 @@ class CertificateStudentName extends EasyTeachLMS {
 
     public function render_student_name($attributes, $content, $block) {    
         // get user and get info
-        $block_wrapper_attributes = get_block_wrapper_attributes( array(
-            'data-user-name' => null,
-        ) );
-        $content = '<div '.$block_wrapper_attributes.'></div>';
-        return $content;
+        $block_wrapper_attributes = get_block_wrapper_attributes();
+        return '<div '.$block_wrapper_attributes.'>'.wp_get_current_user()->data->display_name.'</div>';
     }
 
     public function register_block() {
