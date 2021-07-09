@@ -17,11 +17,11 @@ module.exports = {
     },
     files: [
         {
-            name: 'wpAdmin',
+            name: 'wp-admin',
             entry: {
                 wooCommerceCourseField: './inc/woocommerce/index.js',
                 settings: './inc/settings/index.js',
-                buddyPress: './inc/buddypress/index.js',
+                // buddyPress: './inc/buddypress/index.js',
             },
             optimizeForGutenberg: true,
         },

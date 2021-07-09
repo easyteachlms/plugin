@@ -11,6 +11,13 @@
 			"problemMatcher": [],
 			"label": "npm: build",
 			"detail": "wpackio-scripts build"
+		},
+		{
+			"type": "npm",
+			"script": "package",
+			"problemMatcher": [],
+			"label": "npm: package",
+			"detail": "wpackio-scripts pack"
 		}
 	]
 }

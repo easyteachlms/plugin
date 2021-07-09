@@ -1,5 +1,4 @@
 <?php
-
 class Settings extends EasyTeachLMS {
 	public $default_settings = array(
 		'openEnrollment' => true,
@@ -43,7 +42,7 @@ class Settings extends EasyTeachLMS {
 		$settings = $this->get_settings();
 		
 		$assets = $enqueue->enqueue(
-			'wpAdmin',
+			'wp-admin',
 			'settings',
 			array(
 				'js'        => true,
