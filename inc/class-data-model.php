@@ -5,16 +5,16 @@
  */
 class Data_Model extends EasyTeachLMS {
 	protected $course_id = false;
-	protected $user_id   = false;
 	protected $site_id   = false;
+
 	public function __construct( $init = false ) {
 		if ( true === $init ) {
 			add_action( 'rest_api_init', array( $this, 'register_rest_endpoint' ) );
 			/**
 			 * Example how to get the course structure using php.
-			 * apply_filters('easyteach_get_course_structure',  int $course_id = 0, $user_id = false, $site_id = false);
+			 * apply_filters('easyteach_get_course_structure',  int $course_id = 0, $site_id = false);
 			 */
-			add_filter( 'easyteach_get_course_structure', array($this, 'get_course_structure'), 10, 4);
+			add_filter( 'easyteach_get_course_structure', array($this, 'get_course_structure'), 10, 3);
 		}
 	}
 
@@ -27,11 +27,6 @@ class Data_Model extends EasyTeachLMS {
 				'callback'            => array( $this, 'get_course_structure_restfully' ),
 				'args'                => array(
 					'courseId' => array(
-						'validate_callback' => function( $param, $request, $key ) {
-							return is_numeric( $param );
-						},
-					),
-					'userId'   => array(
 						'validate_callback' => function( $param, $request, $key ) {
 							return is_numeric( $param );
 						},
@@ -116,37 +111,20 @@ class Data_Model extends EasyTeachLMS {
 		return $current_date <= $scheduled_date;
 	}
 
-	// public function is_complete( $uuid, $course_id, $user_id, $site_id ) {
-	// 	if ( function_exists( 'switch_to_blog' ) ) {
-	// 		switch_to_blog( $site_id );
-	// 	}
-	// 	$meta_key      = "_course_{$course_id}_{$site_id}";
-	// 	$user_progress = get_user_meta( $user_id, $meta_key, true );
-	// 	if ( function_exists( 'restore_current_blog' ) ) {
-	// 		restore_current_blog();
-	// 	}
-	// 	if ( is_array( $user_progress ) && array_key_exists( 'completed', $user_progress ) && in_array( $uuid, $user_progress['completed'] ) ) {
-	// 		return true;
-	// 	} else {
-	// 		return false;
-	// 	}
-	// }
-
 	public function get_course_structure_restfully( \WP_REST_Request $request ) {
 		return $this->get_course_structure(
 			$request->get_param( 'courseId' ),
-			$request->get_param( 'userId' ),
 			get_current_blog_id(),
 			'true' === $request->get_param('includeContent'),
 		);
 	}
 
 	/**
-	 * @TODO Look into caching this for a 7 * DAYS_IN_HOURS, on post update we should bust the cache here
+	 * Returns a structured outline for a course, optionally can include content.
 	 * @param int $post_id
 	 * @return false|array
 	 */
-	public function get_course_structure( int $course_id = 0, $user_id = false, $site_id = false, $include_content = false ) {
+	public function get_course_structure( int $course_id = 0, $site_id = false, $include_content = false ) {
 		$post = get_post( $course_id );
 		if ( false === $post || null === $post || \is_wp_error( $post ) || ! is_object( $post ) || ! property_exists( $post, 'post_content' ) ) {
 			return new WP_Error( 'fetch-error', __( 'API could not find course with id of ' . $course_id.'.', 'easyteachlms' ) );
@@ -162,7 +140,6 @@ class Data_Model extends EasyTeachLMS {
 			return new WP_Error( 'parse-error', __( 'API could not parse course ' .$course_id.'.', 'easyteachlms' ) );
 		}
 
-		// @TODO what is the best way to search for and get the first easyteachlms/course block that can be found, regardless of how nested it is. 
 		$course  = $this->recursively_search_for_blocks( $parsed, 'blockName', 'easyteachlms/course' );		
 		$course  = array_pop( $course );
 
@@ -171,7 +148,7 @@ class Data_Model extends EasyTeachLMS {
 
 		$description = array_key_exists( 'description', $course['attrs'] ) ? $course['attrs']['description'] : false;
 
-		$outline = $this->parse_course_block( $course, $course_id, $user_id, $site_id, $include_content );
+		$outline = $this->parse_course_block( $course, $course_id, $site_id, $include_content );
 		
 		$certificate = $this->recursively_search_for_blocks( $parsed, 'blockName', 'easyteachlms/certificate' );
 		$certificate = ! empty($certificate) ? render_block(array_pop($certificate)) : false;
@@ -192,7 +169,7 @@ class Data_Model extends EasyTeachLMS {
 		);
 	}
 
-	protected function parse_course_block( $course, $course_id, $user_id, $site_id, $include_innerblocks ) {
+	protected function parse_course_block( $course, $course_id, $site_id, $include_innerblocks ) {
 		if ( true !== $this->has_innerBlocks( $course ) ) {
 			return new WP_Error( 'parse-error', __( 'API could not find any innerBlocks', 'easyteachlms' ) );
 		}
@@ -217,7 +194,7 @@ class Data_Model extends EasyTeachLMS {
 					foreach ( $block['innerBlocks'] as $key => $block ) {
 
 						if ( 'easyteachlms/quiz' === $block['blockName'] ) {
-							$block_parsed = $this->parse_quiz( $block, $course_id, $user_id, $site_id );
+							$block_parsed = $this->parse_quiz( $block, $course_id, $site_id );
 							$outline['total']++;
 						} else {
 							$block_parsed = $this->parse( 'easyteachlms/lesson-content', $block );
@@ -295,7 +272,7 @@ class Data_Model extends EasyTeachLMS {
 		return $return;
 	}
 
-	public function parse_quiz( $quiz, $course_id, $user_id, $site_id ) {
+	public function parse_quiz( $quiz, $course_id, $site_id ) {
 		$return = array();
 		$uuid   = $quiz['attrs']['uuid'];
 

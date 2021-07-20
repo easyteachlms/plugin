@@ -83,7 +83,7 @@ class Student extends EasyTeachLMS {
 			'action' => 'complete',
 			'courseId' => 99999,
 			'uuid' => 'ajsjf-asdfnasdf-anns',
-			'userId' => 9999,
+			'userId' => 99,
 			'data' => array(
 				'status' => 'complete'
 			)
@@ -109,7 +109,7 @@ class Student extends EasyTeachLMS {
 
 	public function surface_only_most_recent_by_uuid($data) {
 		error_log("Student Surface ". print_r($data, true));
-		if ( !array_key_exists('data', $data) ) {
+		if ( empty($data) || !array_key_exists('data', $data) ) {
 			return false;
 		}
 		$data = $data['data'];
@@ -140,8 +140,16 @@ class Student extends EasyTeachLMS {
 		$user_slug = $request->get_param( 'userSlug' );
 		if ( null === $user_id && null !== $user_slug ) {
 			$user = get_user_by( 'slug', $user_slug );
+			$user_id = $user->ID;
 		} elseif ( null !== $user_id ) {
 			$user = get_user_by( 'ID', $user_id );
+		}
+
+		$cache_key = md5( wp_json_encode(array($user_id, $course_id)) );
+		$cache_ttl = 1 * HOUR_IN_SECONDS;
+		$cached = get_transient( $cache_key );
+		if ( false !== $cached ) {
+			return $cached;
 		}
 
 		$user_data = (array) $user;
@@ -178,6 +186,8 @@ class Student extends EasyTeachLMS {
 		}
 		$return['data'] = $data;
 
+		set_transient( $cache_key, $return, $cache_ttl );
+
 		return $return;
 	}
 
@@ -189,8 +199,6 @@ class Student extends EasyTeachLMS {
 		'data' => false,
 		'userId' => '',
 	)) {
-		error_log('run_student_action()');
-		error_log(print_r($action_data, true));
 		// Triple check data.
 		$user_id = array_key_exists('courseId', $action_data) ? $action_data['userId'] : false;
 		$course_id = array_key_exists('courseId', $action_data) ? $action_data['courseId'] : false;

@@ -32,7 +32,7 @@ const useProvideUserData = (courseId, userId) => {
 
     const initCourseData = () => {
         apiFetch({
-            path: `/easyteachlms/v4/course/get/?courseId=${courseId}&userId=${userId}`,
+            path: `/easyteachlms/v4/course/get/?courseId=${courseId}`,
         }).then(res => {
             // Construct Course Data:
             setCourseData(res);
