@@ -250,7 +250,6 @@ class WooCommerce extends EasyTeachLMS {
 		$user_id = get_current_user_id();
 		ob_start();
 		?>
-		<h3>Purchased Courses</h3>
 		<?php do_action( 'easyteachlms_woocom_courses', $user_id ); ?>
 		<?php
 		echo ob_get_clean();
