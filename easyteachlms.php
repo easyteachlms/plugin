@@ -2,8 +2,8 @@
 /*
 Plugin Name: EasyTeach LMS
 Plugin URI: https://easyteachlms.com
-Description: An easy to use LMS for WordPress. Supports additional features from WooCommerce, and BBPress.
-Version: 4.5.1-beta
+Description: An easy to use LMS for WordPress. Supports additional features from WooCommerce, and BuddyPress.
+Version: 4.5.2-beta
 Author: Cliff Michaels & Associates, LLC.
 Author URI: http://cliffmichaels.com
 GitHub Plugin URI: https://github.com/easyteachlms/plugin
@@ -13,11 +13,6 @@ GitHub Plugin URI: https://github.com/easyteachlms/plugin
 if ( ! defined( 'ABSPATH' ) ) {
 	return;
 }
-
-// Load WC_AM_Client class if it exists.
-// if ( ! class_exists( 'WC_AM_Client_2_7' ) ) {
-// require_once plugin_dir_path( __FILE__ ) . 'wc-am-client.php';
-// }
 
 $easyteach_lms_file = __FILE__;
 /* Find our plugin, wherever it may live! */
@@ -29,14 +24,13 @@ if ( isset( $plugin ) ) {
 	$easyteach_lms_file = $network_plugin;
 }
 
-define( 'EASYTEACHLMS_VERSION', '4.5.1' );
+define( 'EASYTEACHLMS_VERSION', '4.5.2' );
 define( 'EASYTEACHLMS_FILE', $easyteach_lms_file );
 define( 'EASYTEACHLMS_PATH', WP_PLUGIN_DIR . '/' . basename( dirname( $easyteach_lms_file ) ) );
 define( 'EASYTEACHLMS_VENDOR_PATH', WP_PLUGIN_DIR . '/' . basename( dirname( $easyteach_lms_file ) ) . '/vendor/' );
 define( 'EASYTEACHLMS_URL', plugin_dir_url( __FILE__ ) );
 
 require_once EASYTEACHLMS_VENDOR_PATH . '/autoload.php';
-use tgmpa\tgmpa;
 use WPackio\Enqueue;
 
 /**
@@ -45,12 +39,12 @@ use WPackio\Enqueue;
  * @package
  */
 class EasyTeachLMS {
-	protected $plugin_version   = '5.0.0';
+	protected static $plugin_version   = EASYTEACHLMS_VERSION;
 	public $wp_version_required = '5.4.0';
 	public $wp_version_tested   = '5.4.0';
 
-	public function wpack() {
-		return new Enqueue( 'easyTeachLMS', 'dist', '1.0.0', 'plugin', EASYTEACHLMS_FILE );
+	public function wpackio() {
+		return new Enqueue( 'easyTeachLMS', 'dist', self::$plugin_version, 'plugin', EASYTEACHLMS_FILE );
 	}
 
 	/**
@@ -82,60 +76,23 @@ class EasyTeachLMS {
 	 */
 	public function __construct( $init = false ) {
 		if ( true === $init ) {
-			// Load WC_AM_Client class if it exists.
-			// $wcam_lib = false;
-			// if ( ! class_exists( 'WC_AM_Client_2_7' ) ) {
-			// require_once EASYTEACHLMS_PATH . 'wc-am-client.php';
-			// } else {
-			// Preferred positive integer product_id.
-			// $wcam_lib = new WC_AM_Client_2_7( EASYTEACHLMS_FILE, 132967, '1.0.0', 'plugin', 'http://wc/', 'EasyTeach LMS' );
-			// }
-
-			// if ( is_object( $wcam_lib ) && $wcam_lib->get_api_key_status( false ) ) {
-			// Code to load your plugin or theme here.
-			// This code will not run until the API Key is activated.
-			// }
-
 			$this->include_files();
-
-			add_action( 'init', array( $this, 'semantic_ui_css_loader' ) );
-			add_action( 'init', array( $this, 'rewrite' ) );
-			add_action( 'init', array( $this, 'rewrite_tags' ) );
-			add_filter( 'block_categories', array( $this, 'register_block_category' ), 10, 2 );
-			add_action( 'admin_notices', array( $this, 'welcome_admin_notice' ) );
-
-			add_filter( 'classic_editor_enabled_editors_for_post_type', array( $this, 'force_gutenberg' ), 10, 2 );
-
 			add_action( 'bp_include', array( $this, 'include_buddypress_support' ), 32 );
 
+			add_filter( 'classic_editor_enabled_editors_for_post_type', function( $editors, $post_type ) {
+				if ( 'course' === $post_type ) {
+					$editors['classic_editor'] = false;
+				}
+				return $editors;
+			}, 10, 2 );
+			
+			add_action( 'init', array( $this, 'rewrite' ) );
+			add_action( 'init', array( $this, 'rewrite_tags' ) );
+			add_filter( 'block_categories_all', array( $this, 'register_block_category' ), 10, 2 );
+
+
 			register_activation_hook( EASYTEACHLMS_FILE, array( $this, 'activate' ) );
-			register_deactivation_hook( EASYTEACHLMS_FILE, array( $this, 'deactivate' ) );
 		}
-	}
-
-	/**
-	 * Initializes the Base_Plugin() class
-	 *
-	 * Checks for an existing Base_Plugin() instance
-	 * and if it doesn't find one, creates it.
-	 *
-	 * @uses Base_Plugin()
-	 */
-	// public function &init() {
-	// static $instance = false;
-	// if ( ! $instance ) {
-	// $instance = new EasyTeachLMS();
-	// }
-	// return $instance;
-	// }
-
-	public function force_gutenberg( $editors, $post_type ) {
-		error_log( 'force_gutenberg' );
-		if ( 'course' === $post_type ) {
-			$editors['classic_editor'] = false;
-		}
-		error_log( print_r( $editors, true ) );
-		error_log( print_r( $post_type, true ) );
 	}
 
 	public function rewrite_tags() {
@@ -145,78 +102,111 @@ class EasyTeachLMS {
 	}
 
 	public function include_files() {
-		require_once EASYTEACHLMS_PATH . '/inc/template-tags.php';
-		require_once EASYTEACHLMS_PATH . '/inc/class-admin.php';
-		require_once EASYTEACHLMS_PATH . '/inc/class-certificate.php';
-		require_once EASYTEACHLMS_PATH . '/inc/class-course.php';
+		require_once EASYTEACHLMS_PATH . '/inc/certificate/index.php';
+		require_once EASYTEACHLMS_PATH . '/inc/course/index.php';
+		require_once EASYTEACHLMS_PATH . '/inc/enrollment/index.php';
+		require_once EASYTEACHLMS_PATH . '/inc/ghost-block/index.php';
+		require_once EASYTEACHLMS_PATH . '/inc/lesson/index.php';
+		require_once EASYTEACHLMS_PATH . '/inc/quiz/index.php';
+		require_once EASYTEACHLMS_PATH . '/inc/settings/index.php';
+		require_once EASYTEACHLMS_PATH . '/inc/updater/index.php';
+		require_once EASYTEACHLMS_PATH . '/inc/woocommerce/index.php';
+
 		require_once EASYTEACHLMS_PATH . '/inc/class-data-model.php';
-		require_once EASYTEACHLMS_PATH . '/inc/class-lesson.php';
-		require_once EASYTEACHLMS_PATH . '/inc/class-quiz.php';
 		require_once EASYTEACHLMS_PATH . '/inc/class-student.php';
-		require_once EASYTEACHLMS_PATH . '/inc/class-certificate.php';
-		require_once EASYTEACHLMS_PATH . '/inc/class-woocommerce.php';
-		// Mid year code cleanup begins below here:
-		require_once EASYTEACHLMS_PATH . '/inc/cohorts/class-cohorts.php';
+		require_once EASYTEACHLMS_PATH . '/inc/template-tags.php';
 	}
 
 
 	function include_buddypress_support() {
-		require_once EASYTEACHLMS_PATH . '/inc/class-buddypress.php';
+		require_once EASYTEACHLMS_PATH . '/inc/buddypress/index.php';
 	}
 
-	public function semantic_ui_css_loader() {
-		wp_register_style( 'semantic-ui', '//cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css' );
-	}
-
-	function register_block_category( $categories, $post ) {
-		if ( ! in_array( $post->post_type, array( 'course', 'lesson' ) ) ) {
-			return $categories;
-		}
-		return array_merge(
-			$categories,
-			array(
+	function register_block_category( $block_categories, $editor_context ) {
+		if ( ! empty( $editor_context->post ) ) {
+			array_push(
+				$block_categories,
 				array(
 					'slug'  => 'education',
 					'title' => __( 'Education', 'easyteachlms' ),
-				),
-			)
-		);
+					'icon'  => null,
+				)
+			);
+		}
+		return $block_categories;
 	}
 
 	public function activate() {
 		flush_rewrite_rules();
 	}
-
-	public function deactivate() {
-
-	}
-
-	public function welcome_admin_notice() {
-
-		/* Check transient, if available display notice */
-		if ( ! get_option( 'easyteachlms-welcome-2' ) ) {
-			$new_course_link = admin_url( 'post-new.php?post_type=course' );
-			$settings_link   = get_bloginfo( 'wpurl' ) . '/wp-admin/admin.php?page=easyteach-lms-settings';
-			?>
-			<div class="updated notice is-dismissible">
-				<h3>Welcome to EasyTeach LMS – The World’s most DYNAMIC and CUSTOMIZABLE Learning Management System designed for WordPress.</h3>
-				<p>EasyTeach is also a POWERFUL Content Management System, featuring Gutenberg’s Drag & Drop Editor to save you time and effort at every turn, no matter what kind of look and feel you need to create for your user experience.</p>
-				<ul style="padding-left: 15px;list-style: disc;">
-					<li>Ready to create your first course? <a href="<?php echo $new_course_link; ?>">Start Here</a></li>
-					<li>Ready to enable BuddyPress functionality and manage a group of students? <a href="<?php echo $settings_link; ?>">Start Here</li>
-					<li>Need instructions or resources for Easy Teach? <a href="<?php echo $settings_link; ?>">Start Here</a></li>
-				</ul>
-			</div>
-			<?php
-		}
-	}
-
 }
 
 require EASYTEACHLMS_PATH . '/vendor/plugin-installs.php';
 
 $easy_teach_lms = new EasyTeachLMS( true );
 
-function lms_throw_error( $msg ) {
-	error_log( print_r( $msg, true ) );
+if ( ! function_exists( 'classNames' ) ) {
+	/**
+	 * Port of classNames JS library
+	 * Ported from https://github.com/cstro/classnames-php
+	 *
+	 * The classNames function takes any number of arguments which can be a string or array. When using an array, if the value associated with a given key is falsy, that key won't be included in the output. If no value is given the true is assumed.
+	 * classNames('foo'); // 'foo'
+	 * classNames(['foo' => true]); // 'foo'
+	 * classNames('foo', ['bar' => false, 'baz' => true]); // 'foo baz'
+	 * classNames(['foo', 'bar' => true]) // 'foo bar'
+	 *
+	 * @return string
+	 */
+	function classNames() {
+		$args = func_get_args();
+
+		$data = array_reduce(
+			$args,
+			function ( $carry, $arg ) {
+				if ( is_array( $arg ) ) {
+					return array_merge( $carry, $arg );
+				}
+
+				$carry[] = $arg;
+				return $carry;
+			},
+			array()
+		);
+
+		$classes = array_map(
+			function ( $key, $value ) {
+				$condition = $value;
+				$return    = $key;
+
+				if ( is_int( $key ) ) {
+					$condition = null;
+					$return    = $value;
+				}
+
+				$isArray          = is_array( $return );
+				$isObject         = is_object( $return );
+				$isStringableType = ! $isArray && ! $isObject;
+
+				$isStringableObject = $isObject && method_exists( $return, '__toString' );
+
+				if ( ! $isStringableType && ! $isStringableObject ) {
+					return null;
+				}
+
+				if ( $condition === null ) {
+					return $return;
+				}
+
+				return $condition ? $return : null;
+
+			},
+			array_keys( $data ),
+			array_values( $data )
+		);
+
+		$classes = array_filter( $classes );
+
+		return implode( ' ', $classes );
+	}
 }

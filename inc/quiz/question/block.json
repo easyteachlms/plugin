@@ -1,0 +1,33 @@
+{
+	"apiVersion": 2,
+	"name": "easyteachlms/question",
+	"category": "education",
+    "icon": "editor-help",
+	"attributes": {
+		"question": {
+			"type": "string"
+        },
+        "answersType": {
+			"type": "string",
+            "default": "single"
+        },
+        "explanation": {
+			"type": "string"
+        },
+        "points": {
+			"type": "string"
+        },
+        "picture": {
+			"type": "string"
+        }
+	},
+    "parent": ["easyteachlms/quiz"],
+	"usesContext": ["easyteachlms/quiz"],
+    "providesContext": {
+		"answersType": "answersType"
+	},
+	"supports": {
+		"html": false,
+        "align": false
+	}
+}

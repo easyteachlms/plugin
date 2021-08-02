@@ -1,0 +1,39 @@
+{
+    "apiVersion": 2,
+	"name": "easyteachlms/lesson",
+	"category": "education",
+	"attributes": {
+		"postId": {
+            "type": "integer",
+            "default": 0
+        },
+        "lastUpdated": {
+            "type": "string",
+            "default": ""
+        },
+        "title": {
+            "type": "string",
+            "default": ""
+        },
+        "schedule": {
+            "type": "string",
+            "default": ""
+        },
+        "uuid": {
+            "type": "string",
+            "default": 0
+        },
+        "requiresPassing": {
+            "type": "string",
+            "default": ""
+        }
+	},
+    "parent": ["easyteachlms/course"],
+    "providesContext": {
+		"lessonUuid": "uuid"
+	},
+	"supports": {
+		"html": false,
+        "align": false
+	}
+}

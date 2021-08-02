@@ -1,0 +1,24 @@
+div[data-type="easyteachlms/course"].is-selected {
+    & > div.block-editor-block-list__layout > div.block-list-appender {
+        margin-left: 0;
+        &:before {
+            content: "+ Add Lesson or Certificate to Course";
+            font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;
+            font-size: 14px;
+            padding-top: 5px;
+            display: inline-block;
+            position: absolute;
+            width: 100%;
+            text-align: center;
+            width: 100%;
+            z-index: 1;
+        }
+        button {
+            position: relative;
+            z-index: 2;
+            svg {
+                opacity: 0;
+            }
+        }
+    }
+}

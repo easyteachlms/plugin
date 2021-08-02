@@ -1,0 +1,20 @@
+{
+	"apiVersion": 2,
+	"name": "easyteachlms/course",
+	"category": "education",
+	"attributes": {
+		"id": {
+			"type": "integer",
+            "default": 0
+        },
+        "description": {
+			"type": "string",
+            "default": ""
+        }
+	},
+	"supports": {
+		"html": false,
+        "align": false,
+        "multiple": false
+	}
+}

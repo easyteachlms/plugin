@@ -1,0 +1,30 @@
+div[data-type="easyteachlms/quiz"] {
+    background: #f0f0f0;
+    & > div.collapsible-content {
+        padding: 0 1em;
+    }
+    &.is-selected {
+        & > div.collapsible-content > div.block-editor-inner-blocks > div > div.block-list-appender {
+            margin-left: 0;
+            &:before {
+                content: "+ Add a Question";
+                font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;
+                font-size: 14px;
+                padding-top: 5px;
+                display: inline-block;
+                position: absolute;
+                width: 100%;
+                text-align: center;
+                width: 100%;
+                z-index: 1;
+            }
+            button {
+                position: relative;
+                z-index: 2;
+                svg {
+                    opacity: 0;
+                }
+            }
+        }
+    }
+}

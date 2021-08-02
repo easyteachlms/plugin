@@ -1,0 +1,21 @@
+{
+    "apiVersion": 2,
+	"name": "easyteachlms/lesson-content",
+	"category": "education",
+	"attributes": {
+        "title": {
+            "type": "string",
+            "default": ""
+        },
+        "uuid": {
+            "type": "string",
+            "default": 0
+        }
+	},
+    "parent": ["easyteachlms/lesson"],
+	"supports": {
+		"html": false,
+        "align": false
+	},
+    "usesContext": ["lessonUuid"]
+}

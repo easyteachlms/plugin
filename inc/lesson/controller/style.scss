@@ -1,0 +1,44 @@
+div[data-type="easyteachlms/lesson"] {
+    opacity: 0.8;
+    &.open {
+        opacity: 1.0;
+    }
+    & > div.collapsible-content {
+        // padding-left: 1em;
+    }
+    & > div.collapsible-content > div.block-editor-inner-blocks > div > div.wp-block:not(.block-list-appender) {
+        padding-bottom: 0.25em;
+        margin-bottom: 0.25em;
+        border-top: 1px solid black;
+        padding-top: 0.25em;
+        margin-top: 0.25em;
+        &:first-of-type {
+            border-top: 0;
+        }
+    }
+    &.is-selected {
+        & > div.collapsible-content > div.block-editor-inner-blocks > div > div.block-list-appender {
+            margin-left: 0;
+            &:before {
+                content: "+ Add Content or Quiz to this Lesson";
+                font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;
+                font-size: 14px;
+                padding-top: 5px;
+                display: inline-block;
+                position: absolute;
+                width: 100%;
+                text-align: center;
+                width: 100%;
+                z-index: 1;
+            }
+            button {
+                position: relative;
+                z-index: 2;
+                svg {
+                    opacity: 0;
+                }
+            }
+        }
+    }
+
+}

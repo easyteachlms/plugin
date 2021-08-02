@@ -1,10 +1,4 @@
 # EasyTeach LMS
 
-## Installation:
-1. Upload plugin to WordPress powered site
-
-## WPBakery Instructions:
-1. Go to Classic Editor plugin settings, and enable the select user option.
-2. 
-
-## Notes:
+- Requires PHP 7.4 and above.
+- Requires WordPress 5.8 and above, or WordPress 5.4 with Gutenberg 10.3.

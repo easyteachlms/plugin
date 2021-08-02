@@ -1,0 +1,25 @@
+{
+	"apiVersion": 2,
+	"name": "easyteachlms/answer",
+	"category": "education",
+    "icon": "yes-alt",
+	"attributes": {
+		"answer": {
+			"type": "string",
+            "default": ""
+        },
+        "isCorrect": {
+			"type": "boolean",
+            "default": false
+        }
+	},
+    "parent": ["easyteachlms/question"],
+	"usesContext": ["answersType"],
+    "providesContext": {
+		"answersType": "answersType"
+	},
+	"supports": {
+		"html": false,
+        "align": false
+	}
+}
