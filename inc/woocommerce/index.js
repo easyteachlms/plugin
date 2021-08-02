@@ -15,8 +15,7 @@ domReady(function() {
     }
     const inputField = document.querySelector('input[name="elms_attached_courses"]');
     console.log('inputField', inputField.value);
-    // const value = JSON.parse(inputField.value);
-    const value = [];
+    const value = JSON.parse(inputField.value);
     render(
         <Fragment>
             <div style={{

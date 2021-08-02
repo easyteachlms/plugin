@@ -61,6 +61,8 @@ const WPTokenSearchField = ({ postType = 'post', value, onSaveValue }) => {
     const [searchTerm, setSearchTerm] = useState(false);
     const debouncedSearchTerm = useDebounce( searchTerm, 500 );
 
+    console.log('On Load Value: ', value);
+
     const [ data, setData ] = useState(value);
 
     const [ suggestions, setSuggestions ] = useState();
@@ -75,6 +77,14 @@ const WPTokenSearchField = ({ postType = 'post', value, onSaveValue }) => {
             return e.title === tokenValue;
         }).pop();
     }
+
+    // On useEffect selectedTokens with value if it's an array
+    useEffect(() => {
+        if ( Array.isArray(value) ) {
+            setSelectedTokens([...value]);
+        }
+    }, [value]);
+    
     
     /**
      * Handle search.
@@ -94,9 +104,8 @@ const WPTokenSearchField = ({ postType = 'post', value, onSaveValue }) => {
      * Handle setting suggestions from search data.
      */
     useEffect(() => {
-        
+        console.log("data changed...", data);
         const newSuggestions = data.map(m => {
-            
             return m.title;
         });
         

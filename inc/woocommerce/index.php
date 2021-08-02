@@ -17,41 +17,93 @@ class WooCommerce extends EasyTeachLMS {
 			// We're going to force some options on WooCommerce to ensure end user is using users.
 			add_action( 'init', array( $this, 'force_enable_accounts' ) );
 
+			// Modify the order status page with helpful links and information to get customer started.
+			add_action('woocommerce_order_details_before_order_table', array( $this, 'before_order_details' ), 10, 1);
+			add_action( 'woocommerce_order_item_meta_end', array( $this, 'display_order_item_courses' ), 10, 3 );
+
 			// Add My Courses to WooCommerce Account Page:
 			add_action( 'init', array( $this, 'add_courses_endpoint' ) );
 			add_filter( 'query_vars', array( $this, 'courses_query_vars' ), 0 );
 			add_filter( 'woocommerce_account_menu_items', array( $this, 'add_courses_link' ) );
 			add_action( 'woocommerce_account_courses_endpoint', array( $this, 'courses_content' ) );
-			add_action( 'easyteachlms_woocom_courses', array( $this, 'woocom_purchased_courses_grid' ), 10, 1 );
+			add_action( 'easyteachlms_woocom_courses', array( $this, 'woocom_purchased_courses_table' ), 10, 1 );
 		}
 	}
 
-	public function my_courses_grid( $user_id = false ) {
+	public function display_order_item_courses( $item_id, $item, $order ) {
+		error_log( 'display_order_item_courses' );
+		// $order   = \wc_get_order( $item_id );
+		error_log(print_r($order, true));
+
+		if ( count( $order->get_items() ) > 0 ) {
+			foreach ( $order->get_items() as $item ) {
+				// Simple product authorization.
+				$product_id = $item['product_id'];
+				$course_ids = get_post_meta( $product_id, $this->attachment_meta_key, true );
+				$course_ids = array_column($course_ids, 'id');
+				if ( ! empty( $course_ids ) ) {
+					echo '<ul>';
+					foreach( $course_ids as $course_id ) {
+						echo '<li><a href="'.get_permalink( $course_id ).'" target="_blank">' . get_the_title( $course_id ) . '</a></li>';
+					}
+					echo '</ul>';
+				}
+			}
+		}
+	}
+
+	public function before_order_details($order) {
+		ob_start();
+		?>
+		<div>
+			<p><strong>Access your course(s) under each product purchased below.</strong></p>
+		</div>
+		<?php
+		$markup = ob_get_clean();
+		echo apply_filters('easyteallms_before_order_details', $markup, $order);
+	}
+
+	public function woocom_purchased_courses_table( $user_id = false ) {
 		if ( false === $user_id ) {
 			return;
 		}
 
-		$user_data = get_userdata( (int) $user_id );
+		$enrolled_courses = apply_filters('easyteach_get_user_courses', $user_id);
+		
+		ob_start();
+		?>
+			<table class="woocommerce-orders-table woocommerce-MyAccount-orders shop_table shop_table_responsive my_account_orders account-orders-table">
+			<thead>
+				<tr>
+					<th class="woocommerce-orders-table__header"><span class="nobr">Course Name</span></th>
+					<th class="woocommerce-orders-table__header"><span class="nobr">Your Progress</span></th>
+					<th class="woocommerce-orders-table__header"><span class="nobr">Actions</span></th>
+				</tr>
+			</thead>
 
-		// wp_localize_script(
-		// 	$this->assets['frontend']['my-courses']['script'],
-		// 	'myCoursesData',
-		// 	array(
-		// 		'id'      => $user_data->ID,
-		// 		'name'    => $user_data->data->user_nicename,
-		// 		'courses' => apply_filters('easyteach_get_user_courses', $user_data->ID),
-		// 	)
-		// );
-		// wp_enqueue_script( $this->assets['frontend']['my-courses']['script'] );
-
-		return "<div id='easyteachlms-enrolled-courses' data-user-id={$user_id}></div>";
-	}
-
-	public function woocom_purchased_courses_grid( $user_id = false ) {
-		if ( false === $user_id ) {
-			return;
-		}
-		// echo $this->my_courses_grid( $user_id );
+			<tbody>
+				<?php
+				foreach ( $enrolled_courses as $course ) {
+					?>
+					<tr class="woocommerce-orders-table__row order">
+						<td class="woocommerce-orders-table__cell" data-title="Course Name">
+							<a href="<?php echo $course['url'];?>" target="_blank"><?php echo $course['title'];?></a>
+						</td>
+						<td class="woocommerce-orders-table__cell" data-title="Your Progress">
+							<?php echo $course['progress'];?>
+						</td>
+						<td class="woocommerce-orders-table__cell" data-title="Actions">
+							<a href="<?php echo $course['url'];?>" target="_blank">View</a>
+							<span style="cursor: pointer; opacity: 0.5;">Un-enroll</span>
+						</td>
+					</tr>
+					<?php
+				}
+				?>
+			</tbody>
+		</table>
+		<?php
+		echo ob_get_clean();
 	}
 
 	// NEEDS:
@@ -74,6 +126,9 @@ class WooCommerce extends EasyTeachLMS {
 			return ''; // Exit early this is not an order that needs processing.
 		}
 
+		error_log('authorize_purchase');
+		error_log(print_r($course_ids, true));
+
 		// Make an array of just the ids from course_ids
 		$course_ids = array_column($course_ids, 'id');
 
@@ -95,6 +150,9 @@ class WooCommerce extends EasyTeachLMS {
 	public function process_order( $order_id ) {
 		$order   = \wc_get_order( $order_id );
 		$user_id = $order->get_user_id();
+
+		error_log('process_order');
+		error_log(print_r($order, true));
 
 		if ( count( $order->get_items() ) > 0 ) {
 			foreach ( $order->get_items() as $item ) {
@@ -119,7 +177,7 @@ class WooCommerce extends EasyTeachLMS {
 		$enqueue = parent::wpackio();
 
 		$enqueue->enqueue(
-			'wpAdmin',
+			'wp-admin',
 			'wooCommerceCourseField',
 			array(
 				'js'        => true,
@@ -132,12 +190,12 @@ class WooCommerce extends EasyTeachLMS {
 		);
 
 		$attached_courses = get_post_meta( get_the_ID(), $this->attachment_meta_key, true );
-		$attached_courses = sanitize_text_field(wp_json_encode($attached_courses, true));
+		$attached_courses = wp_json_encode($attached_courses, true);
 		ob_start();
 		?>
 		<div id="easy_teach_lms_data" class="panel woocommerce_options_panel hidden">
 			<div id="easyteach-course-field"></div>
-			<input name="elms_attached_courses" type="hidden" value=""/>
+			<input name="elms_attached_courses" type="hidden" value='<?php echo $attached_courses;?>'/>
 		</div>
 		<?php
 		echo ob_get_clean();
