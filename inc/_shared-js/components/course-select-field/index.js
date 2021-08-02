@@ -105,12 +105,14 @@ const WPTokenSearchField = ({ postType = 'post', value, onSaveValue }) => {
      */
     useEffect(() => {
         console.log("data changed...", data);
-        const newSuggestions = data.map(m => {
-            return m.title;
-        });
-        
-        if ( 0 !== newSuggestions.length ) {
-            setSuggestions(newSuggestions);
+        if ( data && data.length > 0 ) {
+            const newSuggestions = data.map(m => {
+                return m.title;
+            });
+            
+            if ( 0 !== newSuggestions.length ) {
+                setSuggestions(newSuggestions);
+            }
         }
     }, [data]);
 

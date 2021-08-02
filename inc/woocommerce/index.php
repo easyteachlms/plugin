@@ -63,6 +63,15 @@ class WooCommerce extends EasyTeachLMS {
 		echo apply_filters('easyteallms_before_order_details', $markup, $order);
 	}
 
+	public function mini_progress_bar($progress) {
+		$progress = intval($progress);
+		ob_start();
+		?>
+		<div class="easyteach-user-progress" style="height: 10px; width: 100%; background-color: #eaeaea"><div class="bar" style="height: 10px; background-color: blue; width: 40%;"></div></div>
+		<?php
+		return ob_get_clean();
+	}
+
 	public function woocom_purchased_courses_table( $user_id = false ) {
 		if ( false === $user_id ) {
 			return;
@@ -90,7 +99,7 @@ class WooCommerce extends EasyTeachLMS {
 							<a href="<?php echo $course['url'];?>" target="_blank"><?php echo $course['title'];?></a>
 						</td>
 						<td class="woocommerce-orders-table__cell" data-title="Your Progress">
-							<?php echo $course['progress'];?>
+							<?php echo $this->mini_progress_bar( $course['progress'] ); ?>
 						</td>
 						<td class="woocommerce-orders-table__cell" data-title="Actions">
 							<a href="<?php echo $course['url'];?>" target="_blank">View</a>
