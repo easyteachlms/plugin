@@ -59,6 +59,10 @@ class Course extends EasyTeachLMS {
 	}
 
 	public function render_course($attributes, $content) {
+		if ( is_post_type_archive( 'course' ) ) {
+			return !empty( get_the_excerpt() ) ? get_the_excerpt() : wp_kses( $attributes['description'], 'post' );
+		}
+
 		$user_id = get_current_user_id();
 		$post_id = $attributes['id'];
 		$is_enrolled = apply_filters('easyteach_is_this_user_enrolled', $post_id, $user_id);
