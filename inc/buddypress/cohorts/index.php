@@ -25,7 +25,7 @@ class Cohorts extends EasyTeachLMS {
 	 */
 	public function __construct( $init = false ) {
 		if ( true === $init ) {
-			require_once EASYTEACHLMS_PATH . '/inc/cohorts/my-groups-widget/index.php';
+			require_once EASYTEACHLMS_PATH . '/inc/cohorts/widget/index.php';
 
 			add_filter( 'bp_rest_groups_prepare_value', array( $this, 'extend_groups_rest_data' ), 10, 3 );
 			add_filter( 'elms_cohort_group_data', array( $this, 'get_group_progress' ), 10, 2 );

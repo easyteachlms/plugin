@@ -1,4 +1,12 @@
-import { Fragment, useEffect, useState } from '@wordpress/element';
+/**
+ * WordPress Dependencies
+ */
+import domReady from '@wordpress/dom-ready';
+import { Fragment, render, useEffect, useState } from '@wordpress/element';
+
+/**
+ * Internal Dependencies
+ */
 import PostsMultiSelectField from './post-select-field';
 
 import './style.scss';
@@ -54,4 +62,9 @@ const AddCoursesField = ({ inputField }) => {
     );
 };
 
-export default AddCoursesField;
+domReady(()=>{
+    if ( document.getElementById('js-easyteach-courses-field') ) {
+        const input = document.getElementById('js-easyteach-courses-field').querySelector('input');
+        render(<AddCoursesField inputField={input}/>, document.getElementById('js-easyteach-courses-field-attach'));
+    }
+});

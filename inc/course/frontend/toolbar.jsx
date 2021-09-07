@@ -21,6 +21,7 @@ const Toolbar = () => {
                     method: 'POST',
                     data: { 
                         action: 'complete',
+                        // cohort?
                         courseId,
                         uuid: currentlyActive.target,
                         data: {

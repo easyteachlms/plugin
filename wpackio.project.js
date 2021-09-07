@@ -8,20 +8,22 @@ module.exports = {
     bannerConfig: {
         name: 'easyteachlms',
         author: 'Seth Rubenstein for Cliff Michaels and Associates',
-        license: 'UNLICENSED',
-        link: 'UNLICENSED',
+        license: 'MIT',
+        link: 'MIT',
         version: pkg.version,
         copyrightText:
-            'This software is released under the UNLICENSED License\nhttps://opensource.org/licenses/UNLICENSED',
+            'This software is released under the MIT License\nhttps://opensource.org/licenses/MIT',
         credit: true,
     },
     files: [
+        // WP Admin (Backend)
         {
             name: 'wp-admin',
             entry: {
                 wooCommerceCourseField: './inc/woocommerce/index.js',
                 settings: './inc/settings/index.js',
-                // buddyPress: './inc/buddypress/index.js',
+                bpCohortsWidget: './inc/buddypress/cohorts/widget/index.js',
+                bpCoursesField: './inc/buddypress/courses-field/index.js',
             },
             optimizeForGutenberg: true,
         },

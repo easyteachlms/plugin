@@ -224,7 +224,6 @@ class Student extends EasyTeachLMS {
 
 		$key = 'elms_'. md5($this->get_user_meta_key($user_id, $course_id));
 		
-		// If false !== $cohort_id then check for buddypress and run this against buddypress group meta instead.
 		$now_data = get_user_meta($user_id, $key, true);
 
 		if ( ! is_array($now_data) ) {
@@ -246,12 +245,44 @@ class Student extends EasyTeachLMS {
 		$timestamp = $right_now->getTimestamp();
 
 		$now_data['data'][$uuid][$action][$timestamp] = $data;
-
-		// If false !== $cohort_id then check for buddypress and run this against buddypress group meta instead.
+		
 		$success = update_user_meta( $user_id, $key, $now_data );
 		if ( true !== $success ) {
 			return new WP_Error('failed-to-run-action', 'Could not save data for ' . $action, $now_data);
 		}
+
+		// @TODO If cohort id then post to the group's activity feed.
+		// https://codex.buddypress.org/plugindev/bp_activity_add-2/
+		// https://buddypress.org/support/topic/how-to-attach-custom-activities-to-groups/
+
+		// If false !== $cohort_id then check for buddypress and run this against buddypress group meta instead.
+		if ( false !== $cohort_id ) {
+			// $bp_group_id = groups_get_id( $slug );
+			$bp_group_id = $cohort_id;
+			if ( false !== $bp_group_id ) {
+				$bp_key = 'elms_group_'. md5( $bp_group_id );
+				$bp_now_data = groups_get_groupmeta( $bp_group_id, $bp_key );
+				if ( ! is_array($bp_now_data) ) {
+					$bp_now_data = array(
+						'courseId' => $course_id,
+						'data' => array(),
+					);
+				}
+				if ( ! array_key_exists($uuid, $bp_now_data['data'] ) ) {
+					$bp_now_data['data'][$uuid] = array();
+				}
+				if ( ! array_key_exists($action, $bp_now_data['data'][$uuid] ) ) {
+					$bp_now_data['data'][$uuid][$action] = array();
+				}
+				$bp_now_data['data'][$uuid][$action][$timestamp] = $data;
+				$bp_success = groups_update_groupmeta( $bp_group_id, $bp_key, $bp_now_data );
+				if ( true !== $bp_success ) {
+					return new WP_Error('failed-to-run-action', 'Could not save data for ' . $action, $bp_now_data);
+				}
+			}
+		}
+
+		error_log(print_r($now_data, true));
 
 		return $now_data;
 	}
@@ -264,6 +295,9 @@ class Student extends EasyTeachLMS {
 	public function update_progress_restfully( \WP_REST_Request $request ) {
 		$action_data = json_decode( $request->get_body(), true );
 		$response = do_action('easyteach_student_action', $action_data);
+		error_log('update_progress_restfully');
+		error_log(print_r($action_data, true));
+		error_log(print_r($response, true));
 		return wp_json_encode( $response );
 	}
 

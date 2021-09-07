@@ -21,8 +21,8 @@ class My_Groups_Widget extends Cohorts {
 
 	public function the_widget_callback( $post, $callback_args ) {
 		$assets  = parent::wpackio()->register(
-			'cohorts',
-			'my-groups-widget',
+			'wp-admin',
+			'bpCohortsWidget',
 			array(
 				'js'        => true,
 				'css'       => true,
@@ -32,10 +32,12 @@ class My_Groups_Widget extends Cohorts {
 				'media'     => 'all',
 			)
 		);
+
 		$handles = array(
 			'js'  => array_pop( $assets['js'] )['handle'],
 			'css' => array_pop( $assets['css'] )['handle'],
 		);
+		
 		wp_localize_script(
 			$handles['js'],
 			'myGroupsWidget',

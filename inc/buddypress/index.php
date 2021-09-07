@@ -1,19 +1,15 @@
 <?php
 namespace EasyTeachLMS;
-use EasyTeachLMS;
+
 use WPackio\Enqueue;
 use BP_Group_Extension;
 
 if ( class_exists( 'BP_Group_Extension' ) ) {
 	class GroupCourses extends BP_Group_Extension {
-		protected $js_deps = array( 'react', 'react-dom', 'wp-element', 'wp-polyfill', 'wp-i18n', 'wp-dom-ready', 'wp-api-fetch' );
 
-		/**
-		 * Here you can see more customization of the config options
-		 */
 		public function __construct() {
 			$args = array(
-				'slug'              => 'easyteach-courses',
+				'slug'              => 'group-courses',
 				'name'              => 'Courses',
 				'nav_item_position' => 10,
 				'screens'           => array(
@@ -51,14 +47,14 @@ if ( class_exists( 'BP_Group_Extension' ) ) {
 
 		public function register_assets() {
 			$enqueue = new Enqueue( 'easyTeachLMS', 'dist', '1.0.0', 'plugin', EASYTEACHLMS_FILE );
-			if ( bp_is_single_item() && bp_is_groups_component() && ( bp_is_current_action( 'members' ) || bp_is_current_action( 'easyteach-courses' ) ) ) {
+			if ( bp_is_single_item() && bp_is_groups_component() && ( bp_is_current_action( 'members' ) || bp_is_current_action( 'group-courses' ) ) ) {
 				$enqueue->enqueue(
-					'app',
-					'buddyPress',
+					'wp-admin',
+					'bpCoursesField',
 					array(
 						'js'        => true,
 						'css'       => false,
-						'js_dep'    => array_merge( $this->js_deps, array( 'bp-api-request' ) ),
+						'js_dep'    => array( 'bp-api-request' ),
 						'css_dep'   => array(),
 						'in_footer' => true,
 						'media'     => 'all',
@@ -67,19 +63,41 @@ if ( class_exists( 'BP_Group_Extension' ) ) {
 			}
 		}
 
+		/**
+		 * Iternal BP Group Extension function, used to get the courses attached to a group and display them.
+		 * @param mixed|null $group_id 
+		 * @return string|void 
+		 */
 		public function display( $group_id = null ) {
 			$group_id         = bp_get_group_id();
 			$attached_courses = groups_get_groupmeta( $group_id, '_attached_courses' );
 			$attached_courses = apply_filters( 'elms_group_courses', $attached_courses, $group_id );
+
 			if ( empty( $attached_courses ) ) {
-				return 'No courses currently selected.';
+				$return  = '<p>No courses have been attached to this group.</p>';
+				if ( current_user_can( 'edit_groups' ) ) {
+					$return .= '<p>You can attach courses by clicking the "Add Course" button below.</p><p><a href="#" class="button">Add Course(s)</a></p>';
+				}
+				return $return;
 			}
-			// Go fetch enrolled courses for this user.
-			echo '<div class="ui cards">';
-			foreach ( $attached_courses as $course_id ) {
-				echo easyteach_course_card( $course_id );
-			}
-			echo '</div>';
+
+			ob_start();
+			?>
+			<ul class="elms-group-courses">
+				<?php foreach ( $attached_courses as $course_id ) : ?>
+					<?php
+					$course = get_post( $course_id );
+					if ( ! $course ) {
+						continue;
+					}
+					?>
+					<li>
+						<a href="<?php echo get_permalink( $course_id ); ?>" taget="_blank"><?php echo $course->post_title; ?></a>
+					</li>
+				<?php endforeach; ?>
+			</ul>
+			<?php
+			echo ob_get_clean();
 		}
 
 		public function settings_screen( $group_id = null ) {
@@ -88,14 +106,15 @@ if ( class_exists( 'BP_Group_Extension' ) ) {
 			if ( ! empty( $attached_courses ) ) {
 				$value = implode( ',', $attached_courses );
 			}
+
 			$enqueue = new Enqueue( 'easyTeachLMS', 'dist', '1.0.0', 'plugin', EASYTEACHLMS_FILE );
 			$enqueue->enqueue(
-				'admin',
-				'buddyPress',
+				'wp-admin',
+				'bpCoursesField',
 				array(
 					'js'        => true,
 					'css'       => true,
-					'js_dep'    => array_merge( $this->js_deps, array( 'wp-components', 'wp-api', 'wp-escape-html' ) ),
+					'js_dep'    => array( 'wp-components', 'wp-api', 'wp-escape-html' ),
 					'css_dep'   => array( 'wp-components' ),
 					'in_footer' => true,
 					'media'     => 'all',
@@ -146,6 +165,11 @@ if ( class_exists( 'BP_Group_Extension' ) ) {
 				}
 			}
 		}
+
+		/**
+		 * Actions below handle the actual attaching and detaching of courses to groups and vice versa (groups to courses).
+		 * @TODO We will add filters to allow for customizing this data structure for storage purposes more deeply. However, this is a lower priority and the final data returned via official hooks will be our current data structure.
+		 */
 
 		public function add( int $group_id, int $course_id ) {
 			error_log( 'Add' );
@@ -264,63 +288,19 @@ if ( class_exists( 'BP_Group_Extension' ) ) {
 			return $attached_courses;
 		}
 
-		public function group_member_item( $buttons, $user_id, $type ) {
-			if ( 'group_member' === $type ) {
-				global $bp;
-				$group_id = groups_get_id( $bp->unfiltered_uri[1] );
-
-				$buttons['view-student'] = array(
-					'id'                => 'view-student',
-					'component'         => 'groups',
-					'must_be_logged_in' => true,
-					'block_self'        => false,
-					'parent_element'    => false,
-					'parent_attr'       => array(
-						'class' => 'button-parent',
-					),
-					'button_element'    => 'div',
-					'button_attr'       => array(
-						'data-group-id' => $group_id,
-						'class'         => 'view-student-progress-button',
-					),
-					'link_text'         => '&nbsp;',
-				);
-
-				$buttons['lms-notification'] = array(
-					'id'                => 'lms-notification',
-					'component'         => 'groups',
-					'must_be_logged_in' => true,
-					'block_self'        => false,
-					'parent_element'    => false,
-					'parent_attr'       => array(
-						'class' => 'button-parent',
-					),
-					'button_element'    => 'div',
-					'button_attr'       => array(
-						'data-group-id' => $group_id,
-						'class'         => 'view-student-notification-button',
-					),
-					'link_text'         => '&nbsp;',
-				);
-			}
-
-			return $buttons;
-		}
-
 	}
 
 	bp_register_group_extension( 'EasyTeachLMS\GroupCourses' );
 
 	$group_courses = new GroupCourses();
 
+	// Register courses field for use on frontend and in backend.
 	add_action( 'wp_enqueue_scripts', array( $group_courses, 'register_assets' ) );
+	add_action( 'rest_api_init', array( $group_courses, 'register_rest_endpoints' ) );
+
+	// Handle enrollment in courses when a user accepts a group invitation.
 	add_action( 'groups_membership_accepted', array( $group_courses, 'enroll' ), 10, 2 );
 	add_action( 'groups_accept_invite', array( $group_courses, 'enroll' ), 10, 2 );
-	add_action( 'bp_groups_member_after_delete', array( $group_courses, 'unenroll' ), 10, 2 );
-	// Disabling this for the time being, needs to be updated to use new narrowly parsed course data from the cohort widget.
-	// add_filter( 'bp_nouveau_get_members_buttons', array( $group_courses, 'group_member_item' ), 10, 3 );
-
-	add_action( 'rest_api_init', array( $group_courses, 'register_rest_endpoints' ) );
+	// Handle unenrollment in courses when a user is removed from a group.
+	add_action( 'bp_groups_member_after_delete', array( $group_courses, 'unenroll' ), 10, 2 );	
 }
-
-// Cohorts?
