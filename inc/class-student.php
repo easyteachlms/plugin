@@ -1,5 +1,7 @@
 <?php
 class Student extends EasyTeachLMS {
+	public static $cache_bust = '100hash';
+	
 	public function __construct( $init = false ) {
 		if ( true === $init ) {
 			add_action( 'easyteach_get_student', array($this, 'get_student'), 10, 1 );
@@ -145,8 +147,8 @@ class Student extends EasyTeachLMS {
 			$user = get_user_by( 'ID', $user_id );
 		}
 
-		$cache_key = md5( wp_json_encode(array($user_id, $course_id)) );
-		$cache_ttl = 1 * HOUR_IN_SECONDS;
+		$cache_key = md5( wp_json_encode(array($user_id, $course_id, self::$cache_bust)) );
+		$cache_ttl = 30 * MINUTE_IN_SECONDS;
 		$cached = get_transient( $cache_key );
 		if ( false !== $cached ) {
 			return $cached;

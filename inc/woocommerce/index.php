@@ -12,6 +12,7 @@ class WooCommerce extends EasyTeachLMS {
 			add_action( 'woocommerce_process_product_meta', array( $this, 'save_fields' ), 10, 2 );
 			
 			// Enrollment
+			// To process an enrollment as a product you can do: do_action('easyteach_process_woocommerce_order', $order_id);
 			add_action( 'easyteach_process_woocommerce_order', array( $this, 'process_order' ), 10, 1 );
 			add_action( 'woocommerce_order_status_completed', array( $this, 'handle_order_processing' ) );
 			add_action( 'woocommerce_order_status_processing', array( $this, 'handle_order_processing' ) );
@@ -185,6 +186,10 @@ class WooCommerce extends EasyTeachLMS {
 			return;
 		}
 
+		error_log("Handle order processing...");
+		error_log('free?'. $order->has_free_item());
+		error_log('total?'. $order->get_total());
+
 		if ( $order->has_status( 'processing' ) && ! $order->has_free_item() ) {
 			return;
 		}
@@ -233,9 +238,6 @@ class WooCommerce extends EasyTeachLMS {
 	public function save_fields( $id, $post ) {
 		if ( ! empty( $_POST['elms_attached_courses'] ) ) {
 			$data = json_decode(stripslashes($_POST['elms_attached_courses']), true);
-			error_log("Saved::");
-			error_log(print_r($_POST['elms_attached_courses'], true));
-			error_log(print_r($data, true));
 			update_post_meta( $id, $this->attachment_meta_key, $data );
 		} else {
 			delete_post_meta( $id, $this->attachment_meta_key );
