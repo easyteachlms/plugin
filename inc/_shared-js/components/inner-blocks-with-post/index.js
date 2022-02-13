@@ -11,6 +11,7 @@ import { select } from '@wordpress/data';
  */
 import InitialState from './initial-state';
 import Controls from './controls';
+import _ from 'lodash';
 
 const ButtonBlockAppender = ({clientId}) => {
     return <InnerBlocks.ButtonBlockAppender clientId={clientId} />;
@@ -31,12 +32,14 @@ const InnerBlocksWithPost = ({
     allowedBlocks,
     renderAppender,
     orientation,
+    template = [],
     __experimentalCaptureToolbars = false,
 }) => {
     // const hasInnerSelectedBlock = select('core/block-editor').hasSelectedInnerBlock(
     //     clientId,
     //     false,
     // );
+    
     // Explicitly, if no setAttributes is passed or false is speciically passed treat this as "save" mode and only display content.
     if (false === setAttributes) {
         return <InnerBlocks.Content />;
@@ -58,14 +61,6 @@ const InnerBlocksWithPost = ({
         <Fragment>
             {false !== setAttributes && (
                 <Fragment>
-                    <InnerBlocks
-                        allowedBlocks={allowedBlocks}
-                        renderAppender={() => isSelected ? <ButtonBlockAppender {...clientId}/> : false}
-                        orientation={orientation}
-                        __experimentalCaptureToolbars={
-                            __experimentalCaptureToolbars
-                        }
-                    />
                     <Controls
                         title={title}
                         postId={postId}
@@ -75,6 +70,15 @@ const InnerBlocksWithPost = ({
                         clientId={clientId}
                         setAttributes={setAttributes}
                         isSelected={isSelected}
+                    />
+                    <InnerBlocks
+                        allowedBlocks={allowedBlocks}
+                        renderAppender={() => isSelected ? <ButtonBlockAppender {...clientId}/> : false}
+                        orientation={orientation}
+                        __experimentalCaptureToolbars={
+                            __experimentalCaptureToolbars
+                        }
+                        template={template}
                     />
                 </Fragment>
             )}

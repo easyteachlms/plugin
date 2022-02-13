@@ -3,7 +3,7 @@
  */
 import { __ } from '@wordpress/i18n';
 import { 
-    __experimentalUseInnerBlocksProps as useInnerBlocksProps,
+    useInnerBlocksProps,
     InnerBlocks,
     RichText,
     useBlockProps,

@@ -16,7 +16,7 @@ import {
     ToolbarButton
 } from '@wordpress/components';
 import { 
-    __experimentalUseInnerBlocksProps as useInnerBlocksProps, 
+    useInnerBlocksProps, 
     InspectorControls
 } from '@wordpress/block-editor';
 

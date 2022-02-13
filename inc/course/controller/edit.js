@@ -8,7 +8,7 @@
  */
 import { 
     useBlockProps,
-    __experimentalUseInnerBlocksProps as useInnerBlocksProps,
+    useInnerBlocksProps,
     InnerBlocks,
 } from '@wordpress/block-editor';
 import { Fragment, useEffect } from '@wordpress/element';

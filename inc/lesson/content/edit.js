@@ -17,7 +17,7 @@ const edit = ({
 
     if (0 !== uuid) {
         return (
-            <Collapsible className={className} title={title} label="Content" defaultOpen={false}>
+            <Collapsible className={className} title={title} label="Content" defaultOpen={true}>
                 <InnerBlocksWithPost
                     title={title}
                     labels={labels}
@@ -25,6 +25,9 @@ const edit = ({
                     clientId={clientId}
                     uuid={uuid}
                     isSelected={isSelected}
+                    template={[
+                        [ 'core/paragraph', { placeholder: __('Content here...', 'elms-lesson-content-placeholder') } ],
+                    ]}
                 />
             </Collapsible>
         );
@@ -38,6 +41,9 @@ const edit = ({
             clientId={clientId}
             uuid={uuid}
             isSelected={isSelected}
+            template={[
+                [ 'core/paragraph', { placeholder: __('Content here...', 'elms-lesson-content-placeholder') } ],
+            ]}
         />
     );
 };

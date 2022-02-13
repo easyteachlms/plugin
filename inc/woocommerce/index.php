@@ -12,9 +12,12 @@ class WooCommerce extends EasyTeachLMS {
 			add_action( 'woocommerce_process_product_meta', array( $this, 'save_fields' ), 10, 2 );
 			
 			// Enrollment
-			add_action( 'woocommerce_order_status_completed', array( $this, 'process_order' ), 10, 1 );
+			add_action( 'easyteach_process_woocommerce_order', array( $this, 'process_order' ), 10, 1 );
+			add_action( 'woocommerce_order_status_completed', array( $this, 'handle_order_processing' ) );
+			add_action( 'woocommerce_order_status_processing', array( $this, 'handle_order_processing' ) );
 
-			// We're going to force some options on WooCommerce to ensure end user is using users.
+			// We're going to force some options on WooCommerce to ensure WooCommerce forces user account registration
+			// and purchases get associated with users corectly.
 			add_action( 'init', array( $this, 'force_enable_accounts' ) );
 
 			// Modify the order status page with helpful links and information to get customer started.
@@ -31,10 +34,6 @@ class WooCommerce extends EasyTeachLMS {
 	}
 
 	public function display_order_item_courses( $item_id, $item, $order ) {
-		error_log( 'display_order_item_courses' );
-		// $order   = \wc_get_order( $item_id );
-		error_log(print_r($order, true));
-
 		if ( count( $order->get_items() ) > 0 ) {
 			foreach ( $order->get_items() as $item ) {
 				// Simple product authorization.
@@ -135,7 +134,7 @@ class WooCommerce extends EasyTeachLMS {
 			return ''; // Exit early this is not an order that needs processing.
 		}
 
-		error_log('authorize_purchase');
+		error_log('authorize_purchase:::');
 		error_log(print_r($course_ids, true));
 
 		// Make an array of just the ids from course_ids
@@ -147,11 +146,16 @@ class WooCommerce extends EasyTeachLMS {
 
 		$data = get_user_meta( $user_id, '_purchased_courses', true );
 
+		error_log("user data...");
+		error_log(print_r($data, true));
+
 		if ( ! $data ) {
 			$data = $course_ids;
 		} else {
 			$data[] = array_merge($data, $course_ids);
 		}
+
+		error_log('... after ...' . print_r($data, true));
 
 		update_user_meta( $user_id, '_purchased_courses', $data );
 	}
@@ -160,16 +164,32 @@ class WooCommerce extends EasyTeachLMS {
 		$order   = \wc_get_order( $order_id );
 		$user_id = $order->get_user_id();
 
-		error_log('process_order');
-		error_log(print_r($order, true));
-
 		if ( count( $order->get_items() ) > 0 ) {
 			foreach ( $order->get_items() as $item ) {
-				// Simple product authorization.
+				// Authorize access to each course purchased.
 				$product_id = $item['product_id'];
 				$this->authorize_purchase( $product_id, $user_id );
 			}
 		}
+	}
+
+	/**
+	 * Order Status completed - give access to user's purchased courses.
+	 *
+	 * @param int  $order_id Order ID.
+	 */
+	public function handle_order_processing( $order_id ) {
+		$order = \wc_get_order( $order_id );
+
+		if ( ! $order ) {
+			return;
+		}
+
+		if ( $order->has_status( 'processing' ) && ! $order->has_free_item() ) {
+			return;
+		}
+
+		do_action( 'easyteach_process_woocommerce_order', $order_id );
 	}
 
 	public function tab( $tabs ) {
